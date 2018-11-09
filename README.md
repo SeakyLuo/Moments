@@ -2,13 +2,16 @@
 Product name: Moments
 
 Product idea:
+
 People use this app to share and rate posts.
 
-"Who is your audience?"
+Who is your audience?
+
 Any people who want to share things and receive high ratings.
 "What problem do you solve? Think about how people currently do things
 like you propose to be done with your app, and how your solution will
 improve things for your audience.”
+
 
 We provide a platform that gives everyone the power to publicly or
 privately create, rate and share ideas and information, instantly, without
