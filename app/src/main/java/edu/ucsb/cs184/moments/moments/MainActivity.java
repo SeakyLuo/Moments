@@ -3,6 +3,7 @@ package edu.ucsb.cs184.moments.moments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,27 +12,64 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ImageView;
+
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawer;
-    private TextView titleText;
+    private NavigationView dNavigationView;
+    private BottomNavigationView bNavigation;
     private ImageButton menuButton;
     private HomeFragment homeFragment;
     private GroupFragment groupFragment;
-    private MessageFragment messageFragment;
+    private MessagesFragment messagesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        titleText = findViewById(R.id.titleText);
-        menuButton = findViewById(R.id.menuButton);
         drawer = findViewById(R.id.drawer_layout);
+        dNavigationView = findViewById(R.id.drawer_navigation);
+        dNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_user_profile:
+                        drawer.closeDrawer(Gravity.START);
+                        return true;
+                    case R.id.nav_user_collections:
+                        drawer.closeDrawer(Gravity.START);
+                        return true;
+                    case R.id.nav_user_draftbox:
+                        drawer.closeDrawer(Gravity.START);
+                        return true;
+                    case R.id.nav_settings:
+                        drawer.closeDrawer(Gravity.START);
+                        return true;
+                }
+                return false;
+            }
+        });
+        bNavigation = findViewById(R.id.navigation);
+        bNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_home:
+                        showFragment(homeFragment);
+                        return true;
+                    case R.id.navigation_group:
+                        showFragment(groupFragment);
+                        return true;
+                    case R.id.navigation_messages:
+                        showFragment(messagesFragment);
+                        return true;
+                }
+                return false;
+            }
+        });
+        menuButton = findViewById(R.id.menuButton);
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,38 +77,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        homeFragment = new HomeFragment();
-        groupFragment = new GroupFragment();
-        messageFragment = new MessageFragment();
-        showFragment(homeFragment);
+        if (savedInstanceState != null) {
+            //Restore the fragment's instance
+            homeFragment = (HomeFragment) getSupportFragmentManager().getFragment(savedInstanceState, "homeFragment");
+        }else{
+            homeFragment = new HomeFragment();
+            groupFragment = new GroupFragment();
+            messagesFragment = new MessagesFragment();
+            showFragment(homeFragment);
+        }
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    titleText.setText(R.string.home);
-                    showFragment(homeFragment);
-                    return true;
-                case R.id.navigation_group:
-                    titleText.setText(R.string.group);
-                    showFragment(groupFragment);
-                    return true;
-                case R.id.navigation_messages:
-                    titleText.setText(R.string.messages);
-                    showFragment(messageFragment);
-                    return true;
-            }
-            return false;
-        }
-    };
+        //Save the fragment's instance
+        getSupportFragmentManager().putFragment(outState, "homeFragment", homeFragment);
+    }
 
     private void showFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                 .replace(R.id.contentView, fragment)
                 .commit();
     }

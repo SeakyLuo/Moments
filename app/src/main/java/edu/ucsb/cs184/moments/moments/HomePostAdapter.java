@@ -16,6 +16,7 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHolder> {
 
@@ -59,8 +60,19 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
 //        holder.setCollect(post.isCollected(userid));
     }
 
-    private String TimeText(Date date){
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+    public static String TimeText(Date date){
+        Date now = new Date();
+        long delta_sec = (now.getTime() - date.getTime()) / 1000;
+        if (delta_sec == 0) return "Just now";
+        else if (delta_sec < 60) return delta_sec + " second"+ ((delta_sec == 1) ? "" : "s") +" ago";
+        long delta_min = delta_sec / 60;
+        if (delta_min < 60) return delta_min + " minute"+ ((delta_min == 1) ? "" : "s") +" ago";
+        long delta_hour = delta_min / 60;
+        if (delta_hour < 24) return delta_hour + " hour"+ ((delta_hour == 1) ? "" : "s") +" ago";
+        long delta_day = delta_hour / 24;
+        if (delta_day < 7) return delta_day + " day"+ ((delta_hour == 1) ? "" : "s") +" ago";
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+//        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
 
     @Override

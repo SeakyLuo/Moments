@@ -8,7 +8,7 @@
             android:icon="@drawable/ic_user"
             android:title="User Profile" />
         <item
-            android:id="@+id/nav_user_collection"
+            android:id="@+id/nav_user_collections"
             android:icon="@drawable/ic_collection"
             android:title="Collections" />
         <item

@@ -71,7 +71,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:backgroundTint="@android:color/transparent"
             android:numStars="5"
+            android:progressTint="@color/Gold"
             android:stepSize="1"
             app:layout_constraintBottom_toTopOf="@+id/post_divider2"
             app:layout_constraintEnd_toEndOf="@+id/post_content"
@@ -103,6 +106,14 @@
                 app:srcCompat="@drawable/ic_comment"
                 tools:layout_editor_absoluteX="37dp"
                 tools:layout_editor_absoluteY="500dp" />
+
+            <!--<ToggleButton-->
+                <!--android:id="@+id/toggleButton"-->
+                <!--style="@style/CollectToggle"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@drawable/ic_collect_toggle_bg"/>-->
 
             <ImageButton
                 android:id="@+id/post_collect"
