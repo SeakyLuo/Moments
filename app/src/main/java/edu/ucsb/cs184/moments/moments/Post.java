@@ -1,26 +1,26 @@
 package edu.ucsb.cs184.moments.moments;
 import android.support.annotation.Nullable;
 
-import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Post {
     private int userid;
     private String content;
-    private Time time;
+    private Date date;
 
     private ArrayList<Rating> ratings = new ArrayList<>();
     private ArrayList<Comment> comments = new ArrayList<>();
 
-    public Post(int userid, String content, Time time){
+    public Post(int userid, String content, Date date){
         this.userid = userid;
         this.content = content;
-        this.time = time;
+        this.date = date;
     }
 
     public int getUserid() { return userid; }
     public String getContent() { return content; }
-    public Time getTime() { return time; }
+    public Date getDate() { return date; }
     public int comments_received() { return comments.size(); }
     public ArrayList<Comment> getComments() { return  comments; }
     public int ratings_received() { return ratings.size(); }
@@ -49,6 +49,8 @@ public class Post {
         if (!(obj instanceof Post))
             return false;
         Post p = (Post) obj;
-        return time == p.time && userid == p.userid;
+        return date == p.date && userid == p.userid;
     }
+
+    public static Post TestPost(){ return new Post(0, new Date().toString(), new Date());}
 }

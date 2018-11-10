@@ -1,18 +1,18 @@
 package edu.ucsb.cs184.moments.moments;
 
-import java.sql.Time;
+import java.sql.Date;
 
 public class Rating {
     private int userid;
     private int rating;
-    private Time time;
-    public Rating(int userid, int rating, Time time){
+    private Date date;
+    public Rating(int userid, int rating, Date date){
         this.userid = userid;
         this.rating = rating;
-        this.time = time;
+        this.date = date;
     }
     public Boolean isAnonymous() { return userid == User.anonymous; }
     public int getUserid() { return userid; }
     public int getRating() { return rating; }
-    public Time getTime() { return time; }
+    public Date getDate() { return date; }
 }

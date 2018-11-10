@@ -18,12 +18,11 @@ public class User {
     private ArrayList<Integer> followers = new ArrayList<>();  // id
     private ArrayList<Integer> followerings = new ArrayList<>();  // id
 
-    public User(int userid, String username, String email, String password){
-        this.userid = userid;
+    public User(String username, String email, String password){
         this.username = username;
         this.email = email;
         this.password = password;
-        // generates a random id
+        // generates a random user id
     }
 
     public void setIcon(Bitmap bitmap) { icon = bitmap; }
@@ -64,6 +63,6 @@ public class User {
     }
     public static User findUser(int id){
         // to be implemented
-        return null;
+        return new User("Seaky","haitianluo@ucsb.edu","Seaky");
     }
 }
