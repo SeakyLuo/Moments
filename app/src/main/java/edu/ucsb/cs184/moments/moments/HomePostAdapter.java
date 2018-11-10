@@ -31,7 +31,7 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
     }
 
     private void add_post(Post post){
-        posts.add(post);
+        posts.add(0, post);
         notifyDataSetChanged();
     }
     public void addPosts(ArrayList<Post> newposts){
