@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "263331802770",
+    "firebase_url": "https://moments-aaa66.firebaseio.com",
+    "project_id": "moments-aaa66",
+    "storage_bucket": "moments-aaa66.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:263331802770:android:b3f60a6a6fe3bfac",
+        "android_client_info": {
+          "package_name": "edu.ucsb.cs184.moments.moments"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "263331802770-3hhltpods4d97hat9rbsmu1a1isf9es6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.ucsb.cs184.moments.moments",
+            "certificate_hash": "be93597cff9d534f7ee72fc6db52ceacb5f7d15f"
+          }
+        },
+        {
+          "client_id": "263331802770-s2b8g3lv16r1uge5jupbchs0b356l0ka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTUdxsWnL8WQva_3gHvMyCjvnxAXx43rg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "263331802770-s2b8g3lv16r1uge5jupbchs0b356l0ka.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
