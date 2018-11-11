@@ -1,6 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
@@ -35,8 +36,8 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
         posts.add(0, post);
         notifyDataSetChanged();
     }
-    public void addPosts(ArrayList<Post> newposts){
-        for (int i = 0; i < newposts.size(); i++) add_post(newposts.get(i));
+    public void addPosts(ArrayList<Post> newPosts){
+        for (int i = 0; i < newPosts.size(); i++) add_post(newPosts.get(i));
         notifyDataSetChanged();
     }
     public void addPost(Post post){
@@ -47,8 +48,8 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        android.util.Log.d("fuck",position+"");
         Post post = posts.get(position);
+        holder.setPost(post);
         User user = User.findUser(post.getUserid());
 //        holder.usericon.setImageBitmap(user.getIcon());
         holder.username.setText(user.getUsername());
@@ -89,6 +90,8 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
         public ImageButton comment;
         public ImageButton collect;
         public ImageButton share;
+        private Post post;
+
         public ViewHolder(View view) {
             super(view);
             usericon = view.findViewById(R.id.post_usericon);
@@ -100,6 +103,12 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
             collect = view.findViewById(R.id.post_collect);
             share = view.findViewById(R.id.post_share);
             usericon.setClickable(true);
+            usericon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
             collect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -107,7 +116,19 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
                     setCollect(true);
                 }
             });
+            view.setClickable(true);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, ViewFullPostActivity.class);
+                    intent.putExtra("Post", post.toString());
+                    context.startActivity(intent);
+                }
+            });
         }
+
+        public void setPost(Post post) { this.post = post;}
 
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void setCollect(boolean collected){

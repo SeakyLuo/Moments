@@ -28,6 +28,10 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".ViewFullPostActivity"
+            android:label="ViewFullPostActivity"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
