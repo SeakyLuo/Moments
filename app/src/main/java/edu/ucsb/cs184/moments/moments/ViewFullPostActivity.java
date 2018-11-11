@@ -1,6 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -12,6 +13,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.jude.swipbackhelper.SwipeBackHelper;
+import com.r0adkll.slidr.Slidr;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,6 +40,9 @@ public class ViewFullPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fullpost_view);
+        SwipeBackHelper.onCreate(this);
+        SwipeBackHelper.getCurrentPage(this).setSwipeRelateEnable(false).setScrimColor(Color.TRANSPARENT);
+
         intent = getIntent();
         Post post = Post.toPost(intent.getStringExtra("Post"));
         setPost(post);
@@ -114,5 +121,17 @@ public class ViewFullPostActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void setCollect(boolean collected){
         collect.setImageResource(collected ? R.drawable.ic_collected : R.drawable.ic_collection);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        SwipeBackHelper.onPostCreate(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SwipeBackHelper.onDestroy(this);
     }
 }
