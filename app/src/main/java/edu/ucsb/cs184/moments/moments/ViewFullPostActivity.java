@@ -14,6 +14,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ViewFullPostActivity extends AppCompatActivity {
@@ -105,15 +106,8 @@ public class ViewFullPostActivity extends AppCompatActivity {
 
     public static String TimeText(Date date){
         Date now = new Date();
-        long delta_sec = (now.getTime() - date.getTime()) / 1000;
-        if (delta_sec == 0) return "Just now";
-        long delta_min = delta_sec / 60;
-        long delta_hour = delta_min / 60;;
-        long delta_day = delta_hour / 24;
-        long delta_month = delta_day / 30;
-        long delta_year = delta_day / 365;
-        if (delta_year >= 1) return new SimpleDateFormat("yyyy-MM-dd").format(date);
-        else if (delta_month >= 1) return new SimpleDateFormat("MM-dd").format(date);
+        if (now.getYear() != date.getYear()) return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
+        else if (now.getDay() == date.getDay()) return new SimpleDateFormat("HH:mm").format(date);
         return new SimpleDateFormat("MM-dd HH:mm").format(date);
     }
 

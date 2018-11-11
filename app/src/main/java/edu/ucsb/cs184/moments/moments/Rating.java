@@ -1,6 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Rating {
     private int userid;

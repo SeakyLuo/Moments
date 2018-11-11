@@ -50,7 +50,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/ic_more1" />
+                app:srcCompat="@drawable/ic_more_v" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
@@ -216,6 +216,7 @@
                     android:elevation="4dp"
                     app:tabIndicatorColor="@android:color/holo_red_light"
                     app:tabSelectedTextColor="@android:color/holo_red_light"
+                    app:tabTextAppearance="@style/TextAppearance.AppCompat.Body2"
                     app:tabTextColor="@color/BlackGray"
                     tools:layout_editor_absoluteX="8dp"
                     tools:layout_editor_absoluteY="287dp">

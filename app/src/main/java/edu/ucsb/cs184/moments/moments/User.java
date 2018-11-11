@@ -14,6 +14,9 @@ public class User {
     private Bitmap icon;
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> collections = new ArrayList<>();
+    private ArrayList<Comment> comments_made = new ArrayList<>();
+    private ArrayList<Comment> comments_recv = new ArrayList<>();
+    private ArrayList<Message> messages = new ArrayList<>();
     private ArrayList<Integer> groups = new ArrayList<>();  // id
     private ArrayList<Integer> followers = new ArrayList<>();  // id
     private ArrayList<Integer> followerings = new ArrayList<>();  // id
@@ -32,12 +35,18 @@ public class User {
         return posts;
     }
     public ArrayList<Post> getCollections() { return collections; }
+    public ArrayList<Comment> getComments_made() { return comments_made; }
+    public ArrayList<Comment> getComments_recv() { return comments_recv; }
 
     public void AddPost(Post post){
         posts.add(post);
     }
     public void DeletePost(Post post){
         posts.remove(post);
+    }
+    public void made_comment(Comment comment) { comments_made.add(comment); }
+    public void recv_comment(Comment comment) { comments_recv.add(comment); }
+    public void delete_comment(Comment comment, Boolean made) {
     }
     public void follow(int userid) {
         followerings.add(userid);

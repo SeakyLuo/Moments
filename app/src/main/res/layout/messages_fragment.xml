@@ -7,14 +7,14 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_group"
+        android:id="@+id/toolbar_messages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorBackgroundFloating"
+        android:contentInsetStart="0dp"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        android:contentInsetStart="0dp"
         app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -37,7 +37,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
+                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/ic_menu" />
 
             <TextView
@@ -51,11 +51,59 @@
                 android:text="@string/title_messages"
                 android:textColor="@color/BlackGray"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/menu_messages"
                 app:layout_constraintStart_toEndOf="@+id/menu_messages"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <android.support.design.widget.TabLayout
+                android:id="@+id/messages_tablayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/menu_messages"
+                app:tabIndicatorColor="@android:color/holo_red_light"
+                app:tabSelectedTextColor="@android:color/holo_red_light"
+                app:tabTextAppearance="@style/TextAppearance.AppCompat.Body2"
+                app:tabTextColor="@color/BlackGray">
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/mAtme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\@Me" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/mComments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comments" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/mRatings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ratings" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/mMessages"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Messages" />
+            </android.support.design.widget.TabLayout>
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/m_viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

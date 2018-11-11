@@ -19,8 +19,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\chat.png" />
-                                      <entry key="outputName" value="ic_chat" />
+                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\more_h.png" />
+                                      <entry key="outputName" value="ic_more_h" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="000000" />
                                     </map>
