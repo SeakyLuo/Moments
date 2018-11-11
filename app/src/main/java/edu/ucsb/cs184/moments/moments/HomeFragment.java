@@ -1,6 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,13 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import static android.app.Activity.RESULT_OK;
+
 public class HomeFragment extends Fragment {
+
+    public static final int REQUEST_POST = 0;
 
     private Context context;
     private FloatingActionButton fab;
@@ -32,7 +40,8 @@ public class HomeFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.addPost(Post.TestPost());
+                Intent intent = new Intent(v.getContext(), EditPostActivity.class);
+                startActivityForResult(intent, REQUEST_POST);
             }
         });
         recyclerView = view.findViewById(R.id.homeRecyclerView);
@@ -42,6 +51,11 @@ public class HomeFragment extends Fragment {
         adapter = new HomePostAdapter();
         recyclerView.setAdapter(adapter);
         return view;
+    }
+
+    public void setPost(String json){
+        Gson gson = new Gson();
+        adapter.addPost(gson.fromJson(json, Post.class));
     }
 
     @Override
@@ -56,5 +70,14 @@ public class HomeFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         //Save the fragment's state here
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) return;
+        if (requestCode == REQUEST_POST){
+            setPost(data.getStringExtra("Post"));
+        }
     }
 }
