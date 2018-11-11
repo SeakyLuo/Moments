@@ -34,18 +34,17 @@ public class MainActivity extends AppCompatActivity {
         dNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                item.setChecked(false);
+                item.setCheckable(false);
+                drawer.closeDrawer(Gravity.START);
                 switch (item.getItemId()){
                     case R.id.nav_user_profile:
-                        drawer.closeDrawer(Gravity.START);
                         return true;
                     case R.id.nav_user_collections:
-                        drawer.closeDrawer(Gravity.START);
                         return true;
                     case R.id.nav_user_draftbox:
-                        drawer.closeDrawer(Gravity.START);
                         return true;
                     case R.id.nav_settings:
-                        drawer.closeDrawer(Gravity.START);
                         return true;
                 }
                 return false;
