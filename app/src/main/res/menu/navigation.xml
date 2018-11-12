@@ -7,13 +7,13 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_group"
-        android:icon="@drawable/ic_navgroup_toggle"
-        android:title="@string/group" />
+        android:id="@+id/navigation_groups"
+        android:icon="@drawable/ic_navgroups_toggle"
+        android:title="@string/title_groups" />
 
     <item
-        android:id="@+id/navigation_messages"
-        android:icon="@drawable/ic_navmessages_toggle"
-        android:title="@string/messages" />
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_navnotifications_toggle"
+        android:title="@string/title_notifications" />
 
 </menu>

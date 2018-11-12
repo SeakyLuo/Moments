@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -40,7 +41,7 @@
                 app:srcCompat="@drawable/ic_back" />
 
             <ImageButton
-                android:id="@+id/fullpost_more"
+                android:id="@+id/search_more"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@android:drawable/screen_background_light_transparent"
@@ -53,7 +54,6 @@
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
-
 
     <ScrollView
         android:id="@+id/fullpost_scrollview"
@@ -89,8 +89,9 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
+                        android:lineSpacingMultiplier="1.25"
                         android:textColor="@android:color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toTopOf="@id/fullpost_divider1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -118,7 +119,7 @@
                         android:layout_marginBottom="8dp"
                         android:text="Username"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toTopOf="@+id/fullpost_time"
                         app:layout_constraintStart_toEndOf="@+id/fullpost_usericon"
@@ -130,7 +131,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:text="Time"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="@+id/fullpost_usericon"
                         app:layout_constraintStart_toEndOf="@+id/fullpost_usericon"
                         app:layout_constraintTop_toBottomOf="@+id/fullpost_username" />
@@ -216,7 +217,7 @@
                     app:tabIndicatorColor="@android:color/holo_red_light"
                     app:tabSelectedTextColor="@android:color/holo_red_light"
                     app:tabTextAppearance="@style/TextAppearance.AppCompat.Body2"
-                    app:tabTextColor="@color/BlackGray"
+                    app:tabTextColor="@color/common_google_signin_btn_text_light_default"
                     tools:layout_editor_absoluteX="8dp"
                     tools:layout_editor_absoluteY="287dp">
 

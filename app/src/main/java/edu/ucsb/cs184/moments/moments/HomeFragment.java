@@ -27,6 +27,7 @@ public class HomeFragment extends Fragment {
     public static final int REQUEST_POST = 0;
 
     private Context context;
+    private ImageButton search;
     private FloatingActionButton fab;
     private RecyclerView recyclerView;
     private HomePostAdapter adapter;
@@ -36,6 +37,14 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.home_fragment,container,false);
         context = getContext();
 
+        search = view.findViewById(R.id.search_home);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
         fab = view.findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

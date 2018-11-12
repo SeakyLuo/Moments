@@ -1,6 +1,5 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,12 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton menuButton;
     private HomeFragment homeFragment;
     private GroupFragment groupFragment;
-    private MessagesFragment messagesFragment;
+    private NotificationsFragment notificationsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.navigation_home:
                         showFragment(homeFragment);
                         return true;
-                    case R.id.navigation_group:
+                    case R.id.navigation_groups:
                         showFragment(groupFragment);
                         return true;
-                    case R.id.navigation_messages:
-                        showFragment(messagesFragment);
+                    case R.id.navigation_notifications:
+                        showFragment(notificationsFragment);
                         return true;
                 }
                 return false;
@@ -84,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             homeFragment = new HomeFragment();
             groupFragment = new GroupFragment();
-            messagesFragment = new MessagesFragment();
+            notificationsFragment = new NotificationsFragment();
             showFragment(homeFragment);
         }
     }
