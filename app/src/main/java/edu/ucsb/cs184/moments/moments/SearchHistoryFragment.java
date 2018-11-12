@@ -8,17 +8,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
 
-public class GroupFragment extends Fragment {
-
+public class SearchHistoryFragment extends Fragment {
     private Context context;
-    private Spinner dropdown;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_groups, container, false);
+        View view = inflater.inflate(R.layout.fragment_searchhistory,container,false);
         context = getContext();
         return view;
     }

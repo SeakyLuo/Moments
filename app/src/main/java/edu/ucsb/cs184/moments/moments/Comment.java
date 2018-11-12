@@ -1,5 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -41,5 +43,12 @@ public class Comment {
     public Comment getParent() { return parent; }
     public Boolean hasParent() { return parent == null; }
 
+    @Override
+    public String toString(){
+        return (new Gson()).toJson(this);
+    }
+    public static Comment fromJson(String json){
+        return (new Gson()).fromJson(json, Comment.class);
+    }
     public static Comment TestComment(){ return new Comment(0, new Date().toString(), new Date());}
 }

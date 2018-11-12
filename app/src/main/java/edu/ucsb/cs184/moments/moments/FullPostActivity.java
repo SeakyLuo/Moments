@@ -39,7 +39,7 @@ public class FullPostActivity extends AppCompatActivity {
         SwipeBackHelper.onCreate(this);
 
         intent = getIntent();
-        Post post = Post.toPost(intent.getStringExtra("Post"));
+        Post post = Post.fromJson(intent.getStringExtra("Post"));
         setPost(post);
 
         backButton = findViewById(R.id.fullpost_back);

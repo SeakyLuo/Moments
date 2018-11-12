@@ -3,6 +3,8 @@ package edu.ucsb.cs184.moments.moments;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 public class User {
@@ -70,8 +72,15 @@ public class User {
     public void uncollect(Post post){
         collections.remove(post);
     }
+    @Override
+    public String toString(){
+        return (new Gson()).toJson(this);
+    }
+    public static User fromJson(String json){
+        return (new Gson()).fromJson(json, User.class);
+    }
     public static User findUser(int id){
         // to be implemented
-        return new User("Seaky","haitianluo@ucsb.edu","Seaky");
+        return new User("Moments Developer","haitianluo@ucsb.edu","moments");
     }
 }

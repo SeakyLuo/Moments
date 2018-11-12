@@ -40,18 +40,6 @@
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/ic_back" />
 
-            <ImageButton
-                android:id="@+id/up_search"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@android:drawable/screen_background_light_transparent"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/ic_more_v" />
-
             <EditText
                 android:id="@+id/search_text"
                 android:layout_width="0dp"
@@ -62,8 +50,7 @@
                 android:inputType="text|textPersonName"
                 android:singleLine="true"
                 app:layout_constraintBottom_toTopOf="@id/search_tabs"
-                app:layout_constraintEnd_toStartOf="@+id/up_search"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/search_back"
                 app:layout_constraintTop_toTopOf="parent" />
 
