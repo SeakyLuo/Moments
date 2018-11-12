@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import java.util.Date;
 
@@ -25,7 +23,7 @@ public class EditPostActivity extends AppCompatActivity {
         setContentView(R.layout.edit_post);
 
         edit_content = findViewById(R.id.edit_content);
-        back = findViewById(R.id.edit_back);
+        back = findViewById(R.id.edit_cancel);
         send = findViewById(R.id.edit_send);
 
         edit_content.addTextChangedListener(new TextWatcher() {
