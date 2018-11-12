@@ -20,7 +20,7 @@ public class EditPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_post);
+        setContentView(R.layout.activity_edit_post);
 
         edit_content = findViewById(R.id.edit_content);
         back = findViewById(R.id.edit_cancel);

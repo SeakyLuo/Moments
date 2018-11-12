@@ -41,7 +41,7 @@
                 app:srcCompat="@drawable/ic_back" />
 
             <ImageButton
-                android:id="@+id/search_more"
+                android:id="@+id/up_search"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@android:drawable/screen_background_light_transparent"

@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/search_toolbar"
+        android:id="@+id/settings_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorBackgroundFloating"
@@ -41,7 +41,7 @@
                 app:srcCompat="@drawable/ic_back" />
 
             <ImageButton
-                android:id="@+id/search_more"
+                android:id="@+id/up_search"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@android:drawable/screen_background_light_transparent"
@@ -62,7 +62,7 @@
                 android:inputType="text|textPersonName"
                 android:singleLine="true"
                 app:layout_constraintBottom_toTopOf="@id/search_tabs"
-                app:layout_constraintEnd_toStartOf="@+id/search_more"
+                app:layout_constraintEnd_toStartOf="@+id/up_search"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/search_back"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -92,6 +92,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/users" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/search_user_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/history" />
             </android.support.design.widget.TabLayout>
 
         </android.support.constraint.ConstraintLayout>
@@ -104,5 +110,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/settings_toolbar" />
 </android.support.constraint.ConstraintLayout>

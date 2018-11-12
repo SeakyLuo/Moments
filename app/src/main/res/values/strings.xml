@@ -23,4 +23,8 @@
     <string name="post_or_user">Post or User</string>
     <string name="users">Users</string>
     <string name="posts">Posts</string>
+    <string name="title_settings">Settings</string>
+    <string name="user_collections">Collections</string>
+    <string name="user_draftbox">Draftbox</string>
+    <string name="history">History</string>
 </resources>

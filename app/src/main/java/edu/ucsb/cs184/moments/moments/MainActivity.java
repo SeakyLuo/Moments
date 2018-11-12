@@ -1,5 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -36,14 +37,27 @@ public class MainActivity extends AppCompatActivity {
                 item.setChecked(false);
                 item.setCheckable(false);
                 drawer.closeDrawer(Gravity.START);
+                Intent intent;
                 switch (item.getItemId()){
                     case R.id.nav_user_profile:
+                        intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+//                        intent.putExtra("userid",0);
+                        startActivity(intent);
                         return true;
                     case R.id.nav_user_collections:
+                        intent = new Intent(getApplicationContext(), UserCollectionsActivity.class);
+//                        intent.putExtra("userid",0);
+                        startActivity(intent);
                         return true;
                     case R.id.nav_user_draftbox:
+                        intent = new Intent(getApplicationContext(), UserDraftboxActivity.class);
+//                        intent.putExtra("userid",0);
+                        startActivity(intent);
                         return true;
                     case R.id.nav_settings:
+                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
+//                        intent.putExtra("userid",0);
+                        startActivity(intent);
                         return true;
                 }
                 return false;
