@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         header.findViewById(R.id.nav_usericon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawer.closeDrawer(Gravity.START);
                 Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
                 startActivity(intent);
             }
@@ -111,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         //Save the fragment's instance
         getSupportFragmentManager().putFragment(outState, "homeFragment", homeFragment);
     }

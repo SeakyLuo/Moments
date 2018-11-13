@@ -7,6 +7,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -35,7 +36,7 @@ public class FullPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fullpost_view);
+        setContentView(R.layout.activity_fullpost);
         SwipeBackHelper.onCreate(this);
 
         intent = getIntent();
@@ -78,13 +79,14 @@ public class FullPostActivity extends AppCompatActivity {
     }
 
     private void setPost(Post post){
-        usericon = findViewById(R.id.fullpost_usericon);
-        username = findViewById(R.id.fullpost_username);
-        time = findViewById(R.id.fullpost_time);
-        content = findViewById(R.id.fullpost_content);
-        comment = findViewById(R.id.fullpost_comment);
-        collect = findViewById(R.id.fullpost_collect);
-        share = findViewById(R.id.fullpost_share);
+        CardView view = findViewById(R.id.up_post);
+        usericon = view.findViewById(R.id.post_usericon);
+        username = view.findViewById(R.id.post_username);
+        time = view.findViewById(R.id.post_time);
+        content = view.findViewById(R.id.post_content);
+        comment = view.findViewById(R.id.post_comment);
+        collect = view.findViewById(R.id.post_collect);
+        share = view.findViewById(R.id.post_share);
         usericon.setClickable(true);
         usericon.setOnClickListener(new View.OnClickListener() {
             @Override

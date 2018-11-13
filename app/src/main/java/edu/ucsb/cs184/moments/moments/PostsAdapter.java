@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHolder> {
+public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<Post> posts = new ArrayList<>();

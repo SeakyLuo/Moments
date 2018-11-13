@@ -69,15 +69,6 @@
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/homeRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_home" />
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
@@ -90,4 +81,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="16dp"
         app:srcCompat="@drawable/ic_newpost" />
+
+    <FrameLayout
+        android:id="@+id/home_timeline"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_home">
+
+    </FrameLayout>
 </android.support.constraint.ConstraintLayout>
