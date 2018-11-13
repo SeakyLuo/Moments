@@ -63,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        View header = dNavigationView.getHeaderView(0);
+        header.findViewById(R.id.nav_usericon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                startActivity(intent);
+            }
+        });
         bNavigation = findViewById(R.id.navigation);
         bNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

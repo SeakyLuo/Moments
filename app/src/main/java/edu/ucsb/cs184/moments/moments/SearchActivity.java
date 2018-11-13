@@ -7,12 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.jude.swipbackhelper.SwipeBackHelper;
-
 public class SearchActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private TabViewPager viewPager;
+    private TabPagerAdapter adapter;
     private ImageButton backButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +44,10 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        viewPager = new TabViewPager(getSupportFragmentManager());
-        viewPager.addFragment(new SearchPostFragment(), "Post");
-        viewPager.addFragment(new SearchUserFragment(), "User");
-        mViewPager.setAdapter(viewPager);
+        adapter = new TabPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new SearchPostFragment(), "Posts");
+        adapter.addFragment(new SearchUserFragment(), "Users");
+        adapter.addFragment(new SearchHistoryFragment(), "History");
+        mViewPager.setAdapter(adapter);
     }
 }

@@ -21,7 +21,7 @@ public class FullPostActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private TabViewPager viewPager;
+    private TabPagerAdapter viewPager;
     private ImageButton backButton;
     private ImageView usericon;
     private TextView username;
@@ -35,7 +35,7 @@ public class FullPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fullpost_view);
+        setContentView(R.layout.activity_fullpost_view);
         SwipeBackHelper.onCreate(this);
 
         intent = getIntent();
@@ -71,7 +71,7 @@ public class FullPostActivity extends AppCompatActivity {
             }
         });
 
-        viewPager = new TabViewPager(getSupportFragmentManager());
+        viewPager = new TabPagerAdapter(getSupportFragmentManager());
         viewPager.addFragment(new FullPostCommetsFragment(), "Comments");
         viewPager.addFragment(new FullPostRatingsFragment(), "Ratings");
         mViewPager.setAdapter(viewPager);
@@ -92,7 +92,9 @@ public class FullPostActivity extends AppCompatActivity {
 
             }
         });
-        username.setText("Seaky");
+        User user = User.findUser(post.getUserid());
+        username.setText(user.getUsername());
+//        usericon.setImageBitmap(user.getIcon());
         time.setText(TimeText(post.getDate()));
         content.setText(post.getContent());
         collect.setOnClickListener(new View.OnClickListener() {
