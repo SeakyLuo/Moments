@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
         <item
@@ -9,7 +8,7 @@
             android:title="User Profile" />
         <item
             android:id="@+id/nav_user_collections"
-            android:icon="@drawable/ic_collection"
+            android:icon="@drawable/ic_heart"
             android:title="Collections" />
         <item
             android:id="@+id/nav_user_draftbox"

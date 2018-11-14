@@ -13,7 +13,7 @@
     </style>
 
     <style name="Widget.Button.Toggle" parent="android:Widget">
-        <item name="android:background">@drawable/ic_collect_toggle_bg</item>
+        <item name="android:background">@drawable/ic_heart_toggle_bg</item>
         <item name="android:disabledAlpha">?android:attr/disabledAlpha</item>
     </style>
 
@@ -21,11 +21,6 @@
         <item name="android:buttonStyleToggle">@style/Widget.Button.Toggle</item>
         <item name="android:textOn"></item>
         <item name="android:textOff"></item>
-    </style>
-
-    <style name="Widget.App.Spinner" parent="@style/Widget.AppCompat.Spinner">
-        <item name="overlapAnchor">true</item>
-        <item name="android:background">@drawable/dropdown_background</item>
     </style>
 
 </resources>

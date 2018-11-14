@@ -54,7 +54,6 @@ public class EditPostActivity extends AppCompatActivity {
                 finish();
             }
         });
-        send.setClickable(false);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

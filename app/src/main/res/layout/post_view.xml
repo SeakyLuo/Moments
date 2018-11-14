@@ -108,21 +108,13 @@
                 tools:layout_editor_absoluteX="37dp"
                 tools:layout_editor_absoluteY="500dp" />
 
-            <!--<ToggleButton-->
-            <!--android:id="@+id/toggleButton"-->
-            <!--style="@style/CollectToggle"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@drawable/ic_collect_toggle_bg"/>-->
-
             <ImageButton
                 android:id="@+id/post_collect"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:drawable/screen_background_light_transparent"
-                app:srcCompat="@drawable/ic_collection"
+                app:srcCompat="@drawable/ic_heart"
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="508dp" />
 

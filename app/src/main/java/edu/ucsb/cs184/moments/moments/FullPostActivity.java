@@ -117,7 +117,7 @@ public class FullPostActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void setCollect(boolean collected){
-        collect.setImageResource(collected ? R.drawable.ic_collected : R.drawable.ic_collection);
+        collect.setImageResource(collected ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
     }
 
     @Override
