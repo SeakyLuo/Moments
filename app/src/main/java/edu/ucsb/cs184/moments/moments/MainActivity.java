@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private GroupFragment groupFragment;
     private NotificationsFragment notificationsFragment;
     private String lastTag;
+    private final static String homeTag = "HOME";
+    private final static String groupTag = "GROUP";
+    private final static String notificationTag = "NOTIFICATION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +84,16 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        showFragment(homeFragment, "HOME", lastTag);
-                        lastTag = "HOME";
+                        showFragment(homeFragment, homeTag, lastTag);
+                        lastTag = homeTag;
                         return true;
                     case R.id.navigation_groups:
-                        showFragment(groupFragment, "GROUP", lastTag);
-                        lastTag = "GROUP";
+                        showFragment(groupFragment, groupTag, lastTag);
+                        lastTag = groupTag;
                         return true;
                     case R.id.navigation_notifications:
-                        showFragment(notificationsFragment, "NOTIFICATION", lastTag);
-                        lastTag = "NOTIFICATION";
+                        showFragment(notificationsFragment, notificationTag, lastTag);
+                        lastTag = notificationTag;
                         return true;
                 }
                 return false;
@@ -111,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
             homeFragment = new HomeFragment();
             groupFragment = new GroupFragment();
             notificationsFragment = new NotificationsFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.contentView, homeFragment, "HOME").commit();
-            lastTag = "HOME";
+            getSupportFragmentManager().beginTransaction().add(R.id.contentView, homeFragment, homeTag).commit();
+            lastTag = homeTag;
         }
     }
 
