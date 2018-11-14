@@ -105,4 +105,8 @@
     <string name="ratings">Ratings</string>
     <string name="messages">Messages</string>
     <string name="rank_by">Rank By</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="save_as_draft">Do you want to save this post as draft?</string>
+    <string name="groups">Groups</string>
 </resources>

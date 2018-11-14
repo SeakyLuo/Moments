@@ -16,6 +16,7 @@ public class User {
     private Bitmap icon;
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> collections = new ArrayList<>();
+    private ArrayList<Post> drafts = new ArrayList<>();
     private ArrayList<Comment> comments_made = new ArrayList<>();
     private ArrayList<Comment> comments_recv = new ArrayList<>();
     private ArrayList<Message> messages = new ArrayList<>();
@@ -27,12 +28,13 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
-        // generates a random user id
+//        this.userid = 10000000 + number of users in database
     }
 
     public void setIcon(Bitmap bitmap) { icon = bitmap; }
     public Bitmap getIcon() { return icon; }
     public String getUsername() { return username; }
+    public int getUserid() { return userid; }
     public ArrayList<Post> getPosts() {
         return posts;
     }
@@ -40,6 +42,10 @@ public class User {
     public ArrayList<Comment> getComments_made() { return comments_made; }
     public ArrayList<Comment> getComments_recv() { return comments_recv; }
 
+    public Boolean isAnonymous() { return this.userid == anonymous; }
+    public void getNotified(){
+        // to be implemented
+    }
     public void AddPost(Post post){
         posts.add(post);
     }

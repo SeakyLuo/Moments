@@ -25,7 +25,7 @@ public class NotificationsFragment extends Fragment {
         context = getContext();
         mViewPager = view.findViewById(R.id.n_viewpager);
         mTabLayout = view.findViewById(R.id.nTablayout);
-
+        mViewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

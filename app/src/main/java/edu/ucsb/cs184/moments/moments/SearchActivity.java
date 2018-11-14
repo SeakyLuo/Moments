@@ -31,6 +31,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition(), true);
+                tab.select();
             }
 
             @Override
