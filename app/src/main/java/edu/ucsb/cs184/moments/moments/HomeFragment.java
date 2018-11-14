@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,8 @@ public class HomeFragment extends Fragment {
     public static final int REQUEST_POST = 0;
 
     private Context context;
+    private DrawerLayout drawer;
+    private ImageButton menu;
     private ImageButton search;
     private FloatingActionButton fab;
     private PostsTimelineFragment fragment;
@@ -45,9 +49,20 @@ public class HomeFragment extends Fragment {
                 startActivityForResult(intent, REQUEST_POST);
             }
         });
+        menu = view.findViewById(R.id.menu_home);
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawer != null) drawer.openDrawer(Gravity.START);
+            }
+        });
         fragment = new PostsTimelineFragment();
         fragment.show(getFragmentManager(), R.id.home_timeline);
         return view;
+    }
+
+    public void setDrawer(DrawerLayout drawer){
+        this.drawer = drawer;
     }
 
     @Override

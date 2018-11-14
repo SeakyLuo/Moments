@@ -23,17 +23,17 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bNavigation;
     private ImageButton menuButton;
     private HomeFragment homeFragment;
-    private GroupFragment groupFragment;
+    private GroupsFragment groupsFragment;
     private NotificationsFragment notificationsFragment;
     private String lastTag;
     private final static String homeTag = "HOME";
-    private final static String groupTag = "GROUP";
+    private final static String groupTag = "GROUPS";
     private final static String notificationTag = "NOTIFICATION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_drawer_nav);
 
         drawer = findViewById(R.id.drawer_layout);
         dNavigationView = findViewById(R.id.drawer_navigation);
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                         lastTag = homeTag;
                         return true;
                     case R.id.navigation_groups:
-                        showFragment(groupFragment, groupTag, lastTag);
+                        showFragment(groupsFragment, groupTag, lastTag);
                         lastTag = groupTag;
                         return true;
                     case R.id.navigation_notifications:
@@ -99,21 +99,14 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        menuButton = findViewById(R.id.menuButton);
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(Gravity.START);
-            }
-        });
 
         if (savedInstanceState != null) {
             //Restore the fragment's instance
             homeFragment = (HomeFragment) getSupportFragmentManager().getFragment(savedInstanceState, homeTag);
         }else{
-            homeFragment = new HomeFragment();
-            groupFragment = new GroupFragment();
-            notificationsFragment = new NotificationsFragment();
+            homeFragment = new HomeFragment(); homeFragment.setDrawer(drawer);
+            groupsFragment = new GroupsFragment(); groupsFragment.setDrawer(drawer);
+            notificationsFragment = new NotificationsFragment(); notificationsFragment.setDrawer(drawer);
             getSupportFragmentManager().beginTransaction().add(R.id.contentView, homeFragment, homeTag).commit();
             lastTag = homeTag;
         }
