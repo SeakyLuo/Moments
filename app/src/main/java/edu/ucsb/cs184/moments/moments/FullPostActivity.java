@@ -1,31 +1,28 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
-import com.r0adkll.slidr.Slidr;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
-public class ViewFullPostActivity extends AppCompatActivity {
+public class FullPostActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private FullPostViewPager fullPostViewPager;
+    private TabPagerAdapter viewPager;
     private ImageButton backButton;
     private ImageView usericon;
     private TextView username;
@@ -39,12 +36,11 @@ public class ViewFullPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fullpost_view);
+        setContentView(R.layout.activity_fullpost);
         SwipeBackHelper.onCreate(this);
-        SwipeBackHelper.getCurrentPage(this).setSwipeRelateEnable(false).setScrimColor(Color.TRANSPARENT);
 
         intent = getIntent();
-        Post post = Post.toPost(intent.getStringExtra("Post"));
+        Post post = Post.fromJson(intent.getStringExtra("Post"));
         setPost(post);
 
         backButton = findViewById(R.id.fullpost_back);
@@ -59,8 +55,6 @@ public class ViewFullPostActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -78,20 +72,21 @@ public class ViewFullPostActivity extends AppCompatActivity {
             }
         });
 
-        fullPostViewPager = new FullPostViewPager(getSupportFragmentManager());
-        fullPostViewPager.addFragment(new FullPostCommetsFragment(), "Comments");
-        fullPostViewPager.addFragment(new FullPostRatingsFragment(), "Ratings");
-        mViewPager.setAdapter(fullPostViewPager);
+        viewPager = new TabPagerAdapter(getSupportFragmentManager());
+        viewPager.addFragment(new FullPostCommetsFragment(), "Comments");
+        viewPager.addFragment(new FullPostRatingsFragment(), "Ratings");
+        mViewPager.setAdapter(viewPager);
     }
 
     private void setPost(Post post){
-        usericon = findViewById(R.id.fullpost_usericon);
-        username = findViewById(R.id.fullpost_username);
-        time = findViewById(R.id.fullpost_time);
-        content = findViewById(R.id.fullpost_content);
-        comment = findViewById(R.id.fullpost_comment);
-        collect = findViewById(R.id.fullpost_collect);
-        share = findViewById(R.id.fullpost_share);
+        CardView view = findViewById(R.id.up_post);
+        usericon = view.findViewById(R.id.post_usericon);
+        username = view.findViewById(R.id.post_username);
+        time = view.findViewById(R.id.post_time);
+        content = view.findViewById(R.id.post_content);
+        comment = view.findViewById(R.id.post_comment);
+        collect = view.findViewById(R.id.post_collect);
+        share = view.findViewById(R.id.post_share);
         usericon.setClickable(true);
         usericon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +94,9 @@ public class ViewFullPostActivity extends AppCompatActivity {
 
             }
         });
-        username.setText("Seaky");
+        User user = User.findUser(post.getUserid());
+        username.setText(user.getUsername());
+//        usericon.setImageBitmap(user.getIcon());
         time.setText(TimeText(post.getDate()));
         content.setText(post.getContent());
         collect.setOnClickListener(new View.OnClickListener() {

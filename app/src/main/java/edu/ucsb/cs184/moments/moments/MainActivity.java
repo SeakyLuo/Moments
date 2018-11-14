@@ -6,15 +6,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +24,11 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton menuButton;
     private HomeFragment homeFragment;
     private GroupFragment groupFragment;
-    private MessagesFragment messagesFragment;
+    private NotificationsFragment notificationsFragment;
+    private String lastTag;
+    private final static String homeTag = "HOME";
+    private final static String groupTag = "GROUP";
+    private final static String notificationTag = "NOTIFICATION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +43,39 @@ public class MainActivity extends AppCompatActivity {
                 item.setChecked(false);
                 item.setCheckable(false);
                 drawer.closeDrawer(Gravity.START);
+                Intent intent;
                 switch (item.getItemId()){
                     case R.id.nav_user_profile:
+                        intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+//                        intent.putExtra("userid",0);
+                        startActivity(intent);
                         return true;
                     case R.id.nav_user_collections:
+                        intent = new Intent(getApplicationContext(), UserCollectionsActivity.class);
+//                        intent.putExtra("userid",0);
+                        startActivity(intent);
                         return true;
                     case R.id.nav_user_draftbox:
+                        intent = new Intent(getApplicationContext(), UserDraftboxActivity.class);
+//                        intent.putExtra("userid",0);
+                        startActivity(intent);
                         return true;
                     case R.id.nav_settings:
+                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
+//                        intent.putExtra("userid",0);
+                        startActivity(intent);
                         return true;
                 }
                 return false;
+            }
+        });
+        View header = dNavigationView.getHeaderView(0);
+        header.findViewById(R.id.nav_usericon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.closeDrawer(Gravity.START);
+                Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                startActivity(intent);
             }
         });
         bNavigation = findViewById(R.id.navigation);
@@ -58,13 +84,16 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        showFragment(homeFragment);
+                        showFragment(homeFragment, homeTag, lastTag);
+                        lastTag = homeTag;
                         return true;
-                    case R.id.navigation_group:
-                        showFragment(groupFragment);
+                    case R.id.navigation_groups:
+                        showFragment(groupFragment, groupTag, lastTag);
+                        lastTag = groupTag;
                         return true;
-                    case R.id.navigation_messages:
-                        showFragment(messagesFragment);
+                    case R.id.navigation_notifications:
+                        showFragment(notificationsFragment, notificationTag, lastTag);
+                        lastTag = notificationTag;
                         return true;
                 }
                 return false;
@@ -84,23 +113,44 @@ public class MainActivity extends AppCompatActivity {
         }else{
             homeFragment = new HomeFragment();
             groupFragment = new GroupFragment();
-            messagesFragment = new MessagesFragment();
-            showFragment(homeFragment);
+            notificationsFragment = new NotificationsFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.contentView, homeFragment, homeTag).commit();
+            lastTag = homeTag;
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         //Save the fragment's instance
         getSupportFragmentManager().putFragment(outState, "homeFragment", homeFragment);
     }
 
-    private void showFragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.contentView, fragment)
-                .commit();
+    protected void showFragment( Fragment fragment, String tag, String lastTag) {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        if ( lastTag != null ) {
+            Fragment lastFragment = fragmentManager.findFragmentByTag( lastTag );
+            //Log.d("showFragment", "showFragment: lastTag is " + lastTag);
+            if ( lastFragment != null ) {
+                transaction.hide( lastFragment );
+                //Log.d("showFragment", "showFragment: HIDE");
+            }
+        }
+
+        if ( fragment.isAdded() ) {
+            transaction.show( fragment );
+            //Log.d("showFragment", "showFragment: SHOW");
+        }
+        else {
+            transaction.add( R.id.contentView, fragment, tag ).setBreadCrumbShortTitle( tag );
+            //Log.d("showFragment", "showFragment: ADD");
+        }
+
+
+        transaction.commit();
     }
 
     @Override

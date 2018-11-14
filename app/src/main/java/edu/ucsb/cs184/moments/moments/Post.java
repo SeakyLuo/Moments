@@ -46,13 +46,10 @@ public class Post {
 
     @Override
     public String toString(){
-        Gson gson = new Gson();
-        return gson.toJson(this);
+        return (new Gson()).toJson(this);
     }
-
-    public static Post toPost(String json){
-        Gson gson = new Gson();
-        return gson.fromJson(json, Post.class);
+    public static Post fromJson(String json){
+        return (new Gson()).fromJson(json, Post.class);
     }
 
     @Override

@@ -16,13 +16,28 @@
                             <entry key="actionbar">
                               <value>
                                 <PersistentState>
+                                  <option name="children">
+                                    <map>
+                                      <entry key="image">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="paddingPercent" value="50" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\cancel.png" />
-                                      <entry key="outputName" value="ic_cancel" />
+                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\down.png" />
+                                      <entry key="outputName" value="ic_down" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="000000" />
+                                      <entry key="themeColor" value="5871ff" />
                                     </map>
                                   </option>
                                 </PersistentState>

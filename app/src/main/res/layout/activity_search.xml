@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_messages"
+        android:id="@+id/settings_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorBackgroundFloating"
@@ -29,81 +29,73 @@
             tools:context=".MainActivity">
 
             <ImageButton
-                android:id="@+id/menu_messages"
+                android:id="@+id/search_back"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@android:drawable/screen_background_light_transparent"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/ic_menu" />
+                app:srcCompat="@drawable/ic_back" />
 
-            <TextView
-                android:id="@+id/title_message"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/search_text"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:gravity="center_vertical"
-                android:text="@string/title_messages"
-                android:textColor="@color/BlackGray"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="@+id/menu_messages"
-                app:layout_constraintStart_toEndOf="@+id/menu_messages"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:hint="@string/post_or_user"
+                android:inputType="text|textPersonName"
+                android:singleLine="true"
+                app:layout_constraintBottom_toTopOf="@id/search_tabs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/search_back"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.design.widget.TabLayout
-                android:id="@+id/messages_tablayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
+                android:id="@+id/search_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/menu_messages"
+                app:layout_constraintTop_toBottomOf="@+id/search_back"
                 app:tabIndicatorColor="@android:color/holo_red_light"
                 app:tabSelectedTextColor="@android:color/holo_red_light"
                 app:tabTextAppearance="@style/TextAppearance.AppCompat.Body2"
-                app:tabTextColor="@color/BlackGray">
+                app:tabTextColor="@color/common_google_signin_btn_text_light_default">
 
                 <android.support.design.widget.TabItem
-                    android:id="@+id/mAtme"
+                    android:id="@+id/search_post_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="\@Me" />
+                    android:text="@string/posts" />
 
                 <android.support.design.widget.TabItem
-                    android:id="@+id/mComments"
+                    android:id="@+id/search_user_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Comments" />
+                    android:text="@string/users" />
 
                 <android.support.design.widget.TabItem
-                    android:id="@+id/mRatings"
+                    android:id="@+id/search_user_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ratings" />
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/mMessages"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Messages" />
+                    android:text="@string/history" />
             </android.support.design.widget.TabLayout>
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/m_viewpager"
+        android:id="@+id/search_viewpager"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_toolbar" />
 </android.support.constraint.ConstraintLayout>

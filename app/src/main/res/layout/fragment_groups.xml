@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_home"
+        android:id="@+id/toolbar_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorBackgroundFloating"
@@ -22,14 +22,16 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:targetApi="m">
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/ToolbarConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".MainActivity">
 
             <ImageButton
-                android:id="@+id/menu_home"
+                android:id="@+id/menu_group"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@android:drawable/screen_background_light_transparent"
@@ -41,53 +43,33 @@
                 app:srcCompat="@drawable/ic_menu" />
 
             <ImageButton
-                android:id="@+id/search_home"
+                android:id="@+id/joinGroupButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="16dp"
                 android:background="@android:drawable/screen_background_light_transparent"
-                android:src="@drawable/ic_search"
+                android:src="@drawable/ic_join_group"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.555" />
 
             <TextView
-                android:id="@+id/title_home"
+                android:id="@+id/title_group"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 android:gravity="center_vertical"
-                android:text="@string/title_home"
+                android:text="@string/title_groups"
                 android:textColor="@color/BlackGray"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/menu_home"
+                app:layout_constraintStart_toEndOf="@+id/menu_group"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/homeRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_home" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        app:backgroundTint="@android:color/holo_red_light"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="16dp"
-        app:srcCompat="@drawable/ic_newpost" />
 </android.support.constraint.ConstraintLayout>

@@ -2,6 +2,8 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.view.Gravity;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 public class Group {
@@ -32,4 +34,12 @@ public class Group {
     public static Group findGroup(int groupid) {
         return null;
     }
+    @Override
+    public String toString(){
+        return (new Gson()).toJson(this);
+    }
+    public static Group fromJson(String json){
+        return (new Gson()).fromJson(json, Group.class);
+    }
+
 }

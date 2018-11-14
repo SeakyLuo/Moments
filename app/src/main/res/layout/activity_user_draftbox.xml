@@ -7,69 +7,50 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_group"
+        android:id="@+id/ud_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:attr/colorBackgroundFloating"
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:contentInsetStart="0dp"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        android:contentInsetStart="0dp"
         app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:targetApi="m">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/ToolbarConstraintLayout"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".MainActivity">
+            android:layout_height="match_parent">
 
             <ImageButton
-                android:id="@+id/menu_group"
+                android:id="@+id/ud_back"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@android:drawable/screen_background_light_transparent"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                app:srcCompat="@drawable/ic_menu" />
-
-            <ImageButton
-                android:id="@+id/joinGroupButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="16dp"
-                android:background="@android:drawable/screen_background_light_transparent"
-                android:src="@drawable/ic_join_group"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.555" />
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_back" />
 
             <TextView
-                android:id="@+id/title_group"
+                android:id="@+id/title_ud"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 android:gravity="center_vertical"
-                android:text="@string/title_Group"
+                android:text="@string/user_draftbox"
                 android:textColor="@color/BlackGray"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/menu_group"
+                app:layout_constraintStart_toEndOf="@+id/ud_back"
                 app:layout_constraintTop_toTopOf="parent" />
-
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
-
 </android.support.constraint.ConstraintLayout>

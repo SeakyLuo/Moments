@@ -13,13 +13,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
-public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHolder> {
+public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<Post> posts = new ArrayList<>();
@@ -121,7 +119,7 @@ public class HomePostAdapter extends RecyclerView.Adapter<HomePostAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-                    Intent intent = new Intent(context, ViewFullPostActivity.class);
+                    Intent intent = new Intent(context, FullPostActivity.class);
                     intent.putExtra("Post", post.toString());
                     context.startActivity(intent);
                 }
