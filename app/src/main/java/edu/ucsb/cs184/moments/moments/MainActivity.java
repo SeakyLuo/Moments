@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private GroupFragment groupFragment;
     private NotificationsFragment notificationsFragment;
     private String lastTag;
-    private final String homeTag = "HOME";
-    private final String groupTag = "GROUP";
-    private final String notificationTag = "NOTIFICATION";
+    private final static String homeTag = "HOME";
+    private final static String groupTag = "GROUP";
+    private final static String notificationTag = "NOTIFICATION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
