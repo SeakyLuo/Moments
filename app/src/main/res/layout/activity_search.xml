@@ -46,7 +46,7 @@
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:ems="10"
-                android:hint="@string/post_or_user"
+                android:hint="@string/post_or_user_or_group"
                 android:inputType="text|textPersonName"
                 android:singleLine="true"
                 app:layout_constraintBottom_toTopOf="@id/search_tabs"
