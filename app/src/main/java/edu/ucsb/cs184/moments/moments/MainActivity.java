@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment homeFragment;
     private GroupFragment groupFragment;
     private NotificationsFragment notificationsFragment;
+    private String lastTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,13 +81,16 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        showFragment(homeFragment);
+                        showFragment(homeFragment, "HOME", lastTag);
+                        lastTag = "HOME";
                         return true;
                     case R.id.navigation_groups:
-                        showFragment(groupFragment);
+                        showFragment(groupFragment, "GROUP", lastTag);
+                        lastTag = "GROUP";
                         return true;
                     case R.id.navigation_notifications:
-                        showFragment(notificationsFragment);
+                        showFragment(notificationsFragment, "NOTIFICATION", lastTag);
+                        lastTag = "NOTIFICATION";
                         return true;
                 }
                 return false;
@@ -105,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
             homeFragment = new HomeFragment();
             groupFragment = new GroupFragment();
             notificationsFragment = new NotificationsFragment();
-            showFragment(homeFragment);
+            getSupportFragmentManager().beginTransaction().add(R.id.contentView, homeFragment, "HOME").commit();
+            lastTag = "HOME";
         }
     }
 
@@ -116,10 +123,31 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().putFragment(outState, "homeFragment", homeFragment);
     }
 
-    private void showFragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.contentView, fragment)
-                .commit();
+    protected void showFragment( Fragment fragment, String tag, String lastTag) {
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        if ( lastTag != null ) {
+            Fragment lastFragment = fragmentManager.findFragmentByTag( lastTag );
+            //Log.d("showFragment", "showFragment: lastTag is " + lastTag);
+            if ( lastFragment != null ) {
+                transaction.hide( lastFragment );
+                //Log.d("showFragment", "showFragment: HIDE");
+            }
+        }
+
+        if ( fragment.isAdded() ) {
+            transaction.show( fragment );
+            //Log.d("showFragment", "showFragment: SHOW");
+        }
+        else {
+            transaction.add( R.id.contentView, fragment, tag ).setBreadCrumbShortTitle( tag );
+            //Log.d("showFragment", "showFragment: ADD");
+        }
+
+
+        transaction.commit();
     }
 
     @Override
