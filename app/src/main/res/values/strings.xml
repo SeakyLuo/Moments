@@ -104,5 +104,5 @@
     <string name="comments">Comments</string>
     <string name="ratings">Ratings</string>
     <string name="messages">Messages</string>
-    <string name="sort_by">Sort By</string>
+    <string name="rank_by">Rank By</string>
 </resources>

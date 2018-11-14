@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="paddingPercent" value="50" />
+                                                <entry key="paddingPercent" value="15" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -34,10 +34,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\down.png" />
-                                      <entry key="outputName" value="ic_down" />
+                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\cancel.png" />
+                                      <entry key="outputName" value="ic_cancel" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="5871ff" />
+                                      <entry key="themeColor" value="000000" />
                                     </map>
                                   </option>
                                 </PersistentState>

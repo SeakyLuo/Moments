@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             //Restore the fragment's instance
-            homeFragment = (HomeFragment) getSupportFragmentManager().getFragment(savedInstanceState, "homeFragment");
+            homeFragment = (HomeFragment) getSupportFragmentManager().getFragment(savedInstanceState, homeTag);
         }else{
             homeFragment = new HomeFragment();
             groupFragment = new GroupFragment();
@@ -123,33 +123,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //Save the fragment's instance
-        getSupportFragmentManager().putFragment(outState, "homeFragment", homeFragment);
+        getSupportFragmentManager().putFragment(outState, homeTag, homeFragment);
     }
 
-    protected void showFragment( Fragment fragment, String tag, String lastTag) {
-
+    protected void showFragment(Fragment fragment, String tag, String lastTag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        if ( lastTag != null ) {
-            Fragment lastFragment = fragmentManager.findFragmentByTag( lastTag );
-            //Log.d("showFragment", "showFragment: lastTag is " + lastTag);
-            if ( lastFragment != null ) {
-                transaction.hide( lastFragment );
-                //Log.d("showFragment", "showFragment: HIDE");
+        if (lastTag != null) {
+            Fragment lastFragment = fragmentManager.findFragmentByTag(lastTag);
+            if (lastFragment != null) {
+                transaction.hide(lastFragment);
             }
         }
 
-        if ( fragment.isAdded() ) {
-            transaction.show( fragment );
-            //Log.d("showFragment", "showFragment: SHOW");
+        if (fragment.isAdded()) {
+            transaction.show(fragment);
         }
         else {
-            transaction.add( R.id.contentView, fragment, tag ).setBreadCrumbShortTitle( tag );
-            //Log.d("showFragment", "showFragment: ADD");
+            transaction.add(R.id.contentView, fragment, tag).setBreadCrumbShortTitle(tag);
         }
-
-
         transaction.commit();
     }
 
