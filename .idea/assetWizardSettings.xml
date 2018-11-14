@@ -34,8 +34,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\cancel.png" />
-                                      <entry key="outputName" value="ic_cancel" />
+                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\back.png" />
+                                      <entry key="outputName" value="ic_back" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="000000" />
                                     </map>
