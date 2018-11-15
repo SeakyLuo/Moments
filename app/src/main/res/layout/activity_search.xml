@@ -46,7 +46,7 @@
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:ems="10"
-                android:hint="@string/post_or_user"
+                android:hint="@string/post_or_user_or_group"
                 android:inputType="text|textPersonName"
                 android:singleLine="true"
                 app:layout_constraintBottom_toTopOf="@id/search_tabs"
@@ -79,6 +79,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/users" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/search_groups_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/groups" />
 
                 <android.support.design.widget.TabItem
                     android:id="@+id/search_user_history"

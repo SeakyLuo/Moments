@@ -27,10 +27,12 @@ public class SearchActivity extends AppCompatActivity {
                 finish();
             }
         });
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition(), true);
+                tab.select();
             }
 
             @Override
@@ -47,6 +49,7 @@ public class SearchActivity extends AppCompatActivity {
         adapter = new TabPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new SearchPostFragment(), "Posts");
         adapter.addFragment(new SearchUserFragment(), "Users");
+        adapter.addFragment(new SearchGroupFragment(), "Groups");
         adapter.addFragment(new SearchHistoryFragment(), "History");
         mViewPager.setAdapter(adapter);
     }

@@ -122,14 +122,14 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <Button
-                android:id="@+id/sortBy"
+                android:id="@+id/rankBy"
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:background="@android:color/transparent"
                 android:drawableRight="@drawable/ic_down"
-                android:text="@string/sort_by"
+                android:text="@string/rank_by"
                 android:textAllCaps="false"
                 android:textColor="@color/design_default_color_primary"
                 android:textSize="14sp"
@@ -139,6 +139,13 @@
                 app:layout_constraintVertical_bias="0.0" />
 
         </android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="50sp"
+            android:text="我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级粗\n我超级大\n" />
 
         <FrameLayout
             android:id="@+id/up_timeline"

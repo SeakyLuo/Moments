@@ -16,6 +16,7 @@ public class EditPostActivity extends AppCompatActivity {
     private ImageButton back;
     private ImageButton send;
     private EditText edit_content;
+    private SaveAsDraftFragment saveAsDraftFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,8 @@ public class EditPostActivity extends AppCompatActivity {
         edit_content = findViewById(R.id.edit_content);
         back = findViewById(R.id.edit_cancel);
         send = findViewById(R.id.edit_send);
+        saveAsDraftFragment = new SaveAsDraftFragment();
+        saveAsDraftFragment.setActivity(this);
 
         edit_content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -39,7 +42,7 @@ public class EditPostActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Boolean hasText = s.length() != 0;
+                Boolean hasText = s.toString().trim().length() != 0;
                 send.setClickable(hasText);
                 send.setImageResource(hasText ? R.drawable.ic_send : R.drawable.ic_send_unclickable);
             }
@@ -48,21 +51,28 @@ public class EditPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String content = edit_content.getText().toString();
-                if (content.length() != 0){
+                if (content.length() == 0) finish();
+                else {
                     // ask save to draft box
+                    saveAsDraftFragment.setPost(getPost());
+                    saveAsDraftFragment.show(getSupportFragmentManager(), "Save As Draft");
                 }
-                finish();
             }
         });
-        send.setClickable(false);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String content = edit_content.getText().toString();
+                if (content.trim().length() == 0) return;
                 Intent intent = new Intent(getApplicationContext(), HomeFragment.class);
-                intent.putExtra("Post", new Post(0, edit_content.getText().toString(), new Date()).toString());
+                intent.putExtra("Post", getPost().toString());
                 setResult(EditPostActivity.RESULT_OK, intent);
                 finish();
             }
         });
+    }
+
+    private Post getPost(){
+        return new Post(0, edit_content.getText().toString(), new Date());
     }
 }

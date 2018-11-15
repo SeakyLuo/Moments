@@ -28,7 +28,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         back = findViewById(R.id.up_back);
         toolbar = findViewById(R.id.up_toolbar);
-        collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout = findViewById(R.id.up_ctoolbar);
         fragment = new PostsTimelineFragment();
         fragment.show(getSupportFragmentManager(), R.id.up_timeline);
 
@@ -39,7 +39,7 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
-        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
+        collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
         setSupportActionBar(toolbar);
         setUserProfile(intent.getIntExtra("userid", 0));
     }

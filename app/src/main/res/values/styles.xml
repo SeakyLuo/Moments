@@ -8,12 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@style/SlideRightAnimation</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
     <style name="Widget.Button.Toggle" parent="android:Widget">
-        <item name="android:background">@drawable/ic_collect_toggle_bg</item>
+        <item name="android:background">@drawable/ic_heart_toggle_bg</item>
         <item name="android:disabledAlpha">?android:attr/disabledAlpha</item>
     </style>
 
@@ -23,9 +26,17 @@
         <item name="android:textOff"></item>
     </style>
 
-    <style name="Widget.App.Spinner" parent="@style/Widget.AppCompat.Spinner">
-        <item name="overlapAnchor">true</item>
-        <item name="android:background">@drawable/dropdown_background</item>
+    <style name="CustomProgressBarHorizontal" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/custom_progressbar</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:max">100</item>
+        <item name="android:progress">50</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
