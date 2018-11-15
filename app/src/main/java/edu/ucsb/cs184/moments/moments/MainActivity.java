@@ -47,22 +47,22 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.nav_user_profile:
                         intent = new Intent(getApplicationContext(), UserProfileActivity.class);
-//                        intent.putExtra("userid",0);
                         startActivity(intent);
                         return true;
                     case R.id.nav_user_collections:
                         intent = new Intent(getApplicationContext(), UserCollectionsActivity.class);
-//                        intent.putExtra("userid",0);
                         startActivity(intent);
                         return true;
                     case R.id.nav_user_draftbox:
                         intent = new Intent(getApplicationContext(), UserDraftboxActivity.class);
-//                        intent.putExtra("userid",0);
                         startActivity(intent);
                         return true;
                     case R.id.nav_settings:
                         intent = new Intent(getApplicationContext(), SettingsActivity.class);
-//                        intent.putExtra("userid",0);
+                        startActivity(intent);
+                        return true;
+                    case R.id.test:
+                        intent = new Intent(getApplicationContext(), TestActivity.class);
                         startActivity(intent);
                         return true;
                 }
@@ -79,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         bNavigation = findViewById(R.id.navigation);
+        bNavigation.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+            }
+        });
         bNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -104,9 +110,9 @@ public class MainActivity extends AppCompatActivity {
             //Restore the fragment's instance
             homeFragment = (HomeFragment) getSupportFragmentManager().getFragment(savedInstanceState, homeTag);
         }else{
-            homeFragment = new HomeFragment(); homeFragment.setDrawer(drawer);
-            groupsFragment = new GroupsFragment(); groupsFragment.setDrawer(drawer);
-            notificationsFragment = new NotificationsFragment(); notificationsFragment.setDrawer(drawer);
+            homeFragment = new HomeFragment(); homeFragment.setWidgets(drawer, bNavigation);
+            groupsFragment = new GroupsFragment(); groupsFragment.setWidgets(drawer, bNavigation);
+            notificationsFragment = new NotificationsFragment(); notificationsFragment.setWidgets(drawer, bNavigation);
             getSupportFragmentManager().beginTransaction().add(R.id.contentView, homeFragment, homeTag).commit();
             lastTag = homeTag;
         }
@@ -134,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             transaction.show(fragment);
         }
         else {
-            transaction.add(R.id.contentView, fragment, tag).setBreadCrumbShortTitle(tag);
+            transaction.add(R.id.contentView, fragment, tag);
         }
         transaction.commit();
     }

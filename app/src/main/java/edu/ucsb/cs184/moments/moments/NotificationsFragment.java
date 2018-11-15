@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -18,6 +19,7 @@ public class NotificationsFragment extends Fragment {
 
     private Context context;
     private DrawerLayout drawer;
+    private BottomNavigationView nav;
     private ImageButton menu;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -38,7 +40,7 @@ public class NotificationsFragment extends Fragment {
                 if (drawer != null) drawer.openDrawer(Gravity.START);
             }
         });
-        mViewPager.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -65,8 +67,9 @@ public class NotificationsFragment extends Fragment {
         return view;
     }
 
-    public void setDrawer(DrawerLayout drawer){
+    public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){
         this.drawer = drawer;
+        this.nav = nav;
     }
 
 }

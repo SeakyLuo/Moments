@@ -140,6 +140,13 @@
 
         </android.support.constraint.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="50sp"
+            android:text="我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级长\n我超级粗\n我超级大\n" />
+
         <FrameLayout
             android:id="@+id/up_timeline"
             android:layout_width="match_parent"

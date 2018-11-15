@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +23,7 @@ public class HomeFragment extends Fragment {
 
     private Context context;
     private DrawerLayout drawer;
+    private BottomNavigationView nav;
     private ImageButton menu;
     private ImageButton search;
     private FloatingActionButton fab;
@@ -41,7 +43,7 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        fab = view.findViewById(R.id.floatingActionButton);
+        fab = view.findViewById(R.id.home_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,12 +59,15 @@ public class HomeFragment extends Fragment {
             }
         });
         fragment = new PostsTimelineFragment();
-        fragment.show(getFragmentManager(), R.id.home_timeline);
+        fragment.setFab(fab);
+        fragment.setNav(nav);
+        fragment.show(getFragmentManager(), R.id.home_content);
         return view;
     }
 
-    public void setDrawer(DrawerLayout drawer){
+    public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){
         this.drawer = drawer;
+        this.nav = nav;
     }
 
     @Override
