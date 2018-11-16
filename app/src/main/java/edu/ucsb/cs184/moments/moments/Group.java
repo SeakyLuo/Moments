@@ -7,16 +7,17 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class Group {
-    private int groupid;
+    private int groupid = 0; // To Be Changed
     private int managerid;
-    private String groupname;
+    private String name;
     private Bitmap icon;
     private ArrayList<Integer> members = new ArrayList<>();
     private ArrayList<Post> posts = new ArrayList<>();
 
-    public Group(String groupname, int managerid){
-        this.groupname = groupname;
+    public Group(String name, int managerid, Bitmap icon){
+        this.name = name;
         this.managerid = managerid;
+        this.icon = icon;
         // generates a random group id
     }
 
@@ -25,8 +26,8 @@ public class Group {
     public void setManagerid(int userid) { this.managerid = userid; }
     public Bitmap getIcon() { return icon; }
     public void setIcon(Bitmap bitmap) { this.icon = bitmap; }
-    public String getGroupname() { return groupname; }
-    public void setGroupname(String name) { this.groupname = name; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
     public ArrayList<Integer> getMembers() { return members; }
     public ArrayList<Post> getPosts() { return posts; }
 

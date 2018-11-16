@@ -66,6 +66,10 @@
             android:label="CreateGroupActivity"
             android:theme="@style/AppTheme"></activity>
         <activity
+            android:name=".GroupPostsActivity"
+            android:label="GroupPostsActivity"
+            android:theme="@style/AppTheme"></activity>
+        <activity
             android:name=".TestActivity"
             android:label="@string/title_activity_scrolling"
             android:theme="@style/AppTheme"></activity>

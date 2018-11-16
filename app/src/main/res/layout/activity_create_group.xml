@@ -56,32 +56,13 @@
         android:id="@+id/cg_group_icon"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="48dp"
         android:clickable="true"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cg_toolbar"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
-
-    <EditText
-        android:id="@+id/cg_groupname"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="72dp"
-        android:ems="10"
-        android:hint="Enter Group Name"
-        android:inputType="textPersonName"
-        android:singleLine="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cg_group_icon"
-        app:layout_constraintVertical_bias="0.094" />
 
     <ImageButton
         android:id="@+id/cg_camera"
@@ -91,5 +72,34 @@
         app:layout_constraintBottom_toBottomOf="@+id/cg_group_icon"
         app:layout_constraintEnd_toEndOf="@+id/cg_group_icon"
         app:srcCompat="@drawable/ic_photo_camera" />
+
+    <EditText
+        android:id="@+id/cg_groupname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:hint="Enter Group Name"
+        android:inputType="textPersonName"
+        android:singleLine="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cg_group_icon" />
+
+    <TextView
+        android:id="@+id/cg_namereminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/group_name_reminder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/cg_groupname"
+        app:layout_constraintTop_toBottomOf="@+id/cg_groupname"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ public class RecycleViewFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
+    private boolean showDivider = false;
     private ArrayList<View> hideViews = new ArrayList<>();
 
     @Nullable
@@ -27,6 +29,7 @@ public class RecycleViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.recycler_view, container, false);
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setAdapter(adapter);
+        if (showDivider) recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy){
@@ -43,6 +46,10 @@ public class RecycleViewFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public void setShowDivider(Boolean bool){
+        showDivider = bool;
     }
 
     public void setAdapter(RecyclerView.Adapter adapter){

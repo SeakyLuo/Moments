@@ -17,11 +17,14 @@ public class EditPostActivity extends AppCompatActivity {
     private ImageButton send;
     private EditText edit_content;
     private SaveAsDraftFragment saveAsDraftFragment;
+    private Class caller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_post);
+        Intent intent = getIntent();
+        caller = intent.getClass();
 
         edit_content = findViewById(R.id.edit_content);
         back = findViewById(R.id.edit_cancel);
@@ -64,7 +67,7 @@ public class EditPostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String content = edit_content.getText().toString();
                 if (content.trim().length() == 0) return;
-                Intent intent = new Intent(getApplicationContext(), HomeFragment.class);
+                Intent intent = new Intent(getApplicationContext(), caller);
                 intent.putExtra("Post", getPost().toString());
                 setResult(EditPostActivity.RESULT_OK, intent);
                 finish();

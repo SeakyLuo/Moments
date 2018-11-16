@@ -1,6 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.view.menu.MenuBuilder;
@@ -48,10 +49,16 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
         Group group = groups.get(position);
         holder.setGroup(group);
         ArrayList<Post> posts = group.getPosts();
-        Post post = posts.get(posts.size() - 1);
-        holder.group_name.setText(group.getGroupname());
-        holder.time.setText(TimeText(post.getDate()));
-        holder.content.setText(post.getContent());
+        if (posts.size() == 0){
+            holder.group_name.setText(group.getName());
+            holder.time.setText(TimeText(new Date()));
+            holder.content.setText("You created a new group.");
+        }else{
+            Post post = posts.get(posts.size() - 1);
+            holder.group_name.setText(group.getName());
+            holder.time.setText(TimeText(post.getDate()));
+            holder.content.setText(post.getUserid() +": " + post.getContent());
+        }
         holder.group_icon.setImageBitmap(group.getIcon());
     }
 
@@ -92,9 +99,9 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
-//                    Intent intent = new Intent(context, FullGroupActivity.class);
-//                    intent.putExtra("Group", group.toString());
-//                    context.startActivity(intent);
+                    Intent intent = new Intent(context, GroupPostsActivity.class);
+                    intent.putExtra(GroupsFragment.GROUP, group.toString());
+                    context.startActivity(intent);
                 }
             });
             view.setOnLongClickListener(new View.OnLongClickListener() {
@@ -104,6 +111,10 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
                     helper.setOnItemSelectedListener(new PopupMenuHelper.onItemSelectListener() {
                         @Override
                         public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
+                            switch (menuItem.getItemId()){
+                                case R.id.menuitem_test:
+                                    return true;
+                            }
                             return false;
                         }
                     });
@@ -113,7 +124,12 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
             });
         }
 
-        public void setGroup(Group group) { this.group = group;}
+        public void setGroup(Group group) {
+            this.group = group;
+            group_name.setText(group.getName());
+            time.setText("");
+            content.setText("Nothing");
+        }
 
         public void setQuiet(boolean isQuiet){
             quiet.setVisibility(isQuiet ? View.VISIBLE : View.INVISIBLE);

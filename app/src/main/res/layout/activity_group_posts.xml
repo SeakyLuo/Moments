@@ -8,20 +8,20 @@
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/groups_app_bar"
+        android:id="@+id/gp_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/groups_ctoolbar"
+            android:id="@+id/gp_ctoolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|enterAlways">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/groups_toolbar"
+                android:id="@+id/gp_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_size"
                 android:background="?android:attr/colorBackgroundFloating"
@@ -33,41 +33,45 @@
                     android:layout_height="match_parent">
 
                     <ImageButton
-                        android:id="@+id/menu_groups"
-                        android:layout_width="@dimen/button_size"
-                        android:layout_height="@dimen/button_size"
+                        android:id="@+id/gp_back"
+                        android:layout_width="@dimen/button_size_small"
+                        android:layout_height="@dimen/button_size_small"
                         android:background="@android:drawable/screen_background_light_transparent"
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0"
-                        app:srcCompat="@drawable/ic_menu" />
-
-                    <ImageButton
-                        android:id="@+id/groups_add"
-                        android:layout_width="@dimen/button_size"
-                        android:layout_height="@dimen/button_size"
-                        android:background="@android:drawable/screen_background_light_transparent"
-                        android:src="@drawable/ic_add"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:srcCompat="@drawable/ic_back" />
 
                     <TextView
-                        android:id="@+id/title_groups"
+                        android:id="@+id/gp_title"
                         android:layout_width="wrap_content"
-                        android:layout_height="0dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:ellipsize="end"
                         android:gravity="center_vertical"
-                        android:text="@string/title_groups"
+                        android:singleLine="true"
+                        android:text="Group Name"
                         android:textColor="@color/BlackGray"
                         android:textSize="24sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/menu_groups"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintEnd_toStartOf="@+id/gp_more"
+                        app:layout_constraintStart_toEndOf="@+id/gp_back"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <ImageButton
+                        android:id="@+id/gp_more"
+                        android:layout_width="@dimen/button_size_small"
+                        android:layout_height="@dimen/button_size_small"
+                        android:layout_marginEnd="4dp"
+                        android:background="@android:drawable/screen_background_light_transparent"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_more_h" />
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.Toolbar>
 
@@ -75,12 +79,27 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/groups_content"
+        android:id="@+id/gp_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        app:layout_anchor="@id/groups_app_bar"
+        app:layout_anchor="@id/gp_app_bar"
         app:layout_anchorGravity="bottom"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/gp_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/holo_red_light"
+        app:layout_anchorGravity="bottom|end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="16dp"
+        app:srcCompat="@drawable/ic_newpost" />
 
 </android.support.design.widget.CoordinatorLayout>
