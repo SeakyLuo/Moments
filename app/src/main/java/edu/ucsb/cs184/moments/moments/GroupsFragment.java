@@ -17,7 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_OK;
+
 public class GroupsFragment extends Fragment {
+
+    public static final String GROUP = "Group";
+
+    private static final int CREATE_GROUP = 0;
 
     private View view;
     private Context context;
@@ -25,6 +33,9 @@ public class GroupsFragment extends Fragment {
     private ImageButton add;
     private DrawerLayout drawer;
     private BottomNavigationView nav;
+    private GroupsAdapter adapter;
+    private RecycleViewFragment fragment;
+    private ArrayList<Integer> groups = new ArrayList<>();
 
     @Nullable
     @Override
@@ -43,11 +54,14 @@ public class GroupsFragment extends Fragment {
         helper.setOnItemSelectedListener(new PopupMenuHelper.onItemSelectListener() {
             @Override
             public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
+                Intent intent;
                 switch (menuItem.getItemId()){
                     case R.id.create_a_group:
+                        intent = new Intent(context, CreateGroupActivity.class);
+                        startActivityForResult(intent, CREATE_GROUP);
                         return true;
                     case R.id.join_a_group:
-                        Intent intent = new Intent(context, SearchActivity.class);
+                        intent = new Intent(context, SearchActivity.class);
                         intent.putExtra(SearchActivity.TAB, SearchActivity.GROUPS);
                         startActivity(intent);
                         return true;
@@ -62,11 +76,37 @@ public class GroupsFragment extends Fragment {
                 helper.show();
             }
         });
+        fragment = new RecycleViewFragment();
+        adapter = new GroupsAdapter();
+        setGroups(UserInfo.user.getGroups());
+        fragment.setAdapter(adapter);
+        fragment.addHiddenView(nav);
+        fragment.show(getFragmentManager(), R.id.groups_content);
         return view;
     }
 
     public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){
         this.drawer = drawer;
         this.nav = nav;
+    }
+
+    public void setGroups(ArrayList<Integer> groups){
+        this.groups = groups;
+        for(Integer group : groups){
+            setGroup(Group.findGroup(group));
+        }
+    }
+
+    public void setGroup(Group group){
+        adapter.addGroup(group);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) return;
+        if (requestCode == CREATE_GROUP){
+            setGroup(Group.fromJson(data.getStringExtra(GROUP)));
+        }
     }
 }

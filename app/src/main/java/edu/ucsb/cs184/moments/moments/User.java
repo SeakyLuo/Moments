@@ -1,7 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 import com.google.gson.Gson;
 
@@ -35,6 +34,8 @@ public class User {
     public Bitmap getIcon() { return icon; }
     public String getUsername() { return username; }
     public int getUserid() { return userid; }
+    public ArrayList<Message> getMessages() { return messages; }
+    public ArrayList<Integer> getGroups() { return groups; }
     public ArrayList<Post> getPosts() {
         return posts;
     }

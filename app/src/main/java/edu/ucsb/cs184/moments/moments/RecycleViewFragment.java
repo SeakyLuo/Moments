@@ -1,6 +1,5 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 
 public class RecycleViewFragment extends Fragment {
 
-    private Context context;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private ArrayList<View> hideViews = new ArrayList<>();
@@ -27,8 +25,8 @@ public class RecycleViewFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recycler_view, container, false);
-        context = getContext();
         recyclerView = view.findViewById(R.id.recyclerview);
+        recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy){
@@ -49,7 +47,6 @@ public class RecycleViewFragment extends Fragment {
 
     public void setAdapter(RecyclerView.Adapter adapter){
         this.adapter = adapter;
-        recyclerView.setAdapter(adapter);
     }
 
     public void addHiddenView(View view) { hideViews.add(view); }
