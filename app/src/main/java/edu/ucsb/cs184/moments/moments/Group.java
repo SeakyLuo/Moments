@@ -1,6 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.view.Gravity;
+import android.graphics.Bitmap;
 
 import com.google.gson.Gson;
 
@@ -10,6 +10,7 @@ public class Group {
     private int groupid;
     private int managerid;
     private String groupname;
+    private Bitmap icon;
     private ArrayList<Integer> members = new ArrayList<>();
     private ArrayList<Post> posts = new ArrayList<>();
 
@@ -18,6 +19,16 @@ public class Group {
         this.managerid = managerid;
         // generates a random group id
     }
+
+    public int getGroupid() { return groupid; }
+    public int getManagerid() { return managerid; }
+    public void setManagerid(int userid) { this.managerid = userid; }
+    public Bitmap getIcon() { return icon; }
+    public void setIcon(Bitmap bitmap) { this.icon = bitmap; }
+    public String getGroupname() { return groupname; }
+    public void setGroupname(String name) { this.groupname = name; }
+    public ArrayList<Integer> getMembers() { return members; }
+    public ArrayList<Post> getPosts() { return posts; }
 
     public void addMember(int userid){
         members.add(userid);

@@ -22,7 +22,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
     private Intent intent;
-    private PostsTimelineFragment fragment;
+    private RecycleViewFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class UserProfileActivity extends AppCompatActivity {
         sortBy = include.findViewById(R.id.fpc_sortby_button);
         toolbar = findViewById(R.id.up_toolbar);
         collapsingToolbarLayout = findViewById(R.id.up_ctoolbar);
-        fragment = new PostsTimelineFragment();
+        fragment = new RecycleViewFragment();
         fragment.show(getSupportFragmentManager(), R.id.up_timeline);
 
         back.setOnClickListener(new View.OnClickListener() {

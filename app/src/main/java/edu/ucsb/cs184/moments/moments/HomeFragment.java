@@ -29,7 +29,7 @@ public class HomeFragment extends Fragment {
     private ImageButton menu;
     private ImageButton search;
     private FloatingActionButton fab;
-    private PostsTimelineFragment fragment;
+    private RecycleViewFragment fragment;
 
     @Nullable
     @Override
@@ -60,7 +60,8 @@ public class HomeFragment extends Fragment {
                 if (drawer != null) drawer.openDrawer(Gravity.START);
             }
         });
-        fragment = new PostsTimelineFragment();
+        fragment = new RecycleViewFragment();
+        fragment.setAdapter(new PostsAdapter());
         fragment.addHiddenView(fab);
         fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.home_content);
