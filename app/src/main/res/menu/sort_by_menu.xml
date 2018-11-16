@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sb_highest_rating"
+        android:title="Highest Rating" />
+
+    <item
+        android:id="@+id/sb_lowest_rating"
+        android:title="Lowest Rating" />
+
+    <item
+        android:id="@+id/sb_lastest"
+        android:title="Lastest Post" />
+
+    <item
+        android:id="@+id/sb_oldest"
+        android:title="Oldest Post" />
+</menu>

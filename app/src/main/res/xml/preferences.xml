@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <Preference
         android:key="manage_account"
@@ -9,18 +11,17 @@
         android:key="account_safety"
         android:title="Account Safety" />
 
-    <ListPreference
-        android:defaultValue="1"
-        android:entries="@android:array/emailAddressTypes"
-        android:entryValues="@android:array/imProtocols"
-        android:key="list_preference_1"
-        android:title="List preference" />
     <SwitchPreference
         android:defaultValue="true"
-        android:key="Notifications"
+        android:key="notifications"
         android:title="Receive Notifications" />
 
-    <Preference
+    <ListPreference
+        android:defaultValue="Follow System"
+        android:entries="@array/languages"
+        android:entryValues="@array/languages"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
         android:key="language"
         android:title="Language" />
 
@@ -31,4 +32,5 @@
     <Preference
         android:key="logout"
         android:title="Logout" />
+
 </PreferenceScreen>

@@ -69,7 +69,7 @@
 
             <include
                 android:id="@+id/up_post"
-                layout="@layout/post_view"
+                layout="@layout/view_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -82,6 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:elevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +92,6 @@
                     android:id="@+id/fullpost_tablayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:elevation="4dp"
                     app:tabIndicatorColor="@android:color/holo_red_light"
                     app:tabSelectedTextColor="@android:color/holo_red_light"
                     app:tabTextAppearance="@style/TextAppearance.AppCompat.Body2"
@@ -114,18 +114,17 @@
                 </android.support.design.widget.TabLayout>
             </android.support.v7.widget.CardView>
 
-            <android.support.v4.view.ViewPager
+            <edu.ucsb.cs184.moments.moments.TabViewPager
                 android:id="@+id/fullpost_viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fullpost_cardView"
-                app:layout_constraintVertical_bias="0.0"/>
+                app:layout_constraintVertical_bias="0.0" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

@@ -17,13 +17,15 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class PostsTimelineFragment extends Fragment {
 
     private Context context;
     private RecyclerView recyclerView;
     private PostsAdapter adapter;
-    private FloatingActionButton hideFab;
-    private BottomNavigationView hideNav;
+    private ArrayList<View> hideViews = new ArrayList<>();
 
     @Nullable
     @Override
@@ -37,23 +39,21 @@ public class PostsTimelineFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy){
                 super.onScrolled(recyclerView, dx, dy);
-                if (hideFab != null){
-                    if (dy > 0 && hideFab.isShown()) hideFab.hide();
-                    else if (dy < 0) hideFab.show();
-                }
-                if (hideNav != null){
-                    if (dy > 0) hideNav.setVisibility(View.GONE);
-                    else if (dy < 0) hideNav.setVisibility(View.VISIBLE);
+                for (View view : hideViews){
+                    if (view instanceof FloatingActionButton){
+                        if (dy > 0 && view.isShown()) ((FloatingActionButton) view).hide();
+                        else if (dy < 0) ((FloatingActionButton) view).show();
+                    }else{
+                        if (dy > 0 && view.isShown()) view.setVisibility(View.GONE);
+                        else if (dy < 0) view.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
         return view;
     }
 
-    public void setFab(FloatingActionButton fab){
-        hideFab = fab;
-    }
-    public void setNav(BottomNavigationView nav) { hideNav = nav; }
+    public void addHiddenView(View view) { hideViews.add(view); }
 
     public void setPost(String json){
         Gson gson = new Gson();

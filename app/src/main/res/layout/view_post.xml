@@ -24,11 +24,43 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/post_usericon"
+                android:layout_width="@dimen/user_icon_post"
+                android:layout_height="@dimen/user_icon_post"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toTopOf="@+id/post_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:drawable/sym_def_app_icon" />
+
             <TextView
-                android:id="@+id/post_content"
-                android:layout_width="match_parent"
+                android:id="@+id/post_username"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:text="Username"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/post_usericon"
+                app:layout_constraintTop_toTopOf="@+id/post_usericon" />
+
+            <TextView
+                android:id="@+id/post_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/post_usericon"
+                app:layout_constraintStart_toStartOf="@+id/post_username" />
+
+            <TextView
+                android:id="@+id/post_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
@@ -38,45 +70,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/post_usericon"
                 app:layout_constraintTop_toBottomOf="@id/post_usericon"
                 tools:text="Content" />
-
-            <TextView
-                android:id="@+id/post_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="Username"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/post_time"
-                app:layout_constraintStart_toEndOf="@+id/post_usericon"
-                app:layout_constraintTop_toTopOf="@+id/post_usericon" />
-
-            <TextView
-                android:id="@+id/post_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Time"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/post_usericon"
-                app:layout_constraintStart_toEndOf="@+id/post_usericon"
-                app:layout_constraintTop_toBottomOf="@+id/post_username" />
-
-            <ImageView
-                android:id="@+id/post_usericon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/post_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/sym_def_app_icon" />
         </android.support.constraint.ConstraintLayout>
 
         <RatingBar

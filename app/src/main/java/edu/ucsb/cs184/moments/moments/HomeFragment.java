@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.support.v7.widget.Toolbar;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -23,6 +24,7 @@ public class HomeFragment extends Fragment {
 
     private Context context;
     private DrawerLayout drawer;
+    private Toolbar toolbar;
     private BottomNavigationView nav;
     private ImageButton menu;
     private ImageButton search;
@@ -59,8 +61,8 @@ public class HomeFragment extends Fragment {
             }
         });
         fragment = new PostsTimelineFragment();
-        fragment.setFab(fab);
-        fragment.setNav(nav);
+        fragment.addHiddenView(fab);
+        fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.home_content);
         return view;
     }

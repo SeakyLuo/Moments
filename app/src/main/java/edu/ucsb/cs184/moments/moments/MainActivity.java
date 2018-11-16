@@ -105,6 +105,19 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        bNavigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_home:
+//                        showFragment(homeFragment, homeTag, lastTag);
+                    case R.id.navigation_groups:
+//                        showFragment(groupsFragment, groupTag, lastTag);
+                    case R.id.navigation_notifications:
+//                        showFragment(notificationsFragment, notificationTag, lastTag);
+                }
+            }
+        });
 
         if (savedInstanceState != null) {
             //Restore the fragment's instance

@@ -1,9 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +23,7 @@ public class FullPostCommentsAdapter extends RecyclerView.Adapter<FullPostCommen
     @Override
     public FullPostCommentsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.post_view, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.view_post, parent, false);
         FullPostCommentsAdapter.ViewHolder holder = new FullPostCommentsAdapter.ViewHolder(view);
         return holder;
     }

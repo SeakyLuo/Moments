@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        android:layout_marginBottom="0dp"
         android:elevation="0dp"
         android:fitsSystemWindows="true">
 
@@ -78,7 +79,8 @@
     </android.support.design.widget.AppBarLayout>
 
     <include
-        layout="@layout/user_profile_content"
+        layout="@layout/content_user_profile"
+        android:id="@+id/content_user_profile"
         app:layout_anchor="@+id/up_app_bar"
         app:layout_anchorGravity="bottom"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

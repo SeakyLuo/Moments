@@ -11,7 +11,7 @@ public class Comment {
     private Date date;
     private Comment parent = null;
 
-    private ArrayList<Comment> comments = new ArrayList<>();
+    private ArrayList<Comment> replies = new ArrayList<>();
     private ArrayList<Rating> ratings = new ArrayList<>();
 
     public Comment(int userid, String content, Date date){
@@ -26,8 +26,8 @@ public class Comment {
         this.parent = parent;
     }
 
-    public int comments_received() { return comments.size(); }
-    public ArrayList<Comment> getComments() { return  comments; }
+    public int replies_received() { return replies.size(); }
+    public ArrayList<Comment> getComments() { return  replies; }
     public int ratings_received() { return ratings.size(); }
     public float ratings_avg(){
         float sum = 0;
