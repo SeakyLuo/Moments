@@ -107,7 +107,6 @@ public class GroupsFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == CREATE_GROUP){
-            android.util.Log.d("fuck",data.getStringExtra(GROUP));
             setGroup(Group.fromJson(data.getStringExtra(GROUP)));
         }
     }

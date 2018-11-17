@@ -36,6 +36,7 @@ public class RecycleViewFragment extends Fragment {
                 super.onScrolled(recyclerView, dx, dy);
                 for (View view : hideViews){
                     if (view instanceof FloatingActionButton){
+                        android.util.Log.d("fuck","hey");
                         if (dy > 0 && view.isShown()) ((FloatingActionButton) view).hide();
                         else if (dy < 0) ((FloatingActionButton) view).show();
                     }else{

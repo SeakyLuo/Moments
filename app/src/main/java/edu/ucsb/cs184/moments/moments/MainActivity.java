@@ -122,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             //Restore the fragment's instance
             homeFragment = (HomeFragment) getSupportFragmentManager().getFragment(savedInstanceState, homeTag);
+            groupsFragment = (GroupsFragment) getSupportFragmentManager().getFragment(savedInstanceState, groupTag);
+            notificationsFragment = (NotificationsFragment) getSupportFragmentManager().getFragment(savedInstanceState, notificationTag);
         }else{
             homeFragment = new HomeFragment(); homeFragment.setWidgets(drawer, bNavigation);
             groupsFragment = new GroupsFragment(); groupsFragment.setWidgets(drawer, bNavigation);
@@ -136,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         //Save the fragment's instance
         getSupportFragmentManager().putFragment(outState, homeTag, homeFragment);
+        getSupportFragmentManager().putFragment(outState, groupTag, groupsFragment);
+        getSupportFragmentManager().putFragment(outState, notificationTag, notificationsFragment);
     }
 
     protected void showFragment(Fragment fragment, String tag, String lastTag) {

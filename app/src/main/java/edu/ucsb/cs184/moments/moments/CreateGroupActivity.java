@@ -16,7 +16,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     private ImageView icon;
     private ImageButton camera;
     private ImageButton cancel;
-    private ImageButton finish;
+    private ImageButton finishButton;
     private EditText name;
 
     @Override
@@ -26,7 +26,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         icon = findViewById(R.id.cg_group_icon);
         camera = findViewById(R.id.cg_camera);
         cancel = findViewById(R.id.cg_cancel);
-        finish = findViewById(R.id.cg_finish);
+        finishButton = findViewById(R.id.cg_finish);
         name = findViewById(R.id.cg_groupname);
 
         icon.setOnClickListener(new View.OnClickListener() {
@@ -44,18 +44,18 @@ public class CreateGroupActivity extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clear();
+                finish();
             }
         });
-        finish.setOnClickListener(new View.OnClickListener() {
+        finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!finishClickable()) return;
                 Group group = new Group(name.getText().toString(), UserInfo.user.getUserid(), ((BitmapDrawable) icon.getDrawable()).getBitmap());
-                Intent intent = new Intent(CreateGroupActivity.this, GroupsFragment.class);
+                Intent intent = new Intent(getApplicationContext(), GroupsFragment.class);
                 intent.putExtra(GroupsFragment.GROUP, group.toString());
-                setResult(CreateGroupActivity.RESULT_OK, intent);
-                clear();
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
         name.addTextChangedListener(new TextWatcher() {
@@ -72,21 +72,13 @@ public class CreateGroupActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 Boolean clickable = finishClickable();
-                finish.setClickable(clickable);
-                finish.setImageResource(clickable ? R.drawable.ic_tick : R.drawable.ic_tick_unclickable);
+                finishButton.setClickable(clickable);
+                finishButton.setImageResource(clickable ? R.drawable.ic_tick : R.drawable.ic_tick_unclickable);
             }
         });
     }
 
     private Boolean finishClickable(){
-        Boolean hasText = name.getText().toString().trim().length() != 0;
-        Boolean le30 = name.getText().toString().length() <= 30;
-        return hasText && le30;
-    }
-
-    private void clear(){
-        icon.setImageBitmap(null);
-        name.setText("");
-        finish();
+        return (name.getText().toString().trim().length() != 0) && (name.getText().toString().length() <= 30);
     }
 }

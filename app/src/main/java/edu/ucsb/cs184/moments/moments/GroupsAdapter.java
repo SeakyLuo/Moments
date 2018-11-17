@@ -2,8 +2,6 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -43,23 +41,10 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Group group = groups.get(position);
         holder.setGroup(group);
-        ArrayList<Post> posts = group.getPosts();
-        if (posts.size() == 0){
-            holder.group_name.setText(group.getName());
-            holder.time.setText(TimeText(new Date()));
-            holder.content.setText("You created a new group.");
-        }else{
-            Post post = posts.get(posts.size() - 1);
-            holder.group_name.setText(group.getName());
-            holder.time.setText(TimeText(post.getDate()));
-            holder.content.setText(post.getUserid() +": " + post.getContent());
-        }
-        holder.group_icon.setImageBitmap(group.getIcon());
     }
 
     public static String TimeText(Date date){
@@ -127,8 +112,16 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
         public void setGroup(Group group) {
             this.group = group;
             group_name.setText(group.getName());
-            time.setText("");
-            content.setText("Nothing");
+            group_icon.setImageBitmap(group.getIcon());
+            ArrayList<Post> posts = group.getPosts();
+            if (posts.size() == 0){
+                time.setText(TimeText(new Date()));
+                content.setText("You have created a new group.");
+            }else{
+                Post post = posts.get(posts.size() - 1);
+                time.setText(TimeText(post.getDate()));
+                content.setText(post.getUserid() +": " + post.getContent());
+            }
         }
 
         public void setQuiet(boolean isQuiet){

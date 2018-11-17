@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
@@ -23,6 +24,7 @@ public class GroupPostsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private BottomNavigationView nav;
     private TextView title;
+    private ImageView icon;
     private ImageButton back;
     private ImageButton more;
     private FloatingActionButton fab;
@@ -42,6 +44,7 @@ public class GroupPostsActivity extends AppCompatActivity {
         back = findViewById(R.id.gp_back);
         more = findViewById(R.id.gp_more);
         title = findViewById(R.id.gp_title);
+        icon = findViewById(R.id.gp_icon);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +65,7 @@ public class GroupPostsActivity extends AppCompatActivity {
             }
         });
         title.setText(group.getName());
+        icon.setImageBitmap(group.getIcon());
         fragment = new RecycleViewFragment();
         fragment.setAdapter(new PostsAdapter());
         fragment.addHiddenView(fab);
@@ -71,7 +75,6 @@ public class GroupPostsActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         //Save the fragment's state here
     }
 

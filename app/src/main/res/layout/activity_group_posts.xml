@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,85 +7,85 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/gp_app_bar"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/gp_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="@dimen/button_size"
+        android:background="?android:attr/colorBackgroundFloating"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="parallax">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/gp_ctoolbar"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|enterAlways">
+            android:layout_height="match_parent">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/gp_toolbar"
-                android:layout_width="match_parent"
+            <ImageButton
+                android:id="@+id/gp_back"
+                android:layout_width="@dimen/button_size"
                 android:layout_height="@dimen/button_size"
-                android:background="?android:attr/colorBackgroundFloating"
-                app:contentInsetStart="0dp"
-                app:layout_collapseMode="parallax">
+                android:background="@android:drawable/screen_background_light_transparent"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_back" />
 
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/gp_title_combo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/gp_more"
+                app:layout_constraintStart_toEndOf="@id/gp_back"
+                app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageButton
-                        android:id="@+id/gp_back"
-                        android:layout_width="@dimen/button_size_small"
-                        android:layout_height="@dimen/button_size_small"
-                        android:background="@android:drawable/screen_background_light_transparent"
-                        android:visibility="visible"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_back" />
+                <ImageView
+                    android:id="@+id/gp_icon"
+                    android:layout_width="@dimen/button_size_small"
+                    android:layout_height="@dimen/button_size_small"
+                    app:srcCompat="@drawable/group_icon" />
 
-                    <TextView
-                        android:id="@+id/gp_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:ellipsize="end"
-                        android:gravity="center_vertical"
-                        android:singleLine="true"
-                        android:text="Group Name"
-                        android:textColor="@color/BlackGray"
-                        android:textSize="24sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/gp_more"
-                        app:layout_constraintStart_toEndOf="@+id/gp_back"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
+                <TextView
+                    android:id="@+id/gp_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="Group Name"
+                    android:textColor="@color/BlackGray"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/gp_more"
-                        android:layout_width="@dimen/button_size_small"
-                        android:layout_height="@dimen/button_size_small"
-                        android:layout_marginEnd="4dp"
-                        android:background="@android:drawable/screen_background_light_transparent"
-                        android:visibility="visible"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_more_h" />
-                </android.support.constraint.ConstraintLayout>
-            </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
+            <ImageButton
+                android:id="@+id/gp_more"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:background="@android:drawable/screen_background_light_transparent"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_more_h" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/gp_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_gravity="bottom"
-        app:layout_anchor="@id/gp_app_bar"
+        app:layout_anchor="@id/gp_toolbar"
         app:layout_anchorGravity="bottom"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gp_toolbar" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/gp_fab"
@@ -102,4 +102,4 @@
         app:maxImageSize="16dp"
         app:srcCompat="@drawable/ic_newpost" />
 
-</android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>

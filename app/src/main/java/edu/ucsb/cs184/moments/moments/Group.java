@@ -4,9 +4,10 @@ import android.graphics.Bitmap;
 
 import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Group {
+public class Group implements Serializable {
     private int groupid = 0; // To Be Changed
     private int managerid;
     private String name;
@@ -25,7 +26,7 @@ public class Group {
     public int getManagerid() { return managerid; }
     public void setManagerid(int userid) { this.managerid = userid; }
     public Bitmap getIcon() { return icon; }
-    public void setIcon(Bitmap bitmap) { this.icon = bitmap; }
+    public void setIcon(Bitmap icon) { this.icon = icon; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public ArrayList<Integer> getMembers() { return members; }
