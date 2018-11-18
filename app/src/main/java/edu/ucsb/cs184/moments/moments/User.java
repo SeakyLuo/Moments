@@ -7,11 +7,10 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 public class User {
-    public static final int anonymous = 0;
-    private int userid;
+    public static final String anonymous = "anonymous";
+    private String userid;
     private String username;
     private String email;
-    private String password;
     private Bitmap icon;
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> collections = new ArrayList<>();
@@ -23,17 +22,16 @@ public class User {
     private ArrayList<Integer> followers = new ArrayList<>();  // id
     private ArrayList<Integer> followerings = new ArrayList<>();  // id
 
-    public User(String username, String email, String password){
+    public User(String username, String email, String uid){
         this.username = username;
         this.email = email;
-        this.password = password;
-//        this.userid = 10000000 + number of users in database
+        this.userid = uid;
     }
 
     public void setIcon(Bitmap bitmap) { icon = bitmap; }
     public Bitmap getIcon() { return icon; }
     public String getUsername() { return username; }
-    public int getUserid() { return userid; }
+    public String getUserid() { return userid; }
     public ArrayList<Message> getMessages() { return messages; }
     public ArrayList<Integer> getGroups() { return groups; }
     public ArrayList<Post> getPosts() {
@@ -42,8 +40,8 @@ public class User {
     public ArrayList<Post> getCollections() { return collections; }
     public ArrayList<Comment> getComments_made() { return comments_made; }
     public ArrayList<Comment> getComments_recv() { return comments_recv; }
-
     public Boolean isAnonymous() { return this.userid == anonymous; }
+
     public void getNotified(){
         // to be implemented
     }
@@ -86,8 +84,8 @@ public class User {
     public static User fromJson(String json){
         return (new Gson()).fromJson(json, User.class);
     }
-    public static User findUser(int id){
+    public static User findUser(String id){
         // to be implemented
-        return new User("Moments Developer","haitianluo@ucsb.edu","moments");
+        return new User("Moments Developer","haitianluo@ucsb.edu","test");
     }
 }

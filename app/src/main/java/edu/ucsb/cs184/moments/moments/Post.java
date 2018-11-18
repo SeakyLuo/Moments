@@ -7,20 +7,20 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Post {
-    private int userid;
+    private String userid;
     private String content;
     private Date date;
 
     private ArrayList<Rating> ratings = new ArrayList<>();
     private ArrayList<Comment> comments = new ArrayList<>();
 
-    public Post(int userid, String content, Date date){
+    public Post(String userid, String content, Date date){
         this.userid = userid;
         this.content = content;
         this.date = date;
     }
 
-    public int getUserid() { return userid; }
+    public String getUserid() { return userid; }
     public String getContent() { return content; }
     public Date getDate() { return date; }
     public int comments_received() { return comments.size(); }
@@ -35,7 +35,7 @@ public class Post {
         return sum / count;
     }
     public Boolean isAnonymous() { return userid == User.anonymous; }
-    public Boolean isCollected(int userid) {
+    public Boolean isCollected(String userid) {
         User user = User.findUser(userid);
         ArrayList<Post> posts = user.getCollections();
         for (int i = 0; i < posts.size(); i++) if (this.equals(posts.get(i))) return true;
@@ -62,5 +62,5 @@ public class Post {
         return date == p.date && userid == p.userid;
     }
 
-    public static Post TestPost(){ return new Post(0, new Date().toString(), new Date());}
+    public static Post TestPost(){ return new Post("test", new Date().toString(), new Date());}
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Comment {
-    private int userid;
+    private String userid;
     private String content;
     private Date date;
     private Comment parent = null;
@@ -14,12 +14,12 @@ public class Comment {
     private ArrayList<Comment> replies = new ArrayList<>();
     private ArrayList<Rating> ratings = new ArrayList<>();
 
-    public Comment(int userid, String content, Date date){
+    public Comment(String userid, String content, Date date){
         this.userid = userid;
         this.content = content;
         this.date = date;
     }
-    public Comment(int userid, String content, Date date, Comment parent){
+    public Comment(String userid, String content, Date date, Comment parent){
         this.userid = userid;
         this.content = content;
         this.date = date;
@@ -37,7 +37,7 @@ public class Comment {
             sum += ratings.get(i).getRating();
         return sum / count;
     }
-    public int getUserid() { return userid; }
+    public String getUserid() { return userid; }
     public String getContent() { return content; }
     public Date getDate() { return date; }
     public Comment getParent() { return parent; }
@@ -50,5 +50,5 @@ public class Comment {
     public static Comment fromJson(String json){
         return (new Gson()).fromJson(json, Comment.class);
     }
-    public static Comment TestComment(){ return new Comment(0, new Date().toString(), new Date());}
+    public static Comment TestComment(){ return new Comment("test", new Date().toString(), new Date());}
 }

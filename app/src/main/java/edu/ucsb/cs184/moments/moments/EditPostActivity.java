@@ -76,6 +76,7 @@ public class EditPostActivity extends AppCompatActivity {
     }
 
     private Post getPost(){
-        return new Post(0, edit_content.getText().toString(), new Date());
+        // TODO: To be implemented
+        return new Post("test", edit_content.getText().toString(), new Date());
     }
 }

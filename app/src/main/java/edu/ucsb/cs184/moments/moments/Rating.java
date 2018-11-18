@@ -5,16 +5,16 @@ import com.google.gson.Gson;
 import java.util.Date;
 
 public class Rating {
-    private int userid;
+    private String userid;
     private int rating;
     private Date date;
-    public Rating(int userid, int rating, Date date){
+    public Rating(String userid, int rating, Date date){
         this.userid = userid;
         this.rating = rating;
         this.date = date;
     }
     public Boolean isAnonymous() { return userid == User.anonymous; }
-    public int getUserid() { return userid; }
+    public String getUserid() { return userid; }
     public int getRating() { return rating; }
     public Date getDate() { return date; }
 

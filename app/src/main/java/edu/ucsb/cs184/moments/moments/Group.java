@@ -9,13 +9,13 @@ import java.util.ArrayList;
 
 public class Group implements Serializable {
     private int groupid = 0; // To Be Changed
-    private int managerid;
+    private String managerid;
     private String name;
     private Bitmap icon;
     private ArrayList<Integer> members = new ArrayList<>();
     private ArrayList<Post> posts = new ArrayList<>();
 
-    public Group(String name, int managerid, Bitmap icon){
+    public Group(String name, String managerid, Bitmap icon){
         this.name = name;
         this.managerid = managerid;
         this.icon = icon;
@@ -23,8 +23,8 @@ public class Group implements Serializable {
     }
 
     public int getGroupid() { return groupid; }
-    public int getManagerid() { return managerid; }
-    public void setManagerid(int userid) { this.managerid = userid; }
+    public String getManagerid() { return managerid; }
+    public void setManagerid(String userid) { this.managerid = userid; }
     public Bitmap getIcon() { return icon; }
     public void setIcon(Bitmap icon) { this.icon = icon; }
     public String getName() { return name; }
