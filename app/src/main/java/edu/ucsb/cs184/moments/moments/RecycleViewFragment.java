@@ -59,8 +59,11 @@ public class RecycleViewFragment extends Fragment {
 
     public void addHiddenView(View view) { hideViews.add(view); }
 
-    public void setPost(String json){
+    public void addPost(String json){
         ((PostsAdapter) adapter).addPost((new Gson()).fromJson(json, Post.class));
+    }
+    public void addComment(Comment comment){
+        ((CommentsAdapter) adapter).addComment(comment);
     }
 
     public void show(FragmentManager manager, int viewId){

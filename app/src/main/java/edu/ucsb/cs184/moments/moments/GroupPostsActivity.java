@@ -83,7 +83,7 @@ public class GroupPostsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == REQUEST_POST){
-            fragment.setPost(data.getStringExtra("Post"));
+            fragment.addPost(data.getStringExtra("Post"));
         }
     }
 

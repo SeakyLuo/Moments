@@ -4,7 +4,6 @@
     <string name="title_groups">Groups</string>
     <string name="title_notifications">Notifications</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">Sign in</string>
     <!-- Strings related to login -->
@@ -123,4 +122,9 @@
     <string name="copy">Copy</string>
     <string name="follow">Follow</string>
     <string name="group_name_reminder">Name must have no more than 30 characters.</string>
+    <string name="add_comment">Add Your Comment</string>
+    <string name="highest_rating">Highest Rating</string>
+    <string name="lowest_rating">Lowest Rating</string>
+    <string name="lastest_post">Lastest Post</string>
+    <string name="oldest_post">Oldest Post</string>
 </resources>

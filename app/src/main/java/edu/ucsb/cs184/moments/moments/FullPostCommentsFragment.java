@@ -1,8 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,13 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class FullPostCommentsFragment extends Fragment {
 
     private Context context;
     private Button sortby_button;
     private TextView sortby_text;
+    private RecycleViewFragment fragment;
 
     @Nullable
     @Override
@@ -31,7 +29,11 @@ public class FullPostCommentsFragment extends Fragment {
         context = getContext();
         sortby_button = view.findViewById(R.id.fpc_sortby_button);
         sortby_text = view.findViewById(R.id.fpc_sortby_text);
+        fragment = new RecycleViewFragment();
 
+        fragment.setAdapter(new CommentsAdapter());
+        fragment.setShowDivider(true);
+        fragment.show(getFragmentManager(), R.id.fpc_content);
         sortby_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,12 +43,16 @@ public class FullPostCommentsFragment extends Fragment {
                     public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.sb_highest_rating:
+                                sortby_text.setText("Sort By " + getString(R.string.highest_rating));
                                 return true;
                             case R.id.sb_lowest_rating:
+                                sortby_text.setText("Sort By " + getString(R.string.lowest_rating));
                                 return true;
                             case R.id.sb_lastest:
+                                sortby_text.setText("Sort By " + getString(R.string.lastest_post));
                                 return true;
                             case R.id.sb_oldest:
+                                sortby_text.setText("Sort By " + getString(R.string.oldest_post));
                                 return true;
                         }
                         return false;
@@ -55,7 +61,12 @@ public class FullPostCommentsFragment extends Fragment {
                 helper.show();
             }
         });
+
         return view;
+    }
+
+    public void addComment(Comment comment){
+        fragment.addComment(comment);
     }
 
 }

@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/sb_highest_rating"
-        android:title="Highest Rating" />
+        android:title="@string/highest_rating" />
 
     <item
         android:id="@+id/sb_lowest_rating"
-        android:title="Lowest Rating" />
+        android:title="@string/lowest_rating" />
 
     <item
         android:id="@+id/sb_lastest"
-        android:title="Lastest Post" />
+        android:title="@string/lastest_post" />
 
     <item
         android:id="@+id/sb_oldest"
-        android:title="Oldest Post" />
+        android:title="@string/oldest_post" />
 </menu>

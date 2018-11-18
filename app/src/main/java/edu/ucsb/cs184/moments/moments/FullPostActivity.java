@@ -4,6 +4,8 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -12,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,14 +33,19 @@ public class FullPostActivity extends AppCompatActivity {
     private ImageButton more;
     private ImageButton backButton;
     private View include;
-    private ImageView usericon;
+    private ImageView poster_icon;
     private TextView username;
     private TextView time;
     private TextView content;
     private ImageButton comment;
     private ImageButton collect;
     private ImageButton share;
+    private ImageView usericon;
+    private EditText edit_comment;
     private Intent intent;
+    private FullPostCommentsFragment commentsFragment;
+    private FullPostRatingsFragment ratingsFragment;
+    private AddCommentFragment addCommentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +56,19 @@ public class FullPostActivity extends AppCompatActivity {
         intent = getIntent();
         Post post = Post.fromJson(intent.getStringExtra("Post"));
 
+        commentsFragment = new FullPostCommentsFragment();
+        ratingsFragment = new FullPostRatingsFragment();
+        addCommentFragment = new AddCommentFragment();
         backButton = findViewById(R.id.fullpost_back);
         more = findViewById(R.id.fullpost_more);
         include = findViewById(R.id.up_post);
+        comment = include.findViewById(R.id.post_comment);
         mViewPager = findViewById(R.id.fullpost_viewpager);
         mTabLayout = findViewById(R.id.fullpost_tablayout);
+        usericon = findViewById(R.id.fpac_user_icon);
+        edit_comment = findViewById(R.id.fpac_editcomment);
 
+        addCommentFragment.setCaller(edit_comment, commentsFragment);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,24 +117,38 @@ public class FullPostActivity extends AppCompatActivity {
 
             }
         });
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddComment();
+            }
+        });
+        Bitmap icon = UserInfo.user.getIcon();
+        usericon.setImageBitmap((icon == null) ? ((BitmapDrawable)getDrawable(R.drawable.user_icon)).getBitmap() : icon);
+        edit_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddComment();
+            }
+        });
 
         pagerAdapter = new TabPagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(new FullPostCommentsFragment(), "Comments");
-        pagerAdapter.addFragment(new FullPostRatingsFragment(), "Ratings");
+        pagerAdapter.addFragment(commentsFragment, "Comments");
+        pagerAdapter.addFragment(ratingsFragment, "Ratings");
         mViewPager.setAdapter(pagerAdapter);
         setPost(post);
     }
 
     private void setPost(Post post){
-        usericon = include.findViewById(R.id.post_usericon);
+        poster_icon = include.findViewById(R.id.post_usericon);
         username = include.findViewById(R.id.post_username);
         time = include.findViewById(R.id.post_time);
         content = include.findViewById(R.id.post_content);
         comment = include.findViewById(R.id.post_comment);
         collect = include.findViewById(R.id.post_collect);
         share = include.findViewById(R.id.post_share);
-        usericon.setClickable(true);
-        usericon.setOnClickListener(new View.OnClickListener() {
+        poster_icon.setClickable(true);
+        poster_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -127,7 +156,7 @@ public class FullPostActivity extends AppCompatActivity {
         });
         User user = User.findUser(post.getUserid());
         username.setText(user.getUsername());
-//        usericon.setImageBitmap(user.getIcon());
+//        poster_icon.setImageBitmap(user.getIcon());
         time.setText(TimeText(post.getDate()));
         content.setText(post.getContent());
         collect.setOnClickListener(new View.OnClickListener() {
@@ -161,5 +190,9 @@ public class FullPostActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         SwipeBackHelper.onDestroy(this);
+    }
+
+    private void showAddComment(){
+        addCommentFragment.showNow(getSupportFragmentManager(), "Add Comment");
     }
 }

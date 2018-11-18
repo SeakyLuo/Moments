@@ -54,6 +54,7 @@
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -128,5 +129,56 @@
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/fullpost_actoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorBackgroundFloating"
+        android:contentInsetStart="0dp"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        app:contentInsetStart="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/acToolbarConstraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/fpac_user_icon"
+                android:layout_width="@dimen/button_size_small"
+                android:layout_height="@dimen/button_size_small"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/fpac_editcomment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/user_icon" />
+
+            <EditText
+                android:id="@+id/fpac_editcomment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:editable="false"
+                android:ellipsize="end"
+                android:ems="10"
+                android:gravity="center_vertical|start"
+                android:hint="@string/add_comment"
+                android:singleLine="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/fpac_user_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.Toolbar>
 </android.support.constraint.ConstraintLayout>
 

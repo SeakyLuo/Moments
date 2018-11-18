@@ -48,15 +48,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Post post = posts.get(position);
         holder.setPost(post);
-        User user = User.findUser(post.getUserid());
-//        holder.usericon.setImageBitmap(user.getIcon());
-        holder.username.setText(user.getUsername());
-        // Can be changed to xxx ago.
-        holder.time.setText(TimeText(post.getDate()));
-        holder.content.setText(post.getContent());
-        holder.ratingBar.setRating(post.ratings_avg());
-        // userid needs to be replaced
-//        holder.setCollect(post.isCollected(userid));
     }
 
     public static String TimeText(Date date){
@@ -126,7 +117,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             });
         }
 
-        public void setPost(Post post) { this.post = post;}
+        public void setPost(Post post) {
+            this.post = post;
+            User user = User.findUser(post.getUserid());
+//        usericon.setImageBitmap(user.getIcon());
+            username.setText(user.getUsername());
+            // Can be changed to xxx ago.
+            time.setText(TimeText(post.getDate()));
+            content.setText(post.getContent());
+            ratingBar.setRating(post.ratings_avg());
+            // userid needs to be replaced
+//        holder.setCollect(post.isCollected(userid));
+        }
 
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void setCollect(boolean collected){

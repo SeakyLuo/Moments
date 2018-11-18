@@ -76,7 +76,7 @@
         android:ems="10"
         android:gravity="top"
         android:hint="@string/share_your_idea"
-        android:inputType="textMultiLine"
+        android:inputType="textPersonName|textMultiLine"
         android:lineSpacingMultiplier="1.25"
         android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@+id/edit_toolbar_bottom"
