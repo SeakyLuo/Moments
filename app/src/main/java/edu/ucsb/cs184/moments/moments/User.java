@@ -40,7 +40,7 @@ public class User {
     public ArrayList<Post> getCollections() { return collections; }
     public ArrayList<Comment> getComments_made() { return comments_made; }
     public ArrayList<Comment> getComments_recv() { return comments_recv; }
-    public Boolean isAnonymous() { return this.userid == anonymous; }
+    public Boolean isAnonymous() { return this.userid.equals(anonymous); }
 
     public void getNotified(){
         // to be implemented

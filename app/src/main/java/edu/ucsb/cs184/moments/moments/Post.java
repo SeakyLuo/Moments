@@ -34,7 +34,7 @@ public class Post {
             sum += ratings.get(i).getRating();
         return sum / count;
     }
-    public Boolean isAnonymous() { return userid == User.anonymous; }
+    public Boolean isAnonymous() { return userid.equals(User.anonymous); }
     public Boolean isCollected(String userid) {
         User user = User.findUser(userid);
         ArrayList<Post> posts = user.getCollections();

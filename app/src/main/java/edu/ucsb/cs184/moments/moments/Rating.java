@@ -13,7 +13,7 @@ public class Rating {
         this.rating = rating;
         this.date = date;
     }
-    public Boolean isAnonymous() { return userid == User.anonymous; }
+    public Boolean isAnonymous() { return userid.equals(User.anonymous); }
     public String getUserid() { return userid; }
     public int getRating() { return rating; }
     public Date getDate() { return date; }
