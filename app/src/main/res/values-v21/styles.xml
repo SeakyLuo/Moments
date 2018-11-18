@@ -13,9 +13,29 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
-    <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">@color/white</item>
-        <item name="android:textColorPrimary">@color/iron</item>
-        <item name="android:background">@color/loginPrimary</item>
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/login_primary_darker</item>
+
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+
+        <item name="colorPrimary">@color/login_primary</item>
+        <item name="colorPrimaryDark">@color/login_primary_dark</item>
+        <item name="colorAccent">@color/login_accent</item>
+
+        <item name="android:windowBackground">@color/login_primary</item>
+
+        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:textColorHint">@color/iron</item>
+
+        <item name="colorButtonNormal">@color/login_primary_darker</item>
+        <item name="android:colorButtonNormal">@color/login_primary_darker</item>
     </style>
+
 </resources>
