@@ -127,4 +127,6 @@
     <string name="lowest_rating">Lowest Rating</string>
     <string name="lastest_post">Lastest Post</string>
     <string name="oldest_post">Oldest Post</string>
+    <string name="no_account_yet">No account yet? Create one.</string>
+    <string name="already_a_member">Already a member? Sign in.</string>
 </resources>

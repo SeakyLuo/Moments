@@ -2,13 +2,17 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -30,7 +34,8 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        Fragment fragment = new TestActivity.SettingsFragment();
+        Fragment fragment = new SettingsFragment();
+        ((SettingsFragment) fragment).setContext(getApplicationContext());
         // this fragment must be from android.app.Fragment,
         // if you use support fragment, it will not work
 
@@ -59,11 +64,29 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment {
+        private Context context;
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             // here we should call settings ui
             addPreferencesFromResource(R.xml.preferences);
+            Preference logout = findPreference("logout");
+            logout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    FirebaseAuth.getInstance().signOut();
+                    UserInfo.firebaseUser = null;
+                    UserInfo.user = null;
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    startActivity(intent);
+                    return false;
+                }
+            });
+
+        }
+
+        public void setContext(Context context){
+            this.context = context;
         }
     }
 }
