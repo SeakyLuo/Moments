@@ -29,8 +29,4 @@
         android:key="aboutus"
         android:title="About Us" />
 
-    <Preference
-        android:key="logout"
-        android:title="Logout" />
-
 </PreferenceScreen>
