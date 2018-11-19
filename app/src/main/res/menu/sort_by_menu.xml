@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/sb_lastest"
-        android:title="@string/lastest_post" />
+        android:title="@string/latest_post" />
 
     <item
         android:id="@+id/sb_oldest"

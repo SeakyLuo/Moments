@@ -109,7 +109,7 @@ public class User {
         return (new Gson()).fromJson(json, User.class);
     }
     public static User findUser(String id){
-        if (id == User.user.getUserid()) return User.user;
+        if (User.user != null && id == User.user.getUserid()) return User.user;
         return FirebaseHelper.findUser(id);
     }
 }

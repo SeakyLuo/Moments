@@ -6,13 +6,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
     public static final String TAB = "TAB";
@@ -20,7 +17,9 @@ public class SearchActivity extends AppCompatActivity {
     public static final String USERS = "Users";
     public static final String GROUPS = "Groups";
     public static final String HISTORY = "History";
-    private static String[] tabIndices = {POSTS, USERS, GROUPS, HISTORY};
+    private static final String[] tabIndices = {POSTS, USERS, GROUPS, HISTORY};
+    private static final String[] textHints = {"Search Post Content", "Search Users", "Search Groups", "Search History"};
+    private EditText searchBar;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private TabPagerAdapter adapter;
@@ -35,6 +34,7 @@ public class SearchActivity extends AppCompatActivity {
         backButton = findViewById(R.id.search_back);
         mViewPager = findViewById(R.id.search_viewpager);
         mTabLayout = findViewById(R.id.search_tabs);
+        searchBar = findViewById(R.id.search_text);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +46,9 @@ public class SearchActivity extends AppCompatActivity {
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition(), true);
+                int index = tab.getPosition();
+                mViewPager.setCurrentItem(index, true);
+                searchBar.setHint(textHints[index]);
                 tab.select();
             }
 
@@ -69,7 +71,8 @@ public class SearchActivity extends AppCompatActivity {
         mViewPager.setAdapter(adapter);
 
         String searchTab = intent.getStringExtra(TAB);
-        if (searchTab != null) setCurrentTab(searchTab);
+        if (searchTab == null) setCurrentTab(POSTS);
+        else setCurrentTab(searchTab);
     }
 
     public void setCurrentTab(String tab){

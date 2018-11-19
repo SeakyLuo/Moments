@@ -137,9 +137,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //Save the fragment's instance
-        try { getSupportFragmentManager().putFragment(outState, homeTag, homeFragment);}catch (java.lang.IllegalStateException e){}
-        try { getSupportFragmentManager().putFragment(outState, groupTag, groupsFragment);}catch (java.lang.IllegalStateException e){}
-        try { getSupportFragmentManager().putFragment(outState, notificationTag, notificationsFragment);}catch (java.lang.IllegalStateException e){}
+        try { getSupportFragmentManager().putFragment(outState, homeTag, homeFragment);}catch (java.lang.IllegalStateException e1){}catch (java.lang.NullPointerException e2){}
+        try { getSupportFragmentManager().putFragment(outState, groupTag, groupsFragment);}catch (java.lang.IllegalStateException e1){}catch (java.lang.NullPointerException e2){}
+        try { getSupportFragmentManager().putFragment(outState, notificationTag, notificationsFragment);}catch (java.lang.IllegalStateException e1){}catch (java.lang.NullPointerException e2){}
     }
 
     protected void showFragment(Fragment fragment, String tag, String lastTag) {
