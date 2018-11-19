@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Group implements Serializable {
-    private int groupid = 0; // To Be Changed
+    private String groupid; // To Be Changed
     private String managerid;
     private String name;
     private Bitmap icon;
@@ -19,10 +19,10 @@ public class Group implements Serializable {
         this.name = name;
         this.managerid = managerid;
         this.icon = icon;
-        // generates a random group id
     }
 
-    public int getGroupid() { return groupid; }
+    public void setGroupid(String groupid) { if (groupid != null) this.groupid = groupid; }
+    public String getGroupid() { return groupid; }
     public String getManagerid() { return managerid; }
     public void setManagerid(String userid) { this.managerid = userid; }
     public Bitmap getIcon() { return icon; }
@@ -44,9 +44,7 @@ public class Group implements Serializable {
     public void deletePost(Post post){
         posts.remove(post);
     }
-    public static Group findGroup(int groupid) {
-        return null;
-    }
+    public static Group findGroup(String id) { return FirebaseHelper.findGroup(id); }
     @Override
     public String toString(){
         return (new Gson()).toJson(this);

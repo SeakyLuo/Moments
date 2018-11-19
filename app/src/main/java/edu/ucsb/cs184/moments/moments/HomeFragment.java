@@ -64,6 +64,11 @@ public class HomeFragment extends Fragment {
         fragment.setAdapter(new PostsAdapter());
         fragment.addHiddenView(fab);
         fragment.addHiddenView(nav);
+        try {
+            fragment.addElements(User.user.Timeline(-1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         fragment.show(getFragmentManager(), R.id.home_content);
         return view;
     }
@@ -83,7 +88,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         //Save the fragment's state here
     }
 
@@ -92,7 +96,11 @@ public class HomeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == REQUEST_POST){
-            fragment.addPost((Post) data.getSerializableExtra(EditPostActivity.POST));
+            try {
+                fragment.addElement(data.getSerializableExtra(EditPostActivity.POST));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

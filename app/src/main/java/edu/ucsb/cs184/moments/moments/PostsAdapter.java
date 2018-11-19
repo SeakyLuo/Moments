@@ -30,16 +30,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         return holder;
     }
 
-    private void add_post(Post post){
+    private void add_element(Post post){
         posts.add(0, post);
+    }
+    public void addElements(ArrayList<Post> data){
+        for (int i = 0; i < data.size(); i++) add_element(data.get(i));
         notifyDataSetChanged();
     }
-    public void addPosts(ArrayList<Post> newPosts){
-        for (int i = 0; i < newPosts.size(); i++) add_post(newPosts.get(i));
-        notifyDataSetChanged();
-    }
-    public void addPost(Post post){
-        add_post(post);
+    public void addElement(Post post){
+        add_element(post);
         notifyDataSetChanged();
     }
 
@@ -111,7 +110,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, FullPostActivity.class);
-                    intent.putExtra("Post", post.toString());
+                    intent.putExtra(FullPostActivity.POST, post);
+                    context.startActivity(intent);
+                }
+            });
+            comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, FullPostActivity.class);
+                    intent.putExtra(FullPostActivity.POST, post);
+                    intent.putExtra(FullPostActivity.ADD_COMMENT, FullPostActivity.ADD_COMMENT);
                     context.startActivity(intent);
                 }
             });

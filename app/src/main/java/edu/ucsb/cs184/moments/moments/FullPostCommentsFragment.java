@@ -66,7 +66,11 @@ public class FullPostCommentsFragment extends Fragment {
     }
 
     public void addComment(Comment comment){
-        fragment.addComment(comment);
+        try {
+            fragment.addElement(comment);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

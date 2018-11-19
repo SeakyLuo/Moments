@@ -27,6 +27,9 @@ import java.util.Date;
 
 public class FullPostActivity extends AppCompatActivity {
 
+    public static final String POST = "post";
+    public static final String ADD_COMMENT = "Add Comment";
+
     private TabViewPager mViewPager;
     private TabLayout mTabLayout;
     private TabPagerAdapter pagerAdapter;
@@ -54,7 +57,7 @@ public class FullPostActivity extends AppCompatActivity {
         SwipeBackHelper.onCreate(this);
 
         intent = getIntent();
-        Post post = Post.fromJson(intent.getStringExtra("Post"));
+        Post post = (Post) intent.getSerializableExtra(POST);
 
         commentsFragment = new FullPostCommentsFragment();
         ratingsFragment = new FullPostRatingsFragment();
@@ -137,6 +140,8 @@ public class FullPostActivity extends AppCompatActivity {
         pagerAdapter.addFragment(ratingsFragment, "Ratings");
         mViewPager.setAdapter(pagerAdapter);
         setPost(post);
+
+        if (intent.getStringExtra(ADD_COMMENT) != null) showAddComment();
     }
 
     private void setPost(Post post){
@@ -193,6 +198,6 @@ public class FullPostActivity extends AppCompatActivity {
     }
 
     private void showAddComment(){
-        addCommentFragment.showNow(getSupportFragmentManager(), "Add Comment");
+        addCommentFragment.showNow(getSupportFragmentManager(), ADD_COMMENT);
     }
 }

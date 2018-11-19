@@ -36,7 +36,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        FirebaseHelper.init();
         mAuth = FirebaseAuth.getInstance();
+        FirebaseHelper.init();
         if (mAuth.getCurrentUser() != null) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
@@ -83,10 +85,11 @@ public class LoginActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme_Dark_Dialog);
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
         String email = _emailText.getText().toString();
@@ -96,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signIn:onComplete:" + task.isSuccessful());
+                        Log.d(TAG, "SignIn:onComplete:" + task.isSuccessful());
 
                         if (task.isSuccessful()) {
                             onLoginSuccess();
@@ -126,12 +129,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
-        User.firebaseUser = mAuth.getCurrentUser();
         FirebaseUser user = mAuth.getCurrentUser();
-        String userName = user.getDisplayName();
+        User.firebaseUser = user;
         String uid = user.getUid();
-        String userEmail = user.getEmail();
-        User.user = new User(userName, userEmail, uid);
+        if (User.user == null) User.user = FirebaseHelper.findUser(uid);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }

@@ -21,11 +21,11 @@ public class User {
     private ArrayList<Comment> comments_made = new ArrayList<>();
     private ArrayList<Comment> comments_recv = new ArrayList<>();
     private ArrayList<Message> messages = new ArrayList<>();
-    private ArrayList<Integer> groups = new ArrayList<>();  // id
-    private ArrayList<Integer> followers = new ArrayList<>();  // id
-    private ArrayList<Integer> followerings = new ArrayList<>();  // id
+    private ArrayList<String> groups = new ArrayList<>();  // id
+    private ArrayList<String> followers = new ArrayList<>();  // id
+    private ArrayList<String> following = new ArrayList<>();  // id
 
-    public User(String username, String email, String uid){
+    public User(String uid, String username, String email){
         this.username = username;
         this.email = email;
         this.userid = uid;
@@ -36,41 +36,49 @@ public class User {
     public String getUsername() { return username; }
     public String getUserid() { return userid; }
     public ArrayList<Message> getMessages() { return messages; }
-    public ArrayList<Integer> getGroups() { return groups; }
+    public ArrayList<String> getGroups() { return groups; }
     public ArrayList<Post> getPosts() {
         return posts;
     }
     public ArrayList<Post> getCollections() { return collections; }
     public ArrayList<Comment> getComments_made() { return comments_made; }
     public ArrayList<Comment> getComments_recv() { return comments_recv; }
-    public Boolean isAnonymous() { return this.userid.equals(anonymous); }
+    public Boolean isAnonymous() { return userid.equals(anonymous); }
 
     public void getNotified(){
         // to be implemented
     }
     public void uploadIcon(Bitmap icon){
         this.icon = icon;
-        upload("icon");
+        upload("icon", icon);
     }
     public void AddPost(Post post){
         posts.add(post);
+        upload("posts", posts);
     }
     public void DeletePost(Post post){
         posts.remove(post);
+        upload("posts", posts);
     }
-    public void made_comment(Comment comment) { comments_made.add(comment); }
-    public void recv_comment(Comment comment) { comments_recv.add(comment); }
+    public void made_comment(Comment comment) {
+        comments_made.add(comment);
+        upload("comments_made", comments_made);
+    }
+    public void recv_comment(Comment comment) {
+        comments_recv.add(comment);
+        upload("comments_recv", comments_recv);
+    }
     public void delete_comment(Comment comment, Boolean made) {
     }
-    public void follow(int userid) {
-        followerings.add(userid);
+    public void follow(String userid) {
+        following.add(userid);
         // add the followed user's post to timeline
     }
-    public void unfollow(int userid) {
-        followerings.remove(userid);
+    public void unfollow(String userid) {
+        following.remove(userid);
         // remove followed user's post to timeline
     }
-    public void joinGroup(int groupid){
+    public void joinGroup(String groupid){
         groups.add(groupid);
         //  add to group database
     }
@@ -84,8 +92,15 @@ public class User {
     public void uncollect(Post post){
         collections.remove(post);
     }
-    private void upload(String child){
-
+    private void upload(String key, Object value){
+        FirebaseHelper.updateUser(key, value);
+    }
+    public ArrayList<Post> Timeline(int count){
+        ArrayList<Post> timeline = new ArrayList<>();
+        for (String id : following){
+            ArrayList<Post> fPosts = findUser(id).posts;
+        }
+        return timeline;
     }
     @Override
     public String toString(){
@@ -96,6 +111,6 @@ public class User {
     }
     public static User findUser(String id){
         // to be implemented
-        return new User("Moments Developer","haitianluo@ucsb.edu","test");
+        return FirebaseHelper.findUser(id);
     }
 }

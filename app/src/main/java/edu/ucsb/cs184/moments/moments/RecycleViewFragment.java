@@ -57,11 +57,17 @@ public class RecycleViewFragment extends Fragment {
 
     public void addHiddenView(View view) { hideViews.add(view); }
 
-    public void addPost(Post data){
-        ((PostsAdapter) adapter).addPost(data);
+    public void addElement(Object obj) throws Exception {
+        if (obj instanceof Post) ((PostsAdapter) adapter).addElement((Post) obj);
+        else if (obj instanceof Comment) ((CommentsAdapter) adapter).addElement((Comment) obj);
+        else throw new Exception("Unsupport Element!");
     }
-    public void addComment(Comment data){
-        ((CommentsAdapter) adapter).addComment(data);
+    public void addElements(ArrayList data) throws Exception {
+        if (data.size() == 0) return;
+        Object obj = data.get(0);
+        if (obj instanceof Post) ((PostsAdapter) adapter).addElements(data);
+        else if (obj instanceof Comment) ((CommentsAdapter) adapter).addElements(data);
+        else throw new Exception("Unsupport data!");
     }
 
     public void show(FragmentManager manager, int viewId){

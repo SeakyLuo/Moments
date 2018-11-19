@@ -35,7 +35,7 @@ public class GroupsFragment extends Fragment {
     private BottomNavigationView nav;
     private GroupsAdapter adapter;
     private RecycleViewFragment fragment;
-    private ArrayList<Integer> groups = new ArrayList<>();
+    private ArrayList<String> groups = new ArrayList<>();
 
     @Nullable
     @Override
@@ -91,9 +91,9 @@ public class GroupsFragment extends Fragment {
         this.nav = nav;
     }
 
-    public void setGroups(ArrayList<Integer> groups){
+    public void setGroups(ArrayList<String> groups){
         this.groups = groups;
-        for(Integer group : groups){
+        for(String group : groups){
             setGroup(Group.findGroup(group));
         }
     }

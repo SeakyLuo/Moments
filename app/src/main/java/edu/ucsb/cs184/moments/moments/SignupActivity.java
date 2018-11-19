@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignupActivity extends AppCompatActivity {
@@ -77,7 +78,7 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.show();
 
         final String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
+        final String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -85,7 +86,10 @@ public class SignupActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     UserProfileChangeRequest updateName = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
-                    mAuth.getCurrentUser().updateProfile(updateName);
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    user.updateProfile(updateName);
+                    User.user = new User(name, email, user.getUid());
+                    FirebaseHelper.insertUser(User.user);
                     onSignupSuccess();
                 } else {
                     onSignupFailed();

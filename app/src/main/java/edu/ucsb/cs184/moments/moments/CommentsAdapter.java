@@ -26,16 +26,16 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         return holder;
     }
 
-    private void add_comment(Comment comment){
+    private void add_element(Comment comment){
         comments.add(0, comment);
         notifyDataSetChanged();
     }
-    public void addComments(ArrayList<Comment> newComments){
-        for (int i = 0; i < newComments.size(); i++) add_comment(newComments.get(i));
+    public void addElements(ArrayList<Comment> newComments){
+        for (int i = 0; i < newComments.size(); i++) add_element(newComments.get(i));
         notifyDataSetChanged();
     }
-    public void addComment(Comment comment){
-        add_comment(comment);
+    public void addElement(Comment comment){
+        add_element(comment);
         notifyDataSetChanged();
     }
 
