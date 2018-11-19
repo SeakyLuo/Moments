@@ -21,7 +21,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 public class SignupActivity extends AppCompatActivity {
-    private static final String TAG = "SignupActivity";
+    public static final String TAG = "SignupActivity";
     private FirebaseAuth mAuth;
 
     private EditText _nameText;
@@ -131,7 +131,7 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("Please enter a valid email address!");
+            _emailText.setError(LoginActivity.VALID_EMAIL);
             valid = false;
         }
 

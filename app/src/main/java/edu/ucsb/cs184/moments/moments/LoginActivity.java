@@ -27,8 +27,10 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
+    public static final String VALID_EMAIL = "Please enter a valid email address!";
+    public static final String VALID_PASSWORD = "Please enter a valid password!";
+    public static final String TAG = "LoginActivity";
+    public static final int REQUEST_SIGNUP = 0;
     private FirebaseAuth mAuth;
 
     private EditText _emailText;
@@ -81,6 +83,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email = _emailText.getText().toString();
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    _emailText.setError("Please enter a valid email address!");
+                }
                 mAuth.sendPasswordResetEmail(email)
                         .addOnSuccessListener(new OnSuccessListener() {
                             @Override
@@ -177,12 +182,12 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("Please enter a valid email address!");
+            _emailText.setError(VALID_EMAIL);
             valid = false;
         }
 
         if (password.isEmpty()) {
-            _passwordText.setError("Please enter a valid password!");
+            _passwordText.setError(VALID_PASSWORD);
             valid = false;
         }
 
