@@ -16,8 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawer;
@@ -57,13 +55,6 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.nav_user_draftbox:
                         intent = new Intent(getApplicationContext(), UserDraftboxActivity.class);
-                        startActivity(intent);
-                        return true;
-                    case R.id.log_out:
-                        FirebaseAuth.getInstance().signOut();
-                        User.firebaseUser = null;
-                        User.user = null;
-                        intent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(intent);
                         return true;
                     case R.id.nav_settings:

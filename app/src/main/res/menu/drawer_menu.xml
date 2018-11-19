@@ -19,10 +19,6 @@
             android:icon="@drawable/ic_settings"
             android:title="Settings" />
         <item
-            android:id="@+id/log_out"
-            android:icon="@drawable/ic_logout"
-            android:title="Log Out" />
-        <item
             android:id="@+id/test"
             android:icon="@drawable/ic_anonymous"
             android:title="Test"/>
