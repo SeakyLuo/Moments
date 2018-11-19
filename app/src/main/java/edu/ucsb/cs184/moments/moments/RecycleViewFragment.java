@@ -12,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 
 public class RecycleViewFragment extends Fragment {
@@ -59,11 +57,11 @@ public class RecycleViewFragment extends Fragment {
 
     public void addHiddenView(View view) { hideViews.add(view); }
 
-    public void addPost(String json){
-        ((PostsAdapter) adapter).addPost((new Gson()).fromJson(json, Post.class));
+    public void addPost(Post data){
+        ((PostsAdapter) adapter).addPost(data);
     }
-    public void addComment(Comment comment){
-        ((CommentsAdapter) adapter).addComment(comment);
+    public void addComment(Comment data){
+        ((CommentsAdapter) adapter).addComment(data);
     }
 
     public void show(FragmentManager manager, int viewId){

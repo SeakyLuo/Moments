@@ -3,10 +3,11 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Post {
+public class Post implements Serializable {
     private String userid;
     private String content;
     private Date date;

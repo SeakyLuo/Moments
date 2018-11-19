@@ -79,7 +79,7 @@ public class GroupsFragment extends Fragment {
         fragment = new RecycleViewFragment();
         fragment.setShowDivider(true);
         adapter = new GroupsAdapter();
-        setGroups(UserInfo.user.getGroups());
+        setGroups(User.user.getGroups());
         fragment.setAdapter(adapter);
         fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.groups_content);
@@ -107,7 +107,7 @@ public class GroupsFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == CREATE_GROUP){
-            setGroup(Group.fromJson(data.getStringExtra(GROUP)));
+            setGroup((Group) data.getSerializableExtra(GROUP));
         }
     }
 }

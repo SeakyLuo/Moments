@@ -26,80 +26,53 @@
             android:layout_height="match_parent">
 
             <ImageButton
-                android:id="@+id/cg_cancel"
-                android:layout_width="@dimen/button_size"
-                android:layout_height="@dimen/button_size"
-                android:background="@android:drawable/screen_background_light_transparent"
-                android:cropToPadding="true"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_cancel" />
-
-            <ImageButton
-                android:id="@+id/cg_finish"
+                android:id="@+id/uu_back"
                 android:layout_width="@dimen/button_size"
                 android:layout_height="@dimen/button_size"
                 android:background="@android:drawable/screen_background_light_transparent"
                 android:clickable="false"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.03"
-                app:srcCompat="@drawable/ic_tick_unclickable" />
+                app:srcCompat="@drawable/ic_back" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
 
     <ImageView
-        android:id="@+id/cg_group_icon"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="48dp"
+        android:id="@+id/uu_usericon"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="72dp"
         android:clickable="true"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/uu_toolbar"
-        app:srcCompat="@drawable/group_icon" />
+        app:srcCompat="@drawable/user_icon" />
 
     <ImageButton
-        android:id="@+id/cg_camera"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:id="@+id/uu_camera"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/cg_group_icon"
-        app:layout_constraintEnd_toEndOf="@+id/cg_group_icon"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@+id/uu_usericon"
+        app:layout_constraintEnd_toEndOf="@+id/uu_usericon"
         app:srcCompat="@drawable/ic_photo_camera" />
 
-    <EditText
-        android:id="@+id/cg_groupname"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="Enter Group Name"
-        android:inputType="textPersonName"
-        android:singleLine="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cg_group_icon" />
-
     <TextView
-        android:id="@+id/cg_namereminder"
+        android:id="@+id/uu_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/group_name_reminder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/cg_groupname"
-        app:layout_constraintTop_toBottomOf="@+id/cg_groupname"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:text="Upload Your Icon"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/uu_usericon" />
 
 </android.support.constraint.ConstraintLayout>

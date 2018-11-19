@@ -13,6 +13,8 @@ import java.util.Date;
 
 public class EditPostActivity extends AppCompatActivity {
 
+    public static final String POST = "Post";
+
     private ImageButton back;
     private ImageButton send;
     private EditText edit_content;
@@ -68,7 +70,7 @@ public class EditPostActivity extends AppCompatActivity {
                 String content = edit_content.getText().toString();
                 if (content.trim().length() == 0) return;
                 Intent intent = new Intent(getApplicationContext(), caller);
-                intent.putExtra("Post", getPost().toString());
+                intent.putExtra(POST, getPost());
                 setResult(EditPostActivity.RESULT_OK, intent);
                 finish();
             }

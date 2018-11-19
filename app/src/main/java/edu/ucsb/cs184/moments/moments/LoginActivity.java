@@ -126,12 +126,12 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
-        UserInfo.firebaseUser = mAuth.getCurrentUser();
+        User.firebaseUser = mAuth.getCurrentUser();
         FirebaseUser user = mAuth.getCurrentUser();
         String userName = user.getDisplayName();
         String uid = user.getUid();
         String userEmail = user.getEmail();
-        UserInfo.user = new User(userName, userEmail, uid);
+        User.user = new User(userName, userEmail, uid);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }

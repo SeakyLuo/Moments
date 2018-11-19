@@ -2,12 +2,15 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.graphics.Bitmap;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class User {
     public static final String anonymous = "anonymous";
+    public static User user;
+    public static FirebaseUser firebaseUser;
     private String userid;
     private String username;
     private String email;
@@ -45,6 +48,10 @@ public class User {
     public void getNotified(){
         // to be implemented
     }
+    public void uploadIcon(Bitmap icon){
+        this.icon = icon;
+        upload("icon");
+    }
     public void AddPost(Post post){
         posts.add(post);
     }
@@ -76,6 +83,9 @@ public class User {
     }
     public void uncollect(Post post){
         collections.remove(post);
+    }
+    private void upload(String child){
+
     }
     @Override
     public String toString(){

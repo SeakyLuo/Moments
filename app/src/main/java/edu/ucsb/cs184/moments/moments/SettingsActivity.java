@@ -75,8 +75,8 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     FirebaseAuth.getInstance().signOut();
-                    UserInfo.firebaseUser = null;
-                    UserInfo.user = null;
+                    User.firebaseUser = null;
+                    User.user = null;
                     Intent intent = new Intent(context, LoginActivity.class);
                     startActivity(intent);
                     return false;

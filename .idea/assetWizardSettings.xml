@@ -16,24 +16,9 @@
                             <entry key="actionbar">
                               <value>
                                 <PersistentState>
-                                  <option name="children">
-                                    <map>
-                                      <entry key="clipartAsset">
-                                        <value>
-                                          <PersistentState>
-                                            <option name="values">
-                                              <map>
-                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/maps/ic_directions_run_black_24dp.xml" />
-                                              </map>
-                                            </option>
-                                          </PersistentState>
-                                        </value>
-                                      </entry>
-                                    </map>
-                                  </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="imageAsset" value="$APPLICATION_HOME_DIR$/bin/C:\Users\Seaky\Desktop\MomentsIcons\addcomment.png" />
+                                      <entry key="imageAsset" value="C:\Program Files\Android\Android Studio\bin\C:\Users\Seaky\Desktop\MomentsIcons\addcomment.png" />
                                       <entry key="outputName" value="ic_logout" />
                                     </map>
                                   </option>
@@ -45,17 +30,12 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="$APPLICATION_HOME_DIR$/bin/C:\Users\Seaky\Desktop\discussion.png" />
+                                      <entry key="foregroundImage" value="C:\Users\Seaky\Desktop\686220.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
                               </value>
                             </entry>
-                          </map>
-                        </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>

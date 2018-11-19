@@ -123,7 +123,7 @@ public class FullPostActivity extends AppCompatActivity {
                 showAddComment();
             }
         });
-        Bitmap icon = UserInfo.user.getIcon();
+        Bitmap icon = User.user.getIcon();
         usericon.setImageBitmap((icon == null) ? ((BitmapDrawable)getDrawable(R.drawable.user_icon)).getBitmap() : icon);
         edit_comment.setOnClickListener(new View.OnClickListener() {
             @Override

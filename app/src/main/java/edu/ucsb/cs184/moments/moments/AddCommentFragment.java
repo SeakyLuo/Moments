@@ -55,7 +55,7 @@ public class AddCommentFragment extends DialogFragment {
             public void onClick(View v) {
                 String content = edit_comment.getText().toString();
                 if (content.trim().length() == 0) return;
-                fragment.addComment(new Comment(UserInfo.user.getUserid(), content, new Date()));
+                fragment.addComment(new Comment(User.user.getUserid(), content, new Date()));
                 dismiss();
             }
         });
