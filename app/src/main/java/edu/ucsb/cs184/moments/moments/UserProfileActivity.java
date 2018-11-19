@@ -55,7 +55,7 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent uu = new Intent(UserProfileActivity.this, UploadIconActivity.class);
-                uu.putExtra(UploadIconActivity.upload_icon, ((BitmapDrawable) icon.getDrawable()).getBitmap());
+                uu.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
                 startActivityForResult(uu, UploadIconActivity.iconCode);
             }
         });
@@ -85,11 +85,12 @@ public class UserProfileActivity extends AppCompatActivity {
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
         setSupportActionBar(toolbar);
-        setUserProfile(intent.getIntExtra("userid", 0));
+        setUserProfile(intent.getStringExtra("userid"));
     }
 
-    private void setUserProfile(int userid){
-        collapsingToolbarLayout.setTitle("Username");
+    private void setUserProfile(String userid){
+        User user = User.findUser(userid);
+        collapsingToolbarLayout.setTitle(user.getUsername());
     }
 
     @Override
@@ -97,7 +98,7 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == UploadIconActivity.iconCode){
-            icon.setImageBitmap((Bitmap) data.getParcelableExtra(UploadIconActivity.upload_icon));
+            icon.setImageBitmap((Bitmap) data.getParcelableExtra(UploadIconActivity.ICON));
         }
     }
 

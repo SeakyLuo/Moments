@@ -79,7 +79,8 @@ public class GroupsFragment extends Fragment {
         fragment = new RecycleViewFragment();
         fragment.setShowDivider(true);
         adapter = new GroupsAdapter();
-        setGroups(User.user.getGroups());
+//        setGroups(User.user.getGroups());
+        setGroups(new ArrayList<String>());
         fragment.setAdapter(adapter);
         fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.groups_content);

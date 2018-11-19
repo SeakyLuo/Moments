@@ -73,21 +73,24 @@
         app:layout_constraintEnd_toEndOf="@+id/cg_group_icon"
         app:srcCompat="@drawable/ic_photo_camera" />
 
-    <EditText
-        android:id="@+id/cg_groupname"
-        android:layout_width="0dp"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/cg_textInputLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="Enter Group Name"
-        android:inputType="textPersonName"
-        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cg_group_icon" />
+        app:layout_constraintTop_toBottomOf="@+id/cg_group_icon" >
+        <EditText
+            android:id="@+id/cg_groupname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="Group Name" />
+    </android.support.design.widget.TextInputLayout>
 
     <TextView
         android:id="@+id/cg_namereminder"
@@ -98,8 +101,8 @@
         android:layout_marginBottom="8dp"
         android:text="@string/group_name_reminder"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/cg_groupname"
-        app:layout_constraintTop_toBottomOf="@+id/cg_groupname"
+        app:layout_constraintStart_toStartOf="@+id/cg_textInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/cg_textInputLayout"
         app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

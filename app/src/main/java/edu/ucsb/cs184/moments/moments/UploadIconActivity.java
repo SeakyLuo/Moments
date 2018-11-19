@@ -32,7 +32,8 @@ public class UploadIconActivity extends AppCompatActivity {
     public static final int galleryCode = 1;
     public static final int iconCode = 2;
     public static final String imagePath = "Moments";
-    public static final String upload_icon = "UploadIcon";
+    public static final String ICON = "Icon";
+    public static final String GROUP = "Group";
 
     private Context context;
     private Intent callerIntent;
@@ -55,7 +56,7 @@ public class UploadIconActivity extends AppCompatActivity {
         icon = findViewById(R.id.uu_usericon);
         camera = findViewById(R.id.uu_camera);
 
-        icon.setImageBitmap((Bitmap) callerIntent.getParcelableExtra(upload_icon));
+        icon.setImageBitmap((Bitmap) callerIntent.getParcelableExtra(ICON));
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,9 +142,9 @@ public class UploadIconActivity extends AppCompatActivity {
             }
         }
         icon.setImageBitmap(image);
-        User.user.uploadIcon(image);
+        if (caller == UserProfileActivity.class) User.user.setIcon(image);
         Intent intent = new Intent(UploadIconActivity.this, caller);
-        intent.putExtra(upload_icon, image);
+        intent.putExtra(ICON, image);
         setResult(RESULT_OK, intent);
     }
 

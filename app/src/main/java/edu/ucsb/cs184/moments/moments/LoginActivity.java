@@ -163,8 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         _loginButton.setEnabled(true);
         FirebaseUser user = mAuth.getCurrentUser();
         User.firebaseUser = user;
-        String uid = user.getUid();
-        if (User.user == null) User.user = FirebaseHelper.findUser(uid);
+        if (User.user == null) User.user = FirebaseHelper.findUser(user.getUid());
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }

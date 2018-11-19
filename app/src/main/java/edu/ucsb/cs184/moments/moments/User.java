@@ -31,7 +31,6 @@ public class User {
         this.userid = uid;
     }
 
-    public void setIcon(Bitmap bitmap) { icon = bitmap; }
     public Bitmap getIcon() { return icon; }
     public String getUsername() { return username; }
     public String getUserid() { return userid; }
@@ -48,7 +47,7 @@ public class User {
     public void getNotified(){
         // to be implemented
     }
-    public void uploadIcon(Bitmap icon){
+    public void setIcon(Bitmap icon){
         this.icon = icon;
         upload("icon", icon);
     }
@@ -110,7 +109,7 @@ public class User {
         return (new Gson()).fromJson(json, User.class);
     }
     public static User findUser(String id){
-        // to be implemented
+        if (id == User.user.getUserid()) return User.user;
         return FirebaseHelper.findUser(id);
     }
 }

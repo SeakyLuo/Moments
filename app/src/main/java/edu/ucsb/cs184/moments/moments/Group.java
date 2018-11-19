@@ -26,7 +26,10 @@ public class Group implements Serializable {
     public String getManagerid() { return managerid; }
     public void setManagerid(String userid) { this.managerid = userid; }
     public Bitmap getIcon() { return icon; }
-    public void setIcon(Bitmap icon) { this.icon = icon; }
+    public void setIcon(Bitmap icon) {
+        this.icon = icon;
+        upload("icon", icon);
+    }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public ArrayList<Integer> getMembers() { return members; }
@@ -43,6 +46,9 @@ public class Group implements Serializable {
     }
     public void deletePost(Post post){
         posts.remove(post);
+    }
+    private void upload(String key, Object value){
+        FirebaseHelper.updateGroup(this, key, value);
     }
     public static Group findGroup(String id) { return FirebaseHelper.findGroup(id); }
     @Override
