@@ -46,9 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseHelper.init();
         if (mAuth.getCurrentUser() != null) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            finish();
+            onLoginSuccess();
         }
     }
 
@@ -83,8 +81,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email = _emailText.getText().toString();
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                if (!validateEmail()) {
                     _emailText.setError("Please enter a valid email address!");
+                    return;
                 }
                 mAuth.sendPasswordResetEmail(email)
                         .addOnSuccessListener(new OnSuccessListener() {
@@ -188,6 +187,19 @@ public class LoginActivity extends AppCompatActivity {
 
         if (password.isEmpty()) {
             _passwordText.setError(VALID_PASSWORD);
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    public boolean validateEmail() {
+        boolean valid = true;
+
+        String email = _emailText.getText().toString();
+
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _emailText.setError(VALID_EMAIL);
             valid = false;
         }
 
