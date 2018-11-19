@@ -62,6 +62,7 @@ public class HomeFragment extends Fragment {
         });
         fragment = new RecycleViewFragment();
         fragment.setAdapter(new PostsAdapter());
+        fragment.addHiddenView(toolbar);
         fragment.addHiddenView(fab);
         fragment.addHiddenView(nav);
         try {

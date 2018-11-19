@@ -8,20 +8,20 @@
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/groups_app_bar"
+        android:id="@+id/home_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/groups_ctoolbar"
+            android:id="@+id/home_ctoolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|enterAlways">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/groups_toolbar"
+                android:id="@+id/home_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_size"
                 android:background="?android:attr/colorBackgroundFloating"
@@ -33,7 +33,7 @@
                     android:layout_height="match_parent">
 
                     <ImageButton
-                        android:id="@+id/menu_groups"
+                        android:id="@+id/menu_home"
                         android:layout_width="@dimen/button_size"
                         android:layout_height="@dimen/button_size"
                         android:background="@android:drawable/screen_background_light_transparent"
@@ -45,28 +45,29 @@
                         app:srcCompat="@drawable/ic_menu" />
 
                     <ImageButton
-                        android:id="@+id/groups_add"
+                        android:id="@+id/search_home"
                         android:layout_width="@dimen/button_size"
                         android:layout_height="@dimen/button_size"
+                        android:layout_marginEnd="0dp"
                         android:background="@android:drawable/screen_background_light_transparent"
-                        android:src="@drawable/ic_add"
+                        android:src="@drawable/ic_search"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/title_groups"
+                        android:id="@+id/title_home"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginStart="4dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="4dp"
                         android:gravity="center_vertical"
-                        android:text="@string/title_groups"
+                        android:text="@string/title_home"
                         android:textColor="@color/BlackGray"
                         android:textSize="24sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/menu_groups"
+                        app:layout_constraintStart_toEndOf="@+id/menu_home"
                         app:layout_constraintTop_toTopOf="parent" />
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.Toolbar>
@@ -75,12 +76,27 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/groups_content"
+        android:id="@+id/home_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        app:layout_anchor="@id/groups_app_bar"
+        app:layout_anchor="@id/home_app_bar"
         app:layout_anchorGravity="bottom"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/home_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/holo_red_light"
+        app:layout_anchorGravity="bottom|end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="16dp"
+        app:srcCompat="@drawable/ic_newpost" />
 
 </android.support.design.widget.CoordinatorLayout>
