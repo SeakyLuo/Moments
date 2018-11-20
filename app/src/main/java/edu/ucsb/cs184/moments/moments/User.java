@@ -13,7 +13,6 @@ public class User {
     public static FirebaseUser firebaseUser;
     private String userid;
     private String username;
-    private String email;
     private Bitmap icon;
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> collections = new ArrayList<>();
@@ -25,9 +24,10 @@ public class User {
     private ArrayList<String> followers = new ArrayList<>();  // id
     private ArrayList<String> following = new ArrayList<>();  // id
 
-    public User(String uid, String username, String email){
+    public User(){}
+
+    public User(String uid, String username){
         this.username = username;
-        this.email = email;
         this.userid = uid;
     }
 
@@ -42,7 +42,7 @@ public class User {
     public ArrayList<Post> getCollections() { return collections; }
     public ArrayList<Comment> getComments_made() { return comments_made; }
     public ArrayList<Comment> getComments_recv() { return comments_recv; }
-    public Boolean isAnonymous() { return userid.equals(anonymous); }
+//    public Boolean isAnonymous() { return userid.equals(anonymous); }
 
     public void getNotified(){
         // to be implemented

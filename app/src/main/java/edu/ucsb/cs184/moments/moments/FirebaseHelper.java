@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class FirebaseHelper {
 
+    private static ArrayList<OnDataReceivedListener> listeners = new ArrayList<>();
     private static FirebaseDatabase firebase;
     private static DatabaseReference db;
     private static DatabaseReference udb, gdb;
@@ -24,8 +25,9 @@ public class FirebaseHelper {
         udb.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                android.util.Log.d("fuck","fuck1")
                 uds = dataSnapshot;
+                for (OnDataReceivedListener listener : listeners)
+                    listener.onUDBReceived();
             }
 
             @Override
@@ -38,6 +40,8 @@ public class FirebaseHelper {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 gds = dataSnapshot;
+                for (OnDataReceivedListener listener : listeners)
+                    listener.onGDBReceived();
             }
 
             @Override
@@ -65,7 +69,7 @@ public class FirebaseHelper {
     public static ArrayList<Post> findPosts(String keyword){
         ArrayList<Post> posts = new ArrayList<>();
         for (DataSnapshot ds : uds.getChildren()){
-            for(Post post : (ArrayList<Post>) ds.child("Posts").getValue()){
+            for(Post post : (ArrayList<Post>) ds.child("posts").getValue()){
                 if (post.getContent().contains(keyword)){
                     posts.add(post);
                 }
@@ -75,11 +79,11 @@ public class FirebaseHelper {
     }
 
     public static User findUser(String id){
-        return (User) uds.child(id).getValue();
+        return uds.child(id).getValue(User.class);
     }
 
     public static Group findGroup(String id){
-        return (Group) gds.child(id).getValue();
+        return gds.child(id).getValue(Group.class);
     }
 
     public static void updateUser(String key, Object data){
@@ -90,12 +94,12 @@ public class FirebaseHelper {
         gdb.child(group.getGroupid()).child(key).setValue(data);
     }
 
-    public static boolean initFinished(){
-        return uds != null && gds != null;
+    public static void addDataReceivedListener(OnDataReceivedListener listener){
+        listeners.add(listener);
     }
 
-    public static interface OnDataSnapshotInit{
-        public void onGDSinit();
-        public void onUDSinit();
+    interface OnDataReceivedListener{
+        void onUDBReceived();
+        void onGDBReceived();
     }
 }

@@ -160,18 +160,27 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        final FirebaseUser firebaseUser = mAuth.getCurrentUser();
         User.firebaseUser = firebaseUser;
-        while(!FirebaseHelper.initFinished()){}
-        if (User.user == null){
-            String id = firebaseUser.getUid();
-            User.user = FirebaseHelper.findUser(id);
-            if (User.user == null){
-                User user = new User(id, "New User"+id, _emailText.getText().toString());
-                FirebaseHelper.insertUser(user);
-                Toast.makeText(getApplicationContext(), "Your account was deleted.\nWe generate a new one for you.", Toast.LENGTH_SHORT).show();
+        FirebaseHelper.addDataReceivedListener(new FirebaseHelper.OnDataReceivedListener() {
+            @Override
+            public void onUDBReceived() {
+                if (User.user == null){
+                    String id = firebaseUser.getUid();
+                    User.user = FirebaseHelper.findUser(id);
+                    if (User.user == null){
+                        User user = new User(id, "New User"+id);
+                        FirebaseHelper.insertUser(user);
+                        Toast.makeText(getApplicationContext(), "Your account was deleted.\nA new one is generated.", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
-        }
+
+            @Override
+            public void onGDBReceived() {
+
+            }
+        });
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }

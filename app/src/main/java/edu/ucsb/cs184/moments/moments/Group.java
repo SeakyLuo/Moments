@@ -15,6 +15,8 @@ public class Group implements Serializable {
     private ArrayList<Integer> members = new ArrayList<>();
     private ArrayList<Post> posts = new ArrayList<>();
 
+    public Group(){}
+
     public Group(String name, String managerid, Bitmap icon){
         this.name = name;
         this.managerid = managerid;
