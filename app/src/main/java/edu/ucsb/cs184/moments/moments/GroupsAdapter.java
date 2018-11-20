@@ -119,7 +119,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
                 content.setText("You have created a new group.");
             }else{
                 Post post = posts.get(posts.size() - 1);
-                time.setText(TimeText(post.getDate()));
+                time.setText(TimeText(post.getTime()));
                 content.setText(post.getUserid() +": " + post.getContent());
             }
         }

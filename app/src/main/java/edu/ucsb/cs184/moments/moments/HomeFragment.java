@@ -66,7 +66,7 @@ public class HomeFragment extends Fragment {
         fragment.addHiddenView(fab);
         fragment.addHiddenView(nav);
         try {
-            fragment.addElements(User.user.Timeline(-1));
+            fragment.addElements(User.user.getTimeline(-1));
         } catch (Exception e) {
             e.printStackTrace();
         }

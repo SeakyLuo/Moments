@@ -132,7 +132,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 //        usericon.setImageBitmap(user.getIcon());
             username.setText(user.getUsername());
             // Can be changed to xxx ago.
-            time.setText(TimeText(post.getDate()));
+            time.setText(TimeText(post.getTime()));
             content.setText(post.getContent());
             ratingBar.setRating(post.ratings_avg());
             // userid needs to be replaced

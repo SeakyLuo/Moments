@@ -1,6 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,6 +26,7 @@ public class FirebaseHelper {
         udb.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("fuck","uds");
                 uds = dataSnapshot;
                 for (OnDataReceivedListener listener : listeners)
                     listener.onUDBReceived();
@@ -39,6 +41,7 @@ public class FirebaseHelper {
         gdb.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("fuck","gds");
                 gds = dataSnapshot;
                 for (OnDataReceivedListener listener : listeners)
                     listener.onGDBReceived();
@@ -86,12 +89,35 @@ public class FirebaseHelper {
         return gds.child(id).getValue(Group.class);
     }
 
-    public static void updateUser(String key, Object data){
-        udb.child(User.user.getUserid()).child(key).setValue(data);
+    public static Post findPost(Post.Key key) {
+        for (Post post : (ArrayList<Post>) uds.child(key.userid).child("posts").getValue()){
+            if (post.getKey() == key) return post;
+        }
+        return null;
+    }
+    public static Comment findComment(Comment.Key key){
+        for (Comment comment : (ArrayList<Comment>) uds.child(key.userid).child("comments_made").getValue()){
+            if (comment.getKey() == key) return comment;
+        }
+        return null;
     }
 
-    public static void updateGroup(Group group, String key, Object data){
-        gdb.child(group.getGroupid()).child(key).setValue(data);
+    public static void updateUser(final String key, final Object data){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                udb.child(User.user.getUserid()).child(key).setValue(data);
+            }
+        }).start();
+    }
+
+    public static void updateGroup(final Group group, final String key, final Object data){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                gdb.child(group.getGroupid()).child(key).setValue(data);
+            }
+        }).start();
     }
 
     public static void addDataReceivedListener(OnDataReceivedListener listener){

@@ -35,7 +35,7 @@ public class FullPostCommentsAdapter extends RecyclerView.Adapter<FullPostCommen
 //        holder.usericon.setImageBitmap(user.getIcon());
         holder.username.setText(user.getUsername());
         // Can be changed to xxx ago.
-        holder.time.setText(TimeText(comment.getDate()));
+        holder.time.setText(TimeText(comment.getTime()));
         holder.content.setText(comment.getContent());
         holder.ratingBar.setRating(comment.ratings_avg());
     }

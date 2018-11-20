@@ -162,7 +162,7 @@ public class FullPostActivity extends AppCompatActivity {
         User user = User.findUser(post.getUserid());
         username.setText(user.getUsername());
 //        poster_icon.setImageBitmap(user.getIcon());
-        time.setText(TimeText(post.getDate()));
+        time.setText(TimeText(post.getTime()));
         content.setText(post.getContent());
         collect.setOnClickListener(new View.OnClickListener() {
             @Override

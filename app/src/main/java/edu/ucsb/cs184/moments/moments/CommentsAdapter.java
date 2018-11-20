@@ -94,7 +94,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             User user = User.findUser(comment.getUserid());
             usericon.setImageBitmap(user.getIcon());
             username.setText(user.getUsername());
-            time.setText(TimeText(comment.getDate()));
+            time.setText(TimeText(comment.getTime()));
             content.setText(comment.getContent());
             int number = comment.getComments().size();
             replies.setText(number + " Repl" + ((number == 1) ? "y" : "ies"));
