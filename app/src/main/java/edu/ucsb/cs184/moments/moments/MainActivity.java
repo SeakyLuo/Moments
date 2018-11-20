@@ -15,7 +15,6 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         View header = dNavigationView.getHeaderView(0);
-        ((TextView) header.findViewById(R.id.nav_username)).setText(User.user.getUsername());
+//        ((TextView) header.findViewById(R.id.nav_username)).setText(User.user.getUsername());
         header.findViewById(R.id.nav_usericon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

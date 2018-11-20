@@ -149,7 +149,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
@@ -157,12 +156,6 @@ public class LoginActivity extends AppCompatActivity {
                 onLoginSuccess();
             }
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        // Disable going back to the MainActivity
-        moveTaskToBack(true);
     }
 
     public void onLoginSuccess() {

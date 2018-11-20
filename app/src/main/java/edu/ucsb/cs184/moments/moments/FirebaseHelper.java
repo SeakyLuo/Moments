@@ -24,6 +24,7 @@ public class FirebaseHelper {
         udb.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                android.util.Log.d("fuck","fuck1")
                 uds = dataSnapshot;
             }
 
@@ -61,34 +62,23 @@ public class FirebaseHelper {
         gdb.child(id).setValue(group);
     }
 
-    public static ArrayList<Post> findPosts(final String keyword){
-        final ArrayList<Post> posts = new ArrayList<>();
-        udb.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()){
-                    ArrayList<Post> uPosts = (ArrayList<Post>) ds.child("Posts").getValue();
-                    for(Post post : uPosts){
-                        if (post.getContent().contains(keyword)){
-                            posts.add(post);
-                        }
-                    }
+    public static ArrayList<Post> findPosts(String keyword){
+        ArrayList<Post> posts = new ArrayList<>();
+        for (DataSnapshot ds : uds.getChildren()){
+            for(Post post : (ArrayList<Post>) ds.child("Posts").getValue()){
+                if (post.getContent().contains(keyword)){
+                    posts.add(post);
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        }
         return posts;
     }
 
-    public static User findUser(final String id){
+    public static User findUser(String id){
         return (User) uds.child(id).getValue();
     }
 
-    public static Group findGroup(final String id){
+    public static Group findGroup(String id){
         return (Group) gds.child(id).getValue();
     }
 
@@ -102,5 +92,10 @@ public class FirebaseHelper {
 
     public static boolean initFinished(){
         return uds != null && gds != null;
+    }
+
+    public static interface OnDataSnapshotInit{
+        public void onGDSinit();
+        public void onUDSinit();
     }
 }
