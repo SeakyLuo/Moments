@@ -70,15 +70,16 @@ public class EditPostActivity extends AppCompatActivity {
                 String content = edit_content.getText().toString();
                 if (content.trim().length() == 0) return;
                 Intent intent = new Intent(getApplicationContext(), caller);
-                intent.putExtra(POST, getPost());
-                setResult(EditPostActivity.RESULT_OK, intent);
+                Post post = getPost();
+                intent.putExtra(POST, post);
+                User.user.make_post(post);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
     }
 
     private Post getPost(){
-        // TODO: To be implemented
-        return new Post("test", edit_content.getText().toString(), new Date());
+        return new Post(User.user.getUserid(), edit_content.getText().toString(), new Date());
     }
 }

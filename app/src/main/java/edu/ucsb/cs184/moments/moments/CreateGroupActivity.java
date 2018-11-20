@@ -57,6 +57,7 @@ public class CreateGroupActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), GroupsFragment.class);
                 intent.putExtra(GroupsFragment.GROUP, group);
                 setResult(RESULT_OK, intent);
+                FirebaseHelper.insertGroup(group);
                 finish();
             }
         });

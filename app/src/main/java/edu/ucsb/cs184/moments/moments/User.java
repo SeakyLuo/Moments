@@ -51,11 +51,11 @@ public class User {
         this.icon = icon;
         upload("icon", icon);
     }
-    public void AddPost(Post post){
+    public void make_post(Post post){
         posts.add(post);
         upload("posts", posts);
     }
-    public void DeletePost(Post post){
+    public void delete_post(Post post){
         posts.remove(post);
         upload("posts", posts);
     }

@@ -2,6 +2,7 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,8 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SwipeBackHelper.onCreate(this);
         setContentView(R.layout.activity_signup);
+        Intent signInIntent = getIntent();
+
         _nameText = findViewById(R.id.input_name);
         _emailText = findViewById(R.id.input_email);
         _passwordText = findViewById(R.id.input_password);
@@ -43,6 +46,14 @@ public class SignupActivity extends AppCompatActivity {
         _signupButton = findViewById(R.id.btn_signup);
         _loginLink = findViewById(R.id.link_login);
         mAuth = FirebaseAuth.getInstance();
+
+        String email = signInIntent.getStringExtra(LoginActivity.EMAIL);
+        if (signInIntent.getStringExtra(LoginActivity.EMAIL) != null){
+            _emailText.setText(email);
+            String password = signInIntent.getStringExtra(LoginActivity.PASSWORD);
+            if (signInIntent.getStringExtra(LoginActivity.PASSWORD) != null)
+                _passwordText.setText(password);
+        }
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +105,7 @@ public class SignupActivity extends AppCompatActivity {
                     UserProfileChangeRequest updateName = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
                     FirebaseUser user = mAuth.getCurrentUser();
                     user.updateProfile(updateName);
-                    User.user = new User(name, email, user.getUid());
+                    User.user = new User(user.getUid(), name, email);
                     FirebaseHelper.insertUser(User.user);
                     onSignupSuccess();
                 } else {
@@ -127,6 +138,10 @@ public class SignupActivity extends AppCompatActivity {
 
         if (name.trim().length() < 2) {
             _nameText.setError("Username should have at least 2 characters");
+            valid = false;
+        }
+        if (name.trim().length() > 40) {
+            _nameText.setError("Username cannot have more than 40 characters");
             valid = false;
         }
 

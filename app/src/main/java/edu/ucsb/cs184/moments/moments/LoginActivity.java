@@ -3,10 +3,9 @@ package edu.ucsb.cs184.moments.moments;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String VALID_EMAIL = "Please enter a valid email address!";
     public static final String VALID_PASSWORD = "Please enter a valid password!";
+    public static final String EMAIL = "email";
+    public static final String PASSWORD = "password";
     public static final String TAG = "LoginActivity";
     public static final int REQUEST_SIGNUP = 0;
     private FirebaseAuth mAuth;
@@ -73,6 +74,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Start the Signup activity
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                if (!_emailText.getText().toString().isEmpty()){
+                    intent.putExtra(EMAIL, _emailText.getText().toString());
+                    if (!_passwordText.getText().toString().isEmpty())
+                        intent.putExtra(PASSWORD, _passwordText.getText().toString());
+                }
                 startActivityForResult(intent, REQUEST_SIGNUP);
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
@@ -161,9 +167,18 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
-        FirebaseUser user = mAuth.getCurrentUser();
-        User.firebaseUser = user;
-        if (User.user == null) User.user = FirebaseHelper.findUser(user.getUid());
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        User.firebaseUser = firebaseUser;
+        while(!FirebaseHelper.initFinished()){}
+        if (User.user == null){
+            String id = firebaseUser.getUid();
+            User.user = FirebaseHelper.findUser(id);
+            if (User.user == null){
+                User user = new User(id, "New User"+id, _emailText.getText().toString());
+                FirebaseHelper.insertUser(user);
+                Toast.makeText(getApplicationContext(), "Your account was deleted.\nWe generate a new one for you.", Toast.LENGTH_SHORT).show();
+            }
+        }
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }
