@@ -79,12 +79,23 @@ public class GroupsFragment extends Fragment {
         fragment = new RecycleViewFragment();
         fragment.setShowDivider(true);
         adapter = new GroupsAdapter();
-//        setGroups(User.user.getGroups());
+        setGroups(User.user.getGroups());
         setGroups(new ArrayList<String>());
         fragment.setAdapter(adapter);
         fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.groups_content);
         return view;
+    }
+
+    public void refresh(){
+        fragment.gotoTop();
+        (new Thread(new Runnable() {
+            @Override
+            public void run() {
+                User.user.refreshGroups();
+                fragment.gotoTop();
+            }
+        })).start();
     }
 
     public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){

@@ -1,14 +1,14 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
 public class UserCollectionsActivity extends AppCompatActivity {
+
     private ImageButton back;
-    private Intent intent;
+    private RecycleViewFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,9 +16,7 @@ public class UserCollectionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_collections);
 
         back = findViewById(R.id.uc_back);
-
-        intent = getIntent();
-        setUserCollections(intent.getIntExtra("userid", 0));
+        fragment = new RecycleViewFragment();
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,9 +24,12 @@ public class UserCollectionsActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void setUserCollections(int userid){
-
+        fragment.setAdapter(new PostsAdapter());
+        try {
+            fragment.addElements(User.user.getCollections());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        fragment.show(getSupportFragmentManager(), R.id.content_collections);
     }
 }

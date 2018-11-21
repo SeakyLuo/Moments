@@ -9,11 +9,11 @@ import java.util.Comparator;
 import java.util.Date;
 
 public class Comment {
-    private String userid;
+    private String userid; // Commentator
     private String content;
     private Date time;
     private Post.Key postKey;
-    private Comment parent = null;
+    private Comment.Key parent;
 
     private ArrayList<Comment> replies = new ArrayList<>();
     private ArrayList<Rating> ratings = new ArrayList<>();
@@ -24,7 +24,7 @@ public class Comment {
         this.time = time;
         this.postKey = postKey;
     }
-    public Comment(String userid, String content, Date time, Comment parent){
+    public Comment(String userid, String content, Date time, Comment.Key parent){
         this.userid = userid;
         this.content = content;
         this.time = time;
@@ -47,7 +47,7 @@ public class Comment {
     public Date getTime() { return time; }
     public Key getKey() { return new Key(userid, time.getTime()); }
     public Post.Key getPostKey() { return postKey; }
-    public Comment getParent() { return parent; }
+    public Comment.Key getParent() { return parent; }
     public Boolean hasParent() { return parent == null; }
 
     @Override

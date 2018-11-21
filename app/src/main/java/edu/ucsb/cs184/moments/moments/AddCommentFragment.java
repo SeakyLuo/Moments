@@ -20,6 +20,8 @@ public class AddCommentFragment extends DialogFragment {
     private EditText parent_comment;
     private FullPostCommentsFragment fragment;
     private ImageButton camera, gallery, at, send;
+    private Post post;
+    private Comment comment;
 
     @Nullable
     @Override
@@ -30,7 +32,7 @@ public class AddCommentFragment extends DialogFragment {
         gallery = view.findViewById(R.id.ac_gallery);
         at = view.findViewById(R.id.ac_at);
         send = view.findViewById(R.id.ac_send);
-//        android.util.Log.d("fuck","qiguai");
+
         edit_comment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -55,12 +57,19 @@ public class AddCommentFragment extends DialogFragment {
             public void onClick(View v) {
                 String content = edit_comment.getText().toString();
                 if (content.trim().length() == 0) return;
-                fragment.addComment(new Comment(User.user.getUserid(), content, new Date()));
+                Comment user_comment = null;
+                if (post != null) user_comment = new Comment(User.user.getUserid(), content, new Date(), post.getKey());
+                else if (comment != null) user_comment = new Comment(User.user.getUserid(), content, new Date(), comment.getKey());
+                User.user.make_comment(comment);
+                fragment.addComment(user_comment);
                 dismiss();
             }
         });
         return view;
     }
+
+    public void setPost(Post post) { this.post = post; }
+    public void setComment(Comment comment) { this.comment = comment; }
 
     public void setCaller(EditText editText, FullPostCommentsFragment fragment){
         parent_comment = editText;

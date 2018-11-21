@@ -66,12 +66,23 @@ public class HomeFragment extends Fragment {
         fragment.addHiddenView(fab);
         fragment.addHiddenView(nav);
         try {
-            fragment.addElements(User.user.getTimeline(-1));
+            fragment.addElements(User.user.getTimeline());
         } catch (Exception e) {
             e.printStackTrace();
         }
         fragment.show(getFragmentManager(), R.id.home_content);
         return view;
+    }
+
+    public void refresh(){
+        fragment.gotoTop();
+        (new Thread(new Runnable() {
+            @Override
+            public void run() {
+                User.user.refreshTimeline();
+                fragment.gotoTop();
+            }
+        })).start();
     }
 
     public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){

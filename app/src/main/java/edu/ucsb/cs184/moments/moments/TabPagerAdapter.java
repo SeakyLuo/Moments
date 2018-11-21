@@ -3,7 +3,6 @@ package edu.ucsb.cs184.moments.moments;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.view.MotionEvent;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -31,6 +31,7 @@ public class EditPostActivity extends AppCompatActivity {
         edit_content = findViewById(R.id.edit_content);
         back = findViewById(R.id.edit_cancel);
         send = findViewById(R.id.edit_send);
+        // TODO: if this activity is initiated by UserDraftbox and the post is published, remember to delete from user draftbox
         saveAsDraftFragment = new SaveAsDraftFragment();
         saveAsDraftFragment.setActivity(this);
 

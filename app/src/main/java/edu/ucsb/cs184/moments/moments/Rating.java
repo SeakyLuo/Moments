@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 public class Rating {
-    private String userid;
+    private String userid;  //rater
     private int rating;
     private Date time;
     private Post.Key postKey;
@@ -26,10 +26,6 @@ public class Rating {
         return postKey;
     }
     public Key getKey(){ return new Key(userid, time.getTime(), postKey); }
-    public void updateRating(int rating, Date time){
-        this.rating = rating;
-        this.time = time;
-    }
 
     @Override
     public String toString(){
@@ -54,7 +50,7 @@ public class Rating {
             if (!(obj instanceof Key))
                 return false;
             Key k = (Key) obj;
-            return time == k.time && userid == k.userid;
+            return postKey.equals(k.postKey) && userid == k.userid;
         }
     }
     public static class TimeComparator implements Comparator<Key> {

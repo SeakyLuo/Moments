@@ -72,6 +72,7 @@ public class FullPostActivity extends AppCompatActivity {
         edit_comment = findViewById(R.id.fpac_editcomment);
 
         addCommentFragment.setCaller(edit_comment, commentsFragment);
+        addCommentFragment.setPost(post);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

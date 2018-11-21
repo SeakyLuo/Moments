@@ -81,12 +81,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         bNavigation = findViewById(R.id.navigation);
-        bNavigation.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-            }
-        });
         bNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -112,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
             public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_home:
-//                        showFragment(homeFragment, homeTag, lastTag);
+                        homeFragment.refresh();
                     case R.id.navigation_groups:
-//                        showFragment(groupsFragment, groupTag, lastTag);
+                        groupsFragment.refresh();
                     case R.id.navigation_notifications:
-//                        showFragment(notificationsFragment, notificationTag, lastTag);
+                        notificationsFragment.refresh();
                 }
             }
         });

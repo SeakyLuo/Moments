@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public ImageButton share;
         private Post post;
 
-        public ViewHolder(View view) {
+        public ViewHolder(final View view) {
             super(view);
             usericon = view.findViewById(R.id.post_usericon);
             username = view.findViewById(R.id.post_username);
@@ -100,8 +101,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             collect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    setCollect(post.isCollected(userid));
-                    setCollect(true);
+                    setCollect(!post.isCollected(User.user.getUserid()));
                 }
             });
             view.setClickable(true);
@@ -124,24 +124,40 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     context.startActivity(intent);
                 }
             });
+            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    if (!fromUser) return;
+                    if (post.getUserid() == User.user.getUserid()){
+                        Toast.makeText(view.getContext(), "You can't rate your own post!", Toast.LENGTH_SHORT).show();
+                        ratingBar.setRating(post.ratings_avg());
+                    }else{
+                        User.user.rate(new Rating(User.user.getUserid(), (int) rating, new Date(), post.getKey()));
+                        if (rating == 0) ratingBar.setRating(post.ratings_avg());
+                    }
+                }
+            });
         }
 
         public void setPost(Post post) {
             this.post = post;
             User user = User.findUser(post.getUserid());
-//        usericon.setImageBitmap(user.getIcon());
+            usericon.setImageBitmap(user.getIcon());
             username.setText(user.getUsername());
-            // Can be changed to xxx ago.
             time.setText(TimeText(post.getTime()));
             content.setText(post.getContent());
             ratingBar.setRating(post.ratings_avg());
-            // userid needs to be replaced
-//        holder.setCollect(post.isCollected(userid));
+            setCollect(post.isCollected(User.user.getUserid()));
         }
 
         @RequiresApi(api = Build.VERSION_CODES.M)
-        public void setCollect(boolean collected){
-            collect.setImageResource(collected ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
+        public void setCollect(boolean Collect){
+            if (Collect){
+                User.user.collect(post);
+            }else{
+                User.user.uncollect(post);
+            }
+            collect.setImageResource(Collect ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
         }
     }
 }

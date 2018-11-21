@@ -34,7 +34,6 @@ public class RecycleViewFragment extends Fragment {
                 super.onScrolled(recyclerView, dx, dy);
                 for (View view : hideViews){
                     if (view instanceof FloatingActionButton){
-                        android.util.Log.d("fuck","hey");
                         if (dy > 0 && view.isShown()) ((FloatingActionButton) view).hide();
                         else if (dy < 0) ((FloatingActionButton) view).show();
                     }else{
@@ -68,6 +67,10 @@ public class RecycleViewFragment extends Fragment {
         if (obj instanceof Post) ((PostsAdapter) adapter).addElements(data);
         else if (obj instanceof Comment) ((CommentsAdapter) adapter).addElements(data);
         else throw new Exception("Unsupport data!");
+    }
+
+    public void gotoTop(){
+        recyclerView.smoothScrollToPosition(0);
     }
 
     public void show(FragmentManager manager, int viewId){
