@@ -80,8 +80,13 @@ public class GroupsFragment extends Fragment {
         fragment.setShowDivider(true);
         adapter = new GroupsAdapter();
         setGroups(User.user.getGroups());
-        setGroups(new ArrayList<String>());
         fragment.setAdapter(adapter);
+        fragment.addOnRefreshListener(new RecycleViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
         fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.groups_content);
         return view;

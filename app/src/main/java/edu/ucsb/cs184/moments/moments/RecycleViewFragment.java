@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,15 +17,18 @@ import java.util.ArrayList;
 
 public class RecycleViewFragment extends Fragment {
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private boolean showDivider = false;
     private ArrayList<View> hideViews = new ArrayList<>();
+    private ArrayList<OnRefreshListener> listeners = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recycler_view, container, false);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_container);
         recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setAdapter(adapter);
         if (showDivider) recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
@@ -43,6 +47,34 @@ public class RecycleViewFragment extends Fragment {
                 }
             }
         });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                for (OnRefreshListener listener : listeners){
+                    listener.onRefresh();
+                }
+            }
+        });
+//        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+//                android.R.color.holo_green_dark,
+//                android.R.color.holo_orange_dark,
+//                android.R.color.holo_blue_dark);
+
+        /**
+         * Showing Swipe Refresh animation on activity create
+         * As animation won't start on onCreate, post runnable is used
+         */
+        swipeRefreshLayout.post(new Runnable() {
+
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                for (OnRefreshListener listener : listeners){
+                    listener.onRefresh();
+                }
+            }
+        });
+
         return view;
     }
 
@@ -77,5 +109,11 @@ public class RecycleViewFragment extends Fragment {
         manager.beginTransaction()
                .add(viewId, this)
                .commit();
+    }
+
+    public void addOnRefreshListener(OnRefreshListener listener) { listeners.add(listener); }
+
+    public interface OnRefreshListener{
+        void onRefresh();
     }
 }

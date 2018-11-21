@@ -75,7 +75,6 @@ public class NotificationsFragment extends Fragment {
         adapter.addFragment(messagesFragment, getString(R.string.messages));
         mViewPager.setAdapter(adapter);
         return view;
-
     }
 
     public void refresh(){

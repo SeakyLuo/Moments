@@ -62,6 +62,12 @@ public class HomeFragment extends Fragment {
         });
         fragment = new RecycleViewFragment();
         fragment.setAdapter(new PostsAdapter());
+        fragment.addOnRefreshListener(new RecycleViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
         fragment.addHiddenView(toolbar);
         fragment.addHiddenView(fab);
         fragment.addHiddenView(nav);
