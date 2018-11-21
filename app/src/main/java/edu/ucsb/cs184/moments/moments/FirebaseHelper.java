@@ -54,7 +54,7 @@ public class FirebaseHelper {
         });
     }
 
-    // I don't think these should be used
+    // I don't think these three should be used
     public static FirebaseDatabase getFirebase(){ return firebase; }
     public static DatabaseReference getUdb() { return udb; }
     public static DatabaseReference getGdb() { return gdb; }
@@ -91,13 +91,13 @@ public class FirebaseHelper {
 
     public static Post findPost(Post.Key key) {
         for (Post post : (ArrayList<Post>) uds.child(key.userid).child("posts").getValue()){
-            if (post.getKey() == key) return post;
+            if (post.getKey().equals(key)) return post;
         }
         return null;
     }
     public static Comment findComment(Comment.Key key){
         for (Comment comment : (ArrayList<Comment>) uds.child(key.userid).child("comments_made").getValue()){
-            if (comment.getKey() == key) return comment;
+            if (comment.getKey().equals(key)) return comment;
         }
         return null;
     }
