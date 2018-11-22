@@ -78,6 +78,14 @@
             android:label="UploadIconActivity"
             android:theme="@style/AppTheme"></activity>
         <activity
+            android:name=".EditUserProfileActivity"
+            android:label="EditUserProfileActivity"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".GroupSettingsActivity"
+            android:label="GroupSettingsActivity"
+            android:theme="@style/AppTheme"></activity>
+        <activity
             android:name=".TestActivity"
             android:label="@string/title_activity_scrolling"
             android:theme="@style/AppTheme"></activity>

@@ -49,10 +49,10 @@ public class FullPostCommentsFragment extends Fragment {
                                 sortby_text.setText("Sort By " + getString(R.string.lowest_rating));
                                 return true;
                             case R.id.sb_lastest:
-                                sortby_text.setText("Sort By " + getString(R.string.latest_post));
+                                sortby_text.setText("Sort By " + getString(R.string.most_recent));
                                 return true;
                             case R.id.sb_oldest:
-                                sortby_text.setText("Sort By " + getString(R.string.oldest_post));
+                                sortby_text.setText("Sort By " + getString(R.string.least_recent));
                                 return true;
                         }
                         return false;

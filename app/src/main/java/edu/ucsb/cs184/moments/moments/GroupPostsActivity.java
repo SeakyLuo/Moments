@@ -37,7 +37,7 @@ public class GroupPostsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_posts);
         data = getIntent();
-        group = Group.fromJson(data.getStringExtra(GroupsFragment.GROUP));
+        group = (Group) data.getSerializableExtra(GroupsFragment.GROUP);
         SwipeBackHelper.onCreate(this);
 
         fab = findViewById(R.id.gp_fab);
@@ -61,7 +61,9 @@ public class GroupPostsActivity extends AppCompatActivity {
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(GroupPostsActivity.this, GroupSettingsActivity.class);
+                intent.putExtra("", group);
+                startActivity(intent);
             }
         });
         title.setText(group.getName());

@@ -56,7 +56,7 @@ public class TestActivity extends AppCompatActivity {
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             // here we should call settings ui
-            addPreferencesFromResource(R.xml.preferences);
+            addPreferencesFromResource(R.xml.user_preferences);
 
         }
     }

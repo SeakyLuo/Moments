@@ -8,11 +8,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Group implements Serializable {
-    private String groupid; // To Be Changed
+    private String groupid;
     private String managerid;
     private String name;
+    private String intro = "";
     private Bitmap icon;
-    private ArrayList<Integer> members = new ArrayList<>();
+    private ArrayList<String> members = new ArrayList<>();
     private ArrayList<Post> posts = new ArrayList<>();
 
     public Group(){}
@@ -26,28 +27,43 @@ public class Group implements Serializable {
     public void setGroupid(String groupid) { if (groupid != null) this.groupid = groupid; }
     public String getGroupid() { return groupid; }
     public String getManagerid() { return managerid; }
-    public void setManagerid(String userid) { this.managerid = userid; }
+    public void setManagerid(String userid) {
+        this.managerid = userid;
+        upload("managerid", managerid);
+    }
     public Bitmap getIcon() { return icon; }
     public void setIcon(Bitmap icon) {
         this.icon = icon;
         upload("icon", icon);
     }
     public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public ArrayList<Integer> getMembers() { return members; }
+    public void setName(String name) {
+        this.name = name;
+        upload("name", name);
+    }
+    public String getIntro() { return intro; }
+    public void setIntro(String intro) {
+        this.intro = intro;
+        upload("icon", icon);
+    }
+    public ArrayList<String> getMembers() { return members; }
     public ArrayList<Post> getPosts() { return posts; }
 
-    public void addMember(int userid){
+    public void addMember(String userid){
         members.add(userid);
+        upload("members", members);
     }
     public void addPost(Post post){
         posts.add(post);
+        upload("posts", posts);
     }
-    public void removeMember(int userid){
+    public void removeMember(String userid){
         members.remove(userid);
+        upload("members", members);
     }
     public void deletePost(Post post){
         posts.remove(post);
+        upload("posts", posts);
     }
     private void upload(String key, Object value){
         FirebaseHelper.updateGroup(this, key, value);

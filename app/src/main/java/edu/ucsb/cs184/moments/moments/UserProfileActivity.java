@@ -1,7 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -26,6 +25,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
     private ImageView icon;
+    private ImageButton follow, message;
     private Intent intent;
     private RecycleViewFragment fragment;
 
@@ -38,10 +38,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
         back = findViewById(R.id.up_back);
         include = findViewById(R.id.content_user_profile);
-        sortBy = include.findViewById(R.id.up_sortby_button);
-        icon = include.findViewById(R.id.up_usericon);
         toolbar = findViewById(R.id.up_toolbar);
         collapsingToolbarLayout = findViewById(R.id.up_ctoolbar);
+        sortBy = include.findViewById(R.id.up_sortby_button);
+        icon = include.findViewById(R.id.up_usericon);
+        follow = include.findViewById(R.id.up_follow);
+        message = include.findViewById(R.id.up_message);
         fragment = new RecycleViewFragment();
         fragment.show(getSupportFragmentManager(), R.id.up_timeline);
 
@@ -51,12 +53,17 @@ public class UserProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent uu = new Intent(UserProfileActivity.this, UploadIconActivity.class);
-                uu.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
-                startActivityForResult(uu, UploadIconActivity.iconCode);
+                // Maximize Image
+            }
+        });
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
         sortBy.setOnClickListener(new View.OnClickListener() {
@@ -88,17 +95,44 @@ public class UserProfileActivity extends AppCompatActivity {
         setUserProfile(intent.getStringExtra("userid"));
     }
 
-    private void setUserProfile(String userid){
+    private void setUserProfile(final String userid){
         User user = User.findUser(userid);
         collapsingToolbarLayout.setTitle(user.getUsername());
+        if (userid.equals(User.user.getUserid())){
+            follow.setImageResource(R.drawable.ic_edit);
+            message.setVisibility(View.INVISIBLE);
+            follow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent eup = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
+                    eup.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
+                    startActivityForResult(eup, EditUserProfileActivity.FINISH);
+                }
+            });
+        }else{
+            message.setVisibility(View.VISIBLE);
+            final boolean isFollowing = User.user.isFollowing(userid);
+            follow.setImageResource(isFollowing ? R.drawable.ic_unfollow : R.drawable.ic_follow);
+            follow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isFollowing){
+                        User.user.follow(userid);
+                    } else{
+                        User.user.unfollow(userid);
+                    }
+                    follow.setImageResource(isFollowing ? R.drawable.ic_unfollow : R.drawable.ic_follow);
+                }
+            });
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
-        if (requestCode == UploadIconActivity.iconCode){
-            icon.setImageBitmap((Bitmap) data.getParcelableExtra(UploadIconActivity.ICON));
+        if (requestCode == EditUserProfileActivity.FINISH){
+            setUserProfile(User.user.getUserid());
         }
     }
 

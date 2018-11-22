@@ -36,6 +36,13 @@
         <item>Traditional Chinese</item>
     </string-array>
 
+    <string-array name="sortby">
+        <item>Most Recent</item>
+        <item>Least Recent</item>
+        <item>Highest Rating</item>
+        <item>Lowest Rating</item>
+    </string-array>
+
     <string name="atme">\@Me</string>
     <string name="comments">Comments</string>
     <string name="ratings">Ratings</string>
@@ -53,10 +60,12 @@
     <string name="add_comment">Add Your Comment</string>
     <string name="highest_rating">Highest Rating</string>
     <string name="lowest_rating">Lowest Rating</string>
-    <string name="latest_post">Latest Post</string>
-    <string name="oldest_post">Oldest Post</string>
+    <string name="most_recent">Most Recent</string>
+    <string name="least_recent">Least Recent</string>
     <string name="not_registered">Not registered? Sign up here.</string>
     <string name="already_registered">Already registered? Sign in here.</string>
     <string name="forgot_password">Forgot password</string>
     <string name="search_bar_hint">Search Post Content</string>
+    <string name="receive_notification">Receive Notification</string>
+    <string name="quit_group">Quit Group</string>
 </resources>

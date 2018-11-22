@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/sb_lastest"
+        android:title="@string/most_recent" />
+    <item
+        android:id="@+id/sb_oldest"
+        android:title="@string/least_recent" />
+    <item
         android:id="@+id/sb_highest_rating"
         android:title="@string/highest_rating" />
-
     <item
         android:id="@+id/sb_lowest_rating"
         android:title="@string/lowest_rating" />
-
-    <item
-        android:id="@+id/sb_lastest"
-        android:title="@string/latest_post" />
-
-    <item
-        android:id="@+id/sb_oldest"
-        android:title="@string/oldest_post" />
 </menu>

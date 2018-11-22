@@ -85,7 +85,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, GroupPostsActivity.class);
-                    intent.putExtra(GroupsFragment.GROUP, group.toString());
+                    intent.putExtra(GroupsFragment.GROUP, group);
                     context.startActivity(intent);
                 }
             });

@@ -18,8 +18,11 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="imageAsset" value="C:\Program Files\Android\Android Studio\bin\C:\Users\Seaky\Desktop\MomentsIcons\addcomment.png" />
-                                      <entry key="outputName" value="ic_logout" />
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\edit.png" />
+                                      <entry key="outputName" value="ic_edit" />
+                                      <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="ffc800" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -30,12 +33,17 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="C:\Users\Seaky\Desktop\686220.png" />
+                                      <entry key="foregroundImage" value="C:\Users\Seaky\Desktop\MomentsIcons\logo.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
                               </value>
                             </entry>
+                          </map>
+                        </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>

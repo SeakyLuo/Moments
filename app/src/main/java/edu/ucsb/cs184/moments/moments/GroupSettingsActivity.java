@@ -2,8 +2,6 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -12,19 +10,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
-public class SettingsActivity extends AppCompatActivity {
+public class GroupSettingsActivity extends AppCompatActivity {
 
     private static final String SETTINGS = "Settings";
+    private static Group group;
     private ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SwipeBackHelper.onCreate(this);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_group_settings);
+        group = (Group) getIntent().getSerializableExtra(GroupsFragment.GROUP);
 
         back = findViewById(R.id.settings_back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -35,7 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         Fragment fragment = new SettingsFragment();
-        ((SettingsFragment) fragment).setContext(getApplicationContext());
+        ((SettingsFragment) fragment).setActivity(this);
         // this fragment must be from android.app.Fragment,
         // if you use support fragment, it will not work
 
@@ -50,7 +49,6 @@ public class SettingsActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -64,29 +62,26 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment {
-        private Context context;
+        private AppCompatActivity activity;
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             // here we should call settings ui
-            addPreferencesFromResource(R.xml.user_preferences);
-            Preference logout = findPreference("logout");
-            logout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            addPreferencesFromResource(R.xml.group_preference);
+            Preference quit = findPreference(getString(R.string.quit_group));
+            quit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    FirebaseAuth.getInstance().signOut();
-                    User.firebaseUser = null;
-                    User.user = null;
-                    Intent intent = new Intent(context, LoginActivity.class);
-                    startActivity(intent);
+//                    User.user.quitGroup(group.getGroupid());
+//                    activity.finish();
+                    // TODO: needs another finish
                     return true;
                 }
             });
-
         }
 
-        public void setContext(Context context){
-            this.context = context;
+        public void setActivity(AppCompatActivity activity){
+            this.activity = activity;
         }
     }
 }

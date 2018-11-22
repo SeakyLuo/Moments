@@ -14,7 +14,9 @@ public class User {
     public static FirebaseUser firebaseUser;
     private String userid;
     private String username;
+    private String intro = "";
     private Bitmap icon;
+    private String gender;
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> drafts = new ArrayList<>();
     private ArrayList<Post.Key> collections = new ArrayList<>();
@@ -33,14 +35,16 @@ public class User {
 
     public User(){}
 
-    public User(String uid, String username){
+    public User(String userid, String username){
         this.username = username;
-        this.userid = uid;
+        this.userid = userid;
     }
 
     public Bitmap getIcon() { return icon; }
     public String getUsername() { return username; }
     public String getUserid() { return userid; }
+    public String getIntro() { return intro; }
+    public String getGender() { return gender; }
     public ArrayList<Message> getMessages() { return messages; }
     public ArrayList<String> getGroups() { return groups; }
     public ArrayList<Post> getPosts() {
@@ -56,10 +60,11 @@ public class User {
         }
         return comments;
     }
-    public Boolean isAnonymous() { return userid.equals(anonymous); }
-    public Boolean hasNewPost() { return posts_notification.size() != 0; }
-    public Boolean hasNewComment() { return comments_notification.size() != 0; }
-    private Boolean hasNewRating() { return ratings_notification.size() != 0; }
+    public boolean isAnonymous() { return userid.equals(anonymous); }
+    public boolean isFollowing(String userid) { return following.contains(userid); }
+    public boolean hasNewPost() { return posts_notification.size() != 0; }
+    public boolean hasNewComment() { return comments_notification.size() != 0; }
+    public boolean hasNewRating() { return ratings_notification.size() != 0; }
     public ArrayList getPostKeys() {
         ArrayList<Post.Key> keys = new ArrayList<>();
         for (Post post: posts) keys.add(post.getKey());
@@ -125,9 +130,21 @@ public class User {
         upload("ratings_notification", ratings_notification);
         upload("ratings_recv", ratings_recv);
     }
+    public void setUsername(String username){
+        this.username = username;
+        upload("username", username);
+    }
     public void setIcon(Bitmap icon){
         this.icon = icon;
         upload("icon", icon);
+    }
+    public void setIntro(String intro){
+        this.intro = intro;
+        upload("intro", intro);
+    }
+    public void setGender(String gender){
+        this.gender = gender;
+        upload("gender", gender);
     }
     public void make_post(Post post){
         posts.add(post);
@@ -149,38 +166,50 @@ public class User {
         upload("comments_made", comments_made);
         findUser(comment.getUserid()).CommentNotification(comment, false);
     }
-    public void delete_comment(Comment comment, Boolean made) {
+    public void delete_comment(Comment comment, boolean made) {
         comments_made.remove(comment);
         FirebaseHelper.findPost(comment.getPostKey()).removeComment(comment);
         upload("comments_made", comments_made);
         findUser(comment.getUserid()).CommentNotification(comment, true);
     }
-    public void follow(String userid) {
-        following.add(userid);
-        User user = findUser(userid);
-        timeline.addAll(user.getPostKeys());
-        user.FollowerNotification(this.userid, false);
-        Collections.sort(timeline, new Post.TimeComparator());
-        upload("following", following);
-        upload("timeline", timeline);
+    public void follow(final String userid) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                following.add(userid);
+                User user = findUser(userid);
+                timeline.addAll(user.getPostKeys());
+                user.FollowerNotification(user.userid, false);
+                Collections.sort(timeline, new Post.TimeComparator());
+                upload("following", following);
+                upload("timeline", timeline);
+            }
+        }).start();
     }
-    public void unfollow(String userid) {
-        following.remove(userid);
-        User user = findUser(userid);
-        for (Post.Key postKey : (ArrayList<Post.Key>) timeline.clone()){
-            if (postKey.userid == userid) timeline.remove(postKey);
-        }
-        user.FollowerNotification(this.userid, true);
-        upload("following", following);
-        upload("timeline", timeline);
+    public void unfollow(final String userid) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                following.remove(userid);
+                User user = findUser(userid);
+                for (Post.Key postKey : (ArrayList<Post.Key>) timeline.clone()){
+                    if (postKey.userid.equals(userid)) timeline.remove(postKey);
+                }
+                user.FollowerNotification(user.userid, true);
+                upload("following", following);
+                upload("timeline", timeline);
+            }
+        }).start();
     }
     public void joinGroup(String groupid){
         groups.add(groupid);
-        //  add to group database
+        upload("groups", groups);
+        FirebaseHelper.findGroup(groupid).addMember(user.userid);
     }
-    public void quitGroup(int groupid){
+    public void quitGroup(String groupid){
         groups.remove(groupid);
-        //  remove from group database
+        upload("groups", groups);
+        FirebaseHelper.findGroup(groupid).removeMember(user.userid);
     }
     public void collect(Post post){
         collections.add(post.getKey());
