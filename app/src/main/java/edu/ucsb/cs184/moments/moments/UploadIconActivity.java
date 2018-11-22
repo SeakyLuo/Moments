@@ -142,6 +142,7 @@ public class UploadIconActivity extends AppCompatActivity {
             }
         }
         icon.setImageBitmap(image);
+        User.user.setIcon(image);
         if (caller == UserProfileActivity.class) User.user.setIcon(image);
         Intent intent = new Intent(UploadIconActivity.this, caller);
         intent.putExtra(ICON, image);

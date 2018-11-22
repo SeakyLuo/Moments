@@ -16,7 +16,7 @@ public class User {
     private String username;
     private String intro = "";
     private Bitmap icon;
-    private String gender;
+    private String gender = "Unknown";
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> drafts = new ArrayList<>();
     private ArrayList<Post.Key> collections = new ArrayList<>();
@@ -53,6 +53,8 @@ public class User {
     public ArrayList<Post> getDrafts() { return drafts; }
     public ArrayList<Post.Key> getCollections() { return collections; }
     public ArrayList<Comment> getComments_made() { return comments_made; }
+    public ArrayList<String> getFollowers() { return followers; }
+    public ArrayList<String> getFollowing() { return following; }
     public ArrayList<Comment> getComments_recv() {
         ArrayList<Comment> comments = new ArrayList<>();
         for (Comment.Key key : comments_recv){
@@ -105,6 +107,7 @@ public class User {
     public void FollowerNotification(String followerid, boolean remove){
         if (remove) followers.remove(followerid);
         else followers.add(followerid);
+        upload("followers", followers);
     }
     public void refreshTimeline(){
         timeline.addAll(0, posts_notification);
@@ -173,33 +176,23 @@ public class User {
         findUser(comment.getUserid()).CommentNotification(comment, true);
     }
     public void follow(final String userid) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                following.add(userid);
-                User user = findUser(userid);
-                timeline.addAll(user.getPostKeys());
-                user.FollowerNotification(user.userid, false);
-                Collections.sort(timeline, new Post.TimeComparator());
-                upload("following", following);
-                upload("timeline", timeline);
-            }
-        }).start();
+        following.add(userid);
+        User user = findUser(userid);
+        timeline.addAll(user.getPostKeys());
+        user.FollowerNotification(user.userid, false);
+        Collections.sort(timeline, new Post.TimeComparator());
+        upload("following", following);
+        upload("timeline", timeline);
     }
     public void unfollow(final String userid) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                following.remove(userid);
-                User user = findUser(userid);
-                for (Post.Key postKey : (ArrayList<Post.Key>) timeline.clone()){
-                    if (postKey.userid.equals(userid)) timeline.remove(postKey);
-                }
-                user.FollowerNotification(user.userid, true);
-                upload("following", following);
-                upload("timeline", timeline);
-            }
-        }).start();
+        following.remove(userid);
+        User user = findUser(userid);
+        for (Post.Key postKey : (ArrayList<Post.Key>) timeline.clone()){
+            if (postKey.userid.equals(userid)) timeline.remove(postKey);
+        }
+        user.FollowerNotification(user.userid, true);
+        upload("following", following);
+        upload("timeline", timeline);
     }
     public void joinGroup(String groupid){
         groups.add(groupid);

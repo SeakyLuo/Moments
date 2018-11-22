@@ -12,6 +12,7 @@ import android.widget.Button;
 
 public class SaveAsDraftFragment extends DialogFragment {
 
+    public static final String SAVE_AS_DRAFT = "Save as Draft";
     private AppCompatActivity activity;
     private Post post;
     private Button yes;

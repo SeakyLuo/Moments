@@ -61,7 +61,7 @@ public class EditPostActivity extends AppCompatActivity {
                 else {
                     // ask save to draft box
                     saveAsDraftFragment.setPost(getPost());
-                    saveAsDraftFragment.show(getSupportFragmentManager(), "Save As Draft");
+                    saveAsDraftFragment.show(getSupportFragmentManager(), SaveAsDraftFragment.SAVE_AS_DRAFT);
                 }
             }
         });

@@ -68,4 +68,11 @@
     <string name="search_bar_hint">Search Post Content</string>
     <string name="receive_notification">Receive Notification</string>
     <string name="quit_group">Quit Group</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="unknown">Unknown</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>

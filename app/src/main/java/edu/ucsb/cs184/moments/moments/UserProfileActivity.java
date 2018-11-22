@@ -12,8 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
 
@@ -24,9 +26,10 @@ public class UserProfileActivity extends AppCompatActivity {
     private View include;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
-    private ImageView icon;
+    private ImageView icon, gender;
+    private TextView username, intro, following, followers;
     private ImageButton follow, message;
-    private Intent intent;
+    private FrameLayout up_timeline;
     private RecycleViewFragment fragment;
 
     @Override
@@ -34,7 +37,6 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         SwipeBackHelper.onCreate(this);
-        intent = getIntent();
 
         back = findViewById(R.id.up_back);
         include = findViewById(R.id.content_user_profile);
@@ -42,9 +44,16 @@ public class UserProfileActivity extends AppCompatActivity {
         collapsingToolbarLayout = findViewById(R.id.up_ctoolbar);
         sortBy = include.findViewById(R.id.up_sortby_button);
         icon = include.findViewById(R.id.up_usericon);
+        gender = include.findViewById(R.id.up_gender);
+        username = include.findViewById(R.id.up_username);
+        intro = include.findViewById(R.id.up_intro);
+        following = include.findViewById(R.id.up_following);
+        followers = include.findViewById(R.id.up_followers);
         follow = include.findViewById(R.id.up_follow);
         message = include.findViewById(R.id.up_message);
+        up_timeline = include.findViewById(R.id.up_timeline);
         fragment = new RecycleViewFragment();
+        fragment.setAdapter(new PostsAdapter());
         fragment.show(getSupportFragmentManager(), R.id.up_timeline);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -92,12 +101,21 @@ public class UserProfileActivity extends AppCompatActivity {
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
         setSupportActionBar(toolbar);
-        setUserProfile(intent.getStringExtra("userid"));
+        setUserProfile(getIntent().getStringExtra("userid"));
     }
 
     private void setUserProfile(final String userid){
         User user = User.findUser(userid);
         collapsingToolbarLayout.setTitle(user.getUsername());
+        username.setText(user.getUsername());
+        if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.INVISIBLE);
+        else{
+            gender.setVisibility(View.VISIBLE);
+            gender.setImageDrawable(user.getGender().equals(getString(R.string.male)) ? getDrawable(R.drawable.ic_male) : getDrawable(R.drawable.ic_female));
+        }
+        following.setText(user.getFollowers().size() + " followers");
+        followers.setText(user.getFollowers().size() + " followers");
+        intro.setText("Intro: " + user.getIntro());
         if (userid.equals(User.user.getUserid())){
             follow.setImageResource(R.drawable.ic_edit);
             message.setVisibility(View.INVISIBLE);
@@ -125,6 +143,17 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             });
         }
+        try {
+            fragment.addElements(user.getPosts());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String FollowCount(int count){
+        if (count > 1000000) return count / 1000000 + " M";
+        else if (count > 1000) return count / 1000 + " K";
+        return count + "";
     }
 
     @Override
