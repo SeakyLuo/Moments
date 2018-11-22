@@ -1,7 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +25,6 @@ public class FirebaseHelper {
         udb.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("fuck","uds");
                 uds = dataSnapshot;
                 for (OnDataReceivedListener listener : listeners)
                     listener.onUDBReceived();
@@ -41,7 +39,6 @@ public class FirebaseHelper {
         gdb.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("fuck","gds");
                 gds = dataSnapshot;
                 for (OnDataReceivedListener listener : listeners)
                     listener.onGDBReceived();
@@ -123,6 +120,8 @@ public class FirebaseHelper {
     public static void addDataReceivedListener(OnDataReceivedListener listener){
         listeners.add(listener);
     }
+
+    public static boolean initFinished() { return uds != null && gds != null; }
 
     interface OnDataReceivedListener{
         void onUDBReceived();

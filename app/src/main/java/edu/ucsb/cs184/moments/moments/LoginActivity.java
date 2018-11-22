@@ -162,25 +162,35 @@ public class LoginActivity extends AppCompatActivity {
         _loginButton.setEnabled(true);
         final FirebaseUser firebaseUser = mAuth.getCurrentUser();
         User.firebaseUser = firebaseUser;
-        FirebaseHelper.addDataReceivedListener(new FirebaseHelper.OnDataReceivedListener() {
-            @Override
-            public void onUDBReceived() {
-                if (User.user == null){
-                    String id = firebaseUser.getUid();
-                    User.user = FirebaseHelper.findUser(id);
-                    if (User.user == null){
-                        User user = new User(id, "New User"+id);
-                        FirebaseHelper.insertUser(user);
-                        Toast.makeText(getApplicationContext(), "Your account was deleted.\nA new one is generated.", Toast.LENGTH_SHORT).show();
-                    }
-                }
+        while (!FirebaseHelper.initFinished()) {}
+        if (User.user == null){
+            String id = firebaseUser.getUid();
+            User.user = FirebaseHelper.findUser(id);
+            if (User.user == null){
+                User user = new User(id, "New User"+id);
+                FirebaseHelper.insertUser(user);
+                Toast.makeText(getApplicationContext(), "Your account was deleted.\nA new one is generated.", Toast.LENGTH_SHORT).show();
             }
-
-            @Override
-            public void onGDBReceived() {
-
-            }
-        });
+        }
+//        FirebaseHelper.addDataReceivedListener(new FirebaseHelper.OnDataReceivedListener() {
+//            @Override
+//            public void onUDBReceived() {
+//                if (User.user == null){
+//                    String id = firebaseUser.getUid();
+//                    User.user = FirebaseHelper.findUser(id);
+//                    if (User.user == null){
+//                        User user = new User(id, "New User"+id);
+//                        FirebaseHelper.insertUser(user);
+//                        Toast.makeText(getApplicationContext(), "Your account was deleted.\nA new one is generated.", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onGDBReceived() {
+//
+//            }
+//        });
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }
