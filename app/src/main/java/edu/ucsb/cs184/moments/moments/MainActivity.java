@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.nav_user_profile:
                         intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                        intent.putExtra(UserProfileActivity.USERID, User.user.getId());
                         startActivity(intent);
                         return true;
                     case R.id.nav_user_collections:
@@ -71,12 +72,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         View header = dNavigationView.getHeaderView(0);
-        ((TextView) header.findViewById(R.id.nav_username)).setText(User.user.getUsername());
+        ((TextView) header.findViewById(R.id.nav_username)).setText(User.user.getName());
         header.findViewById(R.id.nav_usericon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 drawer.closeDrawer(Gravity.START);
                 Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                intent.putExtra(UserProfileActivity.USERID, User.user.getId());
                 startActivity(intent);
             }
         });

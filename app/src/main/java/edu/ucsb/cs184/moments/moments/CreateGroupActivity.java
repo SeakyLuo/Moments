@@ -53,7 +53,7 @@ public class CreateGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!finishClickable()) return;
-                Group group = new Group(name.getText().toString(), User.user.getUserid(), ((BitmapDrawable) icon.getDrawable()).getBitmap());
+                Group group = new Group(name.getText().toString(), User.user.getId(), ((BitmapDrawable) icon.getDrawable()).getBitmap());
                 Intent intent = new Intent(getApplicationContext(), GroupsFragment.class);
                 intent.putExtra(GroupsFragment.GROUP, group);
                 setResult(RESULT_OK, intent);

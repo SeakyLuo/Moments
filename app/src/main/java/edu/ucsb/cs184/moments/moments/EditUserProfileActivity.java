@@ -43,7 +43,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
         gender = findViewById(R.id.eup_gender_input);
         intro = findViewById(R.id.eup_intro_input);
 
-        name.setText(User.user.getUsername());
+        name.setText(User.user.getName());
         gender.setText(User.user.getGender());
         intro.setText(User.user.getIntro());
         back.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +64,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 TextFragment fragment = new TextFragment();
                 fragment.setTitle("Edit Name");
-                fragment.setContent(User.user.getUsername());
+                fragment.setContent(User.user.getName());
                 fragment.show(getSupportFragmentManager(), NAME);
             }
         });
@@ -142,7 +142,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
                     String content = text.getText().toString();
                     if (title_text.contains("Name")){
                         EditUserProfileActivity.setName(content);
-                        User.user.setUsername(content);
+                        User.user.setName(content);
                     }else if (title_text.contains("Intro")){
                         EditUserProfileActivity.setIntro(content);
                         User.user.setIntro(content);
@@ -171,7 +171,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.fragment_select_gender,container,false);
+            View view = inflater.inflate(R.layout.dialog_select_gender,container,false);
             radioGroup = view.findViewById(R.id.sg_radio_group);
             cancel = view.findViewById(R.id.sg_cancel);
             confirm = view.findViewById(R.id.sg_confirm);

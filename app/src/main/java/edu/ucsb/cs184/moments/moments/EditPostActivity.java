@@ -81,6 +81,6 @@ public class EditPostActivity extends AppCompatActivity {
     }
 
     private Post getPost(){
-        return new Post(User.user.getUserid(), edit_content.getText().toString(), new Date());
+        return new Post(User.user.getId(), edit_content.getText().toString(), new Date());
     }
 }

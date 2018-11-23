@@ -21,13 +21,14 @@ import com.jude.swipbackhelper.SwipeBackHelper;
 
 public class UserProfileActivity extends AppCompatActivity {
 
+    public static final String USERID = "userid";
     private Button sortBy;
     private ImageButton back;
     private View include;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
     private ImageView icon, gender;
-    private TextView username, intro, following, followers;
+    private TextView username, user_number, intro, following, followers;
     private ImageButton follow, message;
     private FrameLayout up_timeline;
     private RecycleViewFragment fragment;
@@ -46,6 +47,7 @@ public class UserProfileActivity extends AppCompatActivity {
         icon = include.findViewById(R.id.up_usericon);
         gender = include.findViewById(R.id.up_gender);
         username = include.findViewById(R.id.up_username);
+        user_number = include.findViewById(R.id.up_user_number);
         intro = include.findViewById(R.id.up_intro);
         following = include.findViewById(R.id.up_following);
         followers = include.findViewById(R.id.up_followers);
@@ -101,13 +103,14 @@ public class UserProfileActivity extends AppCompatActivity {
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
         setSupportActionBar(toolbar);
-        setUserProfile(getIntent().getStringExtra("userid"));
+        setUserProfile(getIntent().getStringExtra(USERID));
     }
 
     private void setUserProfile(final String userid){
         User user = User.findUser(userid);
-        collapsingToolbarLayout.setTitle(user.getUsername());
-        username.setText(user.getUsername());
+        collapsingToolbarLayout.setTitle(user.getName());
+        username.setText(user.getName());
+        user_number.setText(user.getNumber());
         if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.INVISIBLE);
         else{
             gender.setVisibility(View.VISIBLE);
@@ -116,7 +119,7 @@ public class UserProfileActivity extends AppCompatActivity {
         following.setText(user.getFollowers().size() + " followers");
         followers.setText(user.getFollowers().size() + " followers");
         intro.setText("Intro: " + user.getIntro());
-        if (userid.equals(User.user.getUserid())){
+        if (userid.equals(User.user.getId())){
             follow.setImageResource(R.drawable.ic_edit);
             message.setVisibility(View.INVISIBLE);
             follow.setOnClickListener(new View.OnClickListener() {
@@ -129,17 +132,18 @@ public class UserProfileActivity extends AppCompatActivity {
             });
         }else{
             message.setVisibility(View.VISIBLE);
-            final boolean isFollowing = User.user.isFollowing(userid);
-            follow.setImageResource(isFollowing ? R.drawable.ic_unfollow : R.drawable.ic_follow);
+            follow.setImageResource(User.user.isFollowing(userid) ? R.drawable.ic_unfollow : R.drawable.ic_follow);
             follow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isFollowing){
-                        User.user.follow(userid);
-                    } else{
+                    if (User.user.isFollowing(userid)){
                         User.user.unfollow(userid);
+                        follow.setImageResource(R.drawable.ic_follow);
                     }
-                    follow.setImageResource(isFollowing ? R.drawable.ic_unfollow : R.drawable.ic_follow);
+                    else{
+                        User.user.follow(userid);
+                        follow.setImageResource(R.drawable.ic_unfollow);
+                    }
                 }
             });
         }
@@ -161,7 +165,7 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == EditUserProfileActivity.FINISH){
-            setUserProfile(User.user.getUserid());
+            setUserProfile(User.user.getId());
         }
     }
 

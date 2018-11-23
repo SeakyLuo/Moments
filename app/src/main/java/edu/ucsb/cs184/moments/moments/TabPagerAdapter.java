@@ -16,10 +16,14 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
     }
 
-    public  void  addFragment(Fragment fragment, String title)
-    {
+    public void addFragment(Fragment fragment, String title){
         fragmentList.add(fragment);
         fragmentTitles.add(title);
+    }
+
+    public void addFragments(List fragments, List<String> titles){
+        fragmentList.addAll(fragments);
+        fragmentTitles.addAll(titles);
     }
 
     @Override

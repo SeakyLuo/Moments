@@ -15,8 +15,8 @@ public class FirebaseHelper {
     private static ArrayList<OnDataReceivedListener> listeners = new ArrayList<>();
     private static FirebaseDatabase firebase;
     private static DatabaseReference db;
-    private static DatabaseReference udb, gdb;
-    private static DataSnapshot uds, gds;
+    private static DatabaseReference udb, gdb, uc, gc;
+    private static DataSnapshot uds, gds, ucds, gcds;
 
     public static void init(){
         firebase = FirebaseDatabase.getInstance();
@@ -49,6 +49,30 @@ public class FirebaseHelper {
 
             }
         });
+        uc = db.child("user_count");
+        uc.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ucds = dataSnapshot;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        gc = db.child("group_count");
+        gc.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                gcds = dataSnapshot;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     // I don't think these three should be used
@@ -57,19 +81,32 @@ public class FirebaseHelper {
     public static DatabaseReference getGdb() { return gdb; }
 
     public static void insertUser(User user){
-        udb.child(user.getUserid()).setValue(user);
+        int number = ucds.getValue(Integer.class);
+        uc.setValue(number);
+        user.setNumber(number++);
+        udb.child(user.getId()).setValue(user);
     }
 
     public static void insertGroup(Group group){
         String id = gdb.push().getKey();
-        group.setGroupid(id);
+        group.setId(id);
+        int number = gcds.getValue(Integer.class);
+        gc.setValue(number);
+        group.setNumber(number++);
         gdb.child(id).setValue(group);
     }
 
-    public static ArrayList<Post> findPosts(String keyword){
+    public static User findUser(String id){
+        return uds.child(id).getValue(User.class);
+    }
+    public static Group findGroup(String id){
+        return gds.child(id).getValue(Group.class);
+    }
+
+    public static ArrayList<Post> searchPosts(String keyword){
         ArrayList<Post> posts = new ArrayList<>();
         for (DataSnapshot ds : uds.getChildren()){
-            for(Post post : (ArrayList<Post>) ds.child("posts").getValue()){
+            for (Post post : (ArrayList<Post>) ds.child("posts").getValue(ArrayList.class)){
                 if (post.getContent().contains(keyword)){
                     posts.add(post);
                 }
@@ -77,23 +114,33 @@ public class FirebaseHelper {
         }
         return posts;
     }
-
-    public static User findUser(String id){
-        return uds.child(id).getValue(User.class);
+    public static ArrayList<User> searchUsers(String keyword) {
+        ArrayList<User> users = new ArrayList<>();
+        for (DataSnapshot ds : uds.getChildren()){
+            User user = ds.getValue(User.class);
+            if (user.getName().contains(keyword) || Integer.toString(user.getNumber()).contains(keyword))
+                users.add(user);
+        }
+        return users;
     }
-
-    public static Group findGroup(String id){
-        return gds.child(id).getValue(Group.class);
+    public static ArrayList<Group> searchGroups(String keyword) {
+        ArrayList<Group> groups = new ArrayList<>();
+        for (DataSnapshot ds : uds.getChildren()){
+            Group group = ds.getValue(Group.class);
+            if (group.getName().contains(keyword) || Integer.toString(group.getNumber()).contains(keyword))
+                groups.add(group);
+        }
+        return groups;
     }
 
     public static Post findPost(Post.Key key) {
-        for (Post post : (ArrayList<Post>) uds.child(key.userid).child("posts").getValue()){
+        for (Post post : (ArrayList<Post>) uds.child(key.userid).child("posts").getValue(ArrayList.class)){
             if (post.getKey().equals(key)) return post;
         }
         return null;
     }
     public static Comment findComment(Comment.Key key){
-        for (Comment comment : (ArrayList<Comment>) uds.child(key.userid).child("comments_made").getValue()){
+        for (Comment comment : (ArrayList<Comment>) uds.child(key.userid).child("comments_made").getValue(ArrayList.class)){
             if (comment.getKey().equals(key)) return comment;
         }
         return null;
@@ -103,7 +150,7 @@ public class FirebaseHelper {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                udb.child(User.user.getUserid()).child(key).setValue(data);
+                udb.child(User.user.getId()).child(key).setValue(data);
             }
         }).start();
     }
@@ -112,7 +159,7 @@ public class FirebaseHelper {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                gdb.child(group.getGroupid()).child(key).setValue(data);
+                gdb.child(group.getId()).child(key).setValue(data);
             }
         }).start();
     }

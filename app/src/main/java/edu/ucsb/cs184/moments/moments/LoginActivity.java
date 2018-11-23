@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
- * A login screen that offers login via email/password.
+ * CustomAdapter login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener() {
                             @Override
                             public void onSuccess(Object o) {
-                                Toast.makeText(LoginActivity.this, "A password reset link has been sent to your email.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "CustomAdapter password reset link has been sent to your email.", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -169,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
             if (User.user == null){
                 User user = new User(id, "New User"+id);
                 FirebaseHelper.insertUser(user);
-                Toast.makeText(getApplicationContext(), "Your account was deleted.\nA new one is generated.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Your account was deleted.\nCustomAdapter new one is generated.", Toast.LENGTH_SHORT).show();
             }
         }
 //        FirebaseHelper.addDataReceivedListener(new FirebaseHelper.OnDataReceivedListener() {

@@ -2,9 +2,6 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,39 +12,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
-
-    private Context context;
-    private ArrayList<Post> posts = new ArrayList<>();
+public class PostsAdapter extends CustomAdapter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.view_post, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_post, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
-    }
-
-    private void add_element(Post post){
-        posts.add(0, post);
-    }
-    public void addElements(ArrayList<Post> data){
-        for (int i = 0; i < data.size(); i++) add_element(data.get(i));
-        notifyDataSetChanged();
-    }
-    public void addElement(Post post){
-        add_element(post);
-        notifyDataSetChanged();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Post post = posts.get(position);
-        holder.setPost(post);
     }
 
     public static String TimeText(Date date){
@@ -65,12 +38,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 //        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
 
-    @Override
-    public int getItemCount() {
-        return posts.size();
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends CustomAdapter.CustomViewHolder {
         public ImageView usericon;
         public TextView username;
         public TextView time;
@@ -79,7 +47,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public ImageButton comment;
         public ImageButton collect;
         public ImageButton share;
-        private Post post;
+        private Post data;
 
         public ViewHolder(final View view) {
             super(view);
@@ -101,7 +69,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             collect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setCollect(!post.isCollected(User.user.getUserid()));
+                    setCollect(!data.isCollected(User.user.getId()));
                 }
             });
             view.setClickable(true);
@@ -110,7 +78,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, FullPostActivity.class);
-                    intent.putExtra(FullPostActivity.POST, post);
+                    intent.putExtra(FullPostActivity.POST, data);
                     context.startActivity(intent);
                 }
             });
@@ -119,7 +87,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, FullPostActivity.class);
-                    intent.putExtra(FullPostActivity.POST, post);
+                    intent.putExtra(FullPostActivity.POST, data);
                     intent.putExtra(FullPostActivity.ADD_COMMENT, FullPostActivity.ADD_COMMENT);
                     context.startActivity(intent);
                 }
@@ -128,35 +96,31 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                     if (!fromUser) return;
-                    if (post.getUserid() == User.user.getUserid()){
+                    if (data.getUserid() == User.user.getId()){
                         Toast.makeText(view.getContext(), "You can't rate your own post!", Toast.LENGTH_SHORT).show();
-                        ratingBar.setRating(post.ratings_avg());
+                        ratingBar.setRating(data.ratings_avg());
                     }else{
-                        User.user.rate(new Rating(User.user.getUserid(), (int) rating, new Date(), post.getKey()));
-                        if (rating == 0) ratingBar.setRating(post.ratings_avg());
+                        User.user.rate(new Rating(User.user.getId(), (int) rating, new Date(), data.getKey()));
+                        if (rating == 0) ratingBar.setRating(data.ratings_avg());
                     }
                 }
             });
         }
 
-        public void setPost(Post post) {
-            this.post = post;
-            User user = User.findUser(post.getUserid());
+        public void setData(Object object) {
+            data = (Post) object;
+            User user = User.findUser(data.getUserid());
             usericon.setImageBitmap(user.getIcon());
-            username.setText(user.getUsername());
-            time.setText(TimeText(post.getTime()));
-            content.setText(post.getContent());
-            ratingBar.setRating(post.ratings_avg());
-            setCollect(post.isCollected(User.user.getUserid()));
+            username.setText(user.getName());
+            time.setText(TimeText(data.getTime()));
+            content.setText(data.getContent());
+            ratingBar.setRating(data.ratings_avg());
+            setCollect(data.isCollected(User.user.getId()));
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.M)
         public void setCollect(boolean Collect){
-            if (Collect){
-                User.user.collect(post);
-            }else{
-                User.user.uncollect(post);
-            }
+            if (Collect) User.user.collect(data);
+            else User.user.uncollect(data);
             collect.setImageResource(Collect ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
         }
     }

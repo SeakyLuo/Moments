@@ -9,18 +9,27 @@
     <EditTextPreference
         android:id="@+id/pg_name"
         android:defaultValue="Group Name"
+        android:summary="Group Name"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:key="Group Name"
         android:title="Group Name" />
+    <Preference
+        android:id="@+id/pg_group_number"
+        android:title="Group Number"
+        android:key="Group Number"
+        android:summary="10000000"/>
     <EditTextPreference
         android:id="@+id/pg_intro"
         android:hint="Introduction"
+        android:summary="Introduction"
+        android:ellipsize="end"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:key="Group Intro"
         android:title="Group Intro" />
     <ListPreference
+        android:summary="@string/most_recent"
         android:defaultValue="@string/most_recent"
         android:entries="@array/sortby"
         android:entryValues="@array/sortby"

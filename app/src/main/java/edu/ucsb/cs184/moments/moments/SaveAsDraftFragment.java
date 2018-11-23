@@ -24,7 +24,7 @@ public class SaveAsDraftFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_save_as_draft,container,false);
+        View view = inflater.inflate(R.layout.dialog_save_as_draft,container,false);
         yes = view.findViewById(R.id.draft_yes);
         no = view.findViewById(R.id.draft_no);
         yes.setOnClickListener(new View.OnClickListener() {

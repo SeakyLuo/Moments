@@ -33,7 +33,7 @@ public class FullPostCommentsAdapter extends RecyclerView.Adapter<FullPostCommen
         Comment comment = comments.get(position);
         User user = User.findUser(comment.getUserid());
 //        holder.usericon.setImageBitmap(user.getIcon());
-        holder.username.setText(user.getUsername());
+        holder.username.setText(user.getName());
         // Can be changed to xxx ago.
         holder.time.setText(TimeText(comment.getTime()));
         holder.content.setText(comment.getContent());

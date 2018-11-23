@@ -36,6 +36,41 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/up_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:maxLines="1"
+                    android:text="Username"
+                    android:textColor="@color/BlackGray"
+                    android:textSize="19sp"
+                    app:layout_constraintStart_toStartOf="@+id/up_usericon"
+                    app:layout_constraintTop_toBottomOf="@+id/up_usericon" />
+
+                <TextView
+                    android:id="@+id/up_user_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="#10000000"
+                    app:layout_constraintStart_toStartOf="@+id/up_username"
+                    app:layout_constraintTop_toBottomOf="@+id/up_username" />
+
+                <TextView
+                    android:id="@+id/up_intro"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="Intro: "
+                    android:textColor="@color/BlackGray"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/up_user_number"
+                    app:layout_constraintTop_toBottomOf="@+id/up_user_number" />
+
+                <TextView
                     android:id="@+id/up_followers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -56,31 +91,6 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/up_intro"
                     app:layout_constraintTop_toBottomOf="@+id/up_intro" />
-
-                <TextView
-                    android:id="@+id/up_intro"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="Intro: "
-                    android:textColor="@color/BlackGray"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/up_username"
-                    app:layout_constraintTop_toBottomOf="@+id/up_username" />
-
-                <TextView
-                    android:id="@+id/up_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:maxLines="1"
-                    android:text="Username"
-                    android:textColor="@color/BlackGray"
-                    android:textSize="19sp"
-                    app:layout_constraintStart_toStartOf="@+id/up_usericon"
-                    app:layout_constraintTop_toBottomOf="@+id/up_usericon" />
 
                 <ImageButton
                     android:id="@+id/up_follow"
@@ -108,9 +118,9 @@
                     android:layout_width="@dimen/icon_size_small"
                     android:layout_height="@dimen/icon_size_small"
                     android:layout_marginStart="8dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/up_username"
-                    app:layout_constraintStart_toEndOf="@+id/up_username"
-                    app:layout_constraintTop_toTopOf="@+id/up_username"
+                    app:layout_constraintBottom_toBottomOf="@+id/up_user_number"
+                    app:layout_constraintStart_toEndOf="@+id/up_user_number"
+                    app:layout_constraintTop_toTopOf="@+id/up_user_number"
                     app:srcCompat="@drawable/ic_male" />
 
             </android.support.constraint.ConstraintLayout>

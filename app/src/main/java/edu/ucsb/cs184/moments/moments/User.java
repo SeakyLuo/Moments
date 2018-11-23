@@ -12,10 +12,11 @@ public class User {
     public static final String anonymous = "anonymous";
     public static User user;
     public static FirebaseUser firebaseUser;
-    private String userid;
-    private String username;
+    private String id;
+    private String name;
     private String intro = "";
     private Bitmap icon;
+    private int user_number;
     private String gender = "Unknown";
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> drafts = new ArrayList<>();
@@ -32,17 +33,20 @@ public class User {
     private ArrayList<Post.Key> posts_notification = new ArrayList<>();
     private ArrayList<Rating.Key> ratings_notification = new ArrayList<>();
     private ArrayList<Post.Key> timeline = new ArrayList<>();
+    private ArrayList<String> search_history = new ArrayList<>();
 
     public User(){}
 
-    public User(String userid, String username){
-        this.username = username;
-        this.userid = userid;
+    public User(String id, String name){
+        this.name = name;
+        this.id = id;
     }
 
+    public void setNumber(int number){ this.user_number = number; }
+    public int getNumber() { return user_number; }
     public Bitmap getIcon() { return icon; }
-    public String getUsername() { return username; }
-    public String getUserid() { return userid; }
+    public String getName() { return name; }
+    public String getId() { return id; }
     public String getIntro() { return intro; }
     public String getGender() { return gender; }
     public ArrayList<Message> getMessages() { return messages; }
@@ -55,6 +59,7 @@ public class User {
     public ArrayList<Comment> getComments_made() { return comments_made; }
     public ArrayList<String> getFollowers() { return followers; }
     public ArrayList<String> getFollowing() { return following; }
+    public ArrayList<String> getSearchHistory() { return search_history; }
     public ArrayList<Comment> getComments_recv() {
         ArrayList<Comment> comments = new ArrayList<>();
         for (Comment.Key key : comments_recv){
@@ -62,7 +67,8 @@ public class User {
         }
         return comments;
     }
-    public boolean isAnonymous() { return userid.equals(anonymous); }
+    public boolean isAnonymous() { return id.equals(anonymous); }
+    public boolean inGroup(String groupid) { return groups.contains(groupid); }
     public boolean isFollowing(String userid) { return following.contains(userid); }
     public boolean hasNewPost() { return posts_notification.size() != 0; }
     public boolean hasNewComment() { return comments_notification.size() != 0; }
@@ -133,9 +139,9 @@ public class User {
         upload("ratings_notification", ratings_notification);
         upload("ratings_recv", ratings_recv);
     }
-    public void setUsername(String username){
-        this.username = username;
-        upload("username", username);
+    public void setName(String name){
+        this.name = name;
+        upload("name", name);
     }
     public void setIcon(Bitmap icon){
         this.icon = icon;
@@ -148,6 +154,14 @@ public class User {
     public void setGender(String gender){
         this.gender = gender;
         upload("gender", gender);
+    }
+    public void addHistory(String content){
+        search_history.add(0, content);
+        upload("search_history", search_history);
+    }
+    public void removeHistory(String content){
+        search_history.remove(content);
+        upload("search_history", search_history);
     }
     public void make_post(Post post){
         posts.add(post);
@@ -179,7 +193,7 @@ public class User {
         following.add(userid);
         User user = findUser(userid);
         timeline.addAll(user.getPostKeys());
-        user.FollowerNotification(user.userid, false);
+        user.FollowerNotification(user.id, false);
         Collections.sort(timeline, new Post.TimeComparator());
         upload("following", following);
         upload("timeline", timeline);
@@ -190,19 +204,19 @@ public class User {
         for (Post.Key postKey : (ArrayList<Post.Key>) timeline.clone()){
             if (postKey.userid.equals(userid)) timeline.remove(postKey);
         }
-        user.FollowerNotification(user.userid, true);
+        user.FollowerNotification(user.id, true);
         upload("following", following);
         upload("timeline", timeline);
     }
     public void joinGroup(String groupid){
         groups.add(groupid);
         upload("groups", groups);
-        FirebaseHelper.findGroup(groupid).addMember(user.userid);
+        FirebaseHelper.findGroup(groupid).addMember(user.id);
     }
     public void quitGroup(String groupid){
         groups.remove(groupid);
         upload("groups", groups);
-        FirebaseHelper.findGroup(groupid).removeMember(user.userid);
+        FirebaseHelper.findGroup(groupid).removeMember(user.id);
     }
     public void collect(Post post){
         collections.add(post.getKey());
@@ -233,7 +247,7 @@ public class User {
         return (new Gson()).fromJson(json, User.class);
     }
     public static User findUser(String id){
-        if (User.user != null && id == User.user.getUserid()) return User.user;
+        if (User.user != null && id == User.user.getId()) return User.user;
         return FirebaseHelper.findUser(id);
     }
 }

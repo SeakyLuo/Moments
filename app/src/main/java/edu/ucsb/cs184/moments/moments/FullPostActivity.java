@@ -161,7 +161,7 @@ public class FullPostActivity extends AppCompatActivity {
             }
         });
         User user = User.findUser(post.getUserid());
-        username.setText(user.getUsername());
+        username.setText(user.getName());
 //        poster_icon.setImageBitmap(user.getIcon());
         time.setText(TimeText(post.getTime()));
         content.setText(post.getContent());

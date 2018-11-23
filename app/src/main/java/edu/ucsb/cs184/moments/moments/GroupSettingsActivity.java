@@ -34,7 +34,6 @@ public class GroupSettingsActivity extends AppCompatActivity {
         });
 
         Fragment fragment = new SettingsFragment();
-        ((SettingsFragment) fragment).setActivity(this);
         // this fragment must be from android.app.Fragment,
         // if you use support fragment, it will not work
 
@@ -62,26 +61,30 @@ public class GroupSettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment {
-        private AppCompatActivity activity;
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             // here we should call settings ui
             addPreferencesFromResource(R.xml.group_preference);
+            Group group = GroupSettingsActivity.group;
+            Preference group_name = findPreference("Group Name");
+            group_name.setSummary(group.getName());
+            group_name.setDefaultValue(group.getName());
+            Preference group_number = findPreference("Group Number");
+            group_number.setSummary(group.getNumber() + "");
+            Preference sortby = findPreference(getString(R.string.sort_by));
+            // TODO: save group settings
+//            sortby.setSummary();
             Preference quit = findPreference(getString(R.string.quit_group));
             quit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-//                    User.user.quitGroup(group.getGroupid());
+//                    User.user.quitGroup(group.getId());
 //                    activity.finish();
                     // TODO: needs another finish
                     return true;
                 }
             });
-        }
-
-        public void setActivity(AppCompatActivity activity){
-            this.activity = activity;
         }
     }
 }

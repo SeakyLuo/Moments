@@ -14,12 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecycleViewFragment extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private CustomAdapter adapter;
     private boolean showDivider = false;
     private ArrayList<View> hideViews = new ArrayList<>();
     private ArrayList<OnRefreshListener> listeners = new ArrayList<>();
@@ -82,23 +83,30 @@ public class RecycleViewFragment extends Fragment {
         showDivider = bool;
     }
 
-    public void setAdapter(RecyclerView.Adapter adapter){
+    public void setAdapter(CustomAdapter adapter){
         this.adapter = adapter;
     }
 
     public void addHiddenView(View view) { hideViews.add(view); }
 
     public void addElement(Object obj) throws Exception {
-        if (obj instanceof Post) ((PostsAdapter) adapter).addElement((Post) obj);
-        else if (obj instanceof Comment) ((CommentsAdapter) adapter).addElement((Comment) obj);
+        if (isValidType(obj)) adapter.addElement(obj);
         else throw new Exception("Unsupport Element!");
     }
-    public void addElements(ArrayList data) throws Exception {
+    public void addElements(List data) throws Exception {
         if (data.size() == 0) return;
-        Object obj = data.get(0);
-        if (obj instanceof Post) ((PostsAdapter) adapter).addElements(data);
-        else if (obj instanceof Comment) ((CommentsAdapter) adapter).addElements(data);
+        if (isValidType(data.get(0))) adapter.addElements(data);
         else throw new Exception("Unsupport data!");
+    }
+    public boolean hasData(){
+        return adapter.hasData();
+    }
+    private boolean isValidType(Object obj){
+        return obj instanceof Post || obj instanceof Comment || obj instanceof User || obj instanceof Group || obj instanceof String;
+    }
+
+    public void clear(){
+        adapter.clear();
     }
 
     public void gotoTop(){

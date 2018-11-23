@@ -8,9 +8,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Group implements Serializable {
-    private String groupid;
+    private String id;
     private String managerid;
     private String name;
+    private int group_number;
     private String intro = "";
     private Bitmap icon;
     private ArrayList<String> members = new ArrayList<>();
@@ -24,13 +25,15 @@ public class Group implements Serializable {
         this.icon = icon;
     }
 
-    public void setGroupid(String groupid) { if (groupid != null) this.groupid = groupid; }
-    public String getGroupid() { return groupid; }
+    public void setId(String id) { if (id != null) this.id = id; }
+    public String getId() { return id; }
     public String getManagerid() { return managerid; }
     public void setManagerid(String userid) {
         this.managerid = userid;
         upload("managerid", managerid);
     }
+    public void setNumber(int number) { this.group_number = number; }
+    public int getNumber() { return group_number;}
     public Bitmap getIcon() { return icon; }
     public void setIcon(Bitmap icon) {
         this.icon = icon;
