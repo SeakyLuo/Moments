@@ -26,6 +26,10 @@ public class FirebaseHelper {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 uds = dataSnapshot;
+                // This updates user
+                // So there is a TODO: gives a red dot on the bottom navigation when there is a new post
+                if (User.firebaseUser != null)
+                    User.user = uds.child(User.firebaseUser.getUid()).getValue(User.class);
                 for (OnDataReceivedListener listener : listeners)
                     listener.onUDBReceived();
             }
@@ -40,6 +44,7 @@ public class FirebaseHelper {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 gds = dataSnapshot;
+                // TODO: Since we update user, updating group is also necessary but has lower priority.
                 for (OnDataReceivedListener listener : listeners)
                     listener.onGDBReceived();
             }
@@ -82,8 +87,8 @@ public class FirebaseHelper {
 
     public static void insertUser(User user){
         int number = ucds.getValue(Integer.class);
-        uc.setValue(number);
-        user.setNumber(number++);
+        user.setNumber(number);
+        uc.setValue(number++);
         udb.child(user.getId()).setValue(user);
     }
 
@@ -91,8 +96,8 @@ public class FirebaseHelper {
         String id = gdb.push().getKey();
         group.setId(id);
         int number = gcds.getValue(Integer.class);
-        gc.setValue(number);
-        group.setNumber(number++);
+        group.setNumber(number);
+        gc.setValue(number++);
         gdb.child(id).setValue(group);
     }
 
@@ -107,9 +112,8 @@ public class FirebaseHelper {
         ArrayList<Post> posts = new ArrayList<>();
         for (DataSnapshot ds : uds.getChildren()){
             for (Post post : (ArrayList<Post>) ds.child("posts").getValue(ArrayList.class)){
-                if (post.getContent().contains(keyword)){
+                if (post.getContent().contains(keyword))
                     posts.add(post);
-                }
             }
         }
         return posts;
