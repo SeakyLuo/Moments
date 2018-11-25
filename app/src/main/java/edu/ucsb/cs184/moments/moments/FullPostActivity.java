@@ -57,7 +57,7 @@ public class FullPostActivity extends AppCompatActivity {
         SwipeBackHelper.onCreate(this);
 
         intent = getIntent();
-        Post post = (Post) intent.getSerializableExtra(POST);
+        final Post post = (Post) intent.getSerializableExtra(POST);
 
         commentsFragment = new FullPostCommentsFragment();
         ratingsFragment = new FullPostRatingsFragment();
@@ -84,13 +84,20 @@ public class FullPostActivity extends AppCompatActivity {
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenuHelper helper = new PopupMenuHelper(R.menu.fullpost_more_menu, FullPostActivity.this, more);
+                final PopupMenuHelper helper = new PopupMenuHelper(R.menu.fullpost_more_menu, FullPostActivity.this, more);
+                if (post.getUserid().equals(User.user.getId())){
+                    helper.hideItem(R.id.fullpostmenu_delete);
+                    helper.hideItem(R.id.fullpostmenu_follow);
+                }else{
+                    boolean isFollowing = User.user.isFollowing(post.getUserid());
+                    helper.modifyIcon(R.id.fullpostmenu_follow, isFollowing ? "Unfollow" : "Follow",isFollowing ? R.drawable.ic_unfollow : R.drawable.ic_follow);
+                }
                 helper.setOnItemSelectedListener(new PopupMenuHelper.onItemSelectListener() {
                     @Override
                     public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.fullpostmenu_follow:
-//                                helper.modifyItem(R.id.fullpostmenu_follow, "Unfollow", R.drawable.ic_unfollow);
+
                                 return true;
                             case R.id.fullpostmenu_copy:
                                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -98,6 +105,8 @@ public class FullPostActivity extends AppCompatActivity {
                                 clipboard.setPrimaryClip(clip);
                                 Toast.makeText(FullPostActivity.this,"Copied!",Toast. LENGTH_SHORT).show();
                                 return true;
+                            case R.id.fullpostmenu_delete:
+
                         }
                         return false;
                     }
@@ -105,6 +114,7 @@ public class FullPostActivity extends AppCompatActivity {
                 helper.show();
             }
         });
+//        include.setClickable(false);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

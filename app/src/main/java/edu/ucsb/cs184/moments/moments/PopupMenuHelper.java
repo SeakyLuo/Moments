@@ -1,10 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.view.MenuInflater;
@@ -32,8 +29,8 @@ public class PopupMenuHelper {
         menuBuilder.add(groupId, itemId, order, title);
     }
 
-    public void modifyItem(int itemid, String title, int drawable){
-        MenuItem item = menuBuilder.findItem(itemid);
+    public void modifyIcon(int itemId, String title, int drawable){
+        MenuItem item = menuBuilder.findItem(itemId);
         item.setTitle(title);
         item.setIcon(drawable);
     }

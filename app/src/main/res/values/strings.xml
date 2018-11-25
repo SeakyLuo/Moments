@@ -73,6 +73,6 @@
     <string name="unknown">Unknown</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
-    <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="delete">Delete</string>
 </resources>

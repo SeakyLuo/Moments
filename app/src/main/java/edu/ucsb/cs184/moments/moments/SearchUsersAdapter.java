@@ -35,6 +35,7 @@ public class SearchUsersAdapter extends CustomAdapter{
             data = (User) object;
             name.setText(data.getName());
             number.setText(data.getNumber());
+            follow.setVisibility(User.user.getId().equals(data.getId()) ? View.INVISIBLE : View.VISIBLE);
             follow.setImageResource(User.user.isFollowing(data.getId()) ? R.drawable.ic_unfollow : R.drawable.ic_follow);
             follow.setOnClickListener(new View.OnClickListener() {
                 @Override
