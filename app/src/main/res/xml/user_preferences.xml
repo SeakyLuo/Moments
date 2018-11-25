@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <Preference
+        android:key="manage_account"
+        android:title="Manage Account" />
+
+    <Preference
+        android:key="account_safety"
+        android:title="Account Safety" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="notifications"
+        android:title="Receive Notifications" />
+
+    <ListPreference
+        android:defaultValue="Follow System"
+        android:entries="@array/languages"
+        android:entryValues="@array/languages"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:key="language"
+        android:title="Language" />
+
+    <Preference
+        android:key="aboutus"
+        android:title="About Us" />
+
+    <Preference
+        android:key="logout"
+        android:title="Logout" />
+
+</PreferenceScreen>

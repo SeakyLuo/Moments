@@ -1,39 +1,77 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.view.Gravity;
+import android.graphics.Bitmap;
 
 import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Group {
-    private int groupid;
-    private int managerid;
-    private String groupname;
-    private ArrayList<Integer> members = new ArrayList<>();
+public class Group implements Serializable {
+    private String id;
+    private String managerid;
+    private String name;
+    private int group_number;
+    private String intro = "";
+    private Bitmap icon;
+    private ArrayList<String> members = new ArrayList<>();
     private ArrayList<Post> posts = new ArrayList<>();
 
-    public Group(String groupname, int managerid){
-        this.groupname = groupname;
+    public Group(){}
+
+    public Group(String name, String managerid, Bitmap icon){
+        this.name = name;
         this.managerid = managerid;
-        // generates a random group id
+        this.icon = icon;
     }
 
-    public void addMember(int userid){
+    public void setId(String id) { if (id != null) this.id = id; }
+    public String getId() { return id; }
+    public String getManagerid() { return managerid; }
+    public void setManagerid(String userid) {
+        this.managerid = userid;
+        upload("managerid", managerid);
+    }
+    public void setNumber(int number) { this.group_number = number; }
+    public int getNumber() { return group_number;}
+    public Bitmap getIcon() { return icon; }
+    public void setIcon(Bitmap icon) {
+        this.icon = icon;
+        upload("icon", icon);
+    }
+    public String getName() { return name; }
+    public void setName(String name) {
+        this.name = name;
+        upload("name", name);
+    }
+    public String getIntro() { return intro; }
+    public void setIntro(String intro) {
+        this.intro = intro;
+        upload("icon", icon);
+    }
+    public ArrayList<String> getMembers() { return members; }
+    public ArrayList<Post> getPosts() { return posts; }
+
+    public void addMember(String userid){
         members.add(userid);
+        upload("members", members);
     }
     public void addPost(Post post){
         posts.add(post);
+        upload("posts", posts);
     }
-    public void removeMember(int userid){
+    public void removeMember(String userid){
         members.remove(userid);
+        upload("members", members);
     }
     public void deletePost(Post post){
         posts.remove(post);
+        upload("posts", posts);
     }
-    public static Group findGroup(int groupid) {
-        return null;
+    private void upload(String key, Object value){
+        FirebaseHelper.updateGroup(this, key, value);
     }
+    public static Group findGroup(String id) { return FirebaseHelper.findGroup(id); }
     @Override
     public String toString(){
         return (new Gson()).toJson(this);

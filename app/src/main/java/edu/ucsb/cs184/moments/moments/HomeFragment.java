@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.support.v7.widget.Toolbar;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -23,11 +24,12 @@ public class HomeFragment extends Fragment {
 
     private Context context;
     private DrawerLayout drawer;
+    private Toolbar toolbar;
     private BottomNavigationView nav;
     private ImageButton menu;
     private ImageButton search;
     private FloatingActionButton fab;
-    private PostsTimelineFragment fragment;
+    private RecycleViewFragment fragment;
 
     @Nullable
     @Override
@@ -58,11 +60,35 @@ public class HomeFragment extends Fragment {
                 if (drawer != null) drawer.openDrawer(Gravity.START);
             }
         });
-        fragment = new PostsTimelineFragment();
-        fragment.setFab(fab);
-        fragment.setNav(nav);
+        fragment = new RecycleViewFragment();
+        fragment.setAdapter(new PostsAdapter());
+        fragment.addOnRefreshListener(new RecycleViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+        fragment.addHiddenView(toolbar);
+        fragment.addHiddenView(fab);
+        fragment.addHiddenView(nav);
+        try {
+            fragment.addElements(User.user.getTimeline());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         fragment.show(getFragmentManager(), R.id.home_content);
         return view;
+    }
+
+    public void refresh(){
+        fragment.gotoTop();
+        (new Thread(new Runnable() {
+            @Override
+            public void run() {
+                User.user.refreshTimeline();
+                fragment.gotoTop();
+            }
+        })).start();
     }
 
     public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){
@@ -80,7 +106,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         //Save the fragment's state here
     }
 
@@ -89,7 +114,11 @@ public class HomeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == REQUEST_POST){
-            fragment.setPost(data.getStringExtra("Post"));
+            try {
+                fragment.addElement(data.getSerializableExtra(EditPostActivity.POST));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

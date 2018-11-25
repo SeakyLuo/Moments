@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.nav_user_profile:
                         intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                        intent.putExtra(UserProfileActivity.USERID, User.user.getId());
                         startActivity(intent);
                         return true;
                     case R.id.nav_user_collections:
@@ -70,21 +72,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         View header = dNavigationView.getHeaderView(0);
+        ((TextView) header.findViewById(R.id.nav_username)).setText(User.user.getName());
         header.findViewById(R.id.nav_usericon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 drawer.closeDrawer(Gravity.START);
                 Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                intent.putExtra(UserProfileActivity.USERID, User.user.getId());
                 startActivity(intent);
             }
         });
         bNavigation = findViewById(R.id.navigation);
-        bNavigation.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-            }
-        });
         bNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -105,10 +103,25 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        bNavigation.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.navigation_home:
+                        homeFragment.refresh();
+                    case R.id.navigation_groups:
+                        groupsFragment.refresh();
+                    case R.id.navigation_notifications:
+                        notificationsFragment.refresh();
+                }
+            }
+        });
 
         if (savedInstanceState != null) {
             //Restore the fragment's instance
             homeFragment = (HomeFragment) getSupportFragmentManager().getFragment(savedInstanceState, homeTag);
+            groupsFragment = (GroupsFragment) getSupportFragmentManager().getFragment(savedInstanceState, groupTag);
+            notificationsFragment = (NotificationsFragment) getSupportFragmentManager().getFragment(savedInstanceState, notificationTag);
         }else{
             homeFragment = new HomeFragment(); homeFragment.setWidgets(drawer, bNavigation);
             groupsFragment = new GroupsFragment(); groupsFragment.setWidgets(drawer, bNavigation);
@@ -122,7 +135,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //Save the fragment's instance
-        getSupportFragmentManager().putFragment(outState, homeTag, homeFragment);
+        try { getSupportFragmentManager().putFragment(outState, homeTag, homeFragment);}catch (java.lang.IllegalStateException e1){}catch (java.lang.NullPointerException e2){}
+        try { getSupportFragmentManager().putFragment(outState, groupTag, groupsFragment);}catch (java.lang.IllegalStateException e1){}catch (java.lang.NullPointerException e2){}
+        try { getSupportFragmentManager().putFragment(outState, notificationTag, notificationsFragment);}catch (java.lang.IllegalStateException e1){}catch (java.lang.NullPointerException e2){}
     }
 
     protected void showFragment(Fragment fragment, String tag, String lastTag) {

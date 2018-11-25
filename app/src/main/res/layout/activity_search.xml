@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/settings_toolbar"
+        android:id="@+id/eup_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorBackgroundFloating"
@@ -46,7 +46,7 @@
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:ems="10"
-                android:hint="@string/post_or_user_or_group"
+                android:hint="@string/search_bar_hint"
                 android:inputType="text|textPersonName"
                 android:singleLine="true"
                 app:layout_constraintBottom_toTopOf="@id/search_tabs"
@@ -103,5 +103,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/eup_toolbar" />
 </android.support.constraint.ConstraintLayout>

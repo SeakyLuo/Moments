@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/sg_icon"
+            android:layout_width="@dimen/user_icon_post"
+            android:layout_height="@dimen/user_icon_post"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/group_icon" />
+
+        <TextView
+            android:id="@+id/sg_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Name"
+            android:textColor="@color/BlackGray"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/sg_join"
+            app:layout_constraintStart_toEndOf="@+id/sg_icon"
+            app:layout_constraintTop_toTopOf="@+id/sg_icon" />
+
+        <TextView
+            android:id="@+id/sg_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="#"
+            app:layout_constraintBottom_toBottomOf="@id/sg_icon"
+            app:layout_constraintEnd_toStartOf="@+id/sg_join"
+            app:layout_constraintStart_toEndOf="@+id/sg_icon" />
+
+        <ImageButton
+            android:id="@+id/sg_join"
+            android:layout_width="@dimen/button_size_small"
+            android:layout_height="@dimen/button_size_small"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_add" />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

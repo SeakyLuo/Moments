@@ -5,4 +5,19 @@
     <color name="colorAccent">#D81B60</color>
     <color name="Gold">#FFD700</color>
     <color name="BlackGray">#242424</color>
+
+    <color name="login_primary">#E43F3F</color>
+    <color name="login_primary_dark">#E12929</color>
+    <color name="login_primary_darker">#CC1D1D</color>
+    <color name="login_accent">#FFFFFF</color>
+
+    <color name="black">#000000</color>
+    <color name="jet">#222222</color>
+    <color name="oil">#333333</color>
+    <color name="monsoon">#777777</color>
+    <color name="jumbo">#888888</color>
+    <color name="aluminum">#999999</color>
+    <color name="base">#AAAAAA</color>
+    <color name="iron">#CCCCCC</color>
+    <color name="white">#FFFFFF</color>
 </resources>

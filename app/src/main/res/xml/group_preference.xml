@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        android:id="@+id/pg_icon"
+        android:key="Group Icon"
+        android:title="Group Icon"/>
+    <EditTextPreference
+        android:id="@+id/pg_name"
+        android:defaultValue="Group Name"
+        android:summary="Group Name"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:key="Group Name"
+        android:title="Group Name" />
+    <Preference
+        android:id="@+id/pg_group_number"
+        android:title="Group Number"
+        android:key="Group Number"
+        android:summary="10000000"/>
+    <EditTextPreference
+        android:id="@+id/pg_intro"
+        android:hint="Introduction"
+        android:summary="Introduction"
+        android:ellipsize="end"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:key="Group Intro"
+        android:title="Group Intro" />
+    <ListPreference
+        android:summary="@string/most_recent"
+        android:defaultValue="@string/most_recent"
+        android:entries="@array/sortby"
+        android:entryValues="@array/sortby"
+        android:key="@string/sort_by"
+        android:title="@string/sort_by" />
+    <SwitchPreference
+        android:id="@+id/group_receive_notification"
+        android:defaultValue="true"
+        android:key="@string/receive_notification"
+        android:title="@string/receive_notification" />
+    <Preference
+        android:id="@+id/pg_quit_group"
+        android:key="@string/quit_group"
+        android:title="@string/quit_group"/>
+
+</PreferenceScreen>

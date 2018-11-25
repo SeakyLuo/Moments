@@ -19,10 +19,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\star_filled.png" />
-                                      <entry key="outputName" value="ic_star_filled" />
+                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\cancel.png" />
+                                      <entry key="outputName" value="ic_cancel_light" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="ffd700" />
+                                      <entry key="themeColor" value="aaaaaa" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,7 +33,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="C:\Users\Seaky\Desktop\discussion.png" />
+                                      <entry key="foregroundImage" value="C:\Users\Seaky\Desktop\MomentsIcons\logo.png" />
                                     </map>
                                   </option>
                                 </PersistentState>

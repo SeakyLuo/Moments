@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/create_a_group"
+        android:icon="@drawable/ic_create_group"
+        android:title="Create a Group" />
+
+    <item
+        android:id="@+id/join_a_group"
+        android:icon="@drawable/ic_join_group"
+        android:title="Join a Group" />
+</menu>
