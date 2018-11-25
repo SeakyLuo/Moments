@@ -3,7 +3,6 @@ package edu.ucsb.cs184.moments.moments;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.view.menu.MenuBuilder;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,36 +14,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder> {
-
-    private Context context;
-    private ArrayList<Group> groups = new ArrayList<>();
+public class GroupsAdapter extends CustomAdapter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.view_group, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_group, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
-    }
-
-    private void add_group(Group group){
-        groups.add(0, group);
-        notifyDataSetChanged();
-    }
-    public void addGroups(ArrayList<Group> newGroups){
-        for (int i = 0; i < newGroups.size(); i++) add_group(newGroups.get(i));
-        notifyDataSetChanged();
-    }
-    public void addGroup(Group group){
-        add_group(group);
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Group group = groups.get(position);
-        holder.setGroup(group);
     }
 
     public static String TimeText(Date date){
@@ -59,18 +35,13 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
 //        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
 
-    @Override
-    public int getItemCount() {
-        return groups.size();
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends CustomAdapter.CustomViewHolder {
         public ImageView group_icon;
         public TextView group_name;
         public TextView time;
         public TextView content;
         public ImageView quiet;
-        private Group group;
+        private Group data;
 
         public ViewHolder(final View view) {
             super(view);
@@ -85,7 +56,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, GroupPostsActivity.class);
-                    intent.putExtra(GroupsFragment.GROUP, group);
+                    intent.putExtra(GroupsFragment.GROUP, data);
                     context.startActivity(intent);
                 }
             });
@@ -109,11 +80,12 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
             });
         }
 
-        public void setGroup(Group group) {
-            this.group = group;
-            group_name.setText(group.getName());
-            group_icon.setImageBitmap(group.getIcon());
-            ArrayList<Post> posts = group.getPosts();
+        @Override
+        public void setData(Object object) {
+            data = (Group) object;
+            group_name.setText(data.getName());
+            group_icon.setImageBitmap(data.getIcon());
+            ArrayList<Post> posts = data.getPosts();
             if (posts.size() == 0){
                 time.setText(TimeText(new Date()));
                 content.setText("You have created a new group.");
@@ -123,7 +95,6 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
                 content.setText(post.getUserid() +": " + post.getContent());
             }
         }
-
         public void setQuiet(boolean isQuiet){
             quiet.setVisibility(isQuiet ? View.VISIBLE : View.INVISIBLE);
         }
