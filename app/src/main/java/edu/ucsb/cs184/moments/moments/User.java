@@ -73,12 +73,12 @@ public class User {
     public boolean hasNewPost() { return posts_notification.size() != 0; }
     public boolean hasNewComment() { return comments_notification.size() != 0; }
     public boolean hasNewRating() { return ratings_notification.size() != 0; }
-    public ArrayList getPostKeys() {
+    public ArrayList<Post.Key> getPostKeys() {
         ArrayList<Post.Key> keys = new ArrayList<>();
         for (Post post: posts) keys.add(post.getKey());
         return keys;
     }
-    public ArrayList getTimeline(){
+    public ArrayList<Post> getTimeline(){
         ArrayList<Post> post_timeline = new ArrayList<>();
         for (Post.Key key : timeline){
             post_timeline.add(Post.findPost(key));
@@ -112,15 +112,15 @@ public class User {
     }
     public void FollowerNotification(String followerid, boolean remove){
         if (remove) followers.remove(followerid);
-        else followers.add(followerid);
+        else followers.add(0, followerid);
         upload("followers", followers);
     }
     public void refreshTimeline(){
-        timeline.addAll(0, posts_notification);
+        timeline.addAll(posts_notification);
         Collections.sort(timeline, new Post.TimeComparator());
+        upload("timeline", timeline);
         posts_notification.clear();
         upload("posts_notification", posts_notification);
-        upload("timeline", timeline);
     }
     public void refreshGroups(){
 
@@ -128,16 +128,16 @@ public class User {
     public void refreshCommentsRecv(){
         comments_recv.addAll(comments_notification);
         Collections.sort(comments_recv, new Comment.TimeComparator());
+        upload("comments_recv", comments_recv);
         comments_notification.clear();
         upload("comments_notification", comments_notification);
-        upload("comments_recv", comments_recv);
     }
     public void refreshRatingsRecv(){
         ratings_recv.addAll(ratings_notification);
         Collections.sort(ratings_recv, new Rating.TimeComparator());
+        upload("ratings_recv", ratings_recv);
         ratings_notification.clear();
         upload("ratings_notification", ratings_notification);
-        upload("ratings_recv", ratings_recv);
     }
     public void setName(String name){
         this.name = name;
@@ -164,8 +164,10 @@ public class User {
         upload("search_history", search_history);
     }
     public void make_post(Post post){
-        posts.add(post);
+        posts.add(0, post);
         upload("posts", posts);
+        timeline.add(0, post.getKey());
+        upload("timeline", timeline);
         for (String id : followers){
             findUser(id).PostNotification(post, false);
         }
@@ -178,7 +180,7 @@ public class User {
         }
     }
     public void make_comment(Comment comment) {
-        comments_made.add(comment);
+        comments_made.add(0, comment);
         FirebaseHelper.findPost(comment.getPostKey()).addComment(comment);
         upload("comments_made", comments_made);
         findUser(comment.getUserid()).CommentNotification(comment, false);
@@ -190,12 +192,12 @@ public class User {
         findUser(comment.getUserid()).CommentNotification(comment, true);
     }
     public void follow(final String userid) {
-        following.add(userid);
-        User user = findUser(userid);
-        timeline.addAll(user.getPostKeys());
-        user.FollowerNotification(user.id, false);
-        Collections.sort(timeline, new Post.TimeComparator());
+        following.add(0, userid);
         upload("following", following);
+        User user = findUser(userid);
+        user.FollowerNotification(User.user.id, false);
+        timeline.addAll(user.getPostKeys());
+        Collections.sort(timeline, new Post.TimeComparator());
         upload("timeline", timeline);
     }
     public void unfollow(final String userid) {
@@ -204,12 +206,12 @@ public class User {
         for (Post.Key postKey : (ArrayList<Post.Key>) timeline.clone()){
             if (postKey.userid.equals(userid)) timeline.remove(postKey);
         }
-        user.FollowerNotification(user.id, true);
+        user.FollowerNotification(User.user.id, true);
         upload("following", following);
         upload("timeline", timeline);
     }
     public void joinGroup(String groupid){
-        groups.add(groupid);
+        groups.add(0, groupid);
         upload("groups", groups);
         FirebaseHelper.findGroup(groupid).addMember(user.id);
     }
@@ -219,7 +221,7 @@ public class User {
         FirebaseHelper.findGroup(groupid).removeMember(user.id);
     }
     public void collect(Post post){
-        collections.add(post.getKey());
+        collections.add(0, post.getKey());
         upload("collections", collections);
     }
     public void uncollect(Post post){
@@ -233,7 +235,7 @@ public class User {
         else FirebaseHelper.findPost(rating.getPostKey()).addRating(rating);
     }
     public void saveAsDraft(Post post){
-        drafts.add(post);
+        drafts.add(0, post);
     }
     private void upload(String key, Object value){
         FirebaseHelper.updateUser(key, value);

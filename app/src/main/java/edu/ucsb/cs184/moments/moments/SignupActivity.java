@@ -28,7 +28,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText _nameText;
     private EditText _emailText;
     private EditText _passwordText;
-    private EditText _reEnterPasswordText;
+    private EditText _cpasswordText;
     private Button _signupButton;
     private TextView _loginLink;
 
@@ -42,7 +42,7 @@ public class SignupActivity extends AppCompatActivity {
         _nameText = findViewById(R.id.input_name);
         _emailText = findViewById(R.id.input_email);
         _passwordText = findViewById(R.id.input_password);
-        _reEnterPasswordText = findViewById(R.id.input_reEnterPassword);
+        _cpasswordText = findViewById(R.id.input_confirmPassword);
         _signupButton = findViewById(R.id.btn_signup);
         _loginLink = findViewById(R.id.link_login);
         mAuth = FirebaseAuth.getInstance();
@@ -134,13 +134,13 @@ public class SignupActivity extends AppCompatActivity {
         String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-        String reEnterPassword = _reEnterPasswordText.getText().toString();
+        String cpassword = _cpasswordText.getText().toString();
 
         if (name.trim().length() < 2) {
             _nameText.setError("Username should have at least 2 characters");
             valid = false;
         }
-        if (name.trim().length() > 40) {
+        else if (name.trim().length() > 40) {
             _nameText.setError("Username cannot have more than 40 characters");
             valid = false;
         }
@@ -158,8 +158,8 @@ public class SignupActivity extends AppCompatActivity {
             valid = false;
         }
 
-        if (!(reEnterPassword.equals(password))) {
-            _reEnterPasswordText.setError("Passwords NOT match!");
+        if (!cpassword.equals(password)) {
+            _cpasswordText.setError("Passwords NOT match!");
             valid = false;
         }
 

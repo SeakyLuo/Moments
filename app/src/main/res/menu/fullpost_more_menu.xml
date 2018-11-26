@@ -9,4 +9,9 @@
         android:id="@+id/fullpostmenu_copy"
         android:icon="@drawable/ic_copy"
         android:title="@string/copy" />
+
+    <item
+        android:id="@+id/fullpostmenu_delete"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/delete" />
 </menu>
