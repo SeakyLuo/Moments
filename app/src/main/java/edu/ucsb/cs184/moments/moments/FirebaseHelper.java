@@ -22,6 +22,7 @@ public class FirebaseHelper {
         firebase = FirebaseDatabase.getInstance();
         db = firebase.getReference();
         udb = db.child("users");
+
         udb.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
