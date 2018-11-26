@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class SaveAsDraftFragment extends DialogFragment {
+public class SaveAsDraftDialog extends DialogFragment {
 
     public static final String SAVE_AS_DRAFT = "Save as Draft";
     private AppCompatActivity activity;
@@ -44,7 +44,7 @@ public class SaveAsDraftFragment extends DialogFragment {
     }
 
     private void close(){
-        SaveAsDraftFragment.this.dismiss();
+        SaveAsDraftDialog.this.dismiss();
         activity.finish();
     }
 }

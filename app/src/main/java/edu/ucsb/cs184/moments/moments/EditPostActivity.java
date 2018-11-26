@@ -18,7 +18,7 @@ public class EditPostActivity extends AppCompatActivity {
     private ImageButton back;
     private ImageButton send;
     private EditText edit_content;
-    private SaveAsDraftFragment saveAsDraftFragment;
+    private SaveAsDraftDialog saveAsDraftDialog;
     private Class caller;
 
     @Override
@@ -32,8 +32,8 @@ public class EditPostActivity extends AppCompatActivity {
         back = findViewById(R.id.edit_cancel);
         send = findViewById(R.id.edit_send);
         // TODO: if this activity is initiated by UserDraftbox and the post is published, remember to delete from user draftbox
-        saveAsDraftFragment = new SaveAsDraftFragment();
-        saveAsDraftFragment.setActivity(this);
+        saveAsDraftDialog = new SaveAsDraftDialog();
+        saveAsDraftDialog.setActivity(this);
 
         edit_content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -60,8 +60,8 @@ public class EditPostActivity extends AppCompatActivity {
                 if (content.length() == 0) finish();
                 else {
                     // ask save to draft box
-                    saveAsDraftFragment.setPost(getPost());
-                    saveAsDraftFragment.show(getSupportFragmentManager(), SaveAsDraftFragment.SAVE_AS_DRAFT);
+                    saveAsDraftDialog.setPost(getPost());
+                    saveAsDraftDialog.show(getSupportFragmentManager(), SaveAsDraftDialog.SAVE_AS_DRAFT);
                 }
             }
         });
