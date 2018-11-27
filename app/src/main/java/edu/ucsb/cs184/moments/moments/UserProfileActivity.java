@@ -31,7 +31,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView username, user_number, intro, following, followers;
     private ImageButton follow, message;
     private FrameLayout up_timeline;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class UserProfileActivity extends AppCompatActivity {
         follow = include.findViewById(R.id.up_follow);
         message = include.findViewById(R.id.up_message);
         up_timeline = include.findViewById(R.id.up_timeline);
-        fragment = new RecycleViewFragment();
+        fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostsAdapter());
         fragment.show(getSupportFragmentManager(), R.id.up_timeline);
 

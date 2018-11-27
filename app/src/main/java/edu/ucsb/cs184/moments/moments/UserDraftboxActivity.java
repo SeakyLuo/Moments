@@ -8,7 +8,7 @@ import android.widget.ImageButton;
 public class UserDraftboxActivity extends AppCompatActivity {
 
     private ImageButton back;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +16,7 @@ public class UserDraftboxActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_draftbox);
 
         back = findViewById(R.id.ud_back);
-        fragment = new RecycleViewFragment();
+        fragment = new RecyclerViewFragment();
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

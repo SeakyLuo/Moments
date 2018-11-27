@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 public class SearchFragment extends Fragment {
 
     private Context context;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
     private String adapter;
 
     @Nullable
@@ -20,7 +20,7 @@ public class SearchFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_result, container, false);
         context = getContext();
-        fragment = new RecycleViewFragment();
+        fragment = new RecyclerViewFragment();
         return view;
     }
 

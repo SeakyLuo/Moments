@@ -28,7 +28,7 @@ public class GroupPostsActivity extends AppCompatActivity {
     private ImageButton back;
     private ImageButton more;
     private FloatingActionButton fab;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
     private Intent data;
     private Group group;
 
@@ -68,7 +68,7 @@ public class GroupPostsActivity extends AppCompatActivity {
         });
         title.setText(group.getName());
         icon.setImageBitmap(group.getIcon());
-        fragment = new RecycleViewFragment();
+        fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostsAdapter());
         fragment.addHiddenView(fab);
         fragment.show(getSupportFragmentManager(), R.id.gp_content);

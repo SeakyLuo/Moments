@@ -34,7 +34,7 @@ public class GroupsFragment extends Fragment {
     private DrawerLayout drawer;
     private BottomNavigationView nav;
     private GroupsAdapter adapter;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
     private ArrayList<String> groups = new ArrayList<>();
 
     @Nullable
@@ -76,12 +76,12 @@ public class GroupsFragment extends Fragment {
                 helper.show();
             }
         });
-        fragment = new RecycleViewFragment();
+        fragment = new RecyclerViewFragment();
         fragment.setShowDivider(true);
         adapter = new GroupsAdapter();
         setGroups(User.user.getGroups());
         fragment.setAdapter(adapter);
-        fragment.addOnRefreshListener(new RecycleViewFragment.OnRefreshListener() {
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refresh();

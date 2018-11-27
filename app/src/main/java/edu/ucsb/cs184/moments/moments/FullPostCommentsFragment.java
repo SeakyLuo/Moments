@@ -19,7 +19,7 @@ public class FullPostCommentsFragment extends Fragment {
     private Context context;
     private Button sortby_button;
     private TextView sortby_text;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
 
     @Nullable
     @Override
@@ -29,7 +29,7 @@ public class FullPostCommentsFragment extends Fragment {
         context = getContext();
         sortby_button = view.findViewById(R.id.fpc_sortby_button);
         sortby_text = view.findViewById(R.id.fpc_sortby_text);
-        fragment = new RecycleViewFragment();
+        fragment = new RecyclerViewFragment();
 
         fragment.setAdapter(new CommentsAdapter());
         fragment.setShowDivider(true);

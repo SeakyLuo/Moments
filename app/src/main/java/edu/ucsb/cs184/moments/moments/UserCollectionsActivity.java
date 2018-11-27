@@ -8,7 +8,7 @@ import android.widget.ImageButton;
 public class UserCollectionsActivity extends AppCompatActivity {
 
     private ImageButton back;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +16,7 @@ public class UserCollectionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_collections);
 
         back = findViewById(R.id.uc_back);
-        fragment = new RecycleViewFragment();
+        fragment = new RecyclerViewFragment();
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

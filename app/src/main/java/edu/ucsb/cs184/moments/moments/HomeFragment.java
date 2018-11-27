@@ -29,7 +29,7 @@ public class HomeFragment extends Fragment {
     private ImageButton menu;
     private ImageButton search;
     private FloatingActionButton fab;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
 
     @Nullable
     @Override
@@ -60,9 +60,9 @@ public class HomeFragment extends Fragment {
                 if (drawer != null) drawer.openDrawer(Gravity.START);
             }
         });
-        fragment = new RecycleViewFragment();
+        fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostsAdapter());
-        fragment.addOnRefreshListener(new RecycleViewFragment.OnRefreshListener() {
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refresh();
