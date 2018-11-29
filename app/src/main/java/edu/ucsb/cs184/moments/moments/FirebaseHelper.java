@@ -18,7 +18,7 @@ public class FirebaseHelper {
     private static DatabaseReference udb, gdb, uc, gc;
     private static DataSnapshot uds, gds, ucds, gcds;
 
-    public static void init(){
+    private static void Init(){
         firebase = FirebaseDatabase.getInstance();
         db = firebase.getReference();
         udb = db.child("users");
@@ -79,6 +79,21 @@ public class FirebaseHelper {
 
             }
         });
+    }
+
+    public static void init(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Init();
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     // I don't think these three should be used

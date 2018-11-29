@@ -18,7 +18,7 @@ public class Rating {
         this.time = time;
         this.postKey = postKey;
     }
-    public Boolean isAnonymous() { return userid.equals(User.anonymous); }
+    public Boolean isAnonymous() { return userid.equals(User.ANONYMOUS); }
     public String getUserid() { return userid; }
     public int getRating() { return rating; }
     public Date getTime() { return time; }

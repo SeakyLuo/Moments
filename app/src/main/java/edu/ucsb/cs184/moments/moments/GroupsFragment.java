@@ -116,7 +116,7 @@ public class GroupsFragment extends Fragment {
     }
 
     public void setGroup(Group group){
-        adapter.addGroup(group);
+        adapter.addElement(group);
     }
 
     @Override

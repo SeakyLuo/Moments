@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class User {
-    public static final String anonymous = "anonymous";
+    public static final String ANONYMOUS = "ANONYMOUS";
     public static User user;
     public static FirebaseUser firebaseUser;
     private String id;
@@ -67,7 +67,7 @@ public class User {
         }
         return comments;
     }
-    public boolean isAnonymous() { return id.equals(anonymous); }
+    public boolean isAnonymous() { return id.equals(ANONYMOUS); }
     public boolean inGroup(String groupid) { return groups.contains(groupid); }
     public boolean isFollowing(String userid) { return following.contains(userid); }
     public boolean hasNewPost() { return posts_notification.size() != 0; }

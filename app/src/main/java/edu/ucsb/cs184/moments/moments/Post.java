@@ -36,7 +36,7 @@ public class Post implements Serializable {
             sum += ratings.get(i).getRating();
         return sum / count;
     }
-    public Boolean isAnonymous() { return userid.equals(User.anonymous); }
+    public Boolean isAnonymous() { return userid.equals(User.ANONYMOUS); }
     public Boolean isCollected(String userid) {
         ArrayList<Key> keys = User.findUser(userid).getCollections();
         for (Key key : keys) if (key.userid == userid) return true;
