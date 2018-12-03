@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,16 +20,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-/**
- * CustomAdapter login screen that offers login via email/password.
- */
 public class LoginActivity extends AppCompatActivity {
 
     public static final String VALID_EMAIL = "Please enter a valid email address!";
     public static final String VALID_PASSWORD = "Please enter a valid password!";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
-    public static final String TAG = "LoginActivity";
     public static final int REQUEST_SIGNUP = 0;
     private FirebaseAuth mAuth;
 
@@ -45,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         FirebaseHelper.init();
         mAuth = FirebaseAuth.getInstance();
-        FirebaseHelper.init();
         if (mAuth.getCurrentUser() != null) {
             onLoginSuccess();
         }
@@ -87,30 +81,28 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email = _emailText.getText().toString();
-                if (!validateEmail()) {
-                    _emailText.setError("Please enter a valid email address!");
-                    return;
+                if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    _emailText.setError(VALID_EMAIL);
+                }else{
+                    mAuth.sendPasswordResetEmail(email)
+                            .addOnSuccessListener(new OnSuccessListener() {
+                                @Override
+                                public void onSuccess(Object o) {
+                                    Toast.makeText(LoginActivity.this, "Password reset link has been sent to your email.", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(LoginActivity.this, "This email address is not registered!", Toast.LENGTH_SHORT).show();
+                        }
+                        // something bad happened
+                    });
                 }
-                mAuth.sendPasswordResetEmail(email)
-                        .addOnSuccessListener(new OnSuccessListener() {
-                            @Override
-                            public void onSuccess(Object o) {
-                                Toast.makeText(LoginActivity.this, "CustomAdapter password reset link has been sent to your email.", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(LoginActivity.this, "This email address is not registered!", Toast.LENGTH_SHORT).show();
-                    }
-                    // something bad happened
-                });
             }
         });
     }
 
     public void login() {
-        Log.d(TAG, "Login");
-
         if (!validate()) {
             onLoginFailed();
             return;
@@ -137,8 +129,6 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "SignIn:onComplete:" + task.isSuccessful());
-
                         if (task.isSuccessful()) {
                             onLoginSuccess();
                         } else {
@@ -162,38 +152,11 @@ public class LoginActivity extends AppCompatActivity {
         _loginButton.setEnabled(true);
         final FirebaseUser firebaseUser = mAuth.getCurrentUser();
         User.firebaseUser = firebaseUser;
-        while (!FirebaseHelper.initFinished()) {}
-        if (User.user == null){
-            String id = firebaseUser.getUid();
-            User.user = FirebaseHelper.findUser(id);
-            if (User.user == null){
-                User user = new User(id, "New User"+id);
-                FirebaseHelper.insertUser(user);
-                Toast.makeText(getApplicationContext(), "Your account was deleted.\nCustomAdapter new one is generated.", Toast.LENGTH_SHORT).show();
-            }
-        }
-//        FirebaseHelper.addDataReceivedListener(new FirebaseHelper.OnDataReceivedListener() {
-//            @Override
-//            public void onUDBReceived() {
-//                if (User.user == null){
-//                    String id = firebaseUser.getUid();
-//                    User.user = FirebaseHelper.findUser(id);
-//                    if (User.user == null){
-//                        User user = new User(id, "New User"+id);
-//                        FirebaseHelper.insertUser(user);
-//                        Toast.makeText(getApplicationContext(), "Your account was deleted.\nA new one is generated.", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onGDBReceived() {
-//
-//            }
-//        });
+        String id = firebaseUser.getUid();
+        User.user = FirebaseHelper.findUser(id);
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
-//        finish();
+        finish();
     }
 
     public void onLoginFailed() {
@@ -203,33 +166,16 @@ public class LoginActivity extends AppCompatActivity {
 
     public boolean validate() {
         boolean valid = true;
-
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _emailText.setError(VALID_EMAIL);
             valid = false;
         }
-
         if (password.isEmpty()) {
             _passwordText.setError(VALID_PASSWORD);
             valid = false;
         }
-
-        return valid;
-    }
-
-    public boolean validateEmail() {
-        boolean valid = true;
-
-        String email = _emailText.getText().toString();
-
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError(VALID_EMAIL);
-            valid = false;
-        }
-
         return valid;
     }
 }

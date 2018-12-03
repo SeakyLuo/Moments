@@ -1,6 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,7 +19,7 @@ public class FirebaseHelper {
     private static DatabaseReference udb, gdb, uc, gc;
     private static DataSnapshot uds, gds, ucds, gcds;
 
-    private static void Init(){
+    public static void init(){
         firebase = FirebaseDatabase.getInstance();
         db = firebase.getReference();
         udb = db.child("users");
@@ -31,7 +32,7 @@ public class FirebaseHelper {
                 // So there is a TODO: gives a red dot on the bottom navigation when there is a new post
                 if (User.firebaseUser != null)
                     User.user = uds.child(User.firebaseUser.getUid()).getValue(User.class);
-                for (OnDataReceivedListener listener : listeners)
+                for (OnDataReceivedListener listener: listeners)
                     listener.onUDBReceived();
             }
 
@@ -45,8 +46,9 @@ public class FirebaseHelper {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 gds = dataSnapshot;
+                Log.d("fuck","fuck4");
                 // TODO: Since we update user, updating group is also necessary but has lower priority.
-                for (OnDataReceivedListener listener : listeners)
+                for (OnDataReceivedListener listener: listeners)
                     listener.onGDBReceived();
             }
 
@@ -81,21 +83,6 @@ public class FirebaseHelper {
         });
     }
 
-    public static void init(){
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Init();
-            }
-        });
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     // I don't think these three should be used
     public static FirebaseDatabase getFirebase(){ return firebase; }
     public static DatabaseReference getUdb() { return udb; }
@@ -126,8 +113,8 @@ public class FirebaseHelper {
 
     public static ArrayList<Post> searchPosts(String keyword){
         ArrayList<Post> posts = new ArrayList<>();
-        for (DataSnapshot ds : uds.getChildren()){
-            for (Post post : (ArrayList<Post>) ds.child("posts").getValue(ArrayList.class)){
+        for (DataSnapshot ds: uds.getChildren()){
+            for (Post post: (ArrayList<Post>) ds.child("posts").getValue(ArrayList.class)){
                 if (post.getContent().contains(keyword))
                     posts.add(post);
             }
@@ -136,7 +123,7 @@ public class FirebaseHelper {
     }
     public static ArrayList<User> searchUsers(String keyword) {
         ArrayList<User> users = new ArrayList<>();
-        for (DataSnapshot ds : uds.getChildren()){
+        for (DataSnapshot ds: uds.getChildren()){
             User user = ds.getValue(User.class);
             if (user.getName().contains(keyword) || Integer.toString(user.getNumber()).contains(keyword))
                 users.add(user);
@@ -145,7 +132,7 @@ public class FirebaseHelper {
     }
     public static ArrayList<Group> searchGroups(String keyword) {
         ArrayList<Group> groups = new ArrayList<>();
-        for (DataSnapshot ds : uds.getChildren()){
+        for (DataSnapshot ds: uds.getChildren()){
             Group group = ds.getValue(Group.class);
             if (group.getName().contains(keyword) || Integer.toString(group.getNumber()).contains(keyword))
                 groups.add(group);
@@ -154,23 +141,23 @@ public class FirebaseHelper {
     }
 
     public static Post findPost(Post.Key key) {
-        for (Post post : (ArrayList<Post>) uds.child(key.userid).child("posts").getValue(ArrayList.class)){
+        for (Post post: (ArrayList<Post>) uds.child(key.userid).child("posts").getValue(ArrayList.class)){
             if (post.getKey().equals(key)) return post;
         }
         return null;
     }
     public static Comment findComment(Comment.Key key){
-        for (Comment comment : (ArrayList<Comment>) uds.child(key.userid).child("comments_made").getValue(ArrayList.class)){
+        for (Comment comment: (ArrayList<Comment>) uds.child(key.userid).child("comments_made").getValue(ArrayList.class)){
             if (comment.getKey().equals(key)) return comment;
         }
         return null;
     }
 
     public static void updateUser(final String key, final Object data){
-        new Thread(new Runnable() {
+         new Thread(new Runnable() {
             @Override
             public void run() {
-                udb.child(User.user.getId()).child(key).setValue(data);
+                if(udb != null) udb.child(User.user.getId()).child(key).setValue(data);
             }
         }).start();
     }
@@ -179,7 +166,7 @@ public class FirebaseHelper {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                gdb.child(group.getId()).child(key).setValue(data);
+                if(gdb != null) gdb.child(group.getId()).child(key).setValue(data);
             }
         }).start();
     }
