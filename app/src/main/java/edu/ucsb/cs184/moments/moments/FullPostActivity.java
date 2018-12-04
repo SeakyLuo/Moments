@@ -64,7 +64,7 @@ public class FullPostActivity extends AppCompatActivity {
         addCommentFragment = new AddCommentFragment();
         backButton = findViewById(R.id.fullpost_back);
         more = findViewById(R.id.fullpost_more);
-        include = findViewById(R.id.up_post);
+        include = findViewById(R.id.fullpost_post);
         comment = include.findViewById(R.id.post_comment);
         mViewPager = findViewById(R.id.fullpost_viewpager);
         mTabLayout = findViewById(R.id.fullpost_tablayout);
