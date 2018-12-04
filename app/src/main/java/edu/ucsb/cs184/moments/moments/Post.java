@@ -10,21 +10,21 @@ import java.util.Date;
 public class Post implements Serializable {
     private String userid;
     private String content;
-    private Date time;
+    private Long time;
 
     private ArrayList<Rating> ratings = new ArrayList<>();
     private ArrayList<Comment> comments = new ArrayList<>();
 
-    public Post(String userid, String content, Date time){
+    public Post(String userid, String content, Long time){
         this.userid = userid;
         this.content = content;
         this.time = time;
     }
 
-    public Key getKey() { return new Key(userid, time.getTime()); }
+    public Key getKey() { return new Key(userid, time); }
     public String getUserid() { return userid; }
     public String getContent() { return content; }
-    public Date getTime() { return time; }
+    public Date getTime() { return new Date(time); }
     public int comments_received() { return comments.size(); }
     public ArrayList<Comment> getComments() { return  comments; }
     public int ratings_received() { return ratings.size(); }
