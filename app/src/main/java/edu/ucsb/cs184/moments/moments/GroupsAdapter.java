@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class GroupsAdapter extends CustomAdapter {
 
@@ -28,11 +30,13 @@ public class GroupsAdapter extends CustomAdapter {
         long delta_day = now.getDay() - date.getDay();
         if (delta_day == 0) return new SimpleDateFormat("HH:mm").format(date);
         else if (delta_day == 1) return "Yesterday";
-        // return Mon Tue Wed Thu Fri Sat Sun
+        Calendar c1 = Calendar.getInstance(), c2 = Calendar.getInstance();
+        c1.setTime(date);
+        c2.setTime(now);
+        if (c1.get(Calendar.DAY_OF_WEEK) == c2.get(Calendar.DAY_OF_WEEK)) return c1.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US);;
         long delta_year = now.getYear() - date.getYear();
         if (delta_year == 0) return new SimpleDateFormat("MM-dd").format(date);
         return new SimpleDateFormat("yyyy-MM-dd").format(date);
-//        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
 
     public static class ViewHolder extends CustomAdapter.CustomViewHolder {

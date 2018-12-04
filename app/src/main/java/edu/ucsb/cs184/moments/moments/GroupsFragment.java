@@ -94,13 +94,13 @@ public class GroupsFragment extends Fragment {
 
     public void refresh(){
         fragment.gotoTop();
-        (new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 User.user.refreshGroups();
                 fragment.gotoTop();
             }
-        })).start();
+        }).start();
     }
 
     public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){
