@@ -38,7 +38,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseHelper.init();
+        if (!FirebaseHelper.initFinished())
+            FirebaseHelper.init();
         mAuth = FirebaseAuth.getInstance();
         authDialog = new ProgressDialog(this);
         authDialog.setIndeterminate(true);
