@@ -25,13 +25,11 @@ public class FirebaseHelper {
         db = firebase.getReference();
         db.keepSynced(true);
         udb = db.child("users");
-        udb.addValueEventListener(new ValueEventListener() {
+        udb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("fuck","uds");
                 uds = dataSnapshot;
-                // This updates user
-                // So there is a TODO: gives a red dot on the bottom navigation when there is a new post
                 if (User.firebaseUser != null)
                     User.user = uds.child(User.firebaseUser.getUid()).getValue(User.class);
                 for (OnDataReceivedListener listener: listeners)
@@ -43,12 +41,35 @@ public class FirebaseHelper {
 
             }
         });
+        udb.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                uds = dataSnapshot;
+                // This updates user
+                // So there is a TODO: gives a red dot on the bottom navigation when there is a new post
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         gdb = db.child("groups");
-        gdb.addValueEventListener(new ValueEventListener() {
+        gdb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("fuck","gds");
                 gds = dataSnapshot;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        gdb.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // TODO: Since we update user, updating group is also necessary but has lower priority.
                 for (OnDataReceivedListener listener: listeners)
                     listener.onGDBReceived();
@@ -60,7 +81,7 @@ public class FirebaseHelper {
             }
         });
         uc = db.child("user_count");
-        uc.addValueEventListener(new ValueEventListener() {
+        uc.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("fuck","ucds");
@@ -72,11 +93,33 @@ public class FirebaseHelper {
 
             }
         });
+        uc.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ucds = dataSnapshot;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         gc = db.child("group_count");
-        gc.addValueEventListener(new ValueEventListener() {
+        gc.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("fuck","gcds");
+                gcds = dataSnapshot;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        gc.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 gcds = dataSnapshot;
             }
 
@@ -181,10 +224,15 @@ public class FirebaseHelper {
         listeners.add(listener);
     }
 
-    public static boolean initFinished() { return uds != null && gds != null; }
+    public static boolean initFinished() { return uds != null && gds != null && ucds != null && gcds != null; }
 
     interface OnDataReceivedListener{
         void onUDBReceived();
         void onGDBReceived();
+    }
+
+    interface OnDataUpdateListener{
+        void onUDBUpdate();
+        void onGDBUpdate();
     }
 }

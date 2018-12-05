@@ -33,18 +33,18 @@ public class LoginActivity extends AppCompatActivity {
     private Button _loginButton;
     private TextView _signupLink;
     private TextView _forgotPassword;
-    private ProgressDialog progressDialog;
+    private ProgressDialog authDialog;
 
     @Override
     protected void onStart() {
         super.onStart();
         FirebaseHelper.init();
         mAuth = FirebaseAuth.getInstance();
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        authDialog = new ProgressDialog(this);
+        authDialog.setIndeterminate(true);
+        authDialog.setMessage("Authenticating...");
+        authDialog.setCanceledOnTouchOutside(false);
+        authDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 _loginButton.setEnabled(true);
@@ -112,24 +112,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void login() {
+    private void login() {
         if (!validate()) {
             onLoginFailed();
             return;
         }
 
         _loginButton.setEnabled(false);
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                _loginButton.setEnabled(true);
-            }
-        });
-        progressDialog.show();
+        authDialog.show();
 
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
@@ -146,6 +136,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public static void logout(){
         mAuth.signOut();
+        User.firebaseUser = null;
+        User.user = null;
     }
 
     @Override
@@ -157,33 +149,33 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void onLoginSuccess() {
+    private void onLoginSuccess() {
         _loginButton.setEnabled(true);
         User.firebaseUser = mAuth.getCurrentUser();
-        FirebaseHelper.addDataReceivedListener(new FirebaseHelper.OnDataReceivedListener() {
-            @Override
-            public void onUDBReceived() {
-                progressDialog.dismiss();
-                User.user = FirebaseHelper.findUser(User.firebaseUser.getUid());
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        if (FirebaseHelper.initFinished()){
+            onDataReceived();
+        }else{
+            FirebaseHelper.addDataReceivedListener(new FirebaseHelper.OnDataReceivedListener() {
+                @Override
+                public void onUDBReceived() {
+                    onDataReceived();
+                }
 
-            @Override
-            public void onGDBReceived() {
+                @Override
+                public void onGDBReceived() {
 
-            }
-        });
+                }
+            });
+        }
     }
 
-    public void onLoginFailed() {
+    private void onLoginFailed() {
         Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
         _loginButton.setEnabled(true);
-        progressDialog.dismiss();
+        authDialog.dismiss();
     }
 
-    public boolean validate() {
+    private boolean validate() {
         boolean valid = true;
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
@@ -196,6 +188,15 @@ public class LoginActivity extends AppCompatActivity {
             valid = false;
         }
         return valid;
+    }
+
+    private void onDataReceived(){
+        authDialog.dismiss();
+        if (User.firebaseUser == null) return;
+        User.user = FirebaseHelper.findUser(User.firebaseUser.getUid());
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
 
