@@ -110,7 +110,7 @@ public class UserProfileActivity extends AppCompatActivity {
         User user = User.findUser(userid);
         collapsingToolbarLayout.setTitle(user.getName());
         username.setText(user.getName());
-        user_number.setText(user.getNumber());
+        user_number.setText(user.getNumber() + "");
         if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.INVISIBLE);
         else{
             gender.setVisibility(View.VISIBLE);

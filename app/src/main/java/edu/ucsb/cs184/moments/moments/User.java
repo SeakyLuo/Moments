@@ -16,7 +16,7 @@ public class User {
     private String name;
     private String intro = "";
     private Bitmap icon;
-    private int user_number;
+    private int user_number = 0;
     private String gender = "Unknown";
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> drafts = new ArrayList<>();

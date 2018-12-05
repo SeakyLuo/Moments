@@ -20,13 +20,15 @@ public class FirebaseHelper {
     private static DataSnapshot uds, gds, ucds, gcds;
 
     public static void init(){
+//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         firebase = FirebaseDatabase.getInstance();
         db = firebase.getReference();
+        db.keepSynced(true);
         udb = db.child("users");
-
         udb.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("fuck","uds");
                 uds = dataSnapshot;
                 // This updates user
                 // So there is a TODO: gives a red dot on the bottom navigation when there is a new post
@@ -45,8 +47,8 @@ public class FirebaseHelper {
         gdb.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("fuck","gds");
                 gds = dataSnapshot;
-                Log.d("fuck","fuck4");
                 // TODO: Since we update user, updating group is also necessary but has lower priority.
                 for (OnDataReceivedListener listener: listeners)
                     listener.onGDBReceived();
@@ -61,6 +63,7 @@ public class FirebaseHelper {
         uc.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("fuck","ucds");
                 ucds = dataSnapshot;
             }
 
@@ -73,6 +76,7 @@ public class FirebaseHelper {
         gc.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("fuck","gcds");
                 gcds = dataSnapshot;
             }
 
@@ -157,7 +161,8 @@ public class FirebaseHelper {
          new Thread(new Runnable() {
             @Override
             public void run() {
-                if(udb != null) udb.child(User.user.getId()).child(key).setValue(data);
+                if(udb != null && User.user != null)
+                    udb.child(User.user.getId()).child(key).setValue(data);
             }
         }).start();
     }
@@ -166,7 +171,8 @@ public class FirebaseHelper {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(gdb != null) gdb.child(group.getId()).child(key).setValue(data);
+                if(gdb != null && group != null)
+                    gdb.child(group.getId()).child(key).setValue(data);
             }
         }).start();
     }

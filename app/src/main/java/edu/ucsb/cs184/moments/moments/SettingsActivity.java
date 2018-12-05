@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -74,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
             logout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    FirebaseAuth.getInstance().signOut();
+                    LoginActivity.logout();
                     User.firebaseUser = null;
                     User.user = null;
                     Intent intent = new Intent(context, LoginActivity.class);

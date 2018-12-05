@@ -18,28 +18,38 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static final String VALID_EMAIL = "Please enter a valid email address!";
-    public static final String VALID_PASSWORD = "Please enter a valid password!";
+    public static final String INVALID_EMAIL = "Please enter a valid email address!";
+    public static final String INVALID_PASSWORD = "Please enter a valid password!";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final int REQUEST_SIGNUP = 0;
-    private FirebaseAuth mAuth;
+    private static FirebaseAuth mAuth;
 
     private EditText _emailText;
     private EditText _passwordText;
     private Button _loginButton;
     private TextView _signupLink;
     private TextView _forgotPassword;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onStart() {
         super.onStart();
         FirebaseHelper.init();
         mAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                _loginButton.setEnabled(true);
+            }
+        });
         if (mAuth.getCurrentUser() != null) {
             onLoginSuccess();
         }
@@ -82,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = _emailText.getText().toString();
                 if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    _emailText.setError(VALID_EMAIL);
+                    _emailText.setError(INVALID_EMAIL);
                 }else{
                     mAuth.sendPasswordResetEmail(email)
                             .addOnSuccessListener(new OnSuccessListener() {
@@ -109,7 +119,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         _loginButton.setEnabled(false);
-
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -129,14 +138,14 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            onLoginSuccess();
-                        } else {
-                            onLoginFailed();
-                        }
-                        progressDialog.dismiss();
+                        if (task.isSuccessful()) onLoginSuccess();
+                        else onLoginFailed();
                     }
                 });
+    }
+
+    public static void logout(){
+        mAuth.signOut();
     }
 
     @Override
@@ -150,18 +159,28 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
-        final FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        User.firebaseUser = firebaseUser;
-        String id = firebaseUser.getUid();
-        User.user = FirebaseHelper.findUser(id);
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-        finish();
+        User.firebaseUser = mAuth.getCurrentUser();
+        FirebaseHelper.addDataReceivedListener(new FirebaseHelper.OnDataReceivedListener() {
+            @Override
+            public void onUDBReceived() {
+                progressDialog.dismiss();
+                User.user = FirebaseHelper.findUser(User.firebaseUser.getUid());
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onGDBReceived() {
+
+            }
+        });
     }
 
     public void onLoginFailed() {
         Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
         _loginButton.setEnabled(true);
+        progressDialog.dismiss();
     }
 
     public boolean validate() {
@@ -169,11 +188,11 @@ public class LoginActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError(VALID_EMAIL);
+            _emailText.setError(INVALID_EMAIL);
             valid = false;
         }
         if (password.isEmpty()) {
-            _passwordText.setError(VALID_PASSWORD);
+            _passwordText.setError(INVALID_PASSWORD);
             valid = false;
         }
         return valid;
