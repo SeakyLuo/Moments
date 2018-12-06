@@ -15,7 +15,7 @@ public class SearchHistoryAdapter extends CustomAdapter{
         return holder;
     }
 
-    public static class ViewHolder extends CustomAdapter.CustomViewHolder{
+    public class ViewHolder extends CustomAdapter.CustomViewHolder{
         TextView item;
         ImageButton delete;
         public ViewHolder(@NonNull View view) {

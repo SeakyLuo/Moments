@@ -3,7 +3,9 @@ package edu.ucsb.cs184.moments.moments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.view.menu.MenuBuilder;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -40,15 +42,13 @@ public class PostsAdapter extends CustomAdapter {
         return new SimpleDateFormat("yyyy-MM-dd").format(time);
     }
 
-    public static class ViewHolder extends CustomAdapter.CustomViewHolder {
+    public class ViewHolder extends CustomAdapter.CustomViewHolder {
         public ImageView usericon;
         public TextView username;
         public TextView time;
         public TextView content;
         public RatingBar ratingBar;
-        public ImageButton comment;
-        public ImageButton collect;
-        public ImageButton share;
+        public ImageButton comment, collect, share, dropdown;
         private Post data;
 
         public ViewHolder(final View view) {
@@ -61,6 +61,7 @@ public class PostsAdapter extends CustomAdapter {
             comment = view.findViewById(R.id.post_comment);
             collect = view.findViewById(R.id.post_collect);
             share = view.findViewById(R.id.post_share);
+            dropdown = view.findViewById(R.id.post_dropdown);
             usericon.setClickable(true);
             usericon.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,6 +108,38 @@ public class PostsAdapter extends CustomAdapter {
                         User.user.rate(new Rating(User.user.getId(), (int) rating, new Date().getTime(), data.getKey()));
                         if (rating == 0) ratingBar.setRating(data.ratings_avg());
                     }
+                }
+            });
+            dropdown.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dropdown.setImageResource(R.drawable.ic_up);
+                    final PopupMenuHelper helper = new PopupMenuHelper(R.menu.post_more_menu, v.getContext(), dropdown);
+                    if (data.getUserid().equals(User.user.getId())){
+                        helper.hideItem(R.id.post_more_follow);
+                    }else{
+                        helper.hideItem(R.id.fullpostmenu_delete);
+                        boolean isFollowing = User.user.isFollowing(data.getUserid());
+                        helper.modifyIcon(R.id.post_more_follow, isFollowing ? "Unfollow" : "Follow",isFollowing ? R.drawable.ic_unfollow : R.drawable.ic_follow);
+                    }
+                    helper.setOnItemSelectedListener(new PopupMenuHelper.onItemSelectListener() {
+                        @Override
+                        public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
+                            switch (menuItem.getItemId()){
+                                case R.id.post_more_follow:
+                                    User.user.follow(data.getUserid());
+                                    return true;
+                                case R.id.post_more_delete:
+                                    User.user.remove_post(data);
+                                    removeElement(data);
+                                    return true;
+                                case R.id.post_more_report:
+                                    return true;
+                            }
+                            return false;
+                        }
+                    });
+                    helper.show();
                 }
             });
         }

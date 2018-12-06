@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/fullpost_more_follow"
+        android:id="@+id/post_more_follow"
         android:icon="@drawable/ic_follow"
         android:title="@string/follow" />
 
     <item
-        android:id="@+id/fullpost_more_copy"
-        android:icon="@drawable/ic_copy"
-        android:title="@string/copy" />
-
-    <item
-        android:id="@+id/fullpost_more_delete"
+        android:id="@+id/post_more_delete"
         android:icon="@drawable/ic_delete"
         android:title="@string/delete" />
 
     <item
-        android:id="@+id/fullpost_more_report"
+        android:id="@+id/post_more_report"
         android:icon="@drawable/ic_warning"
         android:title="@string/report" />
 </menu>

@@ -80,6 +80,7 @@ public class EditPostActivity extends AppCompatActivity {
                 User.user.make_post(post);
                 setResult(RESULT_OK, intent);
                 finish();
+                overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
             }
         });
     }

@@ -36,7 +36,7 @@ public class GroupsAdapter extends CustomAdapter {
         return new SimpleDateFormat("MM-dd").format(time);
     }
 
-    public static class ViewHolder extends CustomAdapter.CustomViewHolder {
+    public class ViewHolder extends CustomAdapter.CustomViewHolder {
         public ImageView group_icon;
         public TextView group_name;
         public TextView time;

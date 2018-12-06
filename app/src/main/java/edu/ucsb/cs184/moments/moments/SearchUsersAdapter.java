@@ -17,7 +17,7 @@ public class SearchUsersAdapter extends CustomAdapter{
         return holder;
     }
 
-    public static class ViewHolder extends CustomAdapter.CustomViewHolder{
+    public class ViewHolder extends CustomAdapter.CustomViewHolder{
         TextView name, number;
         ImageButton follow;
         ImageView icon;

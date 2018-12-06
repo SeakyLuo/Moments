@@ -19,7 +19,7 @@ public class CommentsAdapter extends CustomAdapter {
         return PostsAdapter.TimeText(time);
     }
 
-    public static class ViewHolder extends CustomAdapter.CustomViewHolder {
+    public class ViewHolder extends CustomAdapter.CustomViewHolder {
         public ImageView usericon;
         public TextView username;
         public TextView time;

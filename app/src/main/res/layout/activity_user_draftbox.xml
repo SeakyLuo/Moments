@@ -39,7 +39,7 @@
                 app:srcCompat="@drawable/ic_back" />
 
             <TextView
-                android:id="@+id/title_ud"
+                android:id="@+id/ud_title"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="4dp"
@@ -52,13 +52,26 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ud_back"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/ud_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@android:color/transparent"
+                android:text="Clear"
+                android:textColor="@color/aluminum"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/content_draftbox"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ud_toolbar" />
