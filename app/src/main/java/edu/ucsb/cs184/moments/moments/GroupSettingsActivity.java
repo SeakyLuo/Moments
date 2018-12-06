@@ -25,7 +25,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group_settings);
         group = (Group) getIntent().getSerializableExtra(GroupsFragment.GROUP);
 
-        back = findViewById(R.id.settings_back);
+        back = findViewById(R.id.gs_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

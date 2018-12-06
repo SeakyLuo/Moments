@@ -58,8 +58,8 @@ public class AddCommentFragment extends DialogFragment {
                 String content = edit_comment.getText().toString();
                 if (content.trim().length() == 0) return;
                 Comment user_comment = null;
-                if (post != null) user_comment = new Comment(User.user.getId(), content, new Date(), post.getKey());
-                else if (comment != null) user_comment = new Comment(User.user.getId(), content, new Date(), comment.getKey());
+                if (post != null) user_comment = new Comment(User.user.getId(), content, new Date().getTime(), post.getKey());
+                else if (comment != null) user_comment = new Comment(User.user.getId(), content, new Date().getTime(), comment.getKey());
                 User.user.make_comment(comment);
                 fragment.addComment(user_comment);
                 dismiss();

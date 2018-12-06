@@ -155,16 +155,11 @@ public class LoginActivity extends AppCompatActivity {
         User.firebaseUser = mAuth.getCurrentUser();
         if (FirebaseHelper.initFinished()){
             onDataReceived();
-        }else{
-            FirebaseHelper.addDataReceivedListener(new FirebaseHelper.OnDataReceivedListener() {
+        }else {
+            FirebaseHelper.setOnUDBReceivedListener(new FirebaseHelper.OnUDBReceivedListener() {
                 @Override
                 public void onUDBReceived() {
                     onDataReceived();
-                }
-
-                @Override
-                public void onGDBReceived() {
-
                 }
             });
         }

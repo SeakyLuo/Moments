@@ -36,7 +36,7 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
         data.remove(object);
         notifyDataSetChanged();
     }
-    public void removeElement(int index){
+    public void removeElementAt(int index){
         data.remove(index);
         notifyDataSetChanged();
     }

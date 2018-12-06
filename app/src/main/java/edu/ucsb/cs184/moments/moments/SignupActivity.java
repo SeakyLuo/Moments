@@ -31,6 +31,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText _cpasswordText;
     private Button _signupButton;
     private TextView _loginLink;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,13 +56,22 @@ public class SignupActivity extends AppCompatActivity {
                 _passwordText.setText(password);
         }
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Creating Account...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                _signupButton.setEnabled(true);
+            }
+        });
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signup();
             }
         });
-
         _loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,17 +91,6 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         _signupButton.setEnabled(false);
-
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                _signupButton.setEnabled(true);
-            }
-        });
         progressDialog.show();
 
         final String name = _nameText.getText().toString();
@@ -106,12 +105,16 @@ public class SignupActivity extends AppCompatActivity {
                     FirebaseUser user = mAuth.getCurrentUser();
                     user.updateProfile(updateName);
                     User.user = new User(user.getUid(), name);
+                    FirebaseHelper.setAfterUserInsertionListener(new FirebaseHelper.AfterUserInsertedListener() {
+                        @Override
+                        public void afterUserInserted(User user) {
+                            onSignupSuccess();
+                        }
+                    });
                     FirebaseHelper.insertUser(User.user);
-                    onSignupSuccess();
                 } else {
                     onSignupFailed();
                 }
-                progressDialog.dismiss();
             }
         });
     }
@@ -120,12 +123,14 @@ public class SignupActivity extends AppCompatActivity {
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
         setResult(RESULT_OK);
+        progressDialog.dismiss();
         finish();
     }
 
     public void onSignupFailed() {
         Toast.makeText(getApplicationContext(), "Sign up failed", Toast.LENGTH_LONG).show();
         _signupButton.setEnabled(true);
+        progressDialog.dismiss();
     }
 
     public boolean validate() {
@@ -144,25 +149,21 @@ public class SignupActivity extends AppCompatActivity {
             _nameText.setError("Username cannot have more than 40 characters");
             valid = false;
         }
-
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _emailText.setError(LoginActivity.INVALID_EMAIL);
             valid = false;
         }
-
         if (password.length() < 8) {
             _passwordText.setError("You password should have at least 8 characters.");
             valid = false;
-        } else if (password.length() > 30) {
+        }else if (password.length() > 30) {
             _passwordText.setError("You password cannot have more than 30 characters.");
             valid = false;
         }
-
         if (!cpassword.equals(password)) {
             _cpasswordText.setError("Passwords NOT match!");
             valid = false;
         }
-
         return valid;
     }
 

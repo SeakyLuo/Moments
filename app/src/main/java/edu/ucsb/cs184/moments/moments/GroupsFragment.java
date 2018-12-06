@@ -17,8 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import java.util.ArrayList;
-
 import static android.app.Activity.RESULT_OK;
 
 public class GroupsFragment extends Fragment {
@@ -78,7 +76,7 @@ public class GroupsFragment extends Fragment {
         fragment = new RecyclerViewFragment();
         fragment.setShowDivider(true);
         adapter = new GroupsAdapter();
-        setGroups(User.user.getGroups());
+        adapter.addElements(User.user.getGroups(false));
         fragment.setAdapter(adapter);
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
@@ -105,10 +103,6 @@ public class GroupsFragment extends Fragment {
     public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){
         this.drawer = drawer;
         this.nav = nav;
-    }
-
-    public void setGroups(ArrayList<String> groups){
-        adapter.addElements(groups);
     }
 
     public void addGroup(Group group){

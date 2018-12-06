@@ -23,6 +23,7 @@ public class Group implements Parcelable {
     public Group(String name, String managerid, Bitmap icon){
         this.name = name;
         this.managerid = managerid;
+        this.members.add(managerid);
         this.icon = icon;
     }
 
@@ -116,8 +117,8 @@ public class Group implements Parcelable {
         dest.writeString(name);
         dest.writeInt(group_number);
         dest.writeString(intro);
-        icon.writeToParcel(dest, 0);
-        dest.writeStringArray((String[]) members.toArray());
+        dest.writeParcelable(icon, flags);
+        dest.writeStringList(members);
         dest.writeTypedList(posts);
     }
 }

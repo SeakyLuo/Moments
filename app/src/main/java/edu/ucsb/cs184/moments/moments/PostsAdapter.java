@@ -100,7 +100,7 @@ public class PostsAdapter extends CustomAdapter {
                         Toast.makeText(view.getContext(), "You can't rate your own post!", Toast.LENGTH_SHORT).show();
                         ratingBar.setRating(data.ratings_avg());
                     }else{
-                        User.user.rate(new Rating(User.user.getId(), (int) rating, new Date(), data.getKey()));
+                        User.user.rate(new Rating(User.user.getId(), (int) rating, new Date().getTime(), data.getKey()));
                         if (rating == 0) ratingBar.setRating(data.ratings_avg());
                     }
                 }

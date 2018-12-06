@@ -60,7 +60,7 @@ public class GroupsAdapter extends CustomAdapter {
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, GroupPostsActivity.class);
-                    intent.putExtra(GroupsFragment.GROUP, data.getId());
+                    intent.putExtra(GroupsFragment.GROUP, data);
                     context.startActivity(intent);
                 }
             });
@@ -92,11 +92,13 @@ public class GroupsAdapter extends CustomAdapter {
             ArrayList<Post> posts = data.getPosts();
             if (posts.size() == 0){
                 time.setText(TimeText(new Date()));
-                content.setText("You have created a new group.");
+                String managerid = data.getManagerid();
+                String name = User.findUser(managerid).getName();
+                content.setText(managerid.equals(User.user.getId()) ? "You" : name + " created a new group.");
             }else{
                 Post post = posts.get(posts.size() - 1);
                 time.setText(TimeText(post.getTime()));
-                content.setText(post.getUserid() +": " + post.getContent());
+                content.setText(User.findUser(post.getUserid()).getName() + ": " + post.getContent());
             }
         }
         public void setQuiet(boolean isQuiet){

@@ -88,10 +88,13 @@ public class User implements Parcelable {
     public String getIntro() { return intro; }
     public String getGender() { return gender; }
     public ArrayList<Message> getMessages() { return messages; }
-    public ArrayList<String> getGroups() { return groups; }
-    public ArrayList<Post> getPosts() {
-        return posts;
+    public ArrayList getGroups(boolean onlyKey) {
+        if (onlyKey) return groups;
+        ArrayList<Group> data = new ArrayList<>();
+        for (String gid: groups) data.add(Group.findGroup(gid));
+        return data;
     }
+    public ArrayList<Post> getPosts() { return posts; }
     public ArrayList<Post> getDrafts() { return drafts; }
     public ArrayList<Post.Key> getCollections() { return collections; }
     public ArrayList<Comment> getComments_made() { return comments_made; }
@@ -247,6 +250,10 @@ public class User implements Parcelable {
         user.FollowerNotification(User.user.id, true);
         upload("following", following);
         upload("timeline", timeline);
+    }
+    public void createGroup(String groupid){
+        groups.add(0, groupid);
+        upload("groups", groups);
     }
     public void joinGroup(String groupid){
         groups.add(0, groupid);

@@ -54,11 +54,17 @@ public class CreateGroupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!finishClickable()) return;
                 Group group = new Group(name.getText().toString(), User.user.getId(), ((BitmapDrawable) icon.getDrawable()).getBitmap());
-                Intent intent = new Intent(getApplicationContext(), GroupsFragment.class);
-                intent.putExtra(GroupsFragment.GROUP, group);
-                setResult(RESULT_OK, intent);
+                FirebaseHelper.setAfterGroupInsertionListener(new FirebaseHelper.AfterGroupInsertedListener() {
+                    @Override
+                    public void afterGroupInserted(Group group) {
+                        User.user.createGroup(group.getId());
+                        Intent intent = new Intent(getApplicationContext(), GroupsFragment.class);
+                        intent.putExtra(GroupsFragment.GROUP, group);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                });
                 FirebaseHelper.insertGroup(group);
-                finish();
             }
         });
         name.addTextChangedListener(new TextWatcher() {

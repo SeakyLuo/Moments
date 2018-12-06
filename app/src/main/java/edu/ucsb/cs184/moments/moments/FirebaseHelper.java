@@ -13,11 +13,15 @@ import java.util.ArrayList;
 
 public class FirebaseHelper {
 
-    private static ArrayList<OnDataReceivedListener> listeners = new ArrayList<>();
     private static FirebaseDatabase firebase;
     private static DatabaseReference db;
     private static DatabaseReference udb, gdb, uc, gc, uudb;
     private static DataSnapshot uds, gds, ucds, gcds;
+    private static OnUDBReceivedListener uReceivedListener;
+    private static OnGDBReceivedListener gReceivedListener;
+    private static ArrayList<OnDataUpdatesListener> updateListeners = new ArrayList<>();
+    private static AfterUserInsertedListener uInsertionListener;
+    private static AfterGroupInsertedListener gInsertionListener;
 
     public static void init(){
 //        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
@@ -34,8 +38,7 @@ public class FirebaseHelper {
                     uudb = udb.child(User.firebaseUser.getUid());
                     User.user = uds.child(User.firebaseUser.getUid()).getValue(User.class);
                 }
-                for (OnDataReceivedListener listener: listeners)
-                    listener.onUDBReceived();
+                if (uReceivedListener != null) uReceivedListener.onUDBReceived();
             }
 
             @Override
@@ -47,6 +50,8 @@ public class FirebaseHelper {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 uds = dataSnapshot;
+                for (OnDataUpdatesListener listener: updateListeners)
+                    listener.onUDBUpdates();
                 // This updates user
                 // So there is a TODO: gives a red dot on the bottom navigation when there is a new post
             }
@@ -62,6 +67,7 @@ public class FirebaseHelper {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("fuck","gds");
                 gds = dataSnapshot;
+                if (gReceivedListener != null) gReceivedListener.onGDBReceived();
             }
 
             @Override
@@ -73,8 +79,8 @@ public class FirebaseHelper {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // TODO: Since we update user, updating group is also necessary but has lower priority.
-                for (OnDataReceivedListener listener: listeners)
-                    listener.onGDBReceived();
+                for (OnDataUpdatesListener listener: updateListeners)
+                    listener.onGDBUpdates();
             }
 
             @Override
@@ -83,7 +89,7 @@ public class FirebaseHelper {
             }
         });
         uc = db.child("user_count");
-        uc.addListenerForSingleValueEvent(new ValueEventListener() {
+        uc.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("fuck","ucds");
@@ -95,33 +101,11 @@ public class FirebaseHelper {
 
             }
         });
-        uc.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ucds = dataSnapshot;
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         gc = db.child("group_count");
-        gc.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("fuck","gcds");
-                gcds = dataSnapshot;
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         gc.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("fuck","gcds");
                 gcds = dataSnapshot;
             }
 
@@ -137,20 +121,32 @@ public class FirebaseHelper {
     public static DatabaseReference getUdb() { return udb; }
     public static DatabaseReference getGdb() { return gdb; }
 
-    public static void insertUser(User user){
-        int number = ucds.getValue(Integer.class);
-        user.setNumber(number);
-        uc.setValue(number++);
-        udb.child(user.getId()).setValue(user);
+    public static void insertUser(final User user){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int number = ucds.getValue(Integer.class);
+                user.setNumber(number);
+                uc.setValue(++number);
+                udb.child(user.getId()).setValue(user);
+                if (uInsertionListener != null) uInsertionListener.afterUserInserted(user);
+            }
+        }).start();
     }
 
-    public static void insertGroup(Group group){
-        String id = gdb.push().getKey();
-        group.setId(id);
-        int number = gcds.getValue(Integer.class);
-        group.setNumber(number);
-        gc.setValue(number++);
-        gdb.child(id).setValue(group);
+    public static void insertGroup(final Group group){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String id = gdb.push().getKey();
+                group.setId(id);
+                int number = gcds.getValue(Integer.class);
+                group.setNumber(number);
+                gc.setValue(++number);
+                gdb.child(id).setValue(group);
+                if (gInsertionListener != null) gInsertionListener.afterGroupInserted(group);
+            }
+        }).start();
     }
 
     public static User findUser(String id){
@@ -222,19 +218,39 @@ public class FirebaseHelper {
         }).start();
     }
 
-    public static void addDataReceivedListener(OnDataReceivedListener listener){
-        listeners.add(listener);
+    public static void setOnUDBReceivedListener(OnUDBReceivedListener listener){
+        uReceivedListener = listener;
+    }
+    public static void setOnGDBReceivedListener(OnGDBReceivedListener listener){
+        gReceivedListener = listener;
+    }
+    public static void addOnDateUpdatesListener(OnDataUpdatesListener listener){
+        updateListeners.add(listener);
+    }
+    public static void setAfterUserInsertionListener(AfterUserInsertedListener listener){
+        uInsertionListener = listener;
+    }
+    public static void setAfterGroupInsertionListener(AfterGroupInsertedListener listener){
+        gInsertionListener = listener;
     }
 
     public static boolean initFinished() { return uds != null && gds != null && ucds != null && gcds != null; }
 
-    interface OnDataReceivedListener{
+    interface OnUDBReceivedListener{
         void onUDBReceived();
+    }
+    interface OnGDBReceivedListener{
         void onGDBReceived();
     }
+    interface AfterUserInsertedListener {
+        void afterUserInserted(User user);
+    }
+    interface AfterGroupInsertedListener {
+        void afterGroupInserted(Group group);
+    }
 
-    interface OnDataUpdateListener{
-        void onUDBUpdate();
-        void onGDBUpdate();
+    interface OnDataUpdatesListener {
+        void onUDBUpdates();
+        void onGDBUpdates();
     }
 }
