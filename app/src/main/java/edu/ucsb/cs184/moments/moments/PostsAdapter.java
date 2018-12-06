@@ -80,7 +80,7 @@ public class PostsAdapter extends CustomAdapter {
                     Intent intent = new Intent(context, FullPostActivity.class);
                     intent.putExtra(FullPostActivity.POST, data);
                     context.startActivity(intent);
-                    ((Activity) context).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             comment.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +91,7 @@ public class PostsAdapter extends CustomAdapter {
                     intent.putExtra(FullPostActivity.POST, data);
                     intent.putExtra(FullPostActivity.ADD_COMMENT, FullPostActivity.ADD_COMMENT);
                     context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {

@@ -43,6 +43,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), SearchActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
         toolbar = view.findViewById(R.id.home_toolbar);
@@ -52,6 +53,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EditPostActivity.class);
                 startActivityForResult(intent, REQUEST_POST);
+                getActivity().overridePendingTransition(R.anim.push_down_in, R.anim.push_up_out);
             }
         });
         menu = view.findViewById(R.id.menu_home);

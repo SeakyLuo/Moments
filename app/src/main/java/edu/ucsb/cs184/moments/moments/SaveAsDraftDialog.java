@@ -46,6 +46,6 @@ public class SaveAsDraftDialog extends DialogFragment {
     private void close(){
         SaveAsDraftDialog.this.dismiss();
         activity.finish();
-        // TODO: Animation
+        activity.overridePendingTransition(R.anim.push_down_in,R.anim.push_down_out);
     }
 }

@@ -59,8 +59,7 @@ public class EditPostActivity extends AppCompatActivity {
                 String content = edit_content.getText().toString();
                 if (content.length() == 0){
                     finish();
-                    // TODO: Animation
-//                    overridePendingTransition(R.anim.push_up_in,R.anim.push_up_out);
+                    overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
                 }
                 else {
                     // ask save to draft box

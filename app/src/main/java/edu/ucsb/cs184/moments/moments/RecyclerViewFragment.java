@@ -55,7 +55,7 @@ public class RecyclerViewFragment extends Fragment {
 //                            view.setAlpha(0.0f);
 //                            // Start the animation
 //                            view.animate()
-//                                    .translationY(view.getHeight())
+//                                    .translationY(dy)
 //                                    .alpha(1.0f)
 //                                    .setListener(null);
 //                        }else{
@@ -80,7 +80,7 @@ public class RecyclerViewFragment extends Fragment {
 //                            view.setAlpha(0.0f);
 //                            // Start the animation
 //                            view.animate()
-//                                    .translationY(-view.getHeight())
+//                                    .translationY(-dy)
 //                                    .alpha(1.0f)
 //                                    .setListener(null);
 //                        }else{

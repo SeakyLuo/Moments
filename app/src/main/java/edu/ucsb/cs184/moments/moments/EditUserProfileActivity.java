@@ -51,6 +51,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 finish();
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
         icon.setOnClickListener(new View.OnClickListener() {
