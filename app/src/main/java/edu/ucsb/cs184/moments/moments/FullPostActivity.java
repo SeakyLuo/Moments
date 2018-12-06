@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
@@ -86,9 +84,9 @@ public class FullPostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final PopupMenuHelper helper = new PopupMenuHelper(R.menu.fullpost_more_menu, FullPostActivity.this, more);
                 if (post.getUserid().equals(User.user.getId())){
-                    helper.hideItem(R.id.fullpostmenu_delete);
                     helper.hideItem(R.id.fullpostmenu_follow);
                 }else{
+                    helper.hideItem(R.id.fullpostmenu_delete);
                     boolean isFollowing = User.user.isFollowing(post.getUserid());
                     helper.modifyIcon(R.id.fullpostmenu_follow, isFollowing ? "Unfollow" : "Follow",isFollowing ? R.drawable.ic_unfollow : R.drawable.ic_follow);
                 }
@@ -97,7 +95,7 @@ public class FullPostActivity extends AppCompatActivity {
                     public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.fullpostmenu_follow:
-
+                                User.user.follow(post.getUserid());
                                 return true;
                             case R.id.fullpostmenu_copy:
                                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -106,7 +104,8 @@ public class FullPostActivity extends AppCompatActivity {
                                 Toast.makeText(FullPostActivity.this,"Copied!",Toast. LENGTH_SHORT).show();
                                 return true;
                             case R.id.fullpostmenu_delete:
-
+                                User.user.remove_post(post);
+                                return true;
                         }
                         return false;
                     }
@@ -118,7 +117,10 @@ public class FullPostActivity extends AppCompatActivity {
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition(), true);
+                int position = tab.getPosition();
+                mViewPager.setCurrentItem(position, true);
+                tab.select();
+                if (position == 1) ratingsFragment.setRating(post);
             }
 
             @Override
@@ -176,10 +178,11 @@ public class FullPostActivity extends AppCompatActivity {
         else poster_icon.setImageBitmap(user.getIcon());
         time.setText(TimeText(new Date(post.getTime())));
         content.setText(post.getContent());
+        setCollect(post.isCollected());
         collect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setCollect(post);
+                collect(post);
             }
         });
     }
@@ -191,12 +194,14 @@ public class FullPostActivity extends AppCompatActivity {
         return new SimpleDateFormat("MM-dd HH:mm").format(date);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void setCollect(Post post){
-        boolean collected = post.isCollected(User.user.getId());
-        collect.setImageResource(!collected ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
-        if (collected) User.user.collect(post);
-        else User.user.uncollect(post);
+    public void collect(Post post){
+        boolean collected = post.isCollected();
+        if (collected) User.user.uncollect(post);
+        else User.user.collect(post);
+        setCollect(!collected);
+    }
+    public void setCollect(boolean collected){
+        collect.setImageResource(collected ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
     }
 
     @Override

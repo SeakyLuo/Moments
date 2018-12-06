@@ -55,12 +55,20 @@ public class Post implements Parcelable {
         if (count == 0) return 0f;
         for (int i = 0; i < count; i++)
             sum += ratings.get(i).getRating();
-        return sum / count;
+        return Float.parseFloat(String.format("%.1f", sum / count));
+    }
+    public int counting_star(int stars){
+        int count = 0;
+        for (Rating rating: ratings)
+            if (rating.getRating() == stars)
+                count++;
+        return count;
     }
     public Boolean isAnonymous() { return userid.equals(User.ANONYMOUS); }
-    public Boolean isCollected(String userid) {
-        ArrayList<Key> keys = User.findUser(userid).getCollections();
-        for (Key key : keys) if (key.userid == userid) return true;
+    public Boolean isCollected() {
+        Key postKey = getKey();
+        for (Key key: User.user.getCollections())
+            if (postKey.equals(key)) return true;
         return false;
     }
     public void addComment(Comment comment) { comments.add(comment); }

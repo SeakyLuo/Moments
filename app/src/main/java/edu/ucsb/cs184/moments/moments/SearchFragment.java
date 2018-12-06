@@ -21,22 +21,29 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search_result, container, false);
         context = getContext();
         fragment = new RecyclerViewFragment();
+        setAdapter(adapter);
         return view;
     }
 
     public SearchFragment setAdapter(String adapter){
         this.adapter = adapter;
-        switch (adapter){
-            case SearchActivity.POSTS:
-                fragment.setAdapter(new PostsAdapter());
-            case SearchActivity.USERS:
-                fragment.setAdapter(new SearchUsersAdapter());
-            case SearchActivity.GROUPS:
-                fragment.setAdapter(new SearchGroupsAdapter());
-            case SearchActivity.HISTORY:
-                fragment.setAdapter(new SearchHistoryAdapter());
+        if (fragment != null){
+            switch (adapter){
+                case SearchActivity.POSTS:
+                    fragment.setAdapter(new PostsAdapter());
+                    break;
+                case SearchActivity.USERS:
+                    fragment.setAdapter(new SearchUsersAdapter());
+                    break;
+                case SearchActivity.GROUPS:
+                    fragment.setAdapter(new SearchGroupsAdapter());
+                    break;
+                case SearchActivity.HISTORY:
+                    fragment.setAdapter(new SearchHistoryAdapter());
+                    break;
+            }
+            fragment.show(getFragmentManager(), R.id.search_result_content);
         }
-        fragment.show(getFragmentManager(), R.id.search_result_content);
         return this;
     }
 
@@ -49,16 +56,20 @@ public class SearchFragment extends Fragment {
                     switch (adapter){
                         case SearchActivity.POSTS:
                             fragment.addElements(FirebaseHelper.searchPosts(keyword));
+                            break;
                         case SearchActivity.USERS:
                             fragment.addElements(FirebaseHelper.searchUsers(keyword));
+                            break;
                         case SearchActivity.GROUPS:
                             fragment.addElements(FirebaseHelper.searchGroups(keyword));
+                            break;
                         case SearchActivity.HISTORY:
                             if (User.user.getSearchHistory().contains(keyword)){
                                 User.user.removeHistory(keyword);
                                 User.user.addHistory(keyword);
                             }
                             fragment.addElements(User.user.getSearchHistory());
+                            break;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

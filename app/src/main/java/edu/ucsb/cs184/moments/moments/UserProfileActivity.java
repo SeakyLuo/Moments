@@ -28,7 +28,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
     private ImageView icon, gender;
-    private TextView username, user_number, intro, following, followers;
+    private TextView username, user_number, intro, following, followers, posts_count;
     private ImageButton follow, message;
     private FrameLayout up_timeline;
     private RecyclerViewFragment fragment;
@@ -52,16 +52,23 @@ public class UserProfileActivity extends AppCompatActivity {
         following = include.findViewById(R.id.up_following);
         followers = include.findViewById(R.id.up_followers);
         follow = include.findViewById(R.id.up_follow);
+        posts_count = include.findViewById(R.id.up_posts);
         message = include.findViewById(R.id.up_message);
         up_timeline = include.findViewById(R.id.up_timeline);
         fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostsAdapter());
+        try {
+            fragment.addElements(User.user.getPosts());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         fragment.show(getSupportFragmentManager(), R.id.up_timeline);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+                // TODO: Animation
             }
         });
 
@@ -100,6 +107,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 helper.show();
             }
         });
+        posts_count.setText("Posts: " + User.user.getPosts().size());
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
         setSupportActionBar(toolbar);

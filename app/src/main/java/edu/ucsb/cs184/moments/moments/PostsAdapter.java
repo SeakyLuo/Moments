@@ -69,7 +69,7 @@ public class PostsAdapter extends CustomAdapter {
             collect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setCollect(!data.isCollected(User.user.getId()));
+                    collect(!data.isCollected());
                 }
             });
             view.setClickable(true);
@@ -116,13 +116,17 @@ public class PostsAdapter extends CustomAdapter {
             time.setText(TimeText(new Date(data.getTime())));
             content.setText(data.getContent());
             ratingBar.setRating(data.ratings_avg());
-            setCollect(data.isCollected(User.user.getId()));
+            setCollect(data.isCollected());
         }
 
         public void setCollect(boolean Collect){
+            collect.setImageResource(Collect ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
+        }
+
+        public void collect(boolean Collect){
             if (Collect) User.user.collect(data);
             else User.user.uncollect(data);
-            collect.setImageResource(Collect ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
+            setCollect(Collect);
         }
     }
 }

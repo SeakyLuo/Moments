@@ -210,9 +210,11 @@ public class User implements Parcelable {
             findUser(id).PostNotification(post, false);
         }
     }
-    public void delete_post(Post post){
+    public void remove_post(Post post){
         posts.remove(post);
         upload("posts", posts);
+        timeline.remove(post);
+        upload("timeline", timeline);
         for (String id: followers){
             findUser(id).PostNotification(post, true);
         }

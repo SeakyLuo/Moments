@@ -25,6 +25,7 @@ public class UserCollectionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                // TODO: Animation
             }
         });
         fragment.setAdapter(new PostsAdapter());

@@ -63,7 +63,7 @@ public class SearchActivity extends AppCompatActivity {
                 String new_keyword = searchBar.getText().toString();
                 // if keyword is not changed, don't search
                 // Refresh is ignored for now
-                if (!keyword.isEmpty() && !keyword.equals(new_keyword) && !tabIndices[position].equals(HISTORY)){
+                if (keyword != null && !keyword.isEmpty() && !keyword.equals(new_keyword) && !tabIndices[position].equals(HISTORY)){
                     fragments.get(position).search(keyword);
                 }
                 searchBar.setHint(textHints[position]);
