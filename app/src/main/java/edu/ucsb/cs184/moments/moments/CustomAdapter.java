@@ -30,7 +30,13 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
     }
     public void addElements(List data){
         for (int i = 0; i < data.size(); i++) add_element(data.get(i));
-        notifyDataSetChanged();
+        notifyItemRangeInserted(0, data.size());
+//        notifyDataSetChanged();
+    }
+    public void addElements(int index, List data){
+        this.data.addAll(index, data);
+        notifyItemRangeInserted(index, data.size());
+//        notifyDataSetChanged();
     }
     public void addElement(Object object){
         add_element(object);

@@ -1,7 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +23,6 @@ public class FirebaseHelper {
     private static AfterGroupInsertedListener gInsertionListener;
 
     public static void init(){
-//        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         firebase = FirebaseDatabase.getInstance();
         db = firebase.getReference();
         db.keepSynced(true);
@@ -32,11 +30,21 @@ public class FirebaseHelper {
         udb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("fuck","uds");
                 uds = dataSnapshot;
                 if (User.firebaseUser != null){
                     uudb = udb.child(User.firebaseUser.getUid());
                     User.user = uds.child(User.firebaseUser.getUid()).getValue(User.class);
+//                    uudb.addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                            User.user = dataSnapshot.getValue(User.class);
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                        }
+//                    });
                 }
                 if (uReceivedListener != null) uReceivedListener.onUDBReceived();
             }
@@ -65,7 +73,6 @@ public class FirebaseHelper {
         gdb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("fuck","gds");
                 gds = dataSnapshot;
                 if (gReceivedListener != null) gReceivedListener.onGDBReceived();
             }
@@ -92,7 +99,6 @@ public class FirebaseHelper {
         uc.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("fuck","ucds");
                 ucds = dataSnapshot;
             }
 
@@ -105,7 +111,6 @@ public class FirebaseHelper {
         gc.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("fuck","gcds");
                 gcds = dataSnapshot;
             }
 

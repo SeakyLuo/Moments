@@ -189,7 +189,7 @@ public class FullPostActivity extends AppCompatActivity {
         else poster_icon.setImageBitmap(user.getIcon());
         time.setText(TimeText(post.getTime()));
         content.setText(post.getContent());
-        setCollect(post.isCollected());
+        setCollect(User.user.hasCollected(post));
         collect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,7 +207,7 @@ public class FullPostActivity extends AppCompatActivity {
     }
 
     public void collect(Post post){
-        boolean collected = post.isCollected();
+        boolean collected = User.user.hasCollected(post);
         if (collected) User.user.uncollect(post);
         else User.user.collect(post);
         setCollect(!collected);

@@ -74,7 +74,7 @@ public class PostsAdapter extends CustomAdapter {
             collect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    collect(!data.isCollected());
+                    collect(!User.user.hasCollected(data));
                 }
             });
             view.setClickable(true);
@@ -160,7 +160,7 @@ public class PostsAdapter extends CustomAdapter {
             time.setText(TimeText(data.getTime()));
             content.setText(data.getContent());
             ratingBar.setRating(data.ratings_avg());
-            setCollect(data.isCollected());
+            setCollect(User.user.hasCollected(data));
         }
 
         public void setCollect(boolean Collect){

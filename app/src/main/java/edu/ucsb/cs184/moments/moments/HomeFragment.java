@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
             }
         });
         try {
-            fragment.addElements(User.user.getTimeline());
+            fragment.addElements(0, User.user.getTimeline());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,16 +81,7 @@ public class HomeFragment extends Fragment {
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                try {
-                    // TODO: see below
-                    // Not a good algorithm
-                    // Should add new posts only
-                    User.user.refreshTimeline();
-                    fragment.setData(User.user.getTimeline());
-                } catch (RecyclerViewFragment.UnsupportedDataException e) {
-                    e.printStackTrace();
-                }
-                fragment.refresh();
+                refresh();
             }
         });
         return view;
@@ -98,13 +89,22 @@ public class HomeFragment extends Fragment {
 
     public void refresh(){
         fragment.gotoTop();
-        (new Thread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                User.user.refreshTimeline();
-                fragment.gotoTop();
+                try {
+                    // TODO: see below
+                    // Not a good algorithm
+                    // Should add new posts only
+                    User.user.refreshTimeline();
+                    fragment.setData(User.user.getTimeline());
+                    fragment.refresh();
+                    fragment.gotoTop();
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
             }
-        })).start();
+        });
     }
 
     public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){
@@ -133,6 +133,7 @@ public class HomeFragment extends Fragment {
             case EditPostActivity.MAKE_POST:
                 try {
                     fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
+                    fragment.gotoTop();
                 }catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
                 }finally {
@@ -141,10 +142,12 @@ public class HomeFragment extends Fragment {
             case FullPostActivity.DELETE_POST:
                 try {
                     fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
-                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    fragment.gotoTop();
+                }catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
+                }finally {
+                    break;
                 }
-                break;
         }
     }
 }

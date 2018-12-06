@@ -131,8 +131,11 @@ public class RecyclerViewFragment extends Fragment {
         else throw new UnsupportedDataException();
     }
     public void addElements(List data) throws UnsupportedDataException {
-        if (data.size() == 0) return;
-        if (isValidType(data.get(0))) adapter.addElements(data);
+        if (data.size() == 0 || isValidType(data.get(0))) adapter.addElements(data);
+        else throw new UnsupportedDataException();
+    }
+    public void addElements(int index, List data) throws UnsupportedDataException{
+        if (data.size() == 0 || isValidType(data.get(0))) adapter.addElements(index, data);
         else throw new UnsupportedDataException();
     }
     public void removeElement(Object obj) throws UnsupportedDataException{
@@ -140,12 +143,14 @@ public class RecyclerViewFragment extends Fragment {
         else throw new UnsupportedDataException();
     }
     public void setData(List data) throws UnsupportedDataException{
-        if (data.size() > 0 && isValidType(data.get(0))) adapter.setData(data);
+        if (data.size() == 0 || isValidType(data.get(0))) adapter.setData(data);
         else throw new UnsupportedDataException();
     }
     public void refresh(){
         adapter.notifyDataSetChanged();
+        gotoTop();
     }
+    public List getData() { return adapter.getData(); }
     public boolean hasData(){
         return adapter.hasData();
     }

@@ -30,10 +30,20 @@ public class UserCollectionsActivity extends AppCompatActivity {
         });
         fragment.setAdapter(new PostsAdapter());
         try {
-            fragment.addElements(User.user.getCollections());
+            fragment.setData(User.user.getCollections());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    fragment.setData(User.user.getCollections());
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         fragment.show(getSupportFragmentManager(), R.id.content_collections);
     }
 

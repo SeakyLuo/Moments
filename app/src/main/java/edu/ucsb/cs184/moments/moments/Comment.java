@@ -74,6 +74,14 @@ public class Comment implements Parcelable {
     public Boolean hasParent() { return parent == null; }
 
     @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Post))
+            return false;
+        return getKey().equals(((Comment) obj).getKey());
+    }
+    @Override
     public String toString(){
         return (new Gson()).toJson(this);
     }
@@ -148,7 +156,7 @@ public class Comment implements Parcelable {
     public static class TimeComparator implements Comparator<Key> {
         @Override
         public int compare(Key o1, Key o2) {
-            return Long.compare(o1.time, o2.time) ;
+            return Long.compare(o2.time, o1.time) ;
         }
     }
 }

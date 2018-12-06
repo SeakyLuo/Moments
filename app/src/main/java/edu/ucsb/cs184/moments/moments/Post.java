@@ -65,12 +65,6 @@ public class Post implements Parcelable {
         return count;
     }
     public Boolean isAnonymous() { return userid.equals(User.ANONYMOUS); }
-    public Boolean isCollected() {
-        Key postKey = getKey();
-        for (Key key: User.user.getCollectionKeys())
-            if (postKey.equals(key)) return true;
-        return false;
-    }
     public void addComment(Comment comment) { comments.add(comment); }
     public void addRating(Rating rating) { ratings.add(rating); }
     public void removeComment(Comment comment) { comments.remove(comment); }
@@ -91,8 +85,7 @@ public class Post implements Parcelable {
             return false;
         if (!(obj instanceof Post))
             return false;
-        Post p = (Post) obj;
-        return p.getKey().equals(((Post) obj).getKey());
+        return getKey().equals(((Post) obj).getKey());
     }
 
     @Override
@@ -164,10 +157,15 @@ public class Post implements Parcelable {
         }
     }
 
+    public static class PostComparator implements Comparator<Post> {
+        @Override
+        public int compare(Post o1, Post o2) { return new TimeComparator().compare(o1.getKey(), o2.getKey()); }
+    }
+
     public static class TimeComparator implements Comparator<Key> {
         @Override
         public int compare(Key o1, Key o2) {
-            return Long.compare(o1.time, o2.time) ;
+            return Long.compare(o2.time, o1.time) ;
         }
     }
 

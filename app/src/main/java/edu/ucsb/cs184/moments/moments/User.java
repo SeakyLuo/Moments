@@ -97,16 +97,18 @@ public class User implements Parcelable {
     public ArrayList<Post> getDrafts() { return drafts; }
     public ArrayList<Post> getCollections() {
         ArrayList<Post> data = new ArrayList<>();
-        for (Post.Key key: collections){
+        boolean update = false;
+        for (Post.Key key: (ArrayList<Post.Key>) collections.clone()){
             Post post = Post.findPost(key);
             // Should let user know it's not found/deleted
-            if (post != null)
-                data.add(post);
+            if (post == null){
+                collections.remove(key);
+                update = true;
+            }
+            else data.add(post);
         }
+        if (update) upload("collections", collections);
         return data;
-    }
-    public ArrayList<Post.Key> getCollectionKeys(){
-        return collections;
     }
     public ArrayList<Comment> getCommentsMade() { return comments_made; }
     public ArrayList<String> getFollowers() { return followers; }
@@ -127,6 +129,7 @@ public class User implements Parcelable {
     public boolean isAnonymous() { return id.equals(ANONYMOUS); }
     public boolean inGroup(String groupid) { return groups.contains(groupid); }
     public boolean isFollowing(String userid) { return following.contains(userid); }
+    public boolean hasCollected(Post post) { return collections.contains(post.getKey()); }
     public boolean hasNewPost() { return posts_notification.size() != 0; }
     public boolean hasNewComment() { return comments_notification.size() != 0; }
     public boolean hasNewRating() { return ratings_notification.size() != 0; }
@@ -137,11 +140,28 @@ public class User implements Parcelable {
     }
     public ArrayList<Post> getTimeline(){
         ArrayList<Post> data = new ArrayList<>();
-        for (Post.Key key: timeline){
+        boolean remove = false;
+        for (Post.Key key: (ArrayList<Post.Key>) timeline.clone()){
             Post post = Post.findPost(key);
-            if (post != null)
-                data.add(post);
+            if (post == null){
+                timeline.remove(key);
+                remove = true;
+            }
+            else data.add(post);
         }
+        boolean fix = false;
+        for (Post post: posts){
+            if (!data.contains(post)){
+                data.add(post);
+                timeline.add(post.getKey());
+                fix = true;
+            }
+        }
+        if (fix){
+            Collections.sort(data, new Post.PostComparator());
+            Collections.sort(timeline, new Post.TimeComparator());
+        }
+        if (remove || fix) upload("timeline", timeline);
         return data;
     }
     public void PostNotification(Post post, boolean remove){
@@ -239,6 +259,10 @@ public class User implements Parcelable {
         for (String id: followers){
             findUser(id).PostNotification(post, true);
         }
+        if (hasCollected(post)){
+            collections.remove(post.getKey());
+            upload("collections", collections);
+        }
     }
     public void make_comment(Comment comment) {
         comments_made.add(0, comment);
@@ -246,22 +270,22 @@ public class User implements Parcelable {
         upload("comments_made", comments_made);
         findUser(comment.getUserid()).CommentNotification(comment, false);
     }
-    public void delete_comment(Comment comment, boolean made) {
+    public void remove_comment(Comment comment, boolean made) {
         comments_made.remove(comment);
         Post.findPost(comment.getPostKey()).removeComment(comment);
         upload("comments_made", comments_made);
         findUser(comment.getUserid()).CommentNotification(comment, true);
     }
-    public void follow(final String userid) {
+    public void follow(String userid) {
         following.add(0, userid);
         upload("following", following);
         User user = findUser(userid);
         user.FollowerNotification(User.user.id, false);
-        timeline.addAll(user.getPostKeys());
+        timeline.addAll(0, user.getPostKeys());
         Collections.sort(timeline, new Post.TimeComparator());
         upload("timeline", timeline);
     }
-    public void unfollow(final String userid) {
+    public void unfollow(String userid) {
         following.remove(userid);
         upload("following", following);
         for (Post.Key postKey: (ArrayList<Post.Key>) timeline.clone()){

@@ -115,10 +115,13 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_home:
                         homeFragment.refresh();
+                        break;
                     case R.id.navigation_groups:
                         groupsFragment.refresh();
+                        break;
                     case R.id.navigation_notifications:
                         notificationsFragment.refresh();
+                        break;
                 }
             }
         });
