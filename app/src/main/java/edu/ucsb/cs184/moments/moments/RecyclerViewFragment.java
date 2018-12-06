@@ -113,24 +113,6 @@ public class RecyclerViewFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-//        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
-//                android.R.color.holo_green_dark,
-//                android.R.color.holo_orange_dark,
-//                android.R.color.holo_blue_dark);
-
-        /**
-         * Showing Swipe Refresh animation on activity create
-         * As animation won't start on onCreate, post runnable is used
-         */
-//        swipeRefreshLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                swipeRefreshLayout.setRefreshing(true);
-//                for (OnRefreshListener listener: listeners)
-//                    listener.onRefresh();
-//                swipeRefreshLayout.setRefreshing(false);
-//            }
-//        });
         return view;
     }
 
@@ -156,6 +138,13 @@ public class RecyclerViewFragment extends Fragment {
     public void removeElement(Object obj) throws UnsupportedDataException{
         if (isValidType(obj)) adapter.removeElement(obj);
         else throw new UnsupportedDataException();
+    }
+    public void setData(List data) throws UnsupportedDataException{
+        if (data.size() > 0 && isValidType(data.get(0))) adapter.setData(data);
+        else throw new UnsupportedDataException();
+    }
+    public void refresh(){
+        adapter.notifyDataSetChanged();
     }
     public boolean hasData(){
         return adapter.hasData();
@@ -187,9 +176,6 @@ public class RecyclerViewFragment extends Fragment {
     public class UnsupportedDataException extends Exception{
         public UnsupportedDataException(){
             super("Unsupported data!");
-        }
-        public UnsupportedDataException(String text){
-            super(text);
         }
     }
 }

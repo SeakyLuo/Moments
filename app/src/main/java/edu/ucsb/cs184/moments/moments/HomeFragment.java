@@ -81,7 +81,16 @@ public class HomeFragment extends Fragment {
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                try {
+                    // TODO: see below
+                    // Not a good algorithm
+                    // Should add new posts only
+                    User.user.refreshTimeline();
+                    fragment.setData(User.user.getTimeline());
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
+                fragment.refresh();
             }
         });
         return view;

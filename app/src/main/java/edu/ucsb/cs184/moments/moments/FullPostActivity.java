@@ -93,7 +93,7 @@ public class FullPostActivity extends AppCompatActivity {
                 if (post.getUserid().equals(User.user.getId())){
                     helper.hideItem(R.id.fullpost_more_follow);
                 }else{
-                    helper.hideItem(R.id.fullpostmenu_delete);
+                    helper.hideItem(R.id.fullpost_more_delete);
                     boolean isFollowing = User.user.isFollowing(post.getUserid());
                     helper.modifyIcon(R.id.fullpost_more_follow, isFollowing ? "Unfollow" : "Follow",isFollowing ? R.drawable.ic_unfollow : R.drawable.ic_follow);
                 }

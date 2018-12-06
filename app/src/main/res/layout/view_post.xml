@@ -79,9 +79,10 @@
 
             <ImageButton
                 android:id="@+id/post_dropdown"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/button_size_small"
+                android:layout_height="@dimen/button_size_small"
                 android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/post_username"
                 app:layout_constraintEnd_toEndOf="@+id/post_content"
                 app:layout_constraintTop_toTopOf="@+id/post_username"
                 app:srcCompat="@drawable/ic_down" />

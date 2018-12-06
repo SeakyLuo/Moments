@@ -192,7 +192,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onDataReceived(){
-        progressDialog.dismiss();
         if (User.firebaseUser == null) return;
         User.user = FirebaseHelper.findUser(User.firebaseUser.getUid());
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);

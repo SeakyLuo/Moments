@@ -108,11 +108,11 @@ public class User implements Parcelable {
     public ArrayList<Post.Key> getCollectionKeys(){
         return collections;
     }
-    public ArrayList<Comment> getComments_made() { return comments_made; }
+    public ArrayList<Comment> getCommentsMade() { return comments_made; }
     public ArrayList<String> getFollowers() { return followers; }
     public ArrayList<String> getFollowing() { return following; }
     public ArrayList<String> getSearchHistory() { return search_history; }
-    public ArrayList<Comment> getComments_recv() {
+    public ArrayList<Comment> getCommentsRecv() {
         ArrayList<Comment> data = new ArrayList<>();
         for (Comment.Key key: comments_recv){
             Comment comment = Comment.findComment(key);
@@ -121,6 +121,9 @@ public class User implements Parcelable {
         }
         return data;
     }
+    public ArrayList<Post.Key> getPostsNotification() { return posts_notification; }
+    public ArrayList<Comment.Key> getCommentsNotification() { return comments_notification; }
+    public ArrayList<Rating.Key> getRatingssNotification() { return ratings_notification; }
     public boolean isAnonymous() { return id.equals(ANONYMOUS); }
     public boolean inGroup(String groupid) { return groups.contains(groupid); }
     public boolean isFollowing(String userid) { return following.contains(userid); }

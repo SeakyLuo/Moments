@@ -21,6 +21,10 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
         holder.setData(data.get(position));
     }
 
+    public void setData(List data){
+        this.data = data;
+        notifyDataSetChanged();
+    }
     private void add_element(Object object){
         data.add(0, object);
     }
@@ -30,24 +34,27 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
     }
     public void addElement(Object object){
         add_element(object);
-        notifyDataSetChanged();
+        notifyItemInserted(0);
     }
     public void removeElement(Object object){
-        data.remove(object);
-        notifyDataSetChanged();
+        int index = data.indexOf(object);
+        removeElementAt(index);
     }
     public void removeElementAt(int index){
         data.remove(index);
-        notifyDataSetChanged();
+        notifyItemRemoved(index);
     }
     // Shouldn't be called
     public List<Object> getData(){
         return data;
     }
     public boolean hasData(){
-        return data.size() == 0;
+        return data.size() > 0;
     }
     public void clear(){
+//        int size = data.size();
+//        data.clear();
+//        notifyItemRangeRemoved(0, size);
         data.clear();
         notifyDataSetChanged();
     }

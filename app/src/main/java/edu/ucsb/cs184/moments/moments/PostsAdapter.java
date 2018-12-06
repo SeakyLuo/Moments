@@ -1,5 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -112,13 +114,13 @@ public class PostsAdapter extends CustomAdapter {
             });
             dropdown.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    dropdown.setImageResource(R.drawable.ic_up);
+                public void onClick(final View v) {
+                    ObjectAnimator.ofFloat(v, "rotation", 0, 180).start();
                     final PopupMenuHelper helper = new PopupMenuHelper(R.menu.post_more_menu, v.getContext(), dropdown);
                     if (data.getUserid().equals(User.user.getId())){
                         helper.hideItem(R.id.post_more_follow);
                     }else{
-                        helper.hideItem(R.id.fullpostmenu_delete);
+                        helper.hideItem(R.id.post_more_delete);
                         boolean isFollowing = User.user.isFollowing(data.getUserid());
                         helper.modifyIcon(R.id.post_more_follow, isFollowing ? "Unfollow" : "Follow",isFollowing ? R.drawable.ic_unfollow : R.drawable.ic_follow);
                     }
@@ -137,6 +139,12 @@ public class PostsAdapter extends CustomAdapter {
                                     return true;
                             }
                             return false;
+                        }
+                    });
+                    helper.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                        @Override
+                        public void onDismiss() {
+                            ObjectAnimator.ofFloat(v, "rotation", 180, 360).start();
                         }
                     });
                     helper.show();
