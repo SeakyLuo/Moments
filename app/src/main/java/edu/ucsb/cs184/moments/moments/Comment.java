@@ -20,6 +20,7 @@ public class Comment implements Parcelable {
     private ArrayList<Comment> replies = new ArrayList<>();
     private ArrayList<Rating> ratings = new ArrayList<>();
 
+    public Comment(){}
     public Comment(String userid, String content, Long time, Post.Key postKey){
         this.userid = userid;
         this.content = content;
@@ -101,6 +102,7 @@ public class Comment implements Parcelable {
     public static class Key implements Parcelable{
         String userid;
         Long time;
+        public Key() {}
         public Key(String userid, Long time){
             this.userid = userid;
             this.time = time;
@@ -130,7 +132,7 @@ public class Comment implements Parcelable {
             if (!(obj instanceof Key))
                 return false;
             Key k = (Key) obj;
-            return time == k.time && userid == k.userid;
+            return time.equals(k.time) && userid.equals(k.userid);
         }
 
         @Override

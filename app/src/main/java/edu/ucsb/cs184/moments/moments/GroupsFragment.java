@@ -76,7 +76,7 @@ public class GroupsFragment extends Fragment {
         fragment = new RecyclerViewFragment();
         fragment.setShowDivider(true);
         adapter = new GroupsAdapter();
-        adapter.addElements(User.user.getGroups(false));
+        adapter.addElements(User.user.getGroups());
         fragment.setAdapter(adapter);
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override

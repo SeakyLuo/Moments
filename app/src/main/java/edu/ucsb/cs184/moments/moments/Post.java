@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 
 public class Post implements Parcelable {
     private String userid;
@@ -16,7 +15,7 @@ public class Post implements Parcelable {
     private Long time;
     private ArrayList<Comment> comments = new ArrayList<>();
     private ArrayList<Rating> ratings = new ArrayList<>();
-
+    public Post() {}
     public Post(String userid, String content, Long time){
         this.userid = userid;
         this.content = content;
@@ -46,7 +45,7 @@ public class Post implements Parcelable {
     public Key getKey() { return new Key(userid, time); }
     public String getUserid() { return userid; }
     public String getContent() { return content; }
-    public Date getTime() { return new Date(time); }
+    public Long getTime() { return time; }
     public int comments_received() { return comments.size(); }
     public ArrayList<Comment> getComments() { return  comments; }
     public int ratings_received() { return ratings.size(); }
@@ -108,6 +107,7 @@ public class Post implements Parcelable {
     public static class Key implements Parcelable {
         String userid;
         Long time;
+        public Key() {}
         public Key(String userid, Long time){
             this.userid = userid;
             this.time = time;
@@ -141,7 +141,7 @@ public class Post implements Parcelable {
             if (!(obj instanceof Key))
                 return false;
             Key k = (Key) obj;
-            return time == k.time && userid == k.userid;
+            return time.equals(k.time) && userid.equals(k.userid);
         }
 
         @Override

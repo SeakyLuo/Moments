@@ -88,8 +88,7 @@ public class User implements Parcelable {
     public String getIntro() { return intro; }
     public String getGender() { return gender; }
     public ArrayList<Message> getMessages() { return messages; }
-    public ArrayList getGroups(boolean onlyKey) {
-        if (onlyKey) return groups;
+    public ArrayList<Group> getGroups() {
         ArrayList<Group> data = new ArrayList<>();
         for (String gid: groups) data.add(Group.findGroup(gid));
         return data;
@@ -102,11 +101,10 @@ public class User implements Parcelable {
     public ArrayList<String> getFollowing() { return following; }
     public ArrayList<String> getSearchHistory() { return search_history; }
     public ArrayList<Comment> getComments_recv() {
-        ArrayList<Comment> comments = new ArrayList<>();
-        for (Comment.Key key : comments_recv){
-            comments.add(Comment.findComment(key));
-        }
-        return comments;
+        ArrayList<Comment> data = new ArrayList<>();
+        for (Comment.Key key: comments_recv)
+            data.add(Comment.findComment(key));
+        return data;
     }
     public boolean isAnonymous() { return id.equals(ANONYMOUS); }
     public boolean inGroup(String groupid) { return groups.contains(groupid); }
@@ -120,11 +118,10 @@ public class User implements Parcelable {
         return keys;
     }
     public ArrayList<Post> getTimeline(){
-        ArrayList<Post> post_timeline = new ArrayList<>();
-        for (Post.Key key : timeline){
-            post_timeline.add(Post.findPost(key));
-        }
-        return post_timeline;
+        ArrayList<Post> data = new ArrayList<>();
+        for (Post.Key key: timeline)
+            data.add(Post.findPost(key));
+        return data;
     }
     public void PostNotification(Post post, boolean remove){
         if (remove && posts_notification.contains(post.getKey())) posts_notification.remove(post.getKey());
@@ -138,7 +135,7 @@ public class User implements Parcelable {
     }
     public void RatingNotification(Rating rating){
         boolean update = false;
-        for (Rating.Key key : (ArrayList<Rating.Key>) ratings_notification.clone()){
+        for (Rating.Key key: (ArrayList<Rating.Key>) ratings_notification.clone()){
             if (rating.getKey().equals(key)){
                 if (rating.getRating() == 0) ratings_notification.remove(key);
                 else ratings_notification.set(ratings_notification.indexOf(key), rating.getKey());
@@ -209,14 +206,14 @@ public class User implements Parcelable {
         upload("posts", posts);
         timeline.add(0, post.getKey());
         upload("timeline", timeline);
-        for (String id : followers){
+        for (String id: followers){
             findUser(id).PostNotification(post, false);
         }
     }
     public void delete_post(Post post){
         posts.remove(post);
         upload("posts", posts);
-        for (String id : followers){
+        for (String id: followers){
             findUser(id).PostNotification(post, true);
         }
     }
@@ -244,7 +241,7 @@ public class User implements Parcelable {
     public void unfollow(final String userid) {
         following.remove(userid);
         User user = findUser(userid);
-        for (Post.Key postKey : (ArrayList<Post.Key>) timeline.clone()){
+        for (Post.Key postKey: (ArrayList<Post.Key>) timeline.clone()){
             if (postKey.userid.equals(userid)) timeline.remove(postKey);
         }
         user.FollowerNotification(User.user.id, true);

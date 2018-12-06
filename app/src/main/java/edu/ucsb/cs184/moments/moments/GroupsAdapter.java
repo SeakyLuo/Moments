@@ -97,7 +97,7 @@ public class GroupsAdapter extends CustomAdapter {
                 content.setText(managerid.equals(User.user.getId()) ? "You" : name + " created a new group.");
             }else{
                 Post post = posts.get(posts.size() - 1);
-                time.setText(TimeText(post.getTime()));
+                time.setText(TimeText(new Date(post.getTime())));
                 content.setText(User.findUser(post.getUserid()).getName() + ": " + post.getContent());
             }
         }

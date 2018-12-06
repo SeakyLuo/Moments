@@ -1,5 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -35,7 +36,6 @@ public class PostsAdapter extends CustomAdapter {
         long delta_day = delta_hour / 24;
         if (delta_day < 7) return delta_day + " day"+ ((delta_hour == 1) ? "" : "s") +" ago";
         return new SimpleDateFormat("yyyy-MM-dd").format(date);
-//        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
 
     public static class ViewHolder extends CustomAdapter.CustomViewHolder {
@@ -80,6 +80,7 @@ public class PostsAdapter extends CustomAdapter {
                     Intent intent = new Intent(context, FullPostActivity.class);
                     intent.putExtra(FullPostActivity.POST, data);
                     context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 }
             });
             comment.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +113,7 @@ public class PostsAdapter extends CustomAdapter {
             User user = User.findUser(data.getUserid());
             usericon.setImageBitmap(user.getIcon());
             username.setText(user.getName());
-            time.setText(TimeText(data.getTime()));
+            time.setText(TimeText(new Date(data.getTime())));
             content.setText(data.getContent());
             ratingBar.setRating(data.ratings_avg());
             setCollect(data.isCollected(User.user.getId()));

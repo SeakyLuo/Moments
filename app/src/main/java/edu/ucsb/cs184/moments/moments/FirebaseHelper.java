@@ -159,7 +159,7 @@ public class FirebaseHelper {
     public static ArrayList<Post> searchPosts(String keyword){
         ArrayList<Post> posts = new ArrayList<>();
         for (DataSnapshot ds: uds.getChildren()){
-            for (Post post: (ArrayList<Post>) ds.child("posts").getValue(ArrayList.class)){
+            for (Post post: (ArrayList<Post>) ds.child("posts").getValue()){
                 if (post.getContent().contains(keyword))
                     posts.add(post);
             }
@@ -186,14 +186,18 @@ public class FirebaseHelper {
     }
 
     public static Post findPost(Post.Key key) {
-        for (Post post: (ArrayList<Post>) uds.child(key.userid).child("posts").getValue(ArrayList.class)){
-            if (post.getKey().equals(key)) return post;
+        for (DataSnapshot ds: uds.child(key.userid).child("posts").getChildren()){
+            Post data = ds.getValue(Post.class);
+            if (data.getKey().equals(key))
+                return data;
         }
         return null;
     }
     public static Comment findComment(Comment.Key key){
-        for (Comment comment: (ArrayList<Comment>) uds.child(key.userid).child("comments_made").getValue(ArrayList.class)){
-            if (comment.getKey().equals(key)) return comment;
+        for (DataSnapshot ds: uds.child(key.userid).child("posts").getChildren()){
+            Comment data = ds.getValue(Comment.class);
+            if (data.getKey().equals(key))
+                return data;
         }
         return null;
     }
@@ -235,6 +239,31 @@ public class FirebaseHelper {
     }
 
     public static boolean initFinished() { return uds != null && gds != null && ucds != null && gcds != null; }
+
+//    public void uploadImage(Bitmap bitmap) {
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//        byte[] data = baos.toByteArray();
+//
+//        FirebaseStorage storage = FirebaseStorage.getInstance();
+//        StorageReference storageRef = storage.getReferenceFromUrl("gs://you_firebase_app.appspot.com");
+//        StorageReference imagesRef = storageRef.child("images/name_of_your_image.jpg");
+//
+//        UploadTask uploadTask = imagesRef.putBytes(data);
+//        uploadTask.addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle unsuccessful uploads
+//            }
+//        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+//                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//                // Do what you want
+//            }
+//        });
+//    }
 
     interface OnUDBReceivedListener{
         void onUDBReceived();

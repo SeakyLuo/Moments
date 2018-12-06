@@ -45,7 +45,7 @@ public class FullPostActivity extends AppCompatActivity {
     private ImageButton share;
     private ImageView usericon;
     private EditText edit_comment;
-    private Intent intent;
+    private Post post;
     private FullPostCommentsFragment commentsFragment;
     private FullPostRatingsFragment ratingsFragment;
     private AddCommentFragment addCommentFragment;
@@ -56,8 +56,8 @@ public class FullPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_post);
         SwipeBackHelper.onCreate(this);
 
-        intent = getIntent();
-        final Post post = (Post) intent.getSerializableExtra(POST);
+        Intent intent = getIntent();
+        post = intent.getParcelableExtra(POST);
 
         commentsFragment = new FullPostCommentsFragment();
         ratingsFragment = new FullPostRatingsFragment();
@@ -114,7 +114,7 @@ public class FullPostActivity extends AppCompatActivity {
                 helper.show();
             }
         });
-//        include.setClickable(false);
+        include.setClickable(false);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -155,7 +155,7 @@ public class FullPostActivity extends AppCompatActivity {
         if (intent.getStringExtra(ADD_COMMENT) != null) showAddComment();
     }
 
-    private void setPost(Post post){
+    private void setPost(final Post post){
         poster_icon = include.findViewById(R.id.post_usericon);
         username = include.findViewById(R.id.post_username);
         time = include.findViewById(R.id.post_time);
@@ -172,14 +172,14 @@ public class FullPostActivity extends AppCompatActivity {
         });
         User user = User.findUser(post.getUserid());
         username.setText(user.getName());
-//        poster_icon.setImageBitmap(user.getIcon());
-        time.setText(TimeText(post.getTime()));
+        if (user.getIcon() == null) poster_icon.setImageResource(R.drawable.user_icon);
+        else poster_icon.setImageBitmap(user.getIcon());
+        time.setText(TimeText(new Date(post.getTime())));
         content.setText(post.getContent());
         collect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                    setCollect(post.isCollected(userid));
-                setCollect(true);
+                setCollect(post);
             }
         });
     }
@@ -192,8 +192,11 @@ public class FullPostActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void setCollect(boolean collected){
-        collect.setImageResource(collected ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
+    public void setCollect(Post post){
+        boolean collected = post.isCollected(User.user.getId());
+        collect.setImageResource(!collected ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
+        if (collected) User.user.collect(post);
+        else User.user.uncollect(post);
     }
 
     @Override

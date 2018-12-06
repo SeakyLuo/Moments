@@ -14,6 +14,7 @@ public class Rating implements Parcelable {
     private int rating;
     private Long time;
     private Post.Key postKey;
+    public Rating(){}
     public Rating(String userid, int rating, Long time, Post.Key postKey){
         this.userid = userid;
         this.rating = rating;
@@ -74,6 +75,7 @@ public class Rating implements Parcelable {
         String userid;
         Long time;
         Post.Key postKey;
+        public Key() {}
         public Key(String userid, Long time, Post.Key postKey){
             this.userid = userid;
             this.time = time;
@@ -82,11 +84,7 @@ public class Rating implements Parcelable {
 
         protected Key(Parcel in) {
             userid = in.readString();
-            if (in.readByte() == 0) {
-                time = null;
-            } else {
-                time = in.readLong();
-            }
+            time = in.readLong();
             postKey = in.readParcelable(Post.Key.class.getClassLoader());
         }
 
@@ -121,7 +119,7 @@ public class Rating implements Parcelable {
             if (!(obj instanceof Key))
                 return false;
             Key k = (Key) obj;
-            return postKey.equals(k.postKey) && userid == k.userid;
+            return postKey.equals(k.postKey) && userid.equals(k.userid);
         }
     }
     public static class TimeComparator implements Comparator<Key> {
