@@ -46,5 +46,6 @@ public class SaveAsDraftDialog extends DialogFragment {
     private void close(){
         SaveAsDraftDialog.this.dismiss();
         activity.finish();
+        // TODO: Animation
     }
 }

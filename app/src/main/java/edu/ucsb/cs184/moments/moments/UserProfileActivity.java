@@ -68,7 +68,7 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                // TODO: Animation
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
 

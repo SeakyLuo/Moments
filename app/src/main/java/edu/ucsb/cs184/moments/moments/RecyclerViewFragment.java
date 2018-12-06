@@ -42,13 +42,64 @@ public class RecyclerViewFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy){
                 super.onScrolled(recyclerView, dx, dy);
-                for (View view : hideViews){
+                for (final View view: hideViews){
                     if (view instanceof FloatingActionButton){
-                        if (dy > 0 && view.isShown()) ((FloatingActionButton) view).hide();
-                        else if (dy < 0) ((FloatingActionButton) view).show();
-                    }else{
-                        if (dy > 0 && view.isShown()) view.setVisibility(View.GONE);
-                        else if (dy < 0) view.setVisibility(View.VISIBLE);
+                        if (dy > 0) ((FloatingActionButton) view).hide();
+                        else ((FloatingActionButton) view).show();
+                    }
+//                    else if (view instanceof BottomNavigationView) {
+//                        if (dy > 0){
+//                            // This is hide
+//                            // Prepare the View for the animation
+//                            view.setVisibility(View.VISIBLE);
+//                            view.setAlpha(0.0f);
+//                            // Start the animation
+//                            view.animate()
+//                                    .translationY(view.getHeight())
+//                                    .alpha(1.0f)
+//                                    .setListener(null);
+//                        }else{
+//                            // This is show
+//                            view.animate()
+//                                .translationY(0)
+//                                .alpha(0.0f)
+//                                .setListener(new AnimatorListenerAdapter() {
+//                                    @Override
+//                                    public void onAnimationEnd(Animator animation) {
+//                                        super.onAnimationEnd(animation);
+//                                        view.setVisibility(View.GONE);
+//                                    }
+//                                });
+//                        }
+//                    }
+//                    else if (view instanceof Toolbar){
+//                        if (dy > 0){
+//                            // This is hide
+//                            // Prepare the View for the animation
+//                            view.setVisibility(View.VISIBLE);
+//                            view.setAlpha(0.0f);
+//                            // Start the animation
+//                            view.animate()
+//                                    .translationY(-view.getHeight())
+//                                    .alpha(1.0f)
+//                                    .setListener(null);
+//                        }else{
+//                            // This is show
+//                            view.animate()
+//                                    .translationY(0)
+//                                    .alpha(0.0f)
+//                                    .setListener(new AnimatorListenerAdapter() {
+//                                        @Override
+//                                        public void onAnimationEnd(Animator animation) {
+//                                            super.onAnimationEnd(animation);
+//                                            view.setVisibility(View.GONE);
+//                                        }
+//                                    });
+//                        }
+//                    }
+                    else{
+                        if (dy > 0) view.setVisibility(View.GONE);
+                        else view.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -57,7 +108,7 @@ public class RecyclerViewFragment extends Fragment {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
-                for (OnRefreshListener listener : listeners)
+                for (OnRefreshListener listener: listeners)
                     listener.onRefresh();
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -75,7 +126,7 @@ public class RecyclerViewFragment extends Fragment {
 //            @Override
 //            public void run() {
 //                swipeRefreshLayout.setRefreshing(true);
-//                for (OnRefreshListener listener : listeners)
+//                for (OnRefreshListener listener: listeners)
 //                    listener.onRefresh();
 //                swipeRefreshLayout.setRefreshing(false);
 //            }

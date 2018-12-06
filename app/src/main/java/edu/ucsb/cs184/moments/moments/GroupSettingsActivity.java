@@ -82,6 +82,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
 //                    User.user.quitGroup(group.getId());
 //                    activity.finish();
                     // TODO: needs another finish
+                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
                     return true;
                 }
             });

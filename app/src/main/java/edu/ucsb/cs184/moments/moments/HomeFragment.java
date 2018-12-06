@@ -45,6 +45,7 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        toolbar = view.findViewById(R.id.home_toolbar);
         fab = view.findViewById(R.id.home_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,15 +69,21 @@ public class HomeFragment extends Fragment {
                 refresh();
             }
         });
-        fragment.addHiddenView(toolbar);
-        fragment.addHiddenView(fab);
-        fragment.addHiddenView(nav);
         try {
             fragment.addElements(User.user.getTimeline());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        fragment.addHiddenView(fab);
+        fragment.addHiddenView(toolbar);
+        fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.home_content);
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+        });
         return view;
     }
 
@@ -115,7 +122,7 @@ public class HomeFragment extends Fragment {
         if (resultCode != RESULT_OK) return;
         if (requestCode == REQUEST_POST){
             try {
-                fragment.addElement(data.getSerializableExtra(EditPostActivity.POST));
+                fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
             } catch (Exception e) {
                 e.printStackTrace();
             }
