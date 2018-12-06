@@ -95,15 +95,30 @@ public class User implements Parcelable {
     }
     public ArrayList<Post> getPosts() { return posts; }
     public ArrayList<Post> getDrafts() { return drafts; }
-    public ArrayList<Post.Key> getCollections() { return collections; }
+    public ArrayList<Post> getCollections() {
+        ArrayList<Post> data = new ArrayList<>();
+        for (Post.Key key: collections){
+            Post post = Post.findPost(key);
+            // Should let user know it's not found/deleted
+            if (post != null)
+                data.add(post);
+        }
+        return data;
+    }
+    public ArrayList<Post.Key> getCollectionKeys(){
+        return collections;
+    }
     public ArrayList<Comment> getComments_made() { return comments_made; }
     public ArrayList<String> getFollowers() { return followers; }
     public ArrayList<String> getFollowing() { return following; }
     public ArrayList<String> getSearchHistory() { return search_history; }
     public ArrayList<Comment> getComments_recv() {
         ArrayList<Comment> data = new ArrayList<>();
-        for (Comment.Key key: comments_recv)
-            data.add(Comment.findComment(key));
+        for (Comment.Key key: comments_recv){
+            Comment comment = Comment.findComment(key);
+            if (comment != null)
+                data.add(comment);
+        }
         return data;
     }
     public boolean isAnonymous() { return id.equals(ANONYMOUS); }
@@ -113,14 +128,17 @@ public class User implements Parcelable {
     public boolean hasNewComment() { return comments_notification.size() != 0; }
     public boolean hasNewRating() { return ratings_notification.size() != 0; }
     public ArrayList<Post.Key> getPostKeys() {
-        ArrayList<Post.Key> keys = new ArrayList<>();
-        for (Post post: posts) keys.add(post.getKey());
-        return keys;
+        ArrayList<Post.Key> data = new ArrayList<>();
+        for (Post post: posts) data.add(post.getKey());
+        return data;
     }
     public ArrayList<Post> getTimeline(){
         ArrayList<Post> data = new ArrayList<>();
-        for (Post.Key key: timeline)
-            data.add(Post.findPost(key));
+        for (Post.Key key: timeline){
+            Post post = Post.findPost(key);
+            if (post != null)
+                data.add(post);
+        }
         return data;
     }
     public void PostNotification(Post post, boolean remove){
@@ -213,7 +231,7 @@ public class User implements Parcelable {
     public void remove_post(Post post){
         posts.remove(post);
         upload("posts", posts);
-        timeline.remove(post);
+        timeline.remove(post.getKey());
         upload("timeline", timeline);
         for (String id: followers){
             findUser(id).PostNotification(post, true);
@@ -221,13 +239,13 @@ public class User implements Parcelable {
     }
     public void make_comment(Comment comment) {
         comments_made.add(0, comment);
-        FirebaseHelper.findPost(comment.getPostKey()).addComment(comment);
+        Post.findPost(comment.getPostKey()).addComment(comment);
         upload("comments_made", comments_made);
         findUser(comment.getUserid()).CommentNotification(comment, false);
     }
     public void delete_comment(Comment comment, boolean made) {
         comments_made.remove(comment);
-        FirebaseHelper.findPost(comment.getPostKey()).removeComment(comment);
+        Post.findPost(comment.getPostKey()).removeComment(comment);
         upload("comments_made", comments_made);
         findUser(comment.getUserid()).CommentNotification(comment, true);
     }
@@ -242,13 +260,13 @@ public class User implements Parcelable {
     }
     public void unfollow(final String userid) {
         following.remove(userid);
-        User user = findUser(userid);
+        upload("following", following);
         for (Post.Key postKey: (ArrayList<Post.Key>) timeline.clone()){
             if (postKey.userid.equals(userid)) timeline.remove(postKey);
         }
-        user.FollowerNotification(User.user.id, true);
-        upload("following", following);
         upload("timeline", timeline);
+        User user = findUser(userid);
+        user.FollowerNotification(User.user.id, true);
     }
     public void createGroup(String groupid){
         groups.add(0, groupid);
@@ -275,8 +293,8 @@ public class User implements Parcelable {
     public void rate(Rating rating){
         boolean remove = rating.getRating() == 0;
         findUser(rating.getUserid()).RatingNotification(rating);
-        if (remove) FirebaseHelper.findPost(rating.getPostKey()).removeRating(rating);
-        else FirebaseHelper.findPost(rating.getPostKey()).addRating(rating);
+        if (remove) Post.findPost(rating.getPostKey()).removeRating(rating);
+        else Post.findPost(rating.getPostKey()).addRating(rating);
     }
     public void saveAsDraft(Post post){
         drafts.add(0, post);

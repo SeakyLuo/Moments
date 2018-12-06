@@ -67,7 +67,7 @@ public class Post implements Parcelable {
     public Boolean isAnonymous() { return userid.equals(User.ANONYMOUS); }
     public Boolean isCollected() {
         Key postKey = getKey();
-        for (Key key: User.user.getCollections())
+        for (Key key: User.user.getCollectionKeys())
             if (postKey.equals(key)) return true;
         return false;
     }

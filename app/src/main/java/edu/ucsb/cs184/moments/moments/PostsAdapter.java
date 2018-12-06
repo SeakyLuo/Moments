@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class PostsAdapter extends CustomAdapter {
@@ -24,9 +25,10 @@ public class PostsAdapter extends CustomAdapter {
         return holder;
     }
 
-    public static String TimeText(Date date){
-        Date now = new Date();
-        long delta_sec = (now.getTime() - date.getTime()) / 1000;
+    public static String TimeText(Long time){
+        Calendar date = Calendar.getInstance(), now = Calendar.getInstance();
+        date.setTimeInMillis(time);
+        long delta_sec = (now.getTimeInMillis() - time) / 1000;
         if (delta_sec == 0) return "Just now";
         else if (delta_sec < 60) return delta_sec + " second"+ ((delta_sec == 1) ? "" : "s") +" ago";
         long delta_min = delta_sec / 60;
@@ -35,7 +37,7 @@ public class PostsAdapter extends CustomAdapter {
         if (delta_hour < 24) return delta_hour + " hour"+ ((delta_hour == 1) ? "" : "s") +" ago";
         long delta_day = delta_hour / 24;
         if (delta_day < 7) return delta_day + " day"+ ((delta_hour == 1) ? "" : "s") +" ago";
-        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+        return new SimpleDateFormat("yyyy-MM-dd").format(time);
     }
 
     public static class ViewHolder extends CustomAdapter.CustomViewHolder {
@@ -114,7 +116,7 @@ public class PostsAdapter extends CustomAdapter {
             User user = User.findUser(data.getUserid());
             usericon.setImageBitmap(user.getIcon());
             username.setText(user.getName());
-            time.setText(TimeText(new Date(data.getTime())));
+            time.setText(TimeText(data.getTime()));
             content.setText(data.getContent());
             ratingBar.setRating(data.ratings_avg());
             setCollect(data.isCollected());

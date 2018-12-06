@@ -21,12 +21,13 @@ import android.widget.Toast;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 
 public class FullPostActivity extends AppCompatActivity {
 
     public static final String POST = "post";
     public static final String ADD_COMMENT = "Add Comment";
+    public static final int DELETE_POST = 1;
 
     private TabViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -77,6 +78,7 @@ public class FullPostActivity extends AppCompatActivity {
                 Intent backIntent = new Intent();
                 setResult(RESULT_OK, backIntent);
                 finish();
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
         more.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +107,11 @@ public class FullPostActivity extends AppCompatActivity {
                                 return true;
                             case R.id.fullpostmenu_delete:
                                 User.user.remove_post(post);
+                                Intent intent = new Intent();
+                                intent.putExtra(POST, post);
+                                setResult(FullPostActivity.DELETE_POST, intent);
+                                finish();
+                                overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
                                 return true;
                         }
                         return false;
@@ -165,18 +172,21 @@ public class FullPostActivity extends AppCompatActivity {
         comment = include.findViewById(R.id.post_comment);
         collect = include.findViewById(R.id.post_collect);
         share = include.findViewById(R.id.post_share);
+        User user = User.findUser(post.getUserid());
         poster_icon.setClickable(true);
         poster_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(FullPostActivity.this, UserProfileActivity.class);
+                intent.putExtra(UserProfileActivity.USERID, post.getUserid());
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
-        User user = User.findUser(post.getUserid());
         username.setText(user.getName());
         if (user.getIcon() == null) poster_icon.setImageResource(R.drawable.user_icon);
         else poster_icon.setImageBitmap(user.getIcon());
-        time.setText(TimeText(new Date(post.getTime())));
+        time.setText(TimeText(post.getTime()));
         content.setText(post.getContent());
         setCollect(post.isCollected());
         collect.setOnClickListener(new View.OnClickListener() {
@@ -187,11 +197,12 @@ public class FullPostActivity extends AppCompatActivity {
         });
     }
 
-    public static String TimeText(Date date){
-        Date now = new Date();
-        if (now.getYear() != date.getYear()) return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date);
-        else if (now.getDay() == date.getDay()) return new SimpleDateFormat("HH:mm").format(date);
-        return new SimpleDateFormat("MM-dd HH:mm").format(date);
+    public static String TimeText(Long time){
+        Calendar date = Calendar.getInstance(), now = Calendar.getInstance();
+        date.setTimeInMillis(time);
+        if (now.get(Calendar.YEAR) != date.get(Calendar.YEAR)) return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(time);
+        else if (now.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR)) return new SimpleDateFormat("HH:mm").format(time);
+        return new SimpleDateFormat("MM-dd HH:mm").format(time);
     }
 
     public void collect(Post post){

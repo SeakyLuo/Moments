@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 
 public class Comment implements Parcelable {
     private String userid; // Commentator
@@ -68,7 +67,7 @@ public class Comment implements Parcelable {
     }
     public String getUserid() { return userid; }
     public String getContent() { return content; }
-    public Date getTime() { return new Date(time); }
+    public Long getTime() { return time; }
     public Key getKey() { return new Key(userid, time); }
     public Post.Key getPostKey() { return postKey; }
     public Comment.Key getParent() { return parent; }

@@ -68,7 +68,7 @@ public class FullPostCommentsFragment extends Fragment {
     public void addComment(Comment comment){
         try {
             fragment.addElement(comment);
-        } catch (Exception e) {
+        } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();
         }
     }

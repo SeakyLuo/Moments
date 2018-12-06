@@ -71,7 +71,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
-
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +123,7 @@ public class UserProfileActivity extends AppCompatActivity {
             gender.setVisibility(View.VISIBLE);
             gender.setImageDrawable(user.getGender().equals(getString(R.string.male)) ? getDrawable(R.drawable.ic_male) : getDrawable(R.drawable.ic_female));
         }
-        following.setText(user.getFollowers().size() + " followers");
+        following.setText(user.getFollowers().size() + " following");
         followers.setText(user.getFollowers().size() + " followers");
         intro.setText("Intro: " + user.getIntro());
         if (userid.equals(User.user.getId())){

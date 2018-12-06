@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import com.google.gson.Gson;
 
 import java.util.Comparator;
-import java.util.Date;
 
 public class Rating implements Parcelable {
     private String userid;  //rater
@@ -44,7 +43,7 @@ public class Rating implements Parcelable {
     public Boolean isAnonymous() { return userid.equals(User.ANONYMOUS); }
     public String getUserid() { return userid; }
     public int getRating() { return rating; }
-    public Date getTime() { return new Date(time); }
+    public Long getTime() { return time; }
     public Post.Key getPostKey() {
         return postKey;
     }

@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Date;
-
 public class CommentsAdapter extends CustomAdapter {
 
     @Override
@@ -17,8 +15,8 @@ public class CommentsAdapter extends CustomAdapter {
         return holder;
     }
 
-    public static String TimeText(Date date){
-        return PostsAdapter.TimeText(date);
+    public static String TimeText(Long time){
+        return PostsAdapter.TimeText(time);
     }
 
     public static class ViewHolder extends CustomAdapter.CustomViewHolder {

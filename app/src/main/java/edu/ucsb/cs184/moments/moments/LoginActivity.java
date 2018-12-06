@@ -23,6 +23,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String INVALID_EMAIL = "Please enter a valid email address!";
     public static final String INVALID_PASSWORD = "Please enter a valid password!";
+    public static final String AUTHENTICATING = "Authenticating...";
+    public static final String FETCH_DATA = "Fetching Data...";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final int REQUEST_SIGNUP = 0;
@@ -33,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button _loginButton;
     private TextView _signupLink;
     private TextView _forgotPassword;
-    private ProgressDialog authDialog;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onStart() {
@@ -41,11 +43,11 @@ public class LoginActivity extends AppCompatActivity {
         if (!FirebaseHelper.initFinished())
             FirebaseHelper.init();
         mAuth = FirebaseAuth.getInstance();
-        authDialog = new ProgressDialog(this);
-        authDialog.setIndeterminate(true);
-        authDialog.setMessage("Authenticating...");
-        authDialog.setCanceledOnTouchOutside(false);
-        authDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage(AUTHENTICATING);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 _loginButton.setEnabled(true);
@@ -120,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         _loginButton.setEnabled(false);
-        authDialog.show();
+        progressDialog.show();
 
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
@@ -156,10 +158,13 @@ public class LoginActivity extends AppCompatActivity {
         if (FirebaseHelper.initFinished()){
             onDataReceived();
         }else {
+            progressDialog.setMessage(FETCH_DATA);
+            progressDialog.show();
             FirebaseHelper.setOnUDBReceivedListener(new FirebaseHelper.OnUDBReceivedListener() {
                 @Override
                 public void onUDBReceived() {
                     onDataReceived();
+                    progressDialog.dismiss();
                 }
             });
         }
@@ -168,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
     private void onLoginFailed() {
         Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
         _loginButton.setEnabled(true);
-        authDialog.dismiss();
+        progressDialog.dismiss();
     }
 
     private boolean validate() {
@@ -187,7 +192,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onDataReceived(){
-        authDialog.dismiss();
+        progressDialog.dismiss();
         if (User.firebaseUser == null) return;
         User.user = FirebaseHelper.findUser(User.firebaseUser.getUid());
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);

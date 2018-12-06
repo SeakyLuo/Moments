@@ -9,11 +9,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class EditPostActivity extends AppCompatActivity {
 
     public static final String POST = "Post";
+    public static final int MAKE_POST = 0;
 
     private ImageButton back;
     private ImageButton send;
@@ -84,6 +85,6 @@ public class EditPostActivity extends AppCompatActivity {
     }
 
     private Post getPost(){
-        return new Post(User.user.getId(), edit_content.getText().toString(), new Date().getTime());
+        return new Post(User.user.getId(), edit_content.getText().toString(), Calendar.getInstance().getTimeInMillis());
     }
 }

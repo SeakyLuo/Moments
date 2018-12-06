@@ -44,8 +44,8 @@ public class RecyclerViewFragment extends Fragment {
                 super.onScrolled(recyclerView, dx, dy);
                 for (final View view: hideViews){
                     if (view instanceof FloatingActionButton){
-                        if (dy > 0) ((FloatingActionButton) view).hide();
-                        else ((FloatingActionButton) view).show();
+                        if (dy > 0 && view.isShown()) ((FloatingActionButton) view).hide();
+                        else if (dy <= 0) ((FloatingActionButton) view).show();
                     }
 //                    else if (view instanceof BottomNavigationView) {
 //                        if (dy > 0){
@@ -98,8 +98,8 @@ public class RecyclerViewFragment extends Fragment {
 //                        }
 //                    }
                     else{
-                        if (dy > 0) view.setVisibility(View.GONE);
-                        else view.setVisibility(View.VISIBLE);
+                        if (dy > 0 && view.isShown()) view.setVisibility(View.GONE);
+                        else if (dy <= 0) view.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -144,14 +144,18 @@ public class RecyclerViewFragment extends Fragment {
 
     public void addHiddenView(View view) { hideViews.add(view); }
 
-    public void addElement(Object obj) throws Exception {
+    public void addElement(Object obj) throws UnsupportedDataException {
         if (isValidType(obj)) adapter.addElement(obj);
-        else throw new Exception("Unsupported Element!");
+        else throw new UnsupportedDataException();
     }
-    public void addElements(List data) throws Exception {
+    public void addElements(List data) throws UnsupportedDataException {
         if (data.size() == 0) return;
         if (isValidType(data.get(0))) adapter.addElements(data);
-        else throw new Exception("Unsupported data!");
+        else throw new UnsupportedDataException();
+    }
+    public void removeElement(Object obj) throws UnsupportedDataException{
+        if (isValidType(obj)) adapter.removeElement(obj);
+        else throw new UnsupportedDataException();
     }
     public boolean hasData(){
         return adapter.hasData();
@@ -178,5 +182,14 @@ public class RecyclerViewFragment extends Fragment {
 
     public interface OnRefreshListener{
         void onRefresh();
+    }
+
+    public class UnsupportedDataException extends Exception{
+        public UnsupportedDataException(){
+            super("Unsupported data!");
+        }
+        public UnsupportedDataException(String text){
+            super(text);
+        }
     }
 }

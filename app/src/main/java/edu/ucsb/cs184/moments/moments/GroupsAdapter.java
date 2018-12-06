@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class GroupsAdapter extends CustomAdapter {
@@ -25,18 +24,16 @@ public class GroupsAdapter extends CustomAdapter {
         return holder;
     }
 
-    public static String TimeText(Date date){
-        Date now = new Date();
-        long delta_day = now.getDay() - date.getDay();
-        if (delta_day == 0) return new SimpleDateFormat("HH:mm").format(date);
+    public static String TimeText(Long time){
+        Calendar date = Calendar.getInstance(), now = Calendar.getInstance();
+        date.setTimeInMillis(time);
+        int delta_year = now.get(Calendar.YEAR) - date.get(Calendar.YEAR);
+        if (delta_year != 0) return new SimpleDateFormat("yyyy-MM-dd").format(time);
+        int delta_day = now.get(Calendar.DAY_OF_YEAR) - date.get(Calendar.DAY_OF_YEAR);
+        if (delta_day == 0) return new SimpleDateFormat("HH:mm").format(time);
         else if (delta_day == 1) return "Yesterday";
-        Calendar c1 = Calendar.getInstance(), c2 = Calendar.getInstance();
-        c1.setTime(date);
-        c2.setTime(now);
-        if (c1.get(Calendar.DAY_OF_WEEK) == c2.get(Calendar.DAY_OF_WEEK)) return c1.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US);;
-        long delta_year = now.getYear() - date.getYear();
-        if (delta_year == 0) return new SimpleDateFormat("MM-dd").format(date);
-        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+        if (date.get(Calendar.WEEK_OF_YEAR) == now.get(Calendar.WEEK_OF_YEAR)) return date.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US);;
+        return new SimpleDateFormat("MM-dd").format(time);
     }
 
     public static class ViewHolder extends CustomAdapter.CustomViewHolder {
@@ -91,13 +88,13 @@ public class GroupsAdapter extends CustomAdapter {
             group_icon.setImageBitmap(data.getIcon());
             ArrayList<Post> posts = data.getPosts();
             if (posts.size() == 0){
-                time.setText(TimeText(new Date()));
+                time.setText(TimeText(Calendar.getInstance().getTimeInMillis()));
                 String managerid = data.getManagerid();
                 String name = User.findUser(managerid).getName();
                 content.setText(managerid.equals(User.user.getId()) ? "You" : name + " created a new group.");
             }else{
                 Post post = posts.get(posts.size() - 1);
-                time.setText(TimeText(new Date(post.getTime())));
+                time.setText(TimeText(post.getTime()));
                 content.setText(User.findUser(post.getUserid()).getName() + ": " + post.getContent());
             }
         }

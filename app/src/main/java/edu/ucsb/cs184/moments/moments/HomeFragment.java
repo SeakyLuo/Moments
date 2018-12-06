@@ -20,8 +20,6 @@ import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment {
 
-    public static final int REQUEST_POST = 0;
-
     private Context context;
     private DrawerLayout drawer;
     private Toolbar toolbar;
@@ -52,7 +50,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EditPostActivity.class);
-                startActivityForResult(intent, REQUEST_POST);
+                startActivityForResult(intent, EditPostActivity.MAKE_POST);
                 getActivity().overridePendingTransition(R.anim.push_down_in, R.anim.push_up_out);
             }
         });
@@ -122,12 +120,22 @@ public class HomeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
-        if (requestCode == REQUEST_POST){
-            try {
-                fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        switch (requestCode){
+            case EditPostActivity.MAKE_POST:
+                try {
+                    fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
+                }catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }finally {
+                    break;
+                }
+            case FullPostActivity.DELETE_POST:
+                try {
+                    fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
 }

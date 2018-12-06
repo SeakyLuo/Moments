@@ -85,12 +85,22 @@ public class GroupPostsActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
-        if (requestCode == REQUEST_POST){
-            try {
-                fragment.addElement(data.getSerializableExtra(EditPostActivity.POST));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        switch (requestCode){
+            case EditPostActivity.MAKE_POST:
+                try {
+                    fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
+                }catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }finally {
+                    break;
+                }
+            case FullPostActivity.DELETE_POST:
+                try {
+                    fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
 
