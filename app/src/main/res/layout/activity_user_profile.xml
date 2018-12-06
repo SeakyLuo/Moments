@@ -79,8 +79,10 @@
     </android.support.design.widget.AppBarLayout>
 
     <include
-        layout="@layout/view_user_profile"
         android:id="@+id/content_user_profile"
+        layout="@layout/view_user_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_anchor="@+id/up_app_bar"
         app:layout_anchorGravity="bottom"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

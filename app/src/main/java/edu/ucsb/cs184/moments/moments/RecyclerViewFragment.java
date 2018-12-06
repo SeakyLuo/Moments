@@ -8,10 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,9 @@ public class RecyclerViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.recycler_view, container, false);
         swipeRefreshLayout = view.findViewById(R.id.swipe_container);
         recyclerView = view.findViewById(R.id.recyclerview);
+        LinearLayoutManager linearLayout = new LinearLayoutManager(getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        recyclerView.setLayoutManager(linearLayout);
         recyclerView.setAdapter(adapter);
         if (showDivider) recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -51,9 +56,10 @@ public class RecyclerViewFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                for (OnRefreshListener listener : listeners){
+                swipeRefreshLayout.setRefreshing(true);
+                for (OnRefreshListener listener : listeners)
                     listener.onRefresh();
-                }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
 //        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
@@ -65,17 +71,15 @@ public class RecyclerViewFragment extends Fragment {
          * Showing Swipe Refresh animation on activity create
          * As animation won't start on onCreate, post runnable is used
          */
-        swipeRefreshLayout.post(new Runnable() {
-
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-                for (OnRefreshListener listener : listeners){
-                    listener.onRefresh();
-                }
-            }
-        });
-
+//        swipeRefreshLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                swipeRefreshLayout.setRefreshing(true);
+//                for (OnRefreshListener listener : listeners)
+//                    listener.onRefresh();
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
         return view;
     }
 
@@ -91,12 +95,12 @@ public class RecyclerViewFragment extends Fragment {
 
     public void addElement(Object obj) throws Exception {
         if (isValidType(obj)) adapter.addElement(obj);
-        else throw new Exception("Unsupport Element!");
+        else throw new Exception("Unsupported Element!");
     }
     public void addElements(List data) throws Exception {
         if (data.size() == 0) return;
         if (isValidType(data.get(0))) adapter.addElements(data);
-        else throw new Exception("Unsupport data!");
+        else throw new Exception("Unsupported data!");
     }
     public boolean hasData(){
         return adapter.hasData();

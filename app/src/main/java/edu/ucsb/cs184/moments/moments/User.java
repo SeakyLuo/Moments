@@ -1,6 +1,8 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
@@ -8,7 +10,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class User {
+public class User implements Parcelable {
     public static final String ANONYMOUS = "ANONYMOUS";
     public static User user;
     public static FirebaseUser firebaseUser;
@@ -41,6 +43,42 @@ public class User {
         this.name = name;
         this.id = id;
     }
+
+    protected User(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        intro = in.readString();
+        icon = in.readParcelable(Bitmap.class.getClassLoader());
+        user_number = in.readInt();
+        gender = in.readString();
+        posts = in.createTypedArrayList(Post.CREATOR);
+        drafts = in.createTypedArrayList(Post.CREATOR);
+        collections = in.createTypedArrayList(Post.Key.CREATOR);
+        comments_made = in.createTypedArrayList(Comment.CREATOR);
+        comments_recv = in.createTypedArrayList(Comment.Key.CREATOR);
+        ratings_made = in.createTypedArrayList(Rating.CREATOR);
+        ratings_recv = in.createTypedArrayList(Rating.Key.CREATOR);
+        groups = in.createStringArrayList();
+        followers = in.createStringArrayList();
+        following = in.createStringArrayList();
+        comments_notification = in.createTypedArrayList(Comment.Key.CREATOR);
+        posts_notification = in.createTypedArrayList(Post.Key.CREATOR);
+        ratings_notification = in.createTypedArrayList(Rating.Key.CREATOR);
+        timeline = in.createTypedArrayList(Post.Key.CREATOR);
+        search_history = in.createStringArrayList();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public void setNumber(int number){ this.user_number = number; }
     public int getNumber() { return user_number; }
@@ -249,7 +287,37 @@ public class User {
         return (new Gson()).fromJson(json, User.class);
     }
     public static User findUser(String id){
-        if (User.user != null && id == User.user.getId()) return User.user;
+        if (User.user != null && User.user.getId().equals(id)) return User.user;
         return FirebaseHelper.findUser(id);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(intro);
+        dest.writeParcelable(icon, flags);
+        dest.writeInt(user_number);
+        dest.writeString(gender);
+        dest.writeTypedList(posts);
+        dest.writeTypedList(drafts);
+        dest.writeTypedList(collections);
+        dest.writeTypedList(comments_made);
+        dest.writeTypedList(comments_recv);
+        dest.writeTypedList(ratings_made);
+        dest.writeTypedList(ratings_recv);
+        dest.writeStringList(groups);
+        dest.writeStringList(followers);
+        dest.writeStringList(following);
+        dest.writeTypedList(comments_notification);
+        dest.writeTypedList(posts_notification);
+        dest.writeTypedList(ratings_notification);
+        dest.writeTypedList(timeline);
+        dest.writeStringList(search_history);
     }
 }

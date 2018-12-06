@@ -16,7 +16,7 @@ public class FirebaseHelper {
     private static ArrayList<OnDataReceivedListener> listeners = new ArrayList<>();
     private static FirebaseDatabase firebase;
     private static DatabaseReference db;
-    private static DatabaseReference udb, gdb, uc, gc;
+    private static DatabaseReference udb, gdb, uc, gc, uudb;
     private static DataSnapshot uds, gds, ucds, gcds;
 
     public static void init(){
@@ -30,8 +30,10 @@ public class FirebaseHelper {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("fuck","uds");
                 uds = dataSnapshot;
-                if (User.firebaseUser != null)
+                if (User.firebaseUser != null){
+                    uudb = udb.child(User.firebaseUser.getUid());
                     User.user = uds.child(User.firebaseUser.getUid()).getValue(User.class);
+                }
                 for (OnDataReceivedListener listener: listeners)
                     listener.onUDBReceived();
             }
@@ -204,8 +206,8 @@ public class FirebaseHelper {
          new Thread(new Runnable() {
             @Override
             public void run() {
-                if(udb != null && User.user != null)
-                    udb.child(User.user.getId()).child(key).setValue(data);
+                if(uudb != null && User.user != null)
+                    uudb.child(key).setValue(data);
             }
         }).start();
     }

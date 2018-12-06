@@ -36,9 +36,9 @@ public class GroupPostsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_posts);
-        data = getIntent();
-        group = (Group) data.getSerializableExtra(GroupsFragment.GROUP);
         SwipeBackHelper.onCreate(this);
+        data = getIntent();
+        group = FirebaseHelper.findGroup(data.getStringExtra(GroupsFragment.GROUP));
 
         fab = findViewById(R.id.gp_fab);
         back = findViewById(R.id.gp_back);

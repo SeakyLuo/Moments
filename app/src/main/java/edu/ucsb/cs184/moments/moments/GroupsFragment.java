@@ -35,7 +35,6 @@ public class GroupsFragment extends Fragment {
     private BottomNavigationView nav;
     private GroupsAdapter adapter;
     private RecyclerViewFragment fragment;
-    private ArrayList<String> groups = new ArrayList<>();
 
     @Nullable
     @Override
@@ -109,13 +108,10 @@ public class GroupsFragment extends Fragment {
     }
 
     public void setGroups(ArrayList<String> groups){
-        this.groups = groups;
-        for(String group : groups){
-            setGroup(Group.findGroup(group));
-        }
+        adapter.addElements(groups);
     }
 
-    public void setGroup(Group group){
+    public void addGroup(Group group){
         adapter.addElement(group);
     }
 
@@ -124,7 +120,7 @@ public class GroupsFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == CREATE_GROUP){
-            setGroup((Group) data.getSerializableExtra(GROUP));
+            addGroup((Group) data.getParcelableExtra(GROUP));
         }
     }
 }

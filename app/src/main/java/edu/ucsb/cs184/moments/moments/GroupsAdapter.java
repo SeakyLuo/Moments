@@ -60,7 +60,7 @@ public class GroupsAdapter extends CustomAdapter {
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, GroupPostsActivity.class);
-                    intent.putExtra(GroupsFragment.GROUP, data);
+                    intent.putExtra(GroupsFragment.GROUP, data.getId());
                     context.startActivity(intent);
                 }
             });

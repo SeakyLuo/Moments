@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
@@ -69,6 +70,15 @@ public class SettingsActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             // here we should call settings ui
             addPreferencesFromResource(R.xml.user_preferences);
+            ListPreference language = (ListPreference) findPreference("language");
+            language.setSummary(language.getValue());
+            language.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    preference.setSummary(newValue.toString());
+                    return true;
+                }
+            });
             Preference logout = findPreference("logout");
             logout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override

@@ -1,13 +1,14 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.Gson;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Group implements Serializable {
+public class Group implements Parcelable {
     private String id;
     private String managerid;
     private String name;
@@ -24,6 +25,29 @@ public class Group implements Serializable {
         this.managerid = managerid;
         this.icon = icon;
     }
+
+    protected Group(Parcel in) {
+        id = in.readString();
+        managerid = in.readString();
+        name = in.readString();
+        group_number = in.readInt();
+        intro = in.readString();
+        icon = in.readParcelable(Bitmap.class.getClassLoader());
+        members = in.createStringArrayList();
+        posts = in.createTypedArrayList(Post.CREATOR);
+    }
+
+    public static final Creator<Group> CREATOR = new Creator<Group>() {
+        @Override
+        public Group createFromParcel(Parcel in) {
+            return new Group(in);
+        }
+
+        @Override
+        public Group[] newArray(int size) {
+            return new Group[size];
+        }
+    };
 
     public void setId(String id) { if (id != null) this.id = id; }
     public String getId() { return id; }
@@ -80,4 +104,20 @@ public class Group implements Serializable {
         return (new Gson()).fromJson(json, Group.class);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(managerid);
+        dest.writeString(name);
+        dest.writeInt(group_number);
+        dest.writeString(intro);
+        icon.writeToParcel(dest, 0);
+        dest.writeStringArray((String[]) members.toArray());
+        dest.writeTypedList(posts);
+    }
 }

@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.jude.swipbackhelper.SwipeBackHelper;
+
 public class UserCollectionsActivity extends AppCompatActivity {
 
     private ImageButton back;
@@ -14,6 +16,7 @@ public class UserCollectionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_collections);
+        SwipeBackHelper.onCreate(this);
 
         back = findViewById(R.id.uc_back);
         fragment = new RecyclerViewFragment();
@@ -31,5 +34,17 @@ public class UserCollectionsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         fragment.show(getSupportFragmentManager(), R.id.content_collections);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        SwipeBackHelper.onPostCreate(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SwipeBackHelper.onDestroy(this);
     }
 }

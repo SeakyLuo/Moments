@@ -1,25 +1,47 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
+
 import com.google.gson.Gson;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 
-public class Post implements Serializable {
+public class Post implements Parcelable {
     private String userid;
     private String content;
     private Long time;
-
-    private ArrayList<Rating> ratings = new ArrayList<>();
     private ArrayList<Comment> comments = new ArrayList<>();
+    private ArrayList<Rating> ratings = new ArrayList<>();
 
     public Post(String userid, String content, Long time){
         this.userid = userid;
         this.content = content;
         this.time = time;
     }
+
+    protected Post(Parcel in) {
+        userid = in.readString();
+        content = in.readString();
+        time = in.readLong();
+        comments = in.createTypedArrayList(Comment.CREATOR);
+        ratings = in.createTypedArrayList(Rating.CREATOR);
+    }
+
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
 
     public Key getKey() { return new Key(userid, time); }
     public String getUserid() { return userid; }
@@ -66,13 +88,52 @@ public class Post implements Serializable {
         return p.getKey().equals(((Post) obj).getKey());
     }
 
-    public class Key {
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(userid);
+        dest.writeString(content);
+        if (time == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(time);
+        }
+    }
+
+    public static class Key implements Parcelable {
         String userid;
         Long time;
         public Key(String userid, Long time){
             this.userid = userid;
             this.time = time;
         }
+
+        protected Key(Parcel in) {
+            userid = in.readString();
+            if (in.readByte() == 0) {
+                time = null;
+            } else {
+                time = in.readLong();
+            }
+        }
+
+        public static final Creator<Key> CREATOR = new Creator<Key>() {
+            @Override
+            public Key createFromParcel(Parcel in) {
+                return new Key(in);
+            }
+
+            @Override
+            public Key[] newArray(int size) {
+                return new Key[size];
+            }
+        };
+
         @Override
         public boolean equals(@Nullable Object obj) {
             if (obj == null)
@@ -81,6 +142,17 @@ public class Post implements Serializable {
                 return false;
             Key k = (Key) obj;
             return time == k.time && userid == k.userid;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(userid);
+            dest.writeLong(time);
         }
     }
 
