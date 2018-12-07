@@ -58,11 +58,6 @@ public class UserProfileActivity extends AppCompatActivity {
         up_timeline = include.findViewById(R.id.up_timeline);
         fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostsAdapter());
-        try {
-            fragment.addElements(User.user.getPosts());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         fragment.show(getSupportFragmentManager(), R.id.up_timeline);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -129,8 +124,8 @@ public class UserProfileActivity extends AppCompatActivity {
             gender.setVisibility(View.VISIBLE);
             gender.setImageDrawable(user.getGender().equals(getString(R.string.male)) ? getDrawable(R.drawable.ic_male) : getDrawable(R.drawable.ic_female));
         }
-        following.setText(user.getFollowers().size() + " following");
-        followers.setText(user.getFollowers().size() + " followers");
+        following.setText("Following: " + user.getFollowing().size());
+        followers.setText("Followers: " + user.getFollowers().size());
         intro.setText("Intro: " + user.getIntro());
         posts_count.setText("Posts: " + user.getPosts().size());
         if (userid.equals(User.user.getId())){

@@ -45,7 +45,7 @@ public class FullPostActivity extends AppCompatActivity {
     private Post post;
     private FullPostCommentsFragment commentsFragment;
     private FullPostRatingsFragment ratingsFragment;
-    private AddCommentFragment addCommentFragment;
+    private AddCommentDialog addCommentDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class FullPostActivity extends AppCompatActivity {
 
         commentsFragment = new FullPostCommentsFragment();
         ratingsFragment = new FullPostRatingsFragment();
-        addCommentFragment = new AddCommentFragment();
+        addCommentDialog = new AddCommentDialog();
         backButton = findViewById(R.id.fullpost_back);
         more = findViewById(R.id.fullpost_more);
         include = findViewById(R.id.fullpost_post);
@@ -75,8 +75,8 @@ public class FullPostActivity extends AppCompatActivity {
         usericon = findViewById(R.id.fpac_user_icon);
         edit_comment = findViewById(R.id.fpac_editcomment);
 
-        addCommentFragment.setCaller(edit_comment, commentsFragment);
-        addCommentFragment.setPost(post);
+        addCommentDialog.setCaller(edit_comment, commentsFragment);
+        addCommentDialog.setPost(post);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,6 +229,6 @@ public class FullPostActivity extends AppCompatActivity {
     }
 
     private void showAddComment(){
-        addCommentFragment.showNow(getSupportFragmentManager(), ADD_COMMENT);
+        addCommentDialog.showNow(getSupportFragmentManager(), ADD_COMMENT);
     }
 }

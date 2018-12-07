@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import android.widget.ImageButton;
 
 import java.util.Date;
 
-public class AddCommentFragment extends DialogFragment {
+public class AddCommentDialog extends DialogFragment {
 
     private EditText edit_comment;
     private EditText parent_comment;
@@ -26,7 +27,8 @@ public class AddCommentFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_comment,container,false);
+        View view = inflater.inflate(R.layout.dialog_add_comment,container,false);
+        getDialog().getWindow().setGravity(Gravity.BOTTOM);
         edit_comment = view.findViewById(R.id.ac_editcomment);
         camera = view.findViewById(R.id.ac_camera);
         gallery = view.findViewById(R.id.ac_gallery);

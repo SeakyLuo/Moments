@@ -36,10 +36,36 @@ public class Comment implements Parcelable {
     protected Comment(Parcel in) {
         userid = in.readString();
         content = in.readString();
-        time = in.readLong();
-        // TODO read postkey or parent
+        if (in.readByte() == 0) {
+            time = null;
+        } else {
+            time = in.readLong();
+        }
+        postKey = in.readParcelable(Post.Key.class.getClassLoader());
+        parent = in.readParcelable(Key.class.getClassLoader());
         replies = in.createTypedArrayList(Comment.CREATOR);
         ratings = in.createTypedArrayList(Rating.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(userid);
+        dest.writeString(content);
+        if (time == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(time);
+        }
+        dest.writeParcelable(postKey, flags);
+        dest.writeParcelable(parent, flags);
+        dest.writeTypedList(replies);
+        dest.writeTypedList(ratings);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
@@ -90,20 +116,6 @@ public class Comment implements Parcelable {
     }
     public static Comment findComment(Key key){
         return FirebaseHelper.findComment(key);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(userid);
-        dest.writeString(content);
-        dest.writeLong(time);
-        dest.writeTypedList(replies);
-        dest.writeTypedList(ratings);
     }
 
     public static class Key implements Parcelable{

@@ -40,7 +40,7 @@ public class Rating implements Parcelable {
         }
     };
 
-    public Boolean isAnonymous() { return userid.equals(User.ANONYMOUS); }
+    public Boolean IsAnonymous() { return userid.equals(User.ANONYMOUS); }
     public String getUserid() { return userid; }
     public int getRating() { return rating; }
     public Long getTime() { return time; }
