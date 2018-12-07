@@ -23,19 +23,19 @@ public class User implements Parcelable {
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> drafts = new ArrayList<>();
     private ArrayList<Post.Key> collections = new ArrayList<>();
-    private ArrayList<Comment> comments_made = new ArrayList<>();
-    private ArrayList<Comment.Key> comments_recv = new ArrayList<>();
-    private ArrayList<Rating> ratings_made = new ArrayList<>();
-    private ArrayList<Rating.Key> ratings_recv = new ArrayList<>();
+    private ArrayList<Comment> commentsMade = new ArrayList<>();
+    private ArrayList<Comment.Key> commentsRecv = new ArrayList<>();
+    private ArrayList<Rating> ratingsMade = new ArrayList<>();
+    private ArrayList<Rating.Key> ratingsRecv = new ArrayList<>();
     private ArrayList<Message> messages = new ArrayList<>();
     private ArrayList<String> groups = new ArrayList<>();  // id
     private ArrayList<String> followers = new ArrayList<>();  // id
     private ArrayList<String> following = new ArrayList<>();  // id
-    private ArrayList<Comment.Key> comments_notification = new ArrayList<>();
-    private ArrayList<Post.Key> posts_notification = new ArrayList<>();
-    private ArrayList<Rating.Key> ratings_notification = new ArrayList<>();
+    private ArrayList<Comment.Key> commentsNotification = new ArrayList<>();
+    private ArrayList<Post.Key> postsNotification = new ArrayList<>();
+    private ArrayList<Rating.Key> ratingsNotification = new ArrayList<>();
     private ArrayList<Post.Key> timeline = new ArrayList<>();
-    private ArrayList<String> search_history = new ArrayList<>();
+    private ArrayList<String> searchHistory = new ArrayList<>();
 
     public User(){}
 
@@ -54,18 +54,18 @@ public class User implements Parcelable {
         posts = in.createTypedArrayList(Post.CREATOR);
         drafts = in.createTypedArrayList(Post.CREATOR);
         collections = in.createTypedArrayList(Post.Key.CREATOR);
-        comments_made = in.createTypedArrayList(Comment.CREATOR);
-        comments_recv = in.createTypedArrayList(Comment.Key.CREATOR);
-        ratings_made = in.createTypedArrayList(Rating.CREATOR);
-        ratings_recv = in.createTypedArrayList(Rating.Key.CREATOR);
+        commentsMade = in.createTypedArrayList(Comment.CREATOR);
+        commentsRecv = in.createTypedArrayList(Comment.Key.CREATOR);
+        ratingsMade = in.createTypedArrayList(Rating.CREATOR);
+        ratingsRecv = in.createTypedArrayList(Rating.Key.CREATOR);
         groups = in.createStringArrayList();
         followers = in.createStringArrayList();
         following = in.createStringArrayList();
-        comments_notification = in.createTypedArrayList(Comment.Key.CREATOR);
-        posts_notification = in.createTypedArrayList(Post.Key.CREATOR);
-        ratings_notification = in.createTypedArrayList(Rating.Key.CREATOR);
+        commentsNotification = in.createTypedArrayList(Comment.Key.CREATOR);
+        postsNotification = in.createTypedArrayList(Post.Key.CREATOR);
+        ratingsNotification = in.createTypedArrayList(Rating.Key.CREATOR);
         timeline = in.createTypedArrayList(Post.Key.CREATOR);
-        search_history = in.createStringArrayList();
+        searchHistory = in.createStringArrayList();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -110,29 +110,29 @@ public class User implements Parcelable {
         if (update) upload("collections", collections);
         return data;
     }
-    public ArrayList<Comment> getComments_made() { return comments_made; }
+    public ArrayList<Comment> getCommentsMade() { return commentsMade; }
     public ArrayList<String> getFollowers() { return followers; }
     public ArrayList<String> getFollowing() { return following; }
-    public ArrayList<String> getSearch_history() { return search_history; }
-    public ArrayList<Comment> getComments_recv() {
+    public ArrayList<String> getSearchHistory() { return searchHistory; }
+    public ArrayList<Comment> getCommentsRecv() {
         ArrayList<Comment> data = new ArrayList<>();
-        for (Comment.Key key: comments_recv){
+        for (Comment.Key key: commentsRecv){
             Comment comment = Comment.findComment(key);
             if (comment != null)
                 data.add(comment);
         }
         return data;
     }
-    public ArrayList<Post.Key> getPostsNotification() { return posts_notification; }
-    public ArrayList<Comment.Key> getCommentsNotification() { return comments_notification; }
-    public ArrayList<Rating.Key> getRatingssNotification() { return ratings_notification; }
+    public ArrayList<Post.Key> getPostsNotification() { return postsNotification; }
+    public ArrayList<Comment.Key> getCommentsNotification() { return commentsNotification; }
+    public ArrayList<Rating.Key> getRatingssNotification() { return ratingsNotification; }
     public boolean IsAnonymous() { return id.equals(ANONYMOUS); }
     public boolean inGroup(String groupid) { return groups.contains(groupid); }
     public boolean isFollowing(String userid) { return following.contains(userid); }
     public boolean hasCollected(Post post) { return collections.contains(post.GetKey()); }
-    public boolean hasNewPost() { return posts_notification.size() != 0; }
-    public boolean hasNewComment() { return comments_notification.size() != 0; }
-    public boolean hasNewRating() { return ratings_notification.size() != 0; }
+    public boolean hasNewPost() { return postsNotification.size() != 0; }
+    public boolean hasNewComment() { return commentsNotification.size() != 0; }
+    public boolean hasNewRating() { return ratingsNotification.size() != 0; }
     public ArrayList<Post.Key> getPostKeys() {
         ArrayList<Post.Key> data = new ArrayList<>();
         for (Post post: posts) data.add(post.GetKey());
@@ -165,29 +165,29 @@ public class User implements Parcelable {
         return data;
     }
     public void PostNotification(Post post, boolean remove){
-        if (remove && posts_notification.contains(post.GetKey())) posts_notification.remove(post.GetKey());
-        else posts_notification.add(0, post.GetKey());
-        upload("posts_notification", posts_notification);
+        if (remove && postsNotification.contains(post.GetKey())) postsNotification.remove(post.GetKey());
+        else postsNotification.add(0, post.GetKey());
+        upload("postsNotification", postsNotification);
     }
     public void CommentNotification(Comment comment, boolean remove){
-        if (remove && comments_notification.contains(comment.GetKey())) comments_notification.remove(comment.GetKey());
-        else comments_notification.add(0, comment.GetKey());
-        upload("comments_notification", comments_notification);
+        if (remove && commentsNotification.contains(comment.GetKey())) commentsNotification.remove(comment.GetKey());
+        else commentsNotification.add(0, comment.GetKey());
+        upload("commentsNotification", commentsNotification);
     }
     public void RatingNotification(Rating rating){
         boolean update = false;
-        for (Rating.Key key: (ArrayList<Rating.Key>) ratings_notification.clone()){
+        for (Rating.Key key: (ArrayList<Rating.Key>) ratingsNotification.clone()){
             if (rating.GetKey().equals(key)){
-                if (rating.getRating() == 0) ratings_notification.remove(key);
-                else ratings_notification.set(ratings_notification.indexOf(key), rating.GetKey());
+                if (rating.getRating() == 0) ratingsNotification.remove(key);
+                else ratingsNotification.set(ratingsNotification.indexOf(key), rating.GetKey());
                 update = true;
                 break;
             }
         }
         if(!update){
-            ratings_notification.add(0, rating.GetKey());
+            ratingsNotification.add(0, rating.GetKey());
         }
-        upload("ratings_notification", comments_notification);
+        upload("ratingsNotification", commentsNotification);
     }
     public void FollowerNotification(String followerid, boolean remove){
         if (remove) followers.remove(followerid);
@@ -195,28 +195,28 @@ public class User implements Parcelable {
         upload("followers", followers);
     }
     public void refreshTimeline(){
-        timeline.addAll(posts_notification);
+        timeline.addAll(postsNotification);
         Collections.sort(timeline, new Post.TimeComparator());
         upload("timeline", timeline);
-        posts_notification.clear();
-        upload("posts_notification", posts_notification);
+        postsNotification.clear();
+        upload("postsNotification", postsNotification);
     }
     public void refreshGroups(){
 
     }
     public void refreshCommentsRecv(){
-        comments_recv.addAll(comments_notification);
-        Collections.sort(comments_recv, new Comment.TimeComparator());
-        upload("comments_recv", comments_recv);
-        comments_notification.clear();
-        upload("comments_notification", comments_notification);
+        commentsRecv.addAll(commentsNotification);
+        Collections.sort(commentsRecv, new Comment.TimeComparator());
+        upload("commentsRecv", commentsRecv);
+        commentsNotification.clear();
+        upload("commentsNotification", commentsNotification);
     }
     public void refreshRatingsRecv(){
-        ratings_recv.addAll(ratings_notification);
-        Collections.sort(ratings_recv, new Rating.TimeComparator());
-        upload("ratings_recv", ratings_recv);
-        ratings_notification.clear();
-        upload("ratings_notification", ratings_notification);
+        ratingsRecv.addAll(ratingsNotification);
+        Collections.sort(ratingsRecv, new Rating.TimeComparator());
+        upload("ratingsRecv", ratingsRecv);
+        ratingsNotification.clear();
+        upload("ratingsNotification", ratingsNotification);
     }
     public void setName(String name){
         this.name = name;
@@ -235,15 +235,15 @@ public class User implements Parcelable {
         upload("gender", gender);
     }
     public void addHistory(String history){
-        search_history.remove(history);
-        search_history.add(0, history);
-        upload("search_history", search_history);
+        searchHistory.remove(history);
+        searchHistory.add(0, history);
+        upload("searchHistory", searchHistory);
     }
     public void removeHistory(String content){
-        search_history.remove(content);
-        upload("search_history", search_history);
+        searchHistory.remove(content);
+        upload("searchHistory", searchHistory);
     }
-    public void make_post(Post post){
+    public void makePost(Post post){
         posts.add(0, post);
         upload("posts", posts);
         timeline.add(0, post.GetKey());
@@ -252,7 +252,7 @@ public class User implements Parcelable {
             findUser(id).PostNotification(post, false);
         }
     }
-    public void remove_post(Post post){
+    public void removePost(Post post){
         posts.remove(post);
         upload("posts", posts);
         timeline.remove(post.GetKey());
@@ -265,16 +265,16 @@ public class User implements Parcelable {
             upload("collections", collections);
         }
     }
-    public void make_comment(Comment comment) {
-        comments_made.add(0, comment);
+    public void makeComment(Comment comment) {
+        commentsMade.add(0, comment);
         Post.findPost(comment.getPostKey()).addComment(comment);
-        upload("comments_made", comments_made);
+        upload("commentsMade", commentsMade);
         findUser(comment.getUserid()).CommentNotification(comment, false);
     }
-    public void remove_comment(Comment comment, boolean made) {
-        comments_made.remove(comment);
+    public void removeComment(Comment comment, boolean made) {
+        commentsMade.remove(comment);
         Post.findPost(comment.getPostKey()).removeComment(comment);
-        upload("comments_made", comments_made);
+        upload("commentsMade", commentsMade);
         findUser(comment.getUserid()).CommentNotification(comment, true);
     }
     public void follow(String userid) {
@@ -359,17 +359,17 @@ public class User implements Parcelable {
         dest.writeTypedList(posts);
         dest.writeTypedList(drafts);
         dest.writeTypedList(collections);
-        dest.writeTypedList(comments_made);
-        dest.writeTypedList(comments_recv);
-        dest.writeTypedList(ratings_made);
-        dest.writeTypedList(ratings_recv);
+        dest.writeTypedList(commentsMade);
+        dest.writeTypedList(commentsRecv);
+        dest.writeTypedList(ratingsMade);
+        dest.writeTypedList(ratingsRecv);
         dest.writeStringList(groups);
         dest.writeStringList(followers);
         dest.writeStringList(following);
-        dest.writeTypedList(comments_notification);
-        dest.writeTypedList(posts_notification);
-        dest.writeTypedList(ratings_notification);
+        dest.writeTypedList(commentsNotification);
+        dest.writeTypedList(postsNotification);
+        dest.writeTypedList(ratingsNotification);
         dest.writeTypedList(timeline);
-        dest.writeStringList(search_history);
+        dest.writeStringList(searchHistory);
     }
 }

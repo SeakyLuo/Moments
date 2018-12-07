@@ -107,7 +107,7 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                searchBar.setVisibility((s.length() == 0) ? View.GONE : View.VISIBLE);
+                clearButton.setVisibility((s.toString().isEmpty()) ? View.GONE : View.VISIBLE);
             }
         });
         searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -186,7 +186,7 @@ public class SearchActivity extends AppCompatActivity {
         groupsFragment.setShowDivider(true);
         historyFragment.setShowDivider(true);
         try {
-            historyFragment.setData(User.user.getSearch_history());
+            historyFragment.setData(User.user.getSearchHistory());
         } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();
         }
@@ -194,7 +194,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 try {
-                    historyFragment.setData(User.user.getSearch_history());
+                    historyFragment.setData(User.user.getSearchHistory());
                 } catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
                 }

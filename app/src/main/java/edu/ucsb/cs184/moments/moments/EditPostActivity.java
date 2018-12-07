@@ -77,7 +77,7 @@ public class EditPostActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), caller);
                 Post post = getPost();
                 intent.putExtra(POST, post);
-                User.user.make_post(post);
+                User.user.makePost(post);
                 setResult(RESULT_OK, intent);
                 finish();
                 overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);

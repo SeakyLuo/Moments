@@ -1,5 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -60,9 +62,11 @@ public class SearchUsersAdapter extends CustomAdapter{
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(view.getContext(), UserProfileActivity.class);
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, UserProfileActivity.class);
                     intent.putExtra(UserProfileActivity.USERID, data.getId());
-                    view.getContext().startActivity(intent);
+                    context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
         }

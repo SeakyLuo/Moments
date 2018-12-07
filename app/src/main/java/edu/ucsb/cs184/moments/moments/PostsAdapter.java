@@ -132,7 +132,7 @@ public class PostsAdapter extends CustomAdapter {
                                     User.user.follow(data.getUserid());
                                     return true;
                                 case R.id.post_more_delete:
-                                    User.user.remove_post(data);
+                                    User.user.removePost(data);
                                     removeElement(data);
                                     return true;
                                 case R.id.post_more_report:

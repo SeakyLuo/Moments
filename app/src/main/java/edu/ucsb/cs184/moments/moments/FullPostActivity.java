@@ -111,7 +111,7 @@ public class FullPostActivity extends AppCompatActivity {
                                 Toast.makeText(FullPostActivity.this,"Copied!",Toast. LENGTH_SHORT).show();
                                 return true;
                             case R.id.fullpost_more_delete:
-                                User.user.remove_post(post);
+                                User.user.removePost(post);
                                 Intent intent = new Intent();
                                 intent.putExtra(POST, post);
                                 setResult(FullPostActivity.DELETE_POST, intent);
