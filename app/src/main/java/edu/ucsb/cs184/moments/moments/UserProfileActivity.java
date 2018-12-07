@@ -113,7 +113,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 helper.show();
             }
         });
-        posts_count.setText("Posts: " + User.user.getPosts().size());
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
         setSupportActionBar(toolbar);
@@ -133,6 +132,7 @@ public class UserProfileActivity extends AppCompatActivity {
         following.setText(user.getFollowers().size() + " following");
         followers.setText(user.getFollowers().size() + " followers");
         intro.setText("Intro: " + user.getIntro());
+        posts_count.setText("Posts: " + user.getPosts().size());
         if (userid.equals(User.user.getId())){
             follow.setImageResource(R.drawable.ic_edit);
             message.setVisibility(View.INVISIBLE);

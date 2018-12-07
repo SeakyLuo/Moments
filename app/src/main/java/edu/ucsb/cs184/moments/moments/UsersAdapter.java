@@ -11,7 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SearchUsersAdapter extends CustomAdapter{
+public class UsersAdapter extends CustomAdapter{
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_search_user, parent, false);

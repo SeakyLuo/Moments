@@ -179,7 +179,7 @@ public class SearchActivity extends AppCompatActivity {
         groupsFragment = new RecyclerViewFragment();
         historyFragment = new RecyclerViewFragment();
         postsFragment.setAdapter(new PostsAdapter());
-        usersFragment.setAdapter(new SearchUsersAdapter());
+        usersFragment.setAdapter(new UsersAdapter());
         groupsFragment.setAdapter(new SearchGroupsAdapter());
         historyFragment.setAdapter(new SearchHistoryAdapter());
         usersFragment.setShowDivider(true);
