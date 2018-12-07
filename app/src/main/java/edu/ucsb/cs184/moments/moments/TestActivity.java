@@ -32,7 +32,7 @@ public class TestActivity extends AppCompatActivity {
             // add the fragment to activity if and only if activity is new
             // when activity rotates, do nothing
 
-            transaction.add(R.id.settings_placeholder, fragment, SETTINGS);
+            transaction.add(R.id.settings_content, fragment, SETTINGS);
         }
 
         transaction.commit();

@@ -34,9 +34,9 @@ public class FollowListActivity extends AppCompatActivity {
         intent = getIntent();
         title = intent.getStringExtra(TITLE);
 
-        backButton = findViewById(R.id.search_back);
-        clearButton = findViewById(R.id.search_clear);
-        searchBar = findViewById(R.id.search_text);
+        backButton = findViewById(R.id.fl_back);
+        clearButton = findViewById(R.id.fl_clear);
+        searchBar = findViewById(R.id.fl_text);
         fragment = new RecyclerViewFragment();
 
         backButton.setOnClickListener(new View.OnClickListener() {

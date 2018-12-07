@@ -46,7 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
             // activity is created for the first time, so basically
             // add the fragment to activity if and only if activity is new
             // when activity rotates, do nothing
-            transaction.add(R.id.settings_placeholder, fragment, SETTINGS);
+            transaction.add(R.id.settings_content, fragment, SETTINGS);
         }
         transaction.commit();
     }

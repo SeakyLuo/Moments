@@ -115,7 +115,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setUserProfile(final String userid){
-        User user = User.findUser(userid);
+        final User user = User.findUser(userid);
         collapsingToolbarLayout.setTitle(user.getName());
         username.setText(user.getName());
         user_number.setText("#" + user.getNumber());
@@ -130,6 +130,7 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(UserProfileActivity.this, FollowListActivity.class);
                 intent.putExtra(FollowListActivity.TITLE, FollowListActivity.FOLLOWING);
+                intent.putExtra(FollowListActivity.LIST, user.getFollowing());
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
@@ -140,6 +141,7 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(UserProfileActivity.this, FollowListActivity.class);
                 intent.putExtra(FollowListActivity.TITLE, FollowListActivity.FOLLOWER);
+                intent.putExtra(FollowListActivity.LIST, user.getFollowing());
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
