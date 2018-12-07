@@ -31,7 +31,7 @@ public class GroupsFragment extends Fragment {
     private ImageButton add;
     private DrawerLayout drawer;
     private BottomNavigationView nav;
-    private GroupsAdapter adapter;
+    private GroupAdapter adapter;
     private RecyclerViewFragment fragment;
 
     @Nullable
@@ -75,7 +75,7 @@ public class GroupsFragment extends Fragment {
         });
         fragment = new RecyclerViewFragment();
         fragment.setShowDivider(true);
-        adapter = new GroupsAdapter();
+        adapter = new GroupAdapter();
         adapter.addElements(User.user.getGroups());
         fragment.setAdapter(adapter);
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {

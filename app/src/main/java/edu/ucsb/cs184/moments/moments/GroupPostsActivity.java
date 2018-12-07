@@ -70,7 +70,7 @@ public class GroupPostsActivity extends AppCompatActivity {
         title.setText(group.getName());
         icon.setImageBitmap(group.getIcon());
         fragment = new RecyclerViewFragment();
-        fragment.setAdapter(new PostsAdapter());
+        fragment.setAdapter(new PostAdapter());
         fragment.addHiddenView(fab);
         fragment.show(getSupportFragmentManager(), R.id.gp_content);
     }

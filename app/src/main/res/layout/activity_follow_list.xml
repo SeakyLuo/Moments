@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/search_toolbar"
+        android:id="@+id/fl_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorBackgroundFloating"
@@ -25,7 +25,7 @@
             android:layout_height="match_parent">
 
             <ImageButton
-                android:id="@+id/search_back"
+                android:id="@+id/fl_back"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@android:drawable/screen_background_light_transparent"
@@ -37,62 +37,23 @@
                 app:srcCompat="@drawable/ic_back" />
 
             <EditText
-                android:id="@+id/search_text"
+                android:id="@+id/fl_text"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:ems="10"
-                android:hint="@string/search_bar_hint"
+                android:hint="Search Follow"
                 android:imeOptions="actionSearch"
                 android:inputType="text|textPersonName"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                app:layout_constraintBottom_toTopOf="@id/search_tabs"
-                app:layout_constraintEnd_toStartOf="@id/search_clear"
-                app:layout_constraintStart_toEndOf="@+id/search_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/fl_clear"
+                app:layout_constraintStart_toEndOf="@+id/fl_back"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/search_tabs"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/search_back"
-                app:tabIndicatorColor="@android:color/holo_red_light"
-                app:tabSelectedTextColor="@android:color/holo_red_light"
-                app:tabTextAppearance="@style/TextAppearance.AppCompat.Body2"
-                app:tabTextColor="@color/common_google_signin_btn_text_light_default">
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/search_post_tab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/posts" />
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/search_user_tab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/users" />
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/search_groups_tab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/groups" />
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/search_user_history"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/history" />
-            </android.support.design.widget.TabLayout>
-
             <ImageButton
-                android:id="@+id/search_clear"
+                android:id="@+id/fl_clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -100,21 +61,24 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:background="@android:color/transparent"
-                app:layout_constraintBottom_toTopOf="@+id/search_tabs"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/search_text"
+                app:layout_constraintStart_toEndOf="@+id/fl_text"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_clear" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/search_viewpager"
+    <FrameLayout
+        android:id="@+id/fl_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/fl_toolbar">
+
+    </FrameLayout>
+
 </android.support.constraint.ConstraintLayout>

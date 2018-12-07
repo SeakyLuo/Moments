@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ public class FullPostActivity extends AppCompatActivity {
     private TextView username;
     private TextView time;
     private TextView content;
+    private RatingBar ratingBar;
     private ImageButton comment, collect, share, dropdown;
     private ImageView usericon;
     private EditText edit_comment;
@@ -66,6 +68,7 @@ public class FullPostActivity extends AppCompatActivity {
         username = include.findViewById(R.id.post_username);
         time = include.findViewById(R.id.post_time);
         content = include.findViewById(R.id.post_content);
+        ratingBar = include.findViewById(R.id.post_ratingBar);
         comment = include.findViewById(R.id.post_comment);
         collect = include.findViewById(R.id.post_collect);
         share = include.findViewById(R.id.post_share);
@@ -189,6 +192,20 @@ public class FullPostActivity extends AppCompatActivity {
         else poster_icon.setImageBitmap(user.getIcon());
         time.setText(TimeText(post.getTime()));
         content.setText(post.getContent());
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (post.getUserid().equals(User.user.getId())){
+                    Toast.makeText(FullPostActivity.this, "You can't rate your own post!", Toast.LENGTH_SHORT).show();
+                    ratingBar.setRating(0);
+                }else{
+                    if (rating == 0)
+                        ratingBar.setRating(post.ratings_avg());
+                    else
+                        User.user.rate(new Rating(User.user.getId(), (int) rating, Calendar.getInstance().getTimeInMillis(), post.GetKey()));
+                }
+            }
+        });
         setCollect(User.user.hasCollected(post));
         collect.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment {
             }
         });
         fragment = new RecyclerViewFragment();
-        fragment.setAdapter(new PostsAdapter());
+        fragment.setAdapter(new PostAdapter());
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {

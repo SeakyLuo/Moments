@@ -52,7 +52,7 @@
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
-        android:id="@+id/gs_placeholder"
+        android:id="@+id/gs_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

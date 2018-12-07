@@ -40,7 +40,7 @@ public class UserDraftboxActivity extends AppCompatActivity {
             }
         });
         // TODO: to be implemented
-        fragment.setAdapter(new PostsAdapter());
+        fragment.setAdapter(new PostAdapter());
         try {
             fragment.addElements(User.user.getDrafts());
         } catch (Exception e) {

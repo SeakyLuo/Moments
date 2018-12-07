@@ -23,7 +23,7 @@ public class FullPostCommentsAdapter extends CustomAdapter {
         return holder;
     }
     public static String TimeText(Long time){
-        return PostsAdapter.TimeText(time);
+        return PostAdapter.TimeText(time);
     }
 
     @Override

@@ -28,10 +28,10 @@ public class SearchActivity extends AppCompatActivity {
     private static final String[] textHints = {"Search Post Content", "Search Users", "Search Groups", "Search History"};
     private ArrayList<RecyclerViewFragment> fragments = new ArrayList<>();
     private RecyclerViewFragment postsFragment, usersFragment, groupsFragment, historyFragment;
-    private EditText searchBar;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private TabPagerAdapter adapter;
+    private EditText searchBar;
     private ImageButton backButton, clearButton;
     private Intent intent;
     private int position;
@@ -44,9 +44,9 @@ public class SearchActivity extends AppCompatActivity {
 
         backButton = findViewById(R.id.search_back);
         clearButton = findViewById(R.id.search_clear);
+        searchBar = findViewById(R.id.search_text);
         mViewPager = findViewById(R.id.search_viewpager);
         mTabLayout = findViewById(R.id.search_tabs);
-        searchBar = findViewById(R.id.search_text);
 
         setupFragments();
 
@@ -63,6 +63,36 @@ public class SearchActivity extends AppCompatActivity {
             public void onClick(View v) {
                 searchBar.setText("");
                 clearButton.setVisibility(View.GONE);
+            }
+        });
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                clearButton.setVisibility((s.toString().isEmpty()) ? View.GONE : View.VISIBLE);
+            }
+        });
+        searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    keyword = v.getText().toString().trim();
+                    if (position == 3){
+                        setCurrentTab(POSTS);
+                    }
+                    search(keyword);
+                    return true;
+                }
+                return false;
             }
         });
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
@@ -94,36 +124,6 @@ public class SearchActivity extends AppCompatActivity {
         adapter = new TabPagerAdapter(getSupportFragmentManager());
         adapter.addFragments(fragments, Arrays.asList(tabIndices));
         mViewPager.setAdapter(adapter);
-        searchBar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                clearButton.setVisibility((s.toString().isEmpty()) ? View.GONE : View.VISIBLE);
-            }
-        });
-        searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    keyword = v.getText().toString();
-                    if (position == 3){
-                        setCurrentTab(POSTS);
-                    }
-                    search(keyword);
-                    return true;
-                }
-                return false;
-            }
-        });
 
         String searchTab = intent.getStringExtra(TAB);
         if (searchTab == null) setCurrentTab(POSTS);
@@ -178,8 +178,8 @@ public class SearchActivity extends AppCompatActivity {
         usersFragment = new RecyclerViewFragment();
         groupsFragment = new RecyclerViewFragment();
         historyFragment = new RecyclerViewFragment();
-        postsFragment.setAdapter(new PostsAdapter());
-        usersFragment.setAdapter(new UsersAdapter());
+        postsFragment.setAdapter(new PostAdapter());
+        usersFragment.setAdapter(new UserAdapter());
         groupsFragment.setAdapter(new SearchGroupsAdapter());
         historyFragment.setAdapter(new SearchHistoryAdapter());
         usersFragment.setShowDivider(true);

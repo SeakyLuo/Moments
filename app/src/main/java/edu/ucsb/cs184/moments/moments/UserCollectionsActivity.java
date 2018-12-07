@@ -28,7 +28,7 @@ public class UserCollectionsActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
-        fragment.setAdapter(new PostsAdapter());
+        fragment.setAdapter(new PostAdapter());
         try {
             fragment.setData(User.user.getCollections());
         } catch (Exception e) {

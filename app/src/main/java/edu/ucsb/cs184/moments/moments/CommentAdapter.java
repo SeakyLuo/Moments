@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CommentsAdapter extends CustomAdapter {
+public class CommentAdapter extends CustomAdapter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -16,7 +16,7 @@ public class CommentsAdapter extends CustomAdapter {
     }
 
     public static String TimeText(Long time){
-        return PostsAdapter.TimeText(time);
+        return PostAdapter.TimeText(time);
     }
 
     public class ViewHolder extends CustomAdapter.CustomViewHolder {

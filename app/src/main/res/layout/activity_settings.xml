@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/eup_toolbar"
+        android:id="@+id/search_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorBackgroundFloating"
@@ -55,11 +55,11 @@
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
-        android:id="@+id/settings_placeholder"
+        android:id="@+id/settings_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eup_toolbar"/>
+        app:layout_constraintTop_toBottomOf="@+id/search_toolbar"/>
 
 </android.support.constraint.ConstraintLayout>

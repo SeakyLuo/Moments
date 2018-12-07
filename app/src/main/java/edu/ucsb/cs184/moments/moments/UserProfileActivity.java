@@ -57,7 +57,7 @@ public class UserProfileActivity extends AppCompatActivity {
         message = include.findViewById(R.id.up_message);
         up_timeline = include.findViewById(R.id.up_timeline);
         fragment = new RecyclerViewFragment();
-        fragment.setAdapter(new PostsAdapter());
+        fragment.setAdapter(new PostAdapter());
         fragment.show(getSupportFragmentManager(), R.id.up_timeline);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +125,25 @@ public class UserProfileActivity extends AppCompatActivity {
             gender.setImageDrawable(user.getGender().equals(getString(R.string.male)) ? getDrawable(R.drawable.ic_male) : getDrawable(R.drawable.ic_female));
         }
         following.setText("Following: " + user.getFollowing().size());
+        following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserProfileActivity.this, FollowListActivity.class);
+                intent.putExtra(FollowListActivity.TITLE, FollowListActivity.FOLLOWING);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+            }
+        });
         followers.setText("Followers: " + user.getFollowers().size());
+        followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserProfileActivity.this, FollowListActivity.class);
+                intent.putExtra(FollowListActivity.TITLE, FollowListActivity.FOLLOWER);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+            }
+        });
         intro.setText("Intro: " + user.getIntro());
         posts_count.setText("Posts: " + user.getPosts().size());
         if (userid.equals(User.user.getId())){
