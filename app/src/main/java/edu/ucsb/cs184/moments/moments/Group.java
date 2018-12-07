@@ -94,7 +94,7 @@ public class Group implements Parcelable {
         upload("posts", posts);
     }
     private void upload(String key, Object value){
-        FirebaseHelper.updateGroup(this, key, value);
+        FirebaseHelper.updateGroup(id, key, value);
     }
     public static Group findGroup(String id) { return FirebaseHelper.findGroup(id); }
     @Override

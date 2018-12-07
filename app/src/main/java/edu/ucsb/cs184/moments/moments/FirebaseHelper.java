@@ -208,22 +208,22 @@ public class FirebaseHelper {
         return null;
     }
 
-    public static void updateUser(final String key, final Object data){
-         new Thread(new Runnable() {
+    public static void updateUser(final String id, final String key, final Object data){
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                if(uudb != null && User.user != null)
-                    uudb.child(key).setValue(data);
+                if(udb != null)
+                    udb.child(id).child(key).setValue(data);
             }
         }).start();
     }
 
-    public static void updateGroup(final Group group, final String key, final Object data){
+    public static void updateGroup(final String id, final String key, final Object data){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(gdb != null && group != null)
-                    gdb.child(group.getId()).child(key).setValue(data);
+                if(gdb != null)
+                    gdb.child(id).child(key).setValue(data);
             }
         }).start();
     }

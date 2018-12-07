@@ -144,10 +144,10 @@ public class EditUserProfileActivity extends AppCompatActivity {
                     String content = text.getText().toString();
                     if (title_text.contains("Name")){
                         EditUserProfileActivity.setName(content);
-                        User.user.setName(content);
+                        User.user.modifyName(content);
                     }else if (title_text.contains("Intro")){
                         EditUserProfileActivity.setIntro(content);
-                        User.user.setIntro(content);
+                        User.user.modifyIntro(content);
                     }
                     dismiss();
                 }

@@ -83,10 +83,14 @@ public class User implements Parcelable {
     public void setNumber(int number){ this.user_number = number; }
     public int getNumber() { return user_number; }
     public Bitmap getIcon() { return icon; }
+    public void setIcon(Bitmap icon){ this.icon = icon; }
     public String getName() { return name; }
+    public void setName(String name){ this.name = name; }
     public String getId() { return id; }
     public String getIntro() { return intro; }
+    public void setIntro(String intro){ this.intro = intro; }
     public String getGender() { return gender; }
+    public void setGender(String gender){ this.gender = gender; }
     public ArrayList<Message> getMessages() { return messages; }
     public ArrayList<Group> getGroups() {
         ArrayList<Group> data = new ArrayList<>();
@@ -218,19 +222,19 @@ public class User implements Parcelable {
         ratingsNotification.clear();
         upload("ratingsNotification", ratingsNotification);
     }
-    public void setName(String name){
+    public void modifyName(String name){
         this.name = name;
         upload("name", name);
     }
-    public void setIcon(Bitmap icon){
+    public void modifyIcon(Bitmap icon){
         this.icon = icon;
         upload("icon", icon);
     }
-    public void setIntro(String intro){
+    public void modifyIntro(String intro){
         this.intro = intro;
         upload("intro", intro);
     }
-    public void setGender(String gender){
+    public void modifyGender(String gender){
         this.gender = gender;
         upload("gender", gender);
     }
@@ -329,7 +333,7 @@ public class User implements Parcelable {
     }
     private void upload(String key, Object value){
         if (User.user != null && User.user.id.equals(id))
-            FirebaseHelper.updateUser(key, value);
+            FirebaseHelper.updateUser(id, key, value);
     }
 
     @Override
