@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +30,6 @@ public class SignupActivity extends AppCompatActivity {
     private EditText _cpasswordText;
     private Button _signupButton;
     private TextView _loginLink;
-    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,16 +54,6 @@ public class SignupActivity extends AppCompatActivity {
                 _passwordText.setText(password);
         }
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                _signupButton.setEnabled(true);
-            }
-        });
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,20 +65,28 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Finish the registration screen and return to the Login activity
                 finish();
-                overridePendingTransition(R.anim.push_down_in, R.anim.push_down_out);
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
     }
 
     public void signup() {
-        Log.d(TAG, "Signup");
-
         if (!validate()) {
-            onSignupFailed();
+            onSignupFailed("Sign up failed");
             return;
         }
 
         _signupButton.setEnabled(false);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Creating Account...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                _signupButton.setEnabled(true);
+            }
+        });
         progressDialog.show();
 
         final String name = _nameText.getText().toString();
@@ -108,12 +104,15 @@ public class SignupActivity extends AppCompatActivity {
                     FirebaseHelper.setAfterUserInsertionListener(new FirebaseHelper.AfterUserInsertedListener() {
                         @Override
                         public void afterUserInserted(User user) {
+                            progressDialog.dismiss();
                             onSignupSuccess();
                         }
                     });
                     FirebaseHelper.insertUser(User.user);
                 } else {
-                    onSignupFailed();
+                    progressDialog.dismiss();
+                    String a = task.getException().toString(), b = task.getResult().toString();
+                    onSignupFailed(a);
                 }
             }
         });
@@ -121,16 +120,20 @@ public class SignupActivity extends AppCompatActivity {
 
 
     public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
-        setResult(RESULT_OK);
-        progressDialog.dismiss();
-        finish();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                _signupButton.setEnabled(true);
+                setResult(RESULT_OK);
+                finish();
+                overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
+            }
+        });
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getApplicationContext(), "Sign up failed", Toast.LENGTH_LONG).show();
+    public void onSignupFailed(String text) {
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
         _signupButton.setEnabled(true);
-        progressDialog.dismiss();
     }
 
     public boolean validate() {

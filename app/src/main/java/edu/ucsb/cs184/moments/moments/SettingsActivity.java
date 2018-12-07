@@ -1,8 +1,8 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -36,7 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         Fragment fragment = new SettingsFragment();
-        ((SettingsFragment) fragment).setContext(getApplicationContext());
+        ((SettingsFragment) fragment).setContext(this);
         // this fragment must be from android.app.Fragment,
         // if you use support fragment, it will not work
 
@@ -65,7 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment {
-        private Context context;
+        private Activity activity;
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -85,16 +85,18 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     LoginActivity.logout();
-                    Intent intent = new Intent(context, LoginActivity.class);
+                    Intent intent = new Intent(activity, LoginActivity.class);
                     startActivity(intent);
+                    activity.finish();
+                    activity.overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
                     return true;
                 }
             });
 
         }
 
-        public void setContext(Context context){
-            this.context = context;
+        public void setContext(Activity activity){
+            this.activity = activity;
         }
     }
 }

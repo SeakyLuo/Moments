@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class PostsAdapter extends CustomAdapter {
 
@@ -112,8 +111,10 @@ public class PostsAdapter extends CustomAdapter {
                         Toast.makeText(context, "You can't rate your own post!", Toast.LENGTH_SHORT).show();
                         ratingBar.setRating(data.ratings_avg());
                     }else{
-                        User.user.rate(new Rating(User.user.getId(), (int) rating, new Date().getTime(), data.GetKey()));
-                        if (rating == 0) ratingBar.setRating(data.ratings_avg());
+                        if (rating == 0)
+                            ratingBar.setRating(data.ratings_avg());
+                        else
+                            User.user.rate(new Rating(User.user.getId(), (int) rating, Calendar.getInstance().getTimeInMillis(), data.GetKey()));
                     }
                 }
             });

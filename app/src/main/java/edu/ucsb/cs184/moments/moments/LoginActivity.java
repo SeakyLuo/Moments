@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String INVALID_PASSWORD = "Please enter a valid password!";
     public static final String AUTHENTICATING = "Authenticating...";
     public static final String FETCH_DATA = "Fetching Data...";
+    public static final String LOGIN_FAILED = "Login Failed";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final int REQUEST_SIGNUP = 0;
@@ -45,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage(AUTHENTICATING);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -122,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         _loginButton.setEnabled(false);
+        progressDialog.setMessage(AUTHENTICATING);
         progressDialog.show();
 
         String email = _emailText.getText().toString();
@@ -173,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoginFailed() {
-        Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), LOGIN_FAILED, Toast.LENGTH_LONG).show();
         _loginButton.setEnabled(true);
         progressDialog.dismiss();
     }
@@ -196,9 +197,17 @@ public class LoginActivity extends AppCompatActivity {
     private void onDataReceived(){
         if (User.firebaseUser == null) return;
         User.user = FirebaseHelper.findUser(User.firebaseUser.getUid());
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        if (User.user == null){
+            Toast.makeText(getApplicationContext(), LOGIN_FAILED, Toast.LENGTH_SHORT).show();
+            User.firebaseUser = null;
+            mAuth.signOut();
+            _passwordText.setText("");
+            return;
+        }
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+        overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
     }
 }
 
