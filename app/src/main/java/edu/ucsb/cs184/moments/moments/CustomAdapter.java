@@ -1,5 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -72,9 +73,11 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
 
     public static abstract class CustomViewHolder extends RecyclerView.ViewHolder{
         protected View view;
+        protected Context context;
         public CustomViewHolder(@NonNull View view) {
             super(view);
             this.view = view;
+            this.context = view.getContext();
         }
         public abstract void setData(Object object);
     }

@@ -2,7 +2,6 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.view.menu.MenuBuilder;
 import android.view.LayoutInflater;
@@ -64,11 +63,29 @@ public class PostsAdapter extends CustomAdapter {
             collect = view.findViewById(R.id.post_collect);
             share = view.findViewById(R.id.post_share);
             dropdown = view.findViewById(R.id.post_dropdown);
+        }
+
+        public void setData(Object object) {
+            data = (Post) object;
+            User user = User.findUser(data.getUserid());
+            view.setClickable(true);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, FullPostActivity.class);
+                    intent.putExtra(FullPostActivity.POST, data);
+                    context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                }
+            });
             usericon.setClickable(true);
             usericon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(context, UserProfileActivity.class);
+                    intent.putExtra(UserProfileActivity.USERID, data.getUserid());
+                    context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             collect.setOnClickListener(new View.OnClickListener() {
@@ -77,21 +94,9 @@ public class PostsAdapter extends CustomAdapter {
                     collect(!User.user.hasCollected(data));
                 }
             });
-            view.setClickable(true);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, FullPostActivity.class);
-                    intent.putExtra(FullPostActivity.POST, data);
-                    context.startActivity(intent);
-                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
-                }
-            });
             comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = v.getContext();
                     Intent intent = new Intent(context, FullPostActivity.class);
                     intent.putExtra(FullPostActivity.POST, data);
                     intent.putExtra(FullPostActivity.ADD_COMMENT, FullPostActivity.ADD_COMMENT);
@@ -103,8 +108,8 @@ public class PostsAdapter extends CustomAdapter {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                     if (!fromUser) return;
-                    if (data.getUserid() == User.user.getId()){
-                        Toast.makeText(view.getContext(), "You can't rate your own post!", Toast.LENGTH_SHORT).show();
+                    if (data.getUserid().equals(User.user.getId())){
+                        Toast.makeText(context, "You can't rate your own post!", Toast.LENGTH_SHORT).show();
                         ratingBar.setRating(data.ratings_avg());
                     }else{
                         User.user.rate(new Rating(User.user.getId(), (int) rating, new Date().getTime(), data.GetKey()));
@@ -116,7 +121,7 @@ public class PostsAdapter extends CustomAdapter {
                 @Override
                 public void onClick(final View v) {
                     ObjectAnimator.ofFloat(v, "rotation", 0, 180).start();
-                    final PopupMenuHelper helper = new PopupMenuHelper(R.menu.post_more_menu, v.getContext(), dropdown);
+                    final PopupMenuHelper helper = new PopupMenuHelper(R.menu.post_more_menu, context, dropdown);
                     if (data.getUserid().equals(User.user.getId())){
                         helper.hideItem(R.id.post_more_follow);
                     }else{
@@ -150,12 +155,8 @@ public class PostsAdapter extends CustomAdapter {
                     helper.show();
                 }
             });
-        }
-
-        public void setData(Object object) {
-            data = (Post) object;
-            User user = User.findUser(data.getUserid());
-            usericon.setImageBitmap(user.getIcon());
+            if (user.getIcon() == null) usericon.setImageResource(R.drawable.user_icon);
+            else usericon.setImageBitmap(user.getIcon());
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             content.setText(data.getContent());
