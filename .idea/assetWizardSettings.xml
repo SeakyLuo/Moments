@@ -19,10 +19,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\warning.png" />
-                                      <entry key="outputName" value="ic_warning" />
+                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\clear.png" />
+                                      <entry key="outputName" value="ic_clear" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="000000" />
+                                      <entry key="themeColor" value="aaaaaa" />
                                     </map>
                                   </option>
                                 </PersistentState>

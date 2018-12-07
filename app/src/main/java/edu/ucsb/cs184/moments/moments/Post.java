@@ -42,7 +42,7 @@ public class Post implements Parcelable {
         }
     };
 
-    public Key getKey() { return new Key(userid, time); }
+    public Key GetKey() { return new Key(userid, time); }
     public String getUserid() { return userid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
@@ -85,7 +85,7 @@ public class Post implements Parcelable {
             return false;
         if (!(obj instanceof Post))
             return false;
-        return getKey().equals(((Post) obj).getKey());
+        return GetKey().equals(((Post) obj).GetKey());
     }
 
     @Override
@@ -159,7 +159,7 @@ public class Post implements Parcelable {
 
     public static class PostComparator implements Comparator<Post> {
         @Override
-        public int compare(Post o1, Post o2) { return new TimeComparator().compare(o1.getKey(), o2.getKey()); }
+        public int compare(Post o1, Post o2) { return new TimeComparator().compare(o1.GetKey(), o2.GetKey()); }
     }
 
     public static class TimeComparator implements Comparator<Key> {

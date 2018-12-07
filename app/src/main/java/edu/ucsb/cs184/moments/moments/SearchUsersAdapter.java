@@ -20,7 +20,7 @@ public class SearchUsersAdapter extends CustomAdapter{
     public class ViewHolder extends CustomAdapter.CustomViewHolder{
         TextView name, number;
         ImageButton follow;
-        ImageView icon;
+        ImageView icon, gender;
         User data;
         public ViewHolder(@NonNull View view) {
             super(view);
@@ -28,13 +28,14 @@ public class SearchUsersAdapter extends CustomAdapter{
             number = view.findViewById(R.id.su_number);
             follow = view.findViewById(R.id.su_follow);
             icon = view.findViewById(R.id.su_icon);
+            gender = view.findViewById(R.id.su_gender);
         }
 
         @Override
         public void setData(Object object){
             data = (User) object;
             name.setText(data.getName());
-            number.setText(data.getNumber());
+            number.setText("#" + data.getNumber());
             follow.setVisibility(User.user.getId().equals(data.getId()) ? View.INVISIBLE : View.VISIBLE);
             follow.setImageResource(User.user.isFollowing(data.getId()) ? R.drawable.ic_unfollow : R.drawable.ic_follow);
             follow.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +52,11 @@ public class SearchUsersAdapter extends CustomAdapter{
                     }
                 }
             });
-            icon.setImageBitmap(data.getIcon());
+            if (data.getIcon() == null) icon.setImageResource(R.drawable.user_icon);
+            else icon.setImageBitmap(data.getIcon());
+            String user_gender = data.getGender();
+            gender.setVisibility(user_gender.equals(User.UNKNOWN) ? View.GONE : View.VISIBLE);
+            gender.setImageResource(data.getGender().equals(User.MALE) ? R.drawable.ic_male : R.drawable.ic_female);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

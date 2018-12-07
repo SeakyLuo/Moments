@@ -38,13 +38,11 @@
 
         <TextView
             android:id="@+id/su_number"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="#"
+            android:text="#10000000"
             app:layout_constraintBottom_toBottomOf="@id/su_icon"
-            app:layout_constraintEnd_toStartOf="@+id/su_follow"
             app:layout_constraintStart_toEndOf="@+id/su_icon" />
 
         <ImageButton
@@ -59,6 +57,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_follow" />
+
+        <ImageView
+            android:id="@+id/su_gender"
+            android:layout_width="@dimen/icon_size_small"
+            android:layout_height="@dimen/icon_size_small"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/su_number"
+            app:layout_constraintStart_toEndOf="@+id/su_number"
+            app:layout_constraintTop_toTopOf="@+id/su_number"
+            app:srcCompat="@drawable/ic_male" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

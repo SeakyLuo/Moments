@@ -155,6 +155,8 @@ public class LoginActivity extends AppCompatActivity {
     private void onLoginSuccess() {
         _loginButton.setEnabled(true);
         User.firebaseUser = mAuth.getCurrentUser();
+        if (_emailText != null) _emailText.setText(User.firebaseUser.getEmail());
+        if (_passwordText != null) _passwordText.setText("Password");
         if (FirebaseHelper.initFinished()){
             onDataReceived();
         }else {

@@ -18,6 +18,7 @@ public class SearchHistoryAdapter extends CustomAdapter{
     public class ViewHolder extends CustomAdapter.CustomViewHolder{
         TextView item;
         ImageButton delete;
+        private String data;
         public ViewHolder(@NonNull View view) {
             super(view);
             item = view.findViewById(R.id.sh_text);
@@ -25,14 +26,16 @@ public class SearchHistoryAdapter extends CustomAdapter{
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    User.user.removeHistory(item.getText().toString());
+                    removeElement(data);
+                    User.user.removeHistory(data);
                 }
             });
         }
 
         @Override
         public void setData(Object object){
-            item.setText((String) object);
+            data = object.toString();
+            item.setText(data);
         }
     }
 }

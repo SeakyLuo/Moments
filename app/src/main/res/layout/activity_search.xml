@@ -23,10 +23,8 @@
         tools:targetApi="m">
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/ToolbarConstraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".MainActivity">
+            android:layout_height="match_parent">
 
             <ImageButton
                 android:id="@+id/search_back"
@@ -47,10 +45,12 @@
                 android:background="@android:color/transparent"
                 android:ems="10"
                 android:hint="@string/search_bar_hint"
+                android:imeOptions="actionSearch"
                 android:inputType="text|textPersonName"
+                android:scrollHorizontally="true"
                 android:singleLine="true"
                 app:layout_constraintBottom_toTopOf="@id/search_tabs"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/search_clear"
                 app:layout_constraintStart_toEndOf="@+id/search_back"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -92,6 +92,21 @@
                     android:layout_height="wrap_content"
                     android:text="@string/history" />
             </android.support.design.widget.TabLayout>
+
+            <ImageButton
+                android:id="@+id/search_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toTopOf="@+id/search_tabs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/search_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_clear" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>

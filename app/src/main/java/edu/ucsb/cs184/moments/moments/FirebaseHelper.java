@@ -162,38 +162,39 @@ public class FirebaseHelper {
     }
 
     public static ArrayList<Post> searchPosts(String keyword){
-        ArrayList<Post> posts = new ArrayList<>();
+        ArrayList<Post> data = new ArrayList<>();
         for (DataSnapshot ds: uds.getChildren()){
-            for (Post post: (ArrayList<Post>) ds.child("posts").getValue()){
-                if (post.getContent().contains(keyword))
-                    posts.add(post);
+            for (DataSnapshot pds: ds.child("posts").getChildren()){
+                Post value = pds.getValue(Post.class);
+                if (value.getContent().contains(keyword))
+                    data.add(value);
             }
         }
-        return posts;
+        return data;
     }
     public static ArrayList<User> searchUsers(String keyword) {
-        ArrayList<User> users = new ArrayList<>();
+        ArrayList<User> data = new ArrayList<>();
         for (DataSnapshot ds: uds.getChildren()){
             User user = ds.getValue(User.class);
             if (user.getName().contains(keyword) || Integer.toString(user.getNumber()).contains(keyword))
-                users.add(user);
+                data.add(user);
         }
-        return users;
+        return data;
     }
     public static ArrayList<Group> searchGroups(String keyword) {
-        ArrayList<Group> groups = new ArrayList<>();
+        ArrayList<Group> data = new ArrayList<>();
         for (DataSnapshot ds: uds.getChildren()){
             Group group = ds.getValue(Group.class);
             if (group.getName().contains(keyword) || Integer.toString(group.getNumber()).contains(keyword))
-                groups.add(group);
+                data.add(group);
         }
-        return groups;
+        return data;
     }
 
     public static Post findPost(Post.Key key) {
         for (DataSnapshot ds: uds.child(key.userid).child("posts").getChildren()){
             Post data = ds.getValue(Post.class);
-            if (data.getKey().equals(key))
+            if (data.GetKey().equals(key))
                 return data;
         }
         return null;
@@ -201,7 +202,7 @@ public class FirebaseHelper {
     public static Comment findComment(Comment.Key key){
         for (DataSnapshot ds: uds.child(key.userid).child("posts").getChildren()){
             Comment data = ds.getValue(Comment.class);
-            if (data.getKey().equals(key))
+            if (data.GetKey().equals(key))
                 return data;
         }
         return null;

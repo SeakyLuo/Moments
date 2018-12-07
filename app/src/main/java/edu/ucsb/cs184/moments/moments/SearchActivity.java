@@ -1,10 +1,13 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,13 +26,13 @@ public class SearchActivity extends AppCompatActivity {
     public static final String HISTORY = "History";
     private static final String[] tabIndices = {POSTS, USERS, GROUPS, HISTORY};
     private static final String[] textHints = {"Search Post Content", "Search Users", "Search Groups", "Search History"};
-    private SearchFragment searchPostsFragment, searchUsersFragment, searchGroupsFragment, searchHistoryFragment;
-    private ArrayList<SearchFragment> fragments = new ArrayList<>();
+    private ArrayList<RecyclerViewFragment> fragments = new ArrayList<>();
+    private RecyclerViewFragment postsFragment, usersFragment, groupsFragment, historyFragment;
     private EditText searchBar;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private TabPagerAdapter adapter;
-    private ImageButton backButton;
+    private ImageButton backButton, clearButton;
     private Intent intent;
     private int position;
     private String keyword;
@@ -40,19 +43,26 @@ public class SearchActivity extends AppCompatActivity {
         intent = getIntent();
 
         backButton = findViewById(R.id.search_back);
+        clearButton = findViewById(R.id.search_clear);
         mViewPager = findViewById(R.id.search_viewpager);
         mTabLayout = findViewById(R.id.search_tabs);
         searchBar = findViewById(R.id.search_text);
-        fragments.add(new SearchFragment().setAdapter(POSTS));
-        fragments.add(new SearchFragment().setAdapter(USERS));
-        fragments.add(new SearchFragment().setAdapter(GROUPS));
-        fragments.add(new SearchFragment().setAdapter(HISTORY));
+
+        setupFragments();
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
+            }
+        });
+        clearButton.setVisibility(View.GONE);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchBar.setText("");
+                clearButton.setVisibility(View.GONE);
             }
         });
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
@@ -65,7 +75,7 @@ public class SearchActivity extends AppCompatActivity {
                 // if keyword is not changed, don't search
                 // Refresh is ignored for now
                 if (keyword != null && !keyword.isEmpty() && !keyword.equals(new_keyword) && !tabIndices[position].equals(HISTORY)){
-                    fragments.get(position).search(keyword);
+                    search(keyword);
                 }
                 searchBar.setHint(textHints[position]);
                 tab.select();
@@ -81,44 +91,118 @@ public class SearchActivity extends AppCompatActivity {
 
             }
         });
+        adapter = new TabPagerAdapter(getSupportFragmentManager());
+        adapter.addFragments(fragments, Arrays.asList(tabIndices));
+        mViewPager.setAdapter(adapter);
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                searchBar.setVisibility((s.length() == 0) ? View.GONE : View.VISIBLE);
+            }
+        });
         searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                    actionId == EditorInfo.IME_ACTION_DONE ||
-                    event != null &&
-                    event.getAction() == KeyEvent.ACTION_DOWN &&
-                    event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                    if (event == null || !event.isShiftPressed()) {
-                        // the user is done typing.
-                        keyword = v.getText().toString();
-                        SearchFragment fragment = fragments.get(position);
-                        if (position == 3){
-                            setCurrentTab(POSTS);
-                            getFragmentAt(POSTS).search(keyword);
-                        }else
-                            fragment.search(keyword);
-                        return true; // consume.
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    keyword = v.getText().toString();
+                    if (position == 3){
+                        setCurrentTab(POSTS);
                     }
+                    search(keyword);
+                    return true;
                 }
                 return false;
             }
         });
-
-        adapter = new TabPagerAdapter(getSupportFragmentManager());
-        adapter.addFragments(fragments, Arrays.asList(tabIndices));
-        mViewPager.setAdapter(adapter);
 
         String searchTab = intent.getStringExtra(TAB);
         if (searchTab == null) setCurrentTab(POSTS);
         else setCurrentTab(searchTab);
     }
 
-    public SearchFragment getFragmentAt(String tab){
+    public void search(final String keyword){
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setIndeterminate(true);
+        dialog.setMessage("Searching...");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    switch (position){
+                        case 0:
+                            postsFragment.setData(FirebaseHelper.searchPosts(keyword));
+                            break;
+                        case 1:
+                            usersFragment.setData(FirebaseHelper.searchUsers(keyword));
+                            break;
+                        case 2:
+                            groupsFragment.setData(FirebaseHelper.searchGroups(keyword));
+                            break;
+                        case 3:
+                            postsFragment.setData(FirebaseHelper.searchPosts(keyword));
+                            historyFragment.addElement(keyword);
+                            break;
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }finally {
+                    User.user.addHistory(keyword);
+                    dialog.dismiss();
+                }
+            }
+        });
+    }
+
+    public RecyclerViewFragment getFragmentAt(String tab){
         return fragments.get(Arrays.asList(tabIndices).indexOf(tab));
     }
 
     public void setCurrentTab(String tab){
         mTabLayout.getTabAt(Arrays.asList(tabIndices).indexOf(tab)).select();
+    }
+
+    public void setupFragments(){
+        postsFragment = new RecyclerViewFragment();
+        usersFragment = new RecyclerViewFragment();
+        groupsFragment = new RecyclerViewFragment();
+        historyFragment = new RecyclerViewFragment();
+        postsFragment.setAdapter(new PostsAdapter());
+        usersFragment.setAdapter(new SearchUsersAdapter());
+        groupsFragment.setAdapter(new SearchGroupsAdapter());
+        historyFragment.setAdapter(new SearchHistoryAdapter());
+        usersFragment.setShowDivider(true);
+        groupsFragment.setShowDivider(true);
+        historyFragment.setShowDivider(true);
+        try {
+            historyFragment.setData(User.user.getSearch_history());
+        } catch (RecyclerViewFragment.UnsupportedDataException e) {
+            e.printStackTrace();
+        }
+        historyFragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    historyFragment.setData(User.user.getSearch_history());
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        fragments.add(postsFragment);
+        fragments.add(usersFragment);
+        fragments.add(groupsFragment);
+        fragments.add(historyFragment);
     }
 }

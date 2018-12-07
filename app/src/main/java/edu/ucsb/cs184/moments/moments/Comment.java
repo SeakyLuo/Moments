@@ -68,7 +68,7 @@ public class Comment implements Parcelable {
     public String getUserid() { return userid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
-    public Key getKey() { return new Key(userid, time); }
+    public Key GetKey() { return new Key(userid, time); }
     public Post.Key getPostKey() { return postKey; }
     public Comment.Key getParent() { return parent; }
     public Boolean hasParent() { return parent == null; }
@@ -79,7 +79,7 @@ public class Comment implements Parcelable {
             return false;
         if (!(obj instanceof Post))
             return false;
-        return getKey().equals(((Comment) obj).getKey());
+        return GetKey().equals(((Comment) obj).GetKey());
     }
     @Override
     public String toString(){

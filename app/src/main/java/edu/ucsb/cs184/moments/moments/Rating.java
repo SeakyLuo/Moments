@@ -44,17 +44,17 @@ public class Rating implements Parcelable {
     public String getUserid() { return userid; }
     public int getRating() { return rating; }
     public Long getTime() { return time; }
-    public Post.Key getPostKey() {
+    public Post.Key GetPostKey() {
         return postKey;
     }
-    public Key getKey(){ return new Key(userid, time, postKey); }
+    public Key GetKey(){ return new Key(userid, time, postKey); }
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj == null)
             return false;
         if (!(obj instanceof Post))
             return false;
-        return getKey().equals(((Rating) obj).getKey());
+        return GetKey().equals(((Rating) obj).GetKey());
     }
     @Override
     public String toString(){

@@ -23,7 +23,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     public static final String USERID = "userid";
     private Button sortBy;
-    private ImageButton back;
+    private ImageButton back, search;
     private View include;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
@@ -40,6 +40,7 @@ public class UserProfileActivity extends AppCompatActivity {
         SwipeBackHelper.onCreate(this);
 
         back = findViewById(R.id.up_back);
+        search = findViewById(R.id.up_search);
         include = findViewById(R.id.content_user_profile);
         toolbar = findViewById(R.id.up_toolbar);
         collapsingToolbarLayout = findViewById(R.id.up_ctoolbar);
@@ -69,6 +70,12 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
+            }
+        });
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // search my posts
             }
         });
         icon.setOnClickListener(new View.OnClickListener() {
