@@ -9,31 +9,30 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class EditPostActivity extends AppCompatActivity {
 
-    public static final String POST = "Post";
+    public static final String POST = "Post", GROUP = "Group";
+    public static final int MAKE_POST = 0;
 
     private ImageButton back;
     private ImageButton send;
     private EditText edit_content;
-    private SaveAsDraftFragment saveAsDraftFragment;
+    private Intent intent;
     private Class caller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_post);
-        Intent intent = getIntent();
+        intent = getIntent();
         caller = intent.getClass();
 
         edit_content = findViewById(R.id.edit_content);
         back = findViewById(R.id.edit_cancel);
         send = findViewById(R.id.edit_send);
         // TODO: if this activity is initiated by UserDraftbox and the post is published, remember to delete from user draftbox
-        saveAsDraftFragment = new SaveAsDraftFragment();
-        saveAsDraftFragment.setActivity(this);
 
         edit_content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -48,7 +47,7 @@ public class EditPostActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Boolean hasText = s.toString().trim().length() != 0;
+                Boolean hasText = hasText();
                 send.setClickable(hasText);
                 send.setImageResource(hasText ? R.drawable.ic_send : R.drawable.ic_send_unclickable);
             }
@@ -57,11 +56,27 @@ public class EditPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String content = edit_content.getText().toString();
-                if (content.length() == 0) finish();
-                else {
+                if (content.isEmpty()){
+                    close();
+                }else {
                     // ask save to draft box
-                    saveAsDraftFragment.setPost(getPost());
-                    saveAsDraftFragment.show(getSupportFragmentManager(), SaveAsDraftFragment.SAVE_AS_DRAFT);
+                    String save_as_draft = getString(R.string.save_as_draft);
+                    final AskYesNoDialog askYesNoDialog = new AskYesNoDialog();
+                    askYesNoDialog.showNow(getSupportFragmentManager(), save_as_draft);
+                    askYesNoDialog.setMessage(save_as_draft);
+                    askYesNoDialog.setOnYesListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            User.user.saveAsDraft(getPost());
+                            close();
+                        }
+                    });
+                    askYesNoDialog.setOnNoListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            close();
+                        }
+                    });
                 }
             }
         });
@@ -69,18 +84,31 @@ public class EditPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String content = edit_content.getText().toString();
-                if (content.trim().length() == 0) return;
-                Intent intent = new Intent(getApplicationContext(), caller);
+                if (content.trim().isEmpty()) return;
+                Intent callBack = new Intent();
                 Post post = getPost();
-                intent.putExtra(POST, post);
-                User.user.make_post(post);
-                setResult(RESULT_OK, intent);
-                finish();
+                callBack.putExtra(POST, post);
+                Group group = intent.getParcelableExtra(GROUP);
+                if (group == null)
+                    User.user.addPost(post);
+                else
+                    group.addPost(post);
+                setResult(RESULT_OK, callBack);
+                close();
             }
         });
     }
 
     private Post getPost(){
-        return new Post(User.user.getId(), edit_content.getText().toString(), new Date());
+        return new Post(User.user.getId(), edit_content.getText().toString(), Calendar.getInstance().getTimeInMillis());
+    }
+
+    private boolean hasText(){
+        return !edit_content.toString().trim().isEmpty();
+    }
+
+    private void close(){
+        finish();
+        overridePendingTransition(R.anim.push_down_in,R.anim.push_down_out);
     }
 }

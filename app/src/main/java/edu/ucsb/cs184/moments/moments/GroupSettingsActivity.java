@@ -25,7 +25,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group_settings);
         group = (Group) getIntent().getSerializableExtra(GroupsFragment.GROUP);
 
-        back = findViewById(R.id.settings_back);
+        back = findViewById(R.id.gs_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,7 +43,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
             // activity is created for the first time, so basically
             // add the fragment to activity if and only if activity is new
             // when activity rotates, do nothing
-            transaction.add(R.id.settings_placeholder, fragment, SETTINGS);
+            transaction.add(R.id.settings_content, fragment, SETTINGS);
         }
         transaction.commit();
     }
@@ -82,6 +82,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
 //                    User.user.quitGroup(group.getId());
 //                    activity.finish();
                     // TODO: needs another finish
+                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
                     return true;
                 }
             });

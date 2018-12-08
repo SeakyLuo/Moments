@@ -17,8 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import java.util.ArrayList;
-
 import static android.app.Activity.RESULT_OK;
 
 public class GroupsFragment extends Fragment {
@@ -33,9 +31,8 @@ public class GroupsFragment extends Fragment {
     private ImageButton add;
     private DrawerLayout drawer;
     private BottomNavigationView nav;
-    private GroupsAdapter adapter;
-    private RecycleViewFragment fragment;
-    private ArrayList<String> groups = new ArrayList<>();
+    private GroupAdapter adapter;
+    private RecyclerViewFragment fragment;
 
     @Nullable
     @Override
@@ -62,7 +59,7 @@ public class GroupsFragment extends Fragment {
                         return true;
                     case R.id.join_a_group:
                         intent = new Intent(context, SearchActivity.class);
-                        intent.putExtra(SearchActivity.TAB, SearchActivity.GROUPS);
+                        intent.putExtra(SearchActivity.TAB, SearchPair.GROUPS);
                         startActivity(intent);
                         return true;
                 }
@@ -76,12 +73,12 @@ public class GroupsFragment extends Fragment {
                 helper.show();
             }
         });
-        fragment = new RecycleViewFragment();
+        fragment = new RecyclerViewFragment();
         fragment.setShowDivider(true);
-        adapter = new GroupsAdapter();
-        setGroups(User.user.getGroups());
+        adapter = new GroupAdapter();
+        adapter.addElements(User.user.getGroups());
         fragment.setAdapter(adapter);
-        fragment.addOnRefreshListener(new RecycleViewFragment.OnRefreshListener() {
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refresh();
@@ -94,13 +91,13 @@ public class GroupsFragment extends Fragment {
 
     public void refresh(){
         fragment.gotoTop();
-        (new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 User.user.refreshGroups();
                 fragment.gotoTop();
             }
-        })).start();
+        }).start();
     }
 
     public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){
@@ -108,15 +105,8 @@ public class GroupsFragment extends Fragment {
         this.nav = nav;
     }
 
-    public void setGroups(ArrayList<String> groups){
-        this.groups = groups;
-        for(String group : groups){
-            setGroup(Group.findGroup(group));
-        }
-    }
-
-    public void setGroup(Group group){
-        adapter.addGroup(group);
+    public void addGroup(Group group){
+        adapter.addElement(group);
     }
 
     @Override
@@ -124,7 +114,7 @@ public class GroupsFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == CREATE_GROUP){
-            setGroup((Group) data.getSerializableExtra(GROUP));
+            addGroup((Group) data.getParcelableExtra(GROUP));
         }
     }
 }

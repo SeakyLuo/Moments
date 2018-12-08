@@ -1,5 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,23 +22,29 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
         holder.setData(data.get(position));
     }
 
+    public void setData(List data){
+        this.data = data;
+        notifyDataSetChanged();
+    }
     private void add_element(Object object){
         data.add(0, object);
     }
     public void addElements(List data){
         for (int i = 0; i < data.size(); i++) add_element(data.get(i));
-        notifyDataSetChanged();
+        notifyItemRangeInserted(0, data.size());
+//        notifyDataSetChanged();
+    }
+    public void addElements(int index, List data){
+        this.data.addAll(index, data);
+        notifyItemRangeInserted(index, data.size());
+//        notifyDataSetChanged();
     }
     public void addElement(Object object){
         add_element(object);
-        notifyDataSetChanged();
+        notifyItemInserted(0);
     }
     public void removeElement(Object object){
         data.remove(object);
-        notifyDataSetChanged();
-    }
-    public void removeElement(int index){
-        data.remove(index);
         notifyDataSetChanged();
     }
     // Shouldn't be called
@@ -45,9 +52,12 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
         return data;
     }
     public boolean hasData(){
-        return data.size() == 0;
+        return data.size() > 0;
     }
     public void clear(){
+//        int size = data.size();
+//        data.clear();
+//        notifyItemRangeRemoved(0, size);
         data.clear();
         notifyDataSetChanged();
     }
@@ -59,9 +69,11 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
 
     public static abstract class CustomViewHolder extends RecyclerView.ViewHolder{
         protected View view;
+        protected Context context;
         public CustomViewHolder(@NonNull View view) {
             super(view);
             this.view = view;
+            this.context = view.getContext();
         }
         public abstract void setData(Object object);
     }

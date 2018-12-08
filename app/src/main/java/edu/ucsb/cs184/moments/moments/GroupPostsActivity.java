@@ -28,7 +28,7 @@ public class GroupPostsActivity extends AppCompatActivity {
     private ImageButton back;
     private ImageButton more;
     private FloatingActionButton fab;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
     private Intent data;
     private Group group;
 
@@ -36,9 +36,9 @@ public class GroupPostsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_posts);
-        data = getIntent();
-        group = (Group) data.getSerializableExtra(GroupsFragment.GROUP);
         SwipeBackHelper.onCreate(this);
+        data = getIntent();
+        group = data.getParcelableExtra(GroupsFragment.GROUP);
 
         fab = findViewById(R.id.gp_fab);
         back = findViewById(R.id.gp_back);
@@ -49,6 +49,7 @@ public class GroupPostsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EditPostActivity.class);
+                intent.putExtra(EditPostActivity.GROUP, group);
                 startActivityForResult(intent, REQUEST_POST);
             }
         });
@@ -56,6 +57,7 @@ public class GroupPostsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.push_left_in,R.anim.push_right_out);
             }
         });
         more.setOnClickListener(new View.OnClickListener() {
@@ -67,9 +69,9 @@ public class GroupPostsActivity extends AppCompatActivity {
             }
         });
         title.setText(group.getName());
-        icon.setImageBitmap(group.getIcon());
-        fragment = new RecycleViewFragment();
-        fragment.setAdapter(new PostsAdapter());
+        icon.setImageBitmap(group.GetIcon());
+        fragment = new RecyclerViewFragment();
+        fragment.setAdapter(new PostAdapter());
         fragment.addHiddenView(fab);
         fragment.show(getSupportFragmentManager(), R.id.gp_content);
     }
@@ -84,12 +86,22 @@ public class GroupPostsActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
-        if (requestCode == REQUEST_POST){
-            try {
-                fragment.addElement(data.getSerializableExtra(EditPostActivity.POST));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        switch (requestCode){
+            case EditPostActivity.MAKE_POST:
+                try {
+                    fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
+                }catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }finally {
+                    break;
+                }
+            case FullPostActivity.DELETE_POST:
+                try {
+                    fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
 

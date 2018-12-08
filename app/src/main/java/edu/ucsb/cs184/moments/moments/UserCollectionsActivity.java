@@ -5,31 +5,57 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.jude.swipbackhelper.SwipeBackHelper;
+
 public class UserCollectionsActivity extends AppCompatActivity {
 
     private ImageButton back;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_collections);
+        SwipeBackHelper.onCreate(this);
 
         back = findViewById(R.id.uc_back);
-        fragment = new RecycleViewFragment();
+        fragment = new RecyclerViewFragment();
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
-        fragment.setAdapter(new PostsAdapter());
+        fragment.setAdapter(new PostAdapter());
         try {
-            fragment.addElements(User.user.getCollections());
+            fragment.setData(User.user.getCollections());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    fragment.setData(User.user.getCollections());
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         fragment.show(getSupportFragmentManager(), R.id.content_collections);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        SwipeBackHelper.onPostCreate(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SwipeBackHelper.onDestroy(this);
     }
 }

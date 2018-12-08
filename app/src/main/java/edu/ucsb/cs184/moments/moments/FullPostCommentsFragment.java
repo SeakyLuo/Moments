@@ -19,7 +19,7 @@ public class FullPostCommentsFragment extends Fragment {
     private Context context;
     private Button sortby_button;
     private TextView sortby_text;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
 
     @Nullable
     @Override
@@ -29,10 +29,11 @@ public class FullPostCommentsFragment extends Fragment {
         context = getContext();
         sortby_button = view.findViewById(R.id.fpc_sortby_button);
         sortby_text = view.findViewById(R.id.fpc_sortby_text);
-        fragment = new RecycleViewFragment();
+        fragment = new RecyclerViewFragment();
 
-        fragment.setAdapter(new CommentsAdapter());
+        fragment.setAdapter(new CommentAdapter());
         fragment.setShowDivider(true);
+        fragment.setSwipeEnabled(false);
         fragment.show(getFragmentManager(), R.id.fpc_content);
         sortby_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +49,7 @@ public class FullPostCommentsFragment extends Fragment {
                             case R.id.sb_lowest_rating:
                                 sortby_text.setText("Sort By " + getString(R.string.lowest_rating));
                                 return true;
-                            case R.id.sb_lastest:
+                            case R.id.sb_latest:
                                 sortby_text.setText("Sort By " + getString(R.string.most_recent));
                                 return true;
                             case R.id.sb_oldest:
@@ -68,7 +69,7 @@ public class FullPostCommentsFragment extends Fragment {
     public void addComment(Comment comment){
         try {
             fragment.addElement(comment);
-        } catch (Exception e) {
+        } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();
         }
     }

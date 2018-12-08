@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,28 +60,24 @@ public class SignupActivity extends AppCompatActivity {
                 signup();
             }
         });
-
         _loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Finish the registration screen and return to the Login activity
                 finish();
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
     }
 
     public void signup() {
-        Log.d(TAG, "Signup");
-
         if (!validate()) {
-            onSignupFailed();
+            onSignupFailed("Sign up failed");
             return;
         }
 
         _signupButton.setEnabled(false);
-
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
         progressDialog.setCanceledOnTouchOutside(false);
@@ -106,25 +101,38 @@ public class SignupActivity extends AppCompatActivity {
                     FirebaseUser user = mAuth.getCurrentUser();
                     user.updateProfile(updateName);
                     User.user = new User(user.getUid(), name);
+                    FirebaseHelper.setAfterUserInsertionListener(new FirebaseHelper.AfterUserInsertedListener() {
+                        @Override
+                        public void afterUserInserted(User user) {
+                            progressDialog.dismiss();
+                            onSignupSuccess();
+                        }
+                    });
                     FirebaseHelper.insertUser(User.user);
-                    onSignupSuccess();
                 } else {
-                    onSignupFailed();
+                    progressDialog.dismiss();
+                    String a = task.getException().toString(), b = task.getResult().toString();
+                    onSignupFailed(a);
                 }
-                progressDialog.dismiss();
             }
         });
     }
 
 
     public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
-        setResult(RESULT_OK);
-        finish();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                _signupButton.setEnabled(true);
+                setResult(RESULT_OK);
+                finish();
+                overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
+            }
+        });
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getApplicationContext(), "Sign up failed", Toast.LENGTH_LONG).show();
+    public void onSignupFailed(String text) {
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
         _signupButton.setEnabled(true);
     }
 
@@ -144,25 +152,21 @@ public class SignupActivity extends AppCompatActivity {
             _nameText.setError("Username cannot have more than 40 characters");
             valid = false;
         }
-
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError(LoginActivity.VALID_EMAIL);
+            _emailText.setError(LoginActivity.INVALID_EMAIL);
             valid = false;
         }
-
         if (password.length() < 8) {
             _passwordText.setError("You password should have at least 8 characters.");
             valid = false;
-        } else if (password.length() > 30) {
+        }else if (password.length() > 30) {
             _passwordText.setError("You password cannot have more than 30 characters.");
             valid = false;
         }
-
         if (!cpassword.equals(password)) {
             _cpasswordText.setError("Passwords NOT match!");
             valid = false;
         }
-
         return valid;
     }
 

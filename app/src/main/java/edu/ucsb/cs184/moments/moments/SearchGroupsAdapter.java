@@ -16,7 +16,7 @@ public class SearchGroupsAdapter extends CustomAdapter{
         return holder;
     }
 
-    public static class ViewHolder extends CustomAdapter.CustomViewHolder {
+    public class ViewHolder extends CustomAdapter.CustomViewHolder {
         TextView name, number;
         ImageButton join;
         ImageView icon;
@@ -43,7 +43,7 @@ public class SearchGroupsAdapter extends CustomAdapter{
                     join.setVisibility(View.INVISIBLE);
                 }
             });
-            icon.setImageBitmap(data.getIcon());
+            icon.setImageBitmap(data.GetIcon());
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

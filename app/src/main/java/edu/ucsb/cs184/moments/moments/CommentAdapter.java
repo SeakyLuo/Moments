@@ -6,9 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Date;
-
-public class CommentsAdapter extends CustomAdapter {
+public class CommentAdapter extends CustomAdapter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -17,11 +15,11 @@ public class CommentsAdapter extends CustomAdapter {
         return holder;
     }
 
-    public static String TimeText(Date date){
-        return PostsAdapter.TimeText(date);
+    public static String TimeText(Long time){
+        return PostAdapter.TimeText(time);
     }
 
-    public static class ViewHolder extends CustomAdapter.CustomViewHolder {
+    public class ViewHolder extends CustomAdapter.CustomViewHolder {
         public ImageView usericon;
         public TextView username;
         public TextView time;
@@ -59,7 +57,7 @@ public class CommentsAdapter extends CustomAdapter {
         public void setData(Object obj) {
             data = (Comment) obj;
             User user = User.findUser(data.getUserid());
-            usericon.setImageBitmap(user.getIcon());
+            usericon.setImageBitmap(user.GetIcon());
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             content.setText(data.getContent());

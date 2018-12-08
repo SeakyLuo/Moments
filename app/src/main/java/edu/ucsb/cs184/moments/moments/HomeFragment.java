@@ -1,6 +1,5 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,33 +8,29 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.support.v7.widget.Toolbar;
 
 import static android.app.Activity.RESULT_OK;
 
 public class HomeFragment extends Fragment {
 
-    public static final int REQUEST_POST = 0;
-
-    private Context context;
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private BottomNavigationView nav;
     private ImageButton menu;
     private ImageButton search;
     private FloatingActionButton fab;
-    private RecycleViewFragment fragment;
+    private RecyclerViewFragment fragment;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        context = getContext();
 
         search = view.findViewById(R.id.search_home);
         search.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +38,14 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), SearchActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+            }
+        });
+        toolbar = view.findViewById(R.id.home_toolbar);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.gotoTop();
             }
         });
         fab = view.findViewById(R.id.home_fab);
@@ -50,7 +53,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EditPostActivity.class);
-                startActivityForResult(intent, REQUEST_POST);
+                startActivityForResult(intent, EditPostActivity.MAKE_POST);
+                getActivity().overridePendingTransition(R.anim.push_down_in, R.anim.push_up_out);
             }
         });
         menu = view.findViewById(R.id.menu_home);
@@ -60,35 +64,50 @@ public class HomeFragment extends Fragment {
                 if (drawer != null) drawer.openDrawer(Gravity.START);
             }
         });
-        fragment = new RecycleViewFragment();
-        fragment.setAdapter(new PostsAdapter());
-        fragment.addOnRefreshListener(new RecycleViewFragment.OnRefreshListener() {
+        fragment = new RecyclerViewFragment();
+        fragment.setAdapter(new PostAdapter());
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refresh();
             }
         });
-        fragment.addHiddenView(toolbar);
-        fragment.addHiddenView(fab);
-        fragment.addHiddenView(nav);
         try {
-            fragment.addElements(User.user.getTimeline());
+            fragment.addElements(0, User.user.getTimeline());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        fragment.addHiddenView(fab);
+        fragment.addHiddenView(toolbar);
+        fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.home_content);
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
         return view;
     }
 
     public void refresh(){
         fragment.gotoTop();
-        (new Thread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                User.user.refreshTimeline();
-                fragment.gotoTop();
+                try {
+                    // TODO: see below
+                    // Not a good algorithm
+                    // Should add new posts only
+                    User.user.refreshTimeline();
+                    fragment.setData(User.user.getTimeline());
+                    fragment.refresh();
+                    fragment.gotoTop();
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
             }
-        })).start();
+        });
     }
 
     public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){
@@ -113,12 +132,25 @@ public class HomeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
-        if (requestCode == REQUEST_POST){
-            try {
-                fragment.addElement(data.getSerializableExtra(EditPostActivity.POST));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        switch (requestCode){
+            case EditPostActivity.MAKE_POST:
+                try {
+                    fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
+                    fragment.gotoTop();
+                }catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }finally {
+                    break;
+                }
+            case FullPostActivity.DELETE_POST:
+                try {
+                    fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
+                    fragment.gotoTop();
+                }catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }finally {
+                    break;
+                }
         }
     }
 }

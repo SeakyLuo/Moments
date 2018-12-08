@@ -49,7 +49,9 @@ public class EditUserProfileActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_OK);
                 finish();
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
         icon.setOnClickListener(new View.OnClickListener() {
@@ -62,26 +64,26 @@ public class EditUserProfileActivity extends AppCompatActivity {
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextFragment fragment = new TextFragment();
-                fragment.setTitle("Edit Name");
-                fragment.setContent(User.user.getName());
-                fragment.show(getSupportFragmentManager(), NAME);
+                InputDialog dialog = new InputDialog();
+                dialog.showNow(getSupportFragmentManager(), NAME);
+                dialog.setTitle("Edit Name");
+                dialog.setContent(User.user.getName());
             }
         });
         gender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GenderFragment fragment = new GenderFragment();
-                fragment.show(getSupportFragmentManager(), GENDER);
+                GenderDialog dialog = new GenderDialog();
+                dialog.showNow(getSupportFragmentManager(), GENDER);
             }
         });
         intro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextFragment fragment = new TextFragment();
-                fragment.setTitle("Edit Intro");
-                fragment.setContent(User.user.getIntro());
-                fragment.show(getSupportFragmentManager(), NAME);
+                InputDialog dialog = new InputDialog();
+                dialog.showNow(getSupportFragmentManager(), INTRO);
+                dialog.setTitle("Edit Intro");
+                dialog.setContent(User.user.getIntro());
             }
         });
     }
@@ -116,7 +118,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
         icon.setImageBitmap((Bitmap) intent.getParcelableExtra(UploadIconActivity.ICON));
     }
 
-    public static class TextFragment extends DialogFragment{
+    public static class InputDialog extends DialogFragment{
         private TextView title;
         private EditText text;
         private Button cancel, save;
@@ -142,10 +144,10 @@ public class EditUserProfileActivity extends AppCompatActivity {
                     String content = text.getText().toString();
                     if (title_text.contains("Name")){
                         EditUserProfileActivity.setName(content);
-                        User.user.setName(content);
+                        User.user.modifyName(content);
                     }else if (title_text.contains("Intro")){
                         EditUserProfileActivity.setIntro(content);
-                        User.user.setIntro(content);
+                        User.user.modifyIntro(content);
                     }
                     dismiss();
                 }
@@ -162,16 +164,19 @@ public class EditUserProfileActivity extends AppCompatActivity {
         }
     }
 
-    public static class GenderFragment extends DialogFragment{
-        public final String MALE = getString(R.string.male);
-        public final String FEMALE = getString(R.string.female);
-        public final String UNKNOWN = getString(R.string.unknown);
+    public static class GenderDialog extends DialogFragment{
+        private String MALE;
+        private String FEMALE;
+        private String UNKNOWN;
         private RadioGroup radioGroup;
         private Button cancel, confirm;
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.dialog_select_gender,container,false);
+            MALE = getString(R.string.male);
+            FEMALE = getString(R.string.female);
+            UNKNOWN = getString(R.string.unknown);
             radioGroup = view.findViewById(R.id.sg_radio_group);
             cancel = view.findViewById(R.id.sg_cancel);
             confirm = view.findViewById(R.id.sg_confirm);
@@ -195,12 +200,18 @@ public class EditUserProfileActivity extends AppCompatActivity {
                         case R.id.sg_rb_male:
                             EditUserProfileActivity.setGender(MALE);
                             User.user.setGender(MALE);
+                            dismiss();
+                            break;
                         case R.id.sg_rb_female:
                             EditUserProfileActivity.setGender(FEMALE);
                             User.user.setGender(FEMALE);
+                            dismiss();
+                            break;
                         case R.id.sg_rb_unknown:
                             EditUserProfileActivity.setGender(UNKNOWN);
                             User.user.setGender(UNKNOWN);
+                            dismiss();
+                            break;
                     }
                 }
             });

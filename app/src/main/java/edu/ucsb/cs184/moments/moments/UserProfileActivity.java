@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,16 +21,17 @@ import com.jude.swipbackhelper.SwipeBackHelper;
 public class UserProfileActivity extends AppCompatActivity {
 
     public static final String USERID = "userid";
+    public static final String SORTBY = "Sort By";
     private Button sortBy;
-    private ImageButton back;
-    private View include;
+    private ImageButton back, search;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
     private ImageView icon, gender;
-    private TextView username, user_number, intro, following, followers;
-    private ImageButton follow, message;
-    private FrameLayout up_timeline;
-    private RecycleViewFragment fragment;
+    private TextView username, user_number, intro, following, followers, posts_count;
+    private ImageButton  edit, follow, message;
+    private RecyclerViewFragment fragment;
+    private String userid;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,32 +39,50 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
         SwipeBackHelper.onCreate(this);
 
+        userid = getIntent().getStringExtra(USERID);
+        user = User.findUser(getIntent().getStringExtra(USERID));
         back = findViewById(R.id.up_back);
-        include = findViewById(R.id.content_user_profile);
+        search = findViewById(R.id.up_search);
         toolbar = findViewById(R.id.up_toolbar);
         collapsingToolbarLayout = findViewById(R.id.up_ctoolbar);
-        sortBy = include.findViewById(R.id.up_sortby_button);
-        icon = include.findViewById(R.id.up_usericon);
-        gender = include.findViewById(R.id.up_gender);
-        username = include.findViewById(R.id.up_username);
-        user_number = include.findViewById(R.id.up_user_number);
-        intro = include.findViewById(R.id.up_intro);
-        following = include.findViewById(R.id.up_following);
-        followers = include.findViewById(R.id.up_followers);
-        follow = include.findViewById(R.id.up_follow);
-        message = include.findViewById(R.id.up_message);
-        up_timeline = include.findViewById(R.id.up_timeline);
-        fragment = new RecycleViewFragment();
-        fragment.setAdapter(new PostsAdapter());
+        sortBy = findViewById(R.id.up_sortby_button);
+        icon = findViewById(R.id.up_usericon);
+        gender = findViewById(R.id.up_gender);
+        username = findViewById(R.id.up_username);
+        user_number = findViewById(R.id.up_user_number);
+        intro = findViewById(R.id.up_intro);
+        following = findViewById(R.id.up_following);
+        followers = findViewById(R.id.up_followers);
+        edit = findViewById(R.id.up_edit);
+        follow = findViewById(R.id.up_follow);
+        posts_count = findViewById(R.id.up_posts);
+        message = findViewById(R.id.up_message);
+        fragment = new RecyclerViewFragment();
+        PostAdapter adapter = new PostAdapter();
+        adapter.setUsericonClickable(false);
+        fragment.setAdapter(adapter);
         fragment.show(getSupportFragmentManager(), R.id.up_timeline);
 
+        collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
+        collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
+        setSupportActionBar(toolbar);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
-
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserProfileActivity.this, SearchListActivity.class);
+                intent.putExtra(SearchListActivity.ADAPTER, SearchListActivity.POST);
+                intent.putExtra(SearchListActivity.DATA, user.getPosts());
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+            }
+        });
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +95,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         });
+        sortBy.setText(SORTBY);
         sortBy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,12 +105,20 @@ public class UserProfileActivity extends AppCompatActivity {
                     public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.sb_highest_rating:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.highest_rating));
+//                                fragment.gotoTop();
                                 return true;
                             case R.id.sb_lowest_rating:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.lowest_rating));
+//                                fragment.gotoTop();
                                 return true;
-                            case R.id.sb_lastest:
+                            case R.id.sb_latest:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.most_recent));
+//                                fragment.gotoTop();
                                 return true;
                             case R.id.sb_oldest:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.least_recent));
+//                                fragment.gotoTop();
                                 return true;
                         }
                         return false;
@@ -100,64 +127,87 @@ public class UserProfileActivity extends AppCompatActivity {
                 helper.show();
             }
         });
-        collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
-        collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
-        setSupportActionBar(toolbar);
-        setUserProfile(getIntent().getStringExtra(USERID));
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.gotoTop();
+            }
+        });
+        following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserProfileActivity.this, SearchListActivity.class);
+                intent.putExtra(SearchListActivity.ADAPTER, SearchListActivity.FOLLOWING);
+                intent.putExtra(SearchListActivity.DATA, user.getFollowing());
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+            }
+        });
+        followers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserProfileActivity.this, SearchListActivity.class);
+                intent.putExtra(SearchListActivity.ADAPTER, SearchListActivity.FOLLOWER);
+                intent.putExtra(SearchListActivity.DATA, user.getFollowers());
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+            }
+        });
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
+                intent.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
+                startActivityForResult(intent, EditUserProfileActivity.FINISH);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+            }
+        });
+        follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (User.user.isFollowing(userid)) User.user.unfollow(userid);
+                else User.user.follow(userid);
+                setFollow(userid);
+            }
+        });
+        setUserProfile();
     }
 
-    private void setUserProfile(final String userid){
-        User user = User.findUser(userid);
+    private void setUserProfile(){
         collapsingToolbarLayout.setTitle(user.getName());
         username.setText(user.getName());
-        user_number.setText(user.getNumber());
-        if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.INVISIBLE);
+        user_number.setText("#" + user.getNumber());
+        if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.GONE);
         else{
             gender.setVisibility(View.VISIBLE);
             gender.setImageDrawable(user.getGender().equals(getString(R.string.male)) ? getDrawable(R.drawable.ic_male) : getDrawable(R.drawable.ic_female));
         }
-        following.setText(user.getFollowers().size() + " followers");
-        followers.setText(user.getFollowers().size() + " followers");
+        following.setText("Following: " + user.getFollowing().size());
+        followers.setText("Followers: " + user.getFollowers().size());
         intro.setText("Intro: " + user.getIntro());
-        if (userid.equals(User.user.getId())){
-            follow.setImageResource(R.drawable.ic_edit);
-            message.setVisibility(View.INVISIBLE);
-            follow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent eup = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
-                    eup.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
-                    startActivityForResult(eup, EditUserProfileActivity.FINISH);
-                }
-            });
-        }else{
-            message.setVisibility(View.VISIBLE);
-            follow.setImageResource(User.user.isFollowing(userid) ? R.drawable.ic_unfollow : R.drawable.ic_follow);
-            follow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (User.user.isFollowing(userid)){
-                        User.user.unfollow(userid);
-                        follow.setImageResource(R.drawable.ic_follow);
-                    }
-                    else{
-                        User.user.follow(userid);
-                        follow.setImageResource(R.drawable.ic_unfollow);
-                    }
-                }
-            });
-        }
+        posts_count.setText("Posts: " + user.getPosts().size());
+        boolean self = userid.equals(User.user.getId());
+        edit.setVisibility(self ? View.VISIBLE : View.GONE);
+        message.setVisibility(self ? View.GONE : View.VISIBLE);
+        follow.setVisibility(self ? View.GONE : View.VISIBLE);
+        setFollow(userid);
         try {
-            fragment.addElements(user.getPosts());
+            fragment.setData(user.getPosts());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static String FollowCount(int count){
+    private static String FollowCount(int count){
         if (count > 1000000) return count / 1000000 + " M";
         else if (count > 1000) return count / 1000 + " K";
         return count + "";
+    }
+
+    private void setFollow(String userid){
+        int followImage = IconHelper.followImage(userid);
+        follow.setImageResource(followImage);
+        follow.setBackground(getDrawable(followImage == R.drawable.ic_unfollow ? R.drawable.button_border_green : R.drawable.button_border_orange));
     }
 
     @Override
@@ -165,7 +215,8 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == EditUserProfileActivity.FINISH){
-            setUserProfile(User.user.getId());
+            user = User.findUser(userid);
+            setUserProfile();
         }
     }
 

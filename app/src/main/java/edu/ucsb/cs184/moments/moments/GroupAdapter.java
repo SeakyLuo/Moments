@@ -12,9 +12,10 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.Locale;
 
-public class GroupsAdapter extends CustomAdapter {
+public class GroupAdapter extends CustomAdapter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -23,19 +24,19 @@ public class GroupsAdapter extends CustomAdapter {
         return holder;
     }
 
-    public static String TimeText(Date date){
-        Date now = new Date();
-        long delta_day = now.getDay() - date.getDay();
-        if (delta_day == 0) return new SimpleDateFormat("HH:mm").format(date);
+    public static String TimeText(Long time){
+        Calendar date = Calendar.getInstance(), now = Calendar.getInstance();
+        date.setTimeInMillis(time);
+        int delta_year = now.get(Calendar.YEAR) - date.get(Calendar.YEAR);
+        if (delta_year != 0) return new SimpleDateFormat("yyyy-MM-dd").format(time);
+        int delta_day = now.get(Calendar.DAY_OF_YEAR) - date.get(Calendar.DAY_OF_YEAR);
+        if (delta_day == 0) return new SimpleDateFormat("HH:mm").format(time);
         else if (delta_day == 1) return "Yesterday";
-        // return Mon Tue Wed Thu Fri Sat Sun
-        long delta_year = now.getYear() - date.getYear();
-        if (delta_year == 0) return new SimpleDateFormat("MM-dd").format(date);
-        return new SimpleDateFormat("yyyy-MM-dd").format(date);
-//        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+        if (date.get(Calendar.WEEK_OF_YEAR) == now.get(Calendar.WEEK_OF_YEAR)) return date.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US);;
+        return new SimpleDateFormat("MM-dd").format(time);
     }
 
-    public static class ViewHolder extends CustomAdapter.CustomViewHolder {
+    public class ViewHolder extends CustomAdapter.CustomViewHolder {
         public ImageView group_icon;
         public TextView group_name;
         public TextView time;
@@ -84,15 +85,17 @@ public class GroupsAdapter extends CustomAdapter {
         public void setData(Object object) {
             data = (Group) object;
             group_name.setText(data.getName());
-            group_icon.setImageBitmap(data.getIcon());
+            group_icon.setImageBitmap(data.GetIcon());
             ArrayList<Post> posts = data.getPosts();
             if (posts.size() == 0){
-                time.setText(TimeText(new Date()));
-                content.setText("You have created a new group.");
+                time.setText(TimeText(Calendar.getInstance().getTimeInMillis()));
+                String managerid = data.getManagerid();
+                String name = User.findUser(managerid).getName();
+                content.setText(managerid.equals(User.user.getId()) ? "You" : name + " created a new group.");
             }else{
                 Post post = posts.get(posts.size() - 1);
                 time.setText(TimeText(post.getTime()));
-                content.setText(post.getUserid() +": " + post.getContent());
+                content.setText(User.findUser(post.getUserid()).getName() + ": " + post.getContent());
             }
         }
         public void setQuiet(boolean isQuiet){

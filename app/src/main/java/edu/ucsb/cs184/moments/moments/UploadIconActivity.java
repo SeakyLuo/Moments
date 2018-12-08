@@ -38,8 +38,7 @@ public class UploadIconActivity extends AppCompatActivity {
     private Context context;
     private Intent callerIntent;
     private Class caller;
-    private ImageButton cancel;
-    private ImageButton finish;
+    private ImageButton back;
     private ImageView icon;
     private ImageButton camera;
     private String imageFileName;
@@ -53,9 +52,17 @@ public class UploadIconActivity extends AppCompatActivity {
         caller = callerIntent.getClass();
         SwipeBackHelper.onCreate(this);
 
+        back = findViewById(R.id.uu_back);
         icon = findViewById(R.id.uu_usericon);
         camera = findViewById(R.id.uu_camera);
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
+            }
+        });
         icon.setImageBitmap((Bitmap) callerIntent.getParcelableExtra(ICON));
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,8 +149,8 @@ public class UploadIconActivity extends AppCompatActivity {
             }
         }
         icon.setImageBitmap(image);
-        User.user.setIcon(image);
-        if (caller == UserProfileActivity.class) User.user.setIcon(image);
+        User.user.SetIcon(image);
+        if (caller == UserProfileActivity.class) User.user.SetIcon(image);
         Intent intent = new Intent(UploadIconActivity.this, caller);
         intent.putExtra(ICON, image);
         setResult(RESULT_OK, intent);

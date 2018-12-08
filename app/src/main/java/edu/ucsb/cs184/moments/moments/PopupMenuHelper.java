@@ -7,6 +7,7 @@ import android.support.v7.view.menu.MenuPopupHelper;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupWindow;
 
 
 @SuppressLint("RestrictedApi")
@@ -61,6 +62,10 @@ public class PopupMenuHelper {
 
             }
         });
+    }
+
+    public void setOnDismissListener(PopupWindow.OnDismissListener listener){
+        menuHelper.setOnDismissListener(listener);
     }
 
     public void show(){

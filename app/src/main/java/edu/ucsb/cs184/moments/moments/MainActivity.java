@@ -50,22 +50,27 @@ public class MainActivity extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), UserProfileActivity.class);
                         intent.putExtra(UserProfileActivity.USERID, User.user.getId());
                         startActivity(intent);
+                        overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.nav_user_collections:
                         intent = new Intent(getApplicationContext(), UserCollectionsActivity.class);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.nav_user_draftbox:
                         intent = new Intent(getApplicationContext(), UserDraftboxActivity.class);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.nav_settings:
                         intent = new Intent(getApplicationContext(), SettingsActivity.class);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.test:
                         intent = new Intent(getApplicationContext(), TestActivity.class);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                 }
                 return false;
@@ -80,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
                 intent.putExtra(UserProfileActivity.USERID, User.user.getId());
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
         bNavigation = findViewById(R.id.navigation);
@@ -109,10 +115,13 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_home:
                         homeFragment.refresh();
+                        break;
                     case R.id.navigation_groups:
                         groupsFragment.refresh();
+                        break;
                     case R.id.navigation_notifications:
                         notificationsFragment.refresh();
+                        break;
                 }
             }
         });

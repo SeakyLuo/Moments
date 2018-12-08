@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,7 +9,7 @@
         android:id="@+id/eup_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/screen_background_light_transparent"
+        android:background="?android:attr/colorBackgroundFloating"
         android:contentInsetStart="0dp"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
@@ -29,7 +28,7 @@
                 android:id="@+id/eup_back"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:background="@android:drawable/screen_background_light_transparent"
+                android:background="@android:color/transparent"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
