@@ -42,6 +42,12 @@ public class HomeFragment extends Fragment {
             }
         });
         toolbar = view.findViewById(R.id.home_toolbar);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.gotoTop();
+            }
+        });
         fab = view.findViewById(R.id.home_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
