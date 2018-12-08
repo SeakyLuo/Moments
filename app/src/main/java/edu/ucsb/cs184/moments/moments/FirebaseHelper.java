@@ -1,18 +1,29 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class FirebaseHelper {
+    public static final String GROUP_ICON = "GroupIcon", USER_ICON = "UserIcon";
 
     private static FirebaseDatabase firebase;
+    private static FirebaseStorage storage;
+    private static StorageReference storageRef;
+    private static StorageReference usr, gsr;
     private static DatabaseReference db;
     private static DatabaseReference udb, gdb, uc, gc, uudb;
     private static DataSnapshot uds, gds, ucds, gcds;
@@ -21,9 +32,12 @@ public class FirebaseHelper {
     private static ArrayList<OnDataUpdatesListener> updateListeners = new ArrayList<>();
     private static AfterUserInsertedListener uInsertionListener;
     private static AfterGroupInsertedListener gInsertionListener;
-
     public static void init(){
         firebase = FirebaseDatabase.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        usr = storageRef.child("user_icon");
+        gsr = storageRef.child("group_icon");
         db = firebase.getReference();
         db.keepSynced(true);
         udb = db.child("users");
@@ -255,30 +269,48 @@ public class FirebaseHelper {
 
     public static boolean initFinished() { return uds != null && gds != null && ucds != null && gcds != null; }
 
-//    public void uploadImage(Bitmap bitmap) {
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//        byte[] data = baos.toByteArray();
-//
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        StorageReference storageRef = storage.getReferenceFromUrl("gs://you_firebase_app.appspot.com");
-//        StorageReference imagesRef = storageRef.child("images/name_of_your_image.jpg");
-//
-//        UploadTask uploadTask = imagesRef.putBytes(data);
-//        uploadTask.addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle unsuccessful uploads
-//            }
-//        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-//                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-//                // Do what you want
-//            }
-//        });
-//    }
+    public static void uploadIcon(final Bitmap bitmap, final String type, final String id){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                UploadIcon(bitmap, type, id);
+            }
+        }).start();
+    }
+
+    private static void UploadIcon(Bitmap bitmap, String type, String id) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        StorageReference imagesRef;
+        switch (type){
+            case USER_ICON:
+                imagesRef = usr.child(id + ".jpg");
+                break;
+            case GROUP_ICON:
+                 imagesRef = gsr.child(id + ".jpg");
+                 break;
+            default:
+                return;
+        }
+
+        UploadTask uploadTask = imagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+            }
+        });
+    }
+
+    public static Bitmap getIcon(final String type, final String id){
+        return null;
+    }
 
     interface OnUDBReceivedListener{
         void onUDBReceived();

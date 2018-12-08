@@ -34,33 +34,36 @@ public class CreateGroupActivity extends AppCompatActivity {
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                upload_icon();
+                uploadIcon();
             }
         });
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                upload_icon();
+                uploadIcon();
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!finishClickable()) return;
-                Group group = new Group(name.getText().toString(), User.user.getId(), ((BitmapDrawable) icon.getDrawable()).getBitmap());
+                Group group = new Group(name.getText().toString(), User.user.getId());
                 FirebaseHelper.setAfterGroupInsertionListener(new FirebaseHelper.AfterGroupInsertedListener() {
                     @Override
                     public void afterGroupInserted(Group group) {
                         User.user.createGroup(group.getId());
+                        FirebaseHelper.uploadIcon(((BitmapDrawable) icon.getDrawable()).getBitmap(), FirebaseHelper.GROUP_ICON, group.getId());
                         Intent intent = new Intent(getApplicationContext(), GroupsFragment.class);
                         intent.putExtra(GroupsFragment.GROUP, group);
                         setResult(RESULT_OK, intent);
+                        overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         finish();
                     }
                 });
@@ -91,7 +94,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         return (name.getText().toString().trim().length() != 0) && (name.getText().toString().length() <= 30);
     }
 
-    private void upload_icon(){
+    private void uploadIcon(){
         Intent uu = new Intent(CreateGroupActivity.this, UploadIconActivity.class);
         uu.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
         startActivityForResult(uu, UploadIconActivity.iconCode);

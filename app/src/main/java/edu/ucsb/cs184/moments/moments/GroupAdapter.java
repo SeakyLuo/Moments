@@ -85,7 +85,7 @@ public class GroupAdapter extends CustomAdapter {
         public void setData(Object object) {
             data = (Group) object;
             group_name.setText(data.getName());
-            group_icon.setImageBitmap(data.getIcon());
+            group_icon.setImageBitmap(data.GetIcon());
             ArrayList<Post> posts = data.getPosts();
             if (posts.size() == 0){
                 time.setText(TimeText(Calendar.getInstance().getTimeInMillis()));

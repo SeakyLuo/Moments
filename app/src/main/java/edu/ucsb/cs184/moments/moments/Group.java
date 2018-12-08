@@ -13,18 +13,17 @@ public class Group implements Parcelable {
     private String managerid;
     private String name;
     private int group_number;
-    private String intro = "";
     private Bitmap icon;
+    private String intro = "";
     private ArrayList<String> members = new ArrayList<>();
     private ArrayList<Post> posts = new ArrayList<>();
 
     public Group(){}
 
-    public Group(String name, String managerid, Bitmap icon){
+    public Group(String name, String managerid){
         this.name = name;
         this.managerid = managerid;
         this.members.add(managerid);
-        this.icon = icon;
     }
 
     protected Group(Parcel in) {
@@ -33,7 +32,6 @@ public class Group implements Parcelable {
         name = in.readString();
         group_number = in.readInt();
         intro = in.readString();
-        icon = in.readParcelable(Bitmap.class.getClassLoader());
         members = in.createStringArrayList();
         posts = in.createTypedArrayList(Post.CREATOR);
     }
@@ -59,11 +57,6 @@ public class Group implements Parcelable {
     }
     public void setNumber(int number) { this.group_number = number; }
     public int getNumber() { return group_number;}
-    public Bitmap getIcon() { return icon; }
-    public void setIcon(Bitmap icon) {
-        this.icon = icon;
-        upload("icon", icon);
-    }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public void modifyName(String name){
@@ -78,6 +71,12 @@ public class Group implements Parcelable {
     }
     public ArrayList<String> getMembers() { return members; }
     public ArrayList<Post> getPosts() { return posts; }
+    public void SetIcon(Bitmap bitmap) { icon = bitmap; }
+    public Bitmap GetIcon() {
+        if (icon == null)
+            icon = FirebaseHelper.getIcon(FirebaseHelper.GROUP_ICON, id);
+        return icon;
+    }
 
     public void addMember(String userid){
         members.add(userid);
@@ -127,7 +126,6 @@ public class Group implements Parcelable {
         dest.writeString(name);
         dest.writeInt(group_number);
         dest.writeString(intro);
-        dest.writeParcelable(icon, flags);
         dest.writeStringList(members);
         dest.writeTypedList(posts);
     }

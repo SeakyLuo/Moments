@@ -54,7 +54,7 @@ public class FullPostCommentsAdapter extends CustomAdapter {
         public void setData(Object object) {
             data = (Comment) object;
             User user = User.findUser(data.getUserid());
-//        usericon.setImageBitmap(user.getIcon());
+//        usericon.setImageBitmap(user.GetIcon());
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             content.setText(data.getContent());

@@ -69,7 +69,7 @@ public class GroupPostsActivity extends AppCompatActivity {
             }
         });
         title.setText(group.getName());
-        icon.setImageBitmap(group.getIcon());
+        icon.setImageBitmap(group.GetIcon());
         fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostAdapter());
         fragment.addHiddenView(fab);
