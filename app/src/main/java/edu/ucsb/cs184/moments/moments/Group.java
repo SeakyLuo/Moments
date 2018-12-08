@@ -96,6 +96,7 @@ public class Group implements Parcelable {
     private void upload(String key, Object value){
         FirebaseHelper.updateGroup(id, key, value);
     }
+    public boolean containsKeyword(String keyword) { return name.contains(keyword) || Integer.toString(group_number).contains(keyword); }
     public static Group findGroup(String id) { return FirebaseHelper.findGroup(id); }
     @Override
     public String toString(){
@@ -103,6 +104,13 @@ public class Group implements Parcelable {
     }
     public static Group fromJson(String json){
         return (new Gson()).fromJson(json, Group.class);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (!(obj instanceof Group)) return false;
+        return id.equals(((Group) obj).id);
     }
 
     @Override

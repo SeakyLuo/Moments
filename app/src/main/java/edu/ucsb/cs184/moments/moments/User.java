@@ -3,6 +3,7 @@ package edu.ucsb.cs184.moments.moments;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
@@ -168,6 +169,7 @@ public class User implements Parcelable {
     public boolean hasNewPost() { return postsNotification.size() != 0; }
     public boolean hasNewComment() { return commentsNotification.size() != 0; }
     public boolean hasNewRating() { return ratingsNotification.size() != 0; }
+    public boolean containsKeyword(String keyword) { return name.contains(keyword) || Integer.toString(user_number).contains(keyword); }
     public ArrayList<Post.Key> getPostKeys() {
         ArrayList<Post.Key> data = new ArrayList<>();
         for (Post post: posts) data.add(post.GetKey());
@@ -377,6 +379,13 @@ public class User implements Parcelable {
     public String toString(){
         return (new Gson()).toJson(this);
     }
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == null) return false;
+        if (!(obj instanceof User)) return false;
+        return id.equals(((User) obj).id);
+    }
+
     public static User fromJson(String json){
         return (new Gson()).fromJson(json, User.class);
     }

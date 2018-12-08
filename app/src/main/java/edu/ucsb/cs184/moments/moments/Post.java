@@ -71,7 +71,8 @@ public class Post implements Parcelable {
                 count++;
         return count;
     }
-    public Boolean IsAnonymous() { return userid.equals(User.ANONYMOUS); }
+    public boolean IsAnonymous() { return userid.equals(User.ANONYMOUS); }
+    public boolean containsKeyword(String keyword) { return content.contains(keyword); }
     public void addComment(Comment comment) { comments.add(comment); }
     public void addRating(Rating rating) { ratings.add(rating); }
     public void removeComment(Comment comment) { comments.remove(comment); }
@@ -88,10 +89,8 @@ public class Post implements Parcelable {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj == null)
-            return false;
-        if (!(obj instanceof Post))
-            return false;
+        if (obj == null) return false;
+        if (!(obj instanceof Post)) return false;
         return GetKey().equals(((Post) obj).GetKey());
     }
 

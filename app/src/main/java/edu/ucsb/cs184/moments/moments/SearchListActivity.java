@@ -55,7 +55,17 @@ public class SearchListActivity extends AppCompatActivity {
                 searchBar.setText("");
                 clearButton.setVisibility(View.GONE);
                 try {
-                    fragment.setData(data);
+                    switch (adapter) {
+                        case FOLLOWER:
+                            fragment.setData(data);
+                            break;
+                        case FOLLOWING:
+                            fragment.setData(data);
+                            break;
+                        case POST:
+                            fragment.setData(new ArrayList<Post>());
+                            break;
+                    }
                 } catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
                 }
@@ -115,42 +125,21 @@ public class SearchListActivity extends AppCompatActivity {
     }
 
     private void search(String keyword){
-        ArrayList list = new ArrayList<>();
-        switch (adapter){
-            case FOLLOWER:
-                list.add(searchUser(keyword));
-                list.add(searchUser(keyword.toLowerCase()));
-                break;
-            case FOLLOWING:
-                list.add(searchUser(keyword));
-                list.add(searchUser(keyword.toLowerCase()));
-                break;
-            case POST:
-                list.add(searchPost(keyword));
-                list.add(searchPost(keyword.toLowerCase()));
-                break;
-        }
         try {
-            fragment.setData(list);
+            switch (adapter){
+                case FOLLOWER:
+                    fragment.setData(SearchActivity.searchUsers(keyword));
+                    break;
+                case FOLLOWING:
+                    fragment.setData(SearchActivity.searchUsers(keyword));
+                    break;
+                case POST:
+                    fragment.setData(SearchActivity.searchPosts(keyword));
+                    break;
+            }
         } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();
         }
-    }
-
-    private ArrayList<User> searchUser(String keyword){
-        ArrayList<User> list = new ArrayList<>();
-        for (User obj: (ArrayList<User>) data)
-            if ((obj.getName().contains(keyword) || Integer.toString(obj.getNumber()).contains(keyword)))
-                list.add(obj);
-        return list;
-    }
-
-    private ArrayList<Post> searchPost(String keyword){
-        ArrayList<Post> list = new ArrayList<>();
-        for (Post obj: (ArrayList<Post>) data)
-            if (obj.getContent().contains(keyword))
-                list.add(obj);
-        return list;
     }
 
     @Override

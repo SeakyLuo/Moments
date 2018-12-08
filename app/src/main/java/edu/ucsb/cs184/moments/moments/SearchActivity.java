@@ -140,20 +140,16 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     switch (type){
                         case POSTS:
-                            postsFragment.setData(FirebaseHelper.searchPosts(keyword));
-                            postsFragment.addElements(FirebaseHelper.searchPosts(keyword.toLowerCase()));
+                            postsFragment.setData(searchPosts(keyword));
                             break;
                         case USERS:
-                            usersFragment.setData(FirebaseHelper.searchUsers(keyword));
-                            usersFragment.addElements(FirebaseHelper.searchUsers(keyword.toLowerCase()));
+                            usersFragment.setData(searchUsers(keyword));
                             break;
                         case GROUPS:
-                            groupsFragment.setData(FirebaseHelper.searchGroups(keyword));
-                            usersFragment.addElements(FirebaseHelper.searchGroups(keyword.toLowerCase()));
+                            groupsFragment.setData(searchGroups(keyword));
                             break;
                         case HISTORY:
-                            postsFragment.setData(FirebaseHelper.searchPosts(keyword));
-                            postsFragment.addElements(FirebaseHelper.searchPosts(keyword.toLowerCase()));
+                            postsFragment.setData(searchPosts(keyword));
                             setCurrentTab(POSTS);
                             break;
                     }
@@ -176,6 +172,36 @@ public class SearchActivity extends AppCompatActivity {
     public void searchHistory(SearchPair pair){
         search(pair.keyword, pair.type);
         setCurrentTab(pair.type);
+    }
+
+    public static ArrayList<Post> searchPosts(String keyword){
+        ArrayList<Post> data = FirebaseHelper.searchPosts(keyword);
+        String lowKey = keyword.toLowerCase();
+        if (!lowKey.equals(keyword))
+            for (Post obj: FirebaseHelper.searchPosts(lowKey))
+                if (!data.contains(obj))
+                    data.add(obj);
+        return data;
+    }
+
+    public static ArrayList<User> searchUsers(String keyword){
+        ArrayList<User> data = FirebaseHelper.searchUsers(keyword);
+        String lowKey = keyword.toLowerCase();
+        if (!lowKey.equals(keyword))
+            for (User obj: FirebaseHelper.searchUsers(lowKey))
+                if (!data.contains(obj))
+                    data.add(obj);
+        return data;
+    }
+
+    public static ArrayList<Group> searchGroups(String keyword){
+        ArrayList<Group> data = FirebaseHelper.searchGroups(keyword);
+        String lowKey = keyword.toLowerCase();
+        if (!lowKey.equals(keyword))
+            for (Group obj: FirebaseHelper.searchGroups(lowKey))
+                if (!data.contains(obj))
+                    data.add(obj);
+        return data;
     }
 
     private RecyclerViewFragment getFragmentAt(String tab){

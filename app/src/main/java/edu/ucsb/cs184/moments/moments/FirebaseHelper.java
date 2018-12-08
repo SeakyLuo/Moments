@@ -166,7 +166,7 @@ public class FirebaseHelper {
         for (DataSnapshot ds: uds.getChildren()){
             for (DataSnapshot pds: ds.child("posts").getChildren()){
                 Post value = pds.getValue(Post.class);
-                if (value.getContent().contains(keyword))
+                if (value.containsKeyword(keyword))
                     data.add(value);
             }
         }
@@ -176,7 +176,7 @@ public class FirebaseHelper {
         ArrayList<User> data = new ArrayList<>();
         for (DataSnapshot ds: uds.getChildren()){
             User user = ds.getValue(User.class);
-            if (user.getName().contains(keyword) || Integer.toString(user.getNumber()).contains(keyword))
+            if (user.containsKeyword(keyword))
                 data.add(user);
         }
         return data;
@@ -185,7 +185,7 @@ public class FirebaseHelper {
         ArrayList<Group> data = new ArrayList<>();
         for (DataSnapshot ds: uds.getChildren()){
             Group group = ds.getValue(Group.class);
-            if (group.getName().contains(keyword) || Integer.toString(group.getNumber()).contains(keyword))
+            if (group.containsKeyword(keyword))
                 data.add(group);
         }
         return data;
