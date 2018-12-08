@@ -125,15 +125,32 @@
                 tools:layout_editor_absoluteX="288dp"
                 tools:layout_editor_absoluteY="508dp" />
 
-            <ImageButton
-                android:id="@+id/post_comment"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@android:drawable/screen_background_light_transparent"
-                app:srcCompat="@drawable/ic_comment"
-                tools:layout_editor_absoluteX="37dp"
-                tools:layout_editor_absoluteY="500dp" />
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/post_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:drawable/screen_background_light_transparent"
+                    app:srcCompat="@drawable/ic_comment"
+                    tools:layout_editor_absoluteX="37dp"
+                    tools:layout_editor_absoluteY="500dp" />
+
+                <TextView
+                    android:id="@+id/post_comments_counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="0"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/post_share"

@@ -44,9 +44,7 @@ public class PostAdapter extends CustomAdapter {
 
     public class ViewHolder extends CustomAdapter.CustomViewHolder {
         public ImageView usericon;
-        public TextView username;
-        public TextView time;
-        public TextView content;
+        public TextView username, time, content, comments_counter;
         public RatingBar ratingBar;
         public ImageButton comment, collect, share, dropdown;
         private Post data;
@@ -57,6 +55,7 @@ public class PostAdapter extends CustomAdapter {
             username = view.findViewById(R.id.post_username);
             time = view.findViewById(R.id.post_time);
             content = view.findViewById(R.id.post_content);
+            comments_counter = view.findViewById(R.id.post_comments_counter);
             ratingBar = view.findViewById(R.id.post_ratingBar);
             comment = view.findViewById(R.id.post_comment);
             collect = view.findViewById(R.id.post_collect);
@@ -93,6 +92,9 @@ public class PostAdapter extends CustomAdapter {
                     collect(!User.user.hasCollected(data));
                 }
             });
+            int comments_count = data.getComments().size();
+            comments_counter.setText(comments_count + "");
+            comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
             comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
