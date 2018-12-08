@@ -38,7 +38,7 @@ public class PostAdapter extends CustomAdapter {
         long delta_hour = delta_min / 60;
         if (delta_hour < 24) return delta_hour + " hour"+ ((delta_hour == 1) ? "" : "s") +" ago";
         long delta_day = delta_hour / 24;
-        if (delta_day < 7) return delta_day + " day"+ ((delta_hour == 1) ? "" : "s") +" ago";
+        if (delta_day < 7) return delta_day + " day"+ ((delta_day == 1) ? "" : "s") +" ago";
         return new SimpleDateFormat("yyyy-MM-dd").format(time);
     }
 

@@ -369,8 +369,7 @@ public class User implements Parcelable {
         drafts.add(0, post);
     }
     private void upload(String key, Object value){
-        if (User.user != null && User.user.id.equals(id))
-            FirebaseHelper.updateUser(id, key, value);
+        FirebaseHelper.updateUser(id, key, value);
     }
 
     @Override

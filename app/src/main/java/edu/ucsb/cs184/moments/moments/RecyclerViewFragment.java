@@ -45,7 +45,7 @@ public class RecyclerViewFragment extends Fragment {
                 for (final View view: hideViews){
                     if (view instanceof FloatingActionButton){
                         if (dy > 0 && view.isShown()) ((FloatingActionButton) view).hide();
-                        else if (dy <= 0) ((FloatingActionButton) view).show();
+                        else if (dy <= 0 && !view.isShown()) ((FloatingActionButton) view).show();
                     }
 //                    else if (view instanceof BottomNavigationView) {
 //                        if (dy > 0){
@@ -99,7 +99,7 @@ public class RecyclerViewFragment extends Fragment {
 //                    }
                     else{
                         if (dy > 0 && view.isShown()) view.setVisibility(View.GONE);
-                        else if (dy <= 0) view.setVisibility(View.VISIBLE);
+                        else if (dy <= 0 && !view.isShown()) view.setVisibility(View.VISIBLE);
                     }
                 }
             }
