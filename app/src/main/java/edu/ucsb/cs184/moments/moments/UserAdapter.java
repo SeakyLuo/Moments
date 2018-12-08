@@ -49,8 +49,8 @@ public class UserAdapter extends CustomAdapter{
                     follow.setImageResource(IconHelper.followImage(id));
                 }
             });
-            if (data.getIcon() == null) icon.setImageResource(R.drawable.user_icon);
-            else icon.setImageBitmap(data.getIcon());
+            if (data.GetIcon() == null) icon.setImageResource(R.drawable.user_icon);
+            else icon.setImageBitmap(data.GetIcon());
             String user_gender = data.getGender();
             gender.setVisibility(user_gender.equals(User.UNKNOWN) ? View.GONE : View.VISIBLE);
             gender.setImageResource(data.getGender().equals(User.MALE) ? R.drawable.ic_male : R.drawable.ic_female);

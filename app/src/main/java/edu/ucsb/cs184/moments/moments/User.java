@@ -113,8 +113,12 @@ public class User implements Parcelable {
 
     public void setNumber(int number){ this.user_number = number; }
     public int getNumber() { return user_number; }
-    public Bitmap getIcon() { return icon; }
-    public void setIcon(Bitmap icon){ this.icon = icon; }
+    public Bitmap GetIcon() {
+        if (icon == null)
+            icon = FirebaseHelper.getIcon(FirebaseHelper.USER_ICON, id);
+        return icon;
+    }
+    public void SetIcon(Bitmap bitmap){ icon = bitmap; }
     public String getName() { return name; }
     public void setName(String name){ this.name = name; }
     public String getId() { return id; }

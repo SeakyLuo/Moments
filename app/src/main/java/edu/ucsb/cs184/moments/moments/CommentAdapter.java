@@ -57,7 +57,7 @@ public class CommentAdapter extends CustomAdapter {
         public void setData(Object obj) {
             data = (Comment) obj;
             User user = User.findUser(data.getUserid());
-            usericon.setImageBitmap(user.getIcon());
+            usericon.setImageBitmap(user.GetIcon());
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             content.setText(data.getContent());

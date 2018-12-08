@@ -218,7 +218,7 @@ public class FullPostActivity extends AppCompatActivity {
     private void setPost(final Post post){
         User user = User.findUser(post.getUserid());
         username.setText(user.getName());
-        Bitmap icon = user.getIcon();
+        Bitmap icon = user.GetIcon();
         if (icon == null) poster_icon.setImageResource(R.drawable.user_icon);
         else poster_icon.setImageBitmap(icon);
         time.setText(TimeText(post.getTime()));

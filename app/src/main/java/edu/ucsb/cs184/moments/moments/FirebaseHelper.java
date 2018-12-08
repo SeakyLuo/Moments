@@ -309,7 +309,17 @@ public class FirebaseHelper {
     }
 
     public static Bitmap getIcon(final String type, final String id){
-        return null;
+        StorageReference imagesRef;
+        switch (type){
+            case USER_ICON:
+                imagesRef = usr.child(id + ".jpg");
+                return null;
+            case GROUP_ICON:
+                imagesRef = gsr.child(id + ".jpg");
+                return null;
+            default:
+                return null;
+        }
     }
 
     interface OnUDBReceivedListener{

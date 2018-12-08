@@ -31,9 +31,27 @@ public class Group implements Parcelable {
         managerid = in.readString();
         name = in.readString();
         group_number = in.readInt();
+        icon = in.readParcelable(Bitmap.class.getClassLoader());
         intro = in.readString();
         members = in.createStringArrayList();
         posts = in.createTypedArrayList(Post.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(managerid);
+        dest.writeString(name);
+        dest.writeInt(group_number);
+        dest.writeParcelable(icon, flags);
+        dest.writeString(intro);
+        dest.writeStringList(members);
+        dest.writeTypedList(posts);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Group> CREATOR = new Creator<Group>() {
@@ -112,21 +130,5 @@ public class Group implements Parcelable {
         if (obj == null) return false;
         if (!(obj instanceof Group)) return false;
         return id.equals(((Group) obj).id);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(managerid);
-        dest.writeString(name);
-        dest.writeInt(group_number);
-        dest.writeString(intro);
-        dest.writeStringList(members);
-        dest.writeTypedList(posts);
     }
 }

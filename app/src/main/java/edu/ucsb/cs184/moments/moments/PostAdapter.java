@@ -161,8 +161,8 @@ public class PostAdapter extends CustomAdapter {
                     helper.show();
                 }
             });
-            if (user.getIcon() == null) usericon.setImageResource(R.drawable.user_icon);
-            else usericon.setImageBitmap(user.getIcon());
+            if (user.GetIcon() == null) usericon.setImageResource(R.drawable.user_icon);
+            else usericon.setImageBitmap(user.GetIcon());
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             content.setText(data.getContent());
