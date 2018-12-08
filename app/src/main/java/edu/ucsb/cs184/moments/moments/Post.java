@@ -80,7 +80,7 @@ public class Post implements Parcelable {
     }
     public void addRating(Rating rating){
         ratings.add(0, rating);
-        upload("comments", comments);
+        upload("ratings", ratings);
     }
     public boolean removeComment(Comment comment){
         boolean result = comments.remove(comment);

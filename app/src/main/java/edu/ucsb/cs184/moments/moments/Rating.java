@@ -9,20 +9,22 @@ import com.google.gson.Gson;
 import java.util.Comparator;
 
 public class Rating implements Parcelable {
-    private String userid;  //rater
+    private String raterId;
+    private String posterId;
     private int rating;
     private Long time;
     private Post.Key postKey;
     public Rating(){}
-    public Rating(String userid, int rating, Long time, Post.Key postKey){
-        this.userid = userid;
+    public Rating(String raterId, int rating, Long time, Post.Key postKey){
+        this.raterId = raterId;
         this.rating = rating;
         this.time = time;
         this.postKey = postKey;
+        this.posterId = postKey.userid;
     }
 
     protected Rating(Parcel in) {
-        userid = in.readString();
+        raterId = in.readString();
         rating = in.readInt();
         time = in.readLong();
         postKey = in.readParcelable(Post.Key.class.getClassLoader());
@@ -40,14 +42,15 @@ public class Rating implements Parcelable {
         }
     };
 
-    public Boolean IsAnonymous() { return userid.equals(User.ANONYMOUS); }
-    public String getUserid() { return userid; }
+    public Boolean IsAnonymous() { return raterId.equals(User.ANONYMOUS); }
+    public String getRaterId() { return raterId; }
+    public String getPosterId() { return posterId; }
     public int getRating() { return rating; }
     public Long getTime() { return time; }
     public Post.Key GetPostKey() {
         return postKey;
     }
-    public Key GetKey(){ return new Key(userid, time, postKey); }
+    public Key GetKey(){ return new Key(raterId, time, postKey); }
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj == null)
@@ -71,7 +74,7 @@ public class Rating implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(userid);
+        dest.writeString(raterId);
         dest.writeInt(rating);
         dest.writeLong(time);
         dest.writeParcelable(postKey, 0);

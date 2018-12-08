@@ -359,9 +359,9 @@ public class User implements Parcelable {
     }
     public void rate(Rating rating){
         boolean remove = rating.getRating() == 0;
-        findUser(rating.getUserid()).RatingNotification(rating, remove);
-        if (remove) Post.findPost(rating.GetPostKey()).removeRating(rating);
-        else Post.findPost(rating.GetPostKey()).addRating(rating);
+        findUser(rating.getPosterId()).RatingNotification(rating, remove);
+        Post.findPost(rating.GetPostKey()).removeRating(rating);
+        if (!remove) Post.findPost(rating.GetPostKey()).addRating(rating);
     }
     public void saveAsDraft(Post post){
         drafts.add(0, post);
