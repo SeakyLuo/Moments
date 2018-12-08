@@ -141,15 +141,19 @@ public class SearchActivity extends AppCompatActivity {
                     switch (type){
                         case POSTS:
                             postsFragment.setData(FirebaseHelper.searchPosts(keyword));
+                            postsFragment.addElements(FirebaseHelper.searchPosts(keyword.toLowerCase()));
                             break;
                         case USERS:
                             usersFragment.setData(FirebaseHelper.searchUsers(keyword));
+                            usersFragment.addElements(FirebaseHelper.searchUsers(keyword.toLowerCase()));
                             break;
                         case GROUPS:
                             groupsFragment.setData(FirebaseHelper.searchGroups(keyword));
+                            usersFragment.addElements(FirebaseHelper.searchGroups(keyword.toLowerCase()));
                             break;
                         case HISTORY:
                             postsFragment.setData(FirebaseHelper.searchPosts(keyword));
+                            postsFragment.addElements(FirebaseHelper.searchPosts(keyword.toLowerCase()));
                             setCurrentTab(POSTS);
                             break;
                     }

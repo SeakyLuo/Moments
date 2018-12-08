@@ -141,7 +141,7 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(UserProfileActivity.this, FollowListActivity.class);
                 intent.putExtra(FollowListActivity.TITLE, FollowListActivity.FOLLOWER);
-                intent.putExtra(FollowListActivity.LIST, user.getFollowing());
+                intent.putExtra(FollowListActivity.LIST, user.getFollowers());
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
@@ -150,8 +150,8 @@ public class UserProfileActivity extends AppCompatActivity {
         posts_count.setText("Posts: " + user.getPosts().size());
         boolean self = userid.equals(User.user.getId());
         edit.setVisibility(self ? View.VISIBLE : View.GONE);
-        message.setVisibility(self ? View.VISIBLE : View.GONE);
-        follow.setVisibility(self ? View.VISIBLE : View.GONE);
+        message.setVisibility(self ? View.GONE : View.VISIBLE);
+        follow.setVisibility(self ? View.GONE : View.VISIBLE);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

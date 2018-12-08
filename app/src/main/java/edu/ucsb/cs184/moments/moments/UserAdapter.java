@@ -39,7 +39,7 @@ public class UserAdapter extends CustomAdapter{
             final String id = data.getId();
             name.setText(data.getName());
             number.setText("#" + data.getNumber());
-            follow.setVisibility(User.user.getId().equals(id) ? View.INVISIBLE : View.VISIBLE);
+            follow.setVisibility(User.user.getId().equals(id) ? View.GONE : View.VISIBLE);
             follow.setImageResource(IconHelper.followImage(id));
             follow.setOnClickListener(new View.OnClickListener() {
                 @Override
