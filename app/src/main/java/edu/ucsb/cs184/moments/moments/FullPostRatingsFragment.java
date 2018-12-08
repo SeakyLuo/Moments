@@ -21,6 +21,7 @@ public class FullPostRatingsFragment extends Fragment {
     private TextView reviews;
     private ArrayList<ProgressBar> progressBars = new ArrayList<>();
     private Post post;
+    private boolean shown = false;
 
     @Nullable
     @Override
@@ -34,11 +35,14 @@ public class FullPostRatingsFragment extends Fragment {
         progressBars.add((ProgressBar) view.findViewById(R.id.fp3starprogressBar));
         progressBars.add((ProgressBar) view.findViewById(R.id.fp4starprogressBar));
         progressBars.add((ProgressBar) view.findViewById(R.id.fp5starprogressBar));
+        shown = true;
+        if (post != null) setRating(post);
         return view;
     }
 
     public void setRating(Post post){
         this.post = post;
+        if (!shown) return;
         float rating = post.ratings_avg();
         int review = post.ratings_received();
         ratingBar.setRating(rating);

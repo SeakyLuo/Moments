@@ -136,7 +136,14 @@ public class FullPostActivity extends AppCompatActivity {
                 int position = tab.getPosition();
                 mViewPager.setCurrentItem(position, true);
                 tab.select();
-                if (position == 1) ratingsFragment.setRating(post);
+                switch (position){
+                    case 0:
+                        //
+                        break;
+                    case 1:
+                        ratingsFragment.setRating(post);
+                        break;
+                }
             }
 
             @Override
