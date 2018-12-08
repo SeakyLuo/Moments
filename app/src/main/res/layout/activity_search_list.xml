@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/fl_toolbar"
+        android:id="@+id/sl_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorBackgroundFloating"
@@ -25,7 +25,7 @@
             android:layout_height="match_parent">
 
             <ImageButton
-                android:id="@+id/fl_back"
+                android:id="@+id/sl_back"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@android:drawable/screen_background_light_transparent"
@@ -37,23 +37,23 @@
                 app:srcCompat="@drawable/ic_back" />
 
             <EditText
-                android:id="@+id/fl_text"
+                android:id="@+id/sl_text"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
                 android:ems="10"
-                android:hint="Search Follow"
+                android:hint="Search "
                 android:imeOptions="actionSearch"
                 android:inputType="text|textPersonName"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/fl_clear"
-                app:layout_constraintStart_toEndOf="@+id/fl_back"
+                app:layout_constraintEnd_toStartOf="@id/sl_clear"
+                app:layout_constraintStart_toEndOf="@+id/sl_back"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/fl_clear"
+                android:id="@+id/sl_clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -63,7 +63,7 @@
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/fl_text"
+                app:layout_constraintStart_toEndOf="@+id/sl_text"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_clear" />
 
@@ -71,13 +71,13 @@
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
-        android:id="@+id/fl_content"
+        android:id="@+id/sl_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fl_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/sl_toolbar">
 
     </FrameLayout>
 

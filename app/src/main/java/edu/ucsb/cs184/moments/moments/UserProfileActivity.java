@@ -24,13 +24,14 @@ public class UserProfileActivity extends AppCompatActivity {
     public static final String SORTBY = "Sort By";
     private Button sortBy;
     private ImageButton back, search;
-    private View include;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
     private ImageView icon, gender;
     private TextView username, user_number, intro, following, followers, posts_count;
     private ImageButton  edit, follow, message;
     private RecyclerViewFragment fragment;
+    private String userid;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
         SwipeBackHelper.onCreate(this);
 
+        userid = getIntent().getStringExtra(USERID);
+        user = User.findUser(getIntent().getStringExtra(USERID));
         back = findViewById(R.id.up_back);
         search = findViewById(R.id.up_search);
         toolbar = findViewById(R.id.up_toolbar);
@@ -58,15 +61,11 @@ public class UserProfileActivity extends AppCompatActivity {
         PostAdapter adapter = new PostAdapter();
         adapter.setUsericonClickable(false);
         fragment.setAdapter(adapter);
+        fragment.show(getSupportFragmentManager(), R.id.up_timeline);
 
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
         setSupportActionBar(toolbar);
-        setUserProfile(getIntent().getStringExtra(USERID));
-    }
-
-    private void setUserProfile(final String userid){
-        final User user = User.findUser(userid);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +76,11 @@ public class UserProfileActivity extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // search my posts
+                Intent intent = new Intent(UserProfileActivity.this, SearchListActivity.class);
+                intent.putExtra(SearchListActivity.ADAPTER, SearchListActivity.POST);
+                intent.putExtra(SearchListActivity.DATA, user.getPosts());
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
         icon.setOnClickListener(new View.OnClickListener() {
@@ -130,42 +133,26 @@ public class UserProfileActivity extends AppCompatActivity {
                 fragment.gotoTop();
             }
         });
-        collapsingToolbarLayout.setTitle(user.getName());
-        username.setText(user.getName());
-        user_number.setText("#" + user.getNumber());
-        if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.GONE);
-        else{
-            gender.setVisibility(View.VISIBLE);
-            gender.setImageDrawable(user.getGender().equals(getString(R.string.male)) ? getDrawable(R.drawable.ic_male) : getDrawable(R.drawable.ic_female));
-        }
-        following.setText("Following: " + user.getFollowing().size());
         following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserProfileActivity.this, FollowListActivity.class);
-                intent.putExtra(FollowListActivity.TITLE, FollowListActivity.FOLLOWING);
-                intent.putExtra(FollowListActivity.LIST, user.getFollowing());
+                Intent intent = new Intent(UserProfileActivity.this, SearchListActivity.class);
+                intent.putExtra(SearchListActivity.ADAPTER, SearchListActivity.FOLLOWING);
+                intent.putExtra(SearchListActivity.DATA, user.getFollowing());
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
-        followers.setText("Followers: " + user.getFollowers().size());
         followers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserProfileActivity.this, FollowListActivity.class);
-                intent.putExtra(FollowListActivity.TITLE, FollowListActivity.FOLLOWER);
-                intent.putExtra(FollowListActivity.LIST, user.getFollowers());
+                Intent intent = new Intent(UserProfileActivity.this, SearchListActivity.class);
+                intent.putExtra(SearchListActivity.ADAPTER, SearchListActivity.FOLLOWER);
+                intent.putExtra(SearchListActivity.DATA, user.getFollowers());
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
-        intro.setText("Intro: " + user.getIntro());
-        posts_count.setText("Posts: " + user.getPosts().size());
-        boolean self = userid.equals(User.user.getId());
-        edit.setVisibility(self ? View.VISIBLE : View.GONE);
-        message.setVisibility(self ? View.GONE : View.VISIBLE);
-        follow.setVisibility(self ? View.GONE : View.VISIBLE);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,7 +162,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
-        setFollow(userid);
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,12 +170,32 @@ public class UserProfileActivity extends AppCompatActivity {
                 setFollow(userid);
             }
         });
+        setUserProfile();
+    }
+
+    private void setUserProfile(){
+        collapsingToolbarLayout.setTitle(user.getName());
+        username.setText(user.getName());
+        user_number.setText("#" + user.getNumber());
+        if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.GONE);
+        else{
+            gender.setVisibility(View.VISIBLE);
+            gender.setImageDrawable(user.getGender().equals(getString(R.string.male)) ? getDrawable(R.drawable.ic_male) : getDrawable(R.drawable.ic_female));
+        }
+        following.setText("Following: " + user.getFollowing().size());
+        followers.setText("Followers: " + user.getFollowers().size());
+        intro.setText("Intro: " + user.getIntro());
+        posts_count.setText("Posts: " + user.getPosts().size());
+        boolean self = userid.equals(User.user.getId());
+        edit.setVisibility(self ? View.VISIBLE : View.GONE);
+        message.setVisibility(self ? View.GONE : View.VISIBLE);
+        follow.setVisibility(self ? View.GONE : View.VISIBLE);
+        setFollow(userid);
         try {
-            fragment.addElements(0, user.getPosts());
+            fragment.setData(user.getPosts());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        fragment.show(getSupportFragmentManager(), R.id.up_timeline);
     }
 
     private static String FollowCount(int count){
@@ -209,7 +215,8 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == EditUserProfileActivity.FINISH){
-            setUserProfile(User.user.getId());
+            user = User.findUser(userid);
+            setUserProfile();
         }
     }
 

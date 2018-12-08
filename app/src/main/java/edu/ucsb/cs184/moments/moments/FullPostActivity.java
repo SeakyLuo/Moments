@@ -84,8 +84,7 @@ public class FullPostActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Might have problem as new data does not come in
-                swipeRefreshLayout.setRefreshing(true);
+                post = Post.findPost(post.GetKey());
                 setPost(post);
                 swipeRefreshLayout.setRefreshing(false);
             }

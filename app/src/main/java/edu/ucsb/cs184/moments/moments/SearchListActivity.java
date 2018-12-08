@@ -16,30 +16,29 @@ import com.jude.swipbackhelper.SwipeBackHelper;
 
 import java.util.ArrayList;
 
-public class FollowListActivity extends AppCompatActivity {
+public class SearchListActivity extends AppCompatActivity {
 
-    public static final String TITLE = "title", LIST = "list";
-    public static final String FOLLOWER = "Followers", FOLLOWING = "Following";
+    public static final String ADAPTER = "adapter", DATA = "data";
+    public static final String POST = "Posts", FOLLOWER = "Followers", FOLLOWING = "Following";
 
     private EditText searchBar;
-    private TabPagerAdapter adapter;
     private ImageButton backButton, clearButton;
     private Intent intent;
     private RecyclerViewFragment fragment;
-    private String title;
-    private ArrayList<User> list = new ArrayList<>();
+    private String adapter;
+    private ArrayList data = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_follow_list);
+        setContentView(R.layout.activity_search_list);
         SwipeBackHelper.onCreate(this);
         intent = getIntent();
-        title = intent.getStringExtra(TITLE);
+        adapter = intent.getStringExtra(ADAPTER);
 
-        backButton = findViewById(R.id.fl_back);
-        clearButton = findViewById(R.id.fl_clear);
-        searchBar = findViewById(R.id.fl_text);
+        backButton = findViewById(R.id.sl_back);
+        clearButton = findViewById(R.id.sl_clear);
+        searchBar = findViewById(R.id.sl_text);
         fragment = new RecyclerViewFragment();
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -56,13 +55,13 @@ public class FollowListActivity extends AppCompatActivity {
                 searchBar.setText("");
                 clearButton.setVisibility(View.GONE);
                 try {
-                    fragment.setData(list);
+                    fragment.setData(data);
                 } catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
                 }
             }
         });
-        searchBar.setHint("Search " + title);
+        searchBar.setHint("Search " + adapter);
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -89,27 +88,69 @@ public class FollowListActivity extends AppCompatActivity {
                 return false;
             }
         });
-        fragment.setAdapter(new UserAdapter());
-        for (String id: intent.getStringArrayListExtra(LIST))
-            list.add(User.findUser(id));
+        try {
+            switch (adapter){
+                case FOLLOWER:
+                    fragment.setAdapter(new UserAdapter());
+                    for (String id: intent.getStringArrayListExtra(DATA))
+                        data.add(User.findUser(id));
+                    fragment.setData(data);
+                    break;
+                case FOLLOWING:
+                    fragment.setAdapter(new UserAdapter());
+                    for (String id: intent.getStringArrayListExtra(DATA))
+                        data.add(User.findUser(id));
+                    fragment.setData(data);
+                    break;
+                case POST:
+                    fragment.setAdapter(new PostAdapter());
+                    data = intent.getParcelableArrayListExtra(DATA);
+                    fragment.setData(new ArrayList<Post>());
+                    break;
+            }
+        } catch (RecyclerViewFragment.UnsupportedDataException e) {
+            e.printStackTrace();
+        }
+        fragment.show(getSupportFragmentManager(), R.id.sl_content);
+    }
+
+    private void search(String keyword){
+        ArrayList list = new ArrayList<>();
+        switch (adapter){
+            case FOLLOWER:
+                list.add(searchUser(keyword));
+                list.add(searchUser(keyword.toLowerCase()));
+                break;
+            case FOLLOWING:
+                list.add(searchUser(keyword));
+                list.add(searchUser(keyword.toLowerCase()));
+                break;
+            case POST:
+                list.add(searchPost(keyword));
+                list.add(searchPost(keyword.toLowerCase()));
+                break;
+        }
         try {
             fragment.setData(list);
         } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();
         }
-        fragment.show(getSupportFragmentManager(), R.id.fl_content);
     }
 
-    private void search(String keyword){
-        ArrayList<User> data = new ArrayList<>();
-        for (User user: list)
-            if ((user.getName().contains(keyword) || Integer.toString(user.getNumber()).contains(keyword)))
-                data.add(user);
-        try {
-            fragment.setData(data);
-        } catch (RecyclerViewFragment.UnsupportedDataException e) {
-            e.printStackTrace();
-        }
+    private ArrayList<User> searchUser(String keyword){
+        ArrayList<User> list = new ArrayList<>();
+        for (User obj: (ArrayList<User>) data)
+            if ((obj.getName().contains(keyword) || Integer.toString(obj.getNumber()).contains(keyword)))
+                list.add(obj);
+        return list;
+    }
+
+    private ArrayList<Post> searchPost(String keyword){
+        ArrayList<Post> list = new ArrayList<>();
+        for (Post obj: (ArrayList<Post>) data)
+            if (obj.getContent().contains(keyword))
+                list.add(obj);
+        return list;
     }
 
     @Override

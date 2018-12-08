@@ -64,26 +64,26 @@ public class EditUserProfileActivity extends AppCompatActivity {
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextFragment fragment = new TextFragment();
-                fragment.showNow(getSupportFragmentManager(), NAME);
-                fragment.setTitle("Edit Name");
-                fragment.setContent(User.user.getName());
+                InputDialog dialog = new InputDialog();
+                dialog.showNow(getSupportFragmentManager(), NAME);
+                dialog.setTitle("Edit Name");
+                dialog.setContent(User.user.getName());
             }
         });
         gender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GenderFragment fragment = new GenderFragment();
-                fragment.showNow(getSupportFragmentManager(), GENDER);
+                GenderDialog dialog = new GenderDialog();
+                dialog.showNow(getSupportFragmentManager(), GENDER);
             }
         });
         intro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextFragment fragment = new TextFragment();
-                fragment.showNow(getSupportFragmentManager(), INTRO);
-                fragment.setTitle("Edit Intro");
-                fragment.setContent(User.user.getIntro());
+                InputDialog dialog = new InputDialog();
+                dialog.showNow(getSupportFragmentManager(), INTRO);
+                dialog.setTitle("Edit Intro");
+                dialog.setContent(User.user.getIntro());
             }
         });
     }
@@ -118,7 +118,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
         icon.setImageBitmap((Bitmap) intent.getParcelableExtra(UploadIconActivity.ICON));
     }
 
-    public static class TextFragment extends DialogFragment{
+    public static class InputDialog extends DialogFragment{
         private TextView title;
         private EditText text;
         private Button cancel, save;
@@ -164,7 +164,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
         }
     }
 
-    public static class GenderFragment extends DialogFragment{
+    public static class GenderDialog extends DialogFragment{
         private String MALE;
         private String FEMALE;
         private String UNKNOWN;

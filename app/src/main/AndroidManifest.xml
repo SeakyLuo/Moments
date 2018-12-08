@@ -87,7 +87,7 @@
             android:label="GroupSettingsActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".FollowListActivity"
+            android:name=".SearchListActivity"
             android:label="FollowListActivity"
             android:theme="@style/AppTheme" />
         <activity

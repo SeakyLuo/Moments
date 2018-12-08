@@ -62,12 +62,7 @@ public class Post implements Parcelable {
         return sum / count;
     }
     public float ratings_avg(int digit){
-        float sum = 0;
-        int count = ratings.size();
-        if (count == 0) return 0f;
-        for (int i = 0; i < count; i++)
-            sum += ratings.get(i).getRating();
-        return Float.parseFloat(String.format("%." + digit + "f", sum / count));
+        return Float.parseFloat(String.format("%." + digit + "f", ratings_avg()));
     }
     public int counting_star(int stars){
         int count = 0;
