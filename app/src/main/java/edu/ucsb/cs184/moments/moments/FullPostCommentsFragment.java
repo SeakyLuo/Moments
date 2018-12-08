@@ -33,6 +33,7 @@ public class FullPostCommentsFragment extends Fragment {
 
         fragment.setAdapter(new CommentAdapter());
         fragment.setShowDivider(true);
+        fragment.setSwipeEnabled(false);
         fragment.show(getFragmentManager(), R.id.fpc_content);
         sortby_button.setOnClickListener(new View.OnClickListener() {
             @Override

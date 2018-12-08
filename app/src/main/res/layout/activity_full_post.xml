@@ -2,11 +2,8 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    android:layout_height="match_parent">
     <android.support.v7.widget.Toolbar
         android:id="@+id/fullpost_toolbar"
         android:layout_width="match_parent"
@@ -52,66 +49,71 @@
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/fullpost_swipe_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fullpost_toolbar">
-
-        <LinearLayout
+        android:layout_height="wrap_content">
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fullpost_toolbar">
 
-            <include
-                android:id="@+id/fullpost_post"
-                layout="@layout/view_post"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"/>
+                android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/fullpost_cardView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:elevation="4dp">
-
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/fullpost_tablayout"
+                <include
+                    android:id="@+id/fullpost_post"
+                    layout="@layout/view_post"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:tabIndicatorColor="@android:color/holo_red_light"
-                    app:tabSelectedTextColor="@android:color/holo_red_light"
-                    app:tabTextAppearance="@style/TextAppearance.AppCompat.Body2"
-                    app:tabTextColor="@color/common_google_signin_btn_text_light_default">
+                    android:layout_marginTop="8dp"/>
 
-                    <android.support.design.widget.TabItem
-                        android:id="@+id/comments_tab"
-                        android:layout_width="wrap_content"
+                <android.support.v7.widget.CardView
+                    android:id="@+id/fullpost_cardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:elevation="4dp">
+
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/fullpost_tablayout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Comments" />
+                        app:tabIndicatorColor="@android:color/holo_red_light"
+                        app:tabSelectedTextColor="@android:color/holo_red_light"
+                        app:tabTextAppearance="@style/TextAppearance.AppCompat.Body2"
+                        app:tabTextColor="@color/common_google_signin_btn_text_light_default">
 
-                    <android.support.design.widget.TabItem
-                        android:id="@+id/ratings_tab"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ratings" />
+                        <android.support.design.widget.TabItem
+                            android:id="@+id/comments_tab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Comments" />
 
-                </android.support.design.widget.TabLayout>
-            </android.support.v7.widget.CardView>
+                        <android.support.design.widget.TabItem
+                            android:id="@+id/ratings_tab"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ratings" />
 
-            <edu.ucsb.cs184.moments.moments.TabViewPager
-                android:id="@+id/fullpost_viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"/>
+                    </android.support.design.widget.TabLayout>
+                </android.support.v7.widget.CardView>
 
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+                <edu.ucsb.cs184.moments.moments.TabViewPager
+                    android:id="@+id/fullpost_viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="8dp"/>
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/fullpost_add_comment"
@@ -120,6 +122,7 @@
         android:background="?android:attr/colorBackgroundFloating"
         android:contentInsetStart="0dp"
         android:elevation="4dp"
+        android:layout_marginBottom="0dp"
         android:minHeight="?attr/actionBarSize"
         app:contentInsetStart="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -162,5 +165,6 @@
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
+
 </android.support.constraint.ConstraintLayout>
 

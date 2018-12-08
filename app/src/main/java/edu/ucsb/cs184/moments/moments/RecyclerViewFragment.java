@@ -24,6 +24,7 @@ public class RecyclerViewFragment extends Fragment {
     private RecyclerView recyclerView;
     private CustomAdapter adapter;
     private boolean showDivider = false;
+    private boolean swipeEnabled = true;
     private ArrayList<View> hideViews = new ArrayList<>();
     private ArrayList<OnRefreshListener> listeners = new ArrayList<>();
 
@@ -46,64 +47,14 @@ public class RecyclerViewFragment extends Fragment {
                     if (view instanceof FloatingActionButton){
                         if (dy > 0 && view.isShown()) ((FloatingActionButton) view).hide();
                         else if (dy <= 0 && !view.isShown()) ((FloatingActionButton) view).show();
-                    }
-//                    else if (view instanceof BottomNavigationView) {
-//                        if (dy > 0){
-//                            // This is hide
-//                            // Prepare the View for the animation
-//                            view.setVisibility(View.VISIBLE);
-//                            view.setAlpha(0.0f);
-//                            // Start the animation
-//                            view.animate()
-//                                    .translationY(dy)
-//                                    .alpha(1.0f)
-//                                    .setListener(null);
-//                        }else{
-//                            // This is show
-//                            view.animate()
-//                                .translationY(0)
-//                                .alpha(0.0f)
-//                                .setListener(new AnimatorListenerAdapter() {
-//                                    @Override
-//                                    public void onAnimationEnd(Animator animation) {
-//                                        super.onAnimationEnd(animation);
-//                                        view.setVisibility(View.GONE);
-//                                    }
-//                                });
-//                        }
-//                    }
-//                    else if (view instanceof Toolbar){
-//                        if (dy > 0){
-//                            // This is hide
-//                            // Prepare the View for the animation
-//                            view.setVisibility(View.VISIBLE);
-//                            view.setAlpha(0.0f);
-//                            // Start the animation
-//                            view.animate()
-//                                    .translationY(-dy)
-//                                    .alpha(1.0f)
-//                                    .setListener(null);
-//                        }else{
-//                            // This is show
-//                            view.animate()
-//                                    .translationY(0)
-//                                    .alpha(0.0f)
-//                                    .setListener(new AnimatorListenerAdapter() {
-//                                        @Override
-//                                        public void onAnimationEnd(Animator animation) {
-//                                            super.onAnimationEnd(animation);
-//                                            view.setVisibility(View.GONE);
-//                                        }
-//                                    });
-//                        }
-//                    }
-                    else{
+                    }else{
                         if (dy > 0 && view.isShown()) view.setVisibility(View.GONE);
                         else if (dy <= 0 && !view.isShown()) view.setVisibility(View.VISIBLE);
                     }
                 }
             }
         });
+        swipeRefreshLayout.setEnabled(swipeEnabled);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -116,12 +67,14 @@ public class RecyclerViewFragment extends Fragment {
         return view;
     }
 
-    public void setShowDivider(Boolean bool){
-        showDivider = bool;
+    public void setShowDivider(boolean showDivider){
+        this.showDivider = showDivider;
     }
-
     public void setAdapter(CustomAdapter adapter){
         this.adapter = adapter;
+    }
+    public void setSwipeEnabled(boolean swipeEnabled) {
+        this.swipeEnabled = swipeEnabled;
     }
 
     public void addHiddenView(View view) { if (view != null) hideViews.add(view); }

@@ -20,6 +20,7 @@ public class FullPostRatingsFragment extends Fragment {
     private TextView avg_rating;
     private TextView reviews;
     private ArrayList<ProgressBar> progressBars = new ArrayList<>();
+    private ArrayList<TextView> textViews = new ArrayList<>();
     private Post post;
     private boolean shown = false;
 
@@ -35,6 +36,11 @@ public class FullPostRatingsFragment extends Fragment {
         progressBars.add((ProgressBar) view.findViewById(R.id.fp3starprogressBar));
         progressBars.add((ProgressBar) view.findViewById(R.id.fp4starprogressBar));
         progressBars.add((ProgressBar) view.findViewById(R.id.fp5starprogressBar));
+        textViews.add((TextView) view.findViewById(R.id.fp5starcount));
+        textViews.add((TextView) view.findViewById(R.id.fp4starcount));
+        textViews.add((TextView) view.findViewById(R.id.fp3starcount));
+        textViews.add((TextView) view.findViewById(R.id.fp2starcount));
+        textViews.add((TextView) view.findViewById(R.id.fp1starcount));
         shown = true;
         if (post != null) setRating(post);
         return view;
@@ -43,14 +49,17 @@ public class FullPostRatingsFragment extends Fragment {
     public void setRating(Post post){
         this.post = post;
         if (!shown) return;
-        float rating = post.ratings_avg();
+        float rating = post.ratings_avg(1);
         int review = post.ratings_received();
         ratingBar.setRating(rating);
         avg_rating.setText("Rating: " + rating + "/5.0");
         reviews.setText("Reviews: " + review);
         for (int i = 0; i < progressBars.size(); i++){
             ProgressBar progressBar = progressBars.get(i);
-            progressBar.setProgress((review == 0) ? 50 : post.counting_star(i) / review * 100);
+            TextView textView = textViews.get(i);
+            int counting_star = post.counting_star(i);
+            textView.setText(counting_star + "");
+            progressBar.setProgress((review == 0) ? 50 : counting_star / review * 100);
         }
     }
 

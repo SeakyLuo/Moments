@@ -5,9 +5,9 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.view.MenuItem;
@@ -30,6 +30,7 @@ public class FullPostActivity extends AppCompatActivity {
     public static final String ADD_COMMENT = "Add Comment";
     public static final int DELETE_POST = 1;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private TabViewPager mViewPager;
     private TabLayout mTabLayout;
     private TabPagerAdapter pagerAdapter;
@@ -59,8 +60,6 @@ public class FullPostActivity extends AppCompatActivity {
         commentsFragment = new FullPostCommentsFragment();
         ratingsFragment = new FullPostRatingsFragment();
         addCommentDialog = new AddCommentDialog();
-        backButton = findViewById(R.id.fullpost_back);
-        more = findViewById(R.id.fullpost_more);
         include = findViewById(R.id.fullpost_post);
         poster_icon = include.findViewById(R.id.post_usericon);
         username = include.findViewById(R.id.post_username);
@@ -72,6 +71,9 @@ public class FullPostActivity extends AppCompatActivity {
         collect = include.findViewById(R.id.post_collect);
         share = include.findViewById(R.id.post_share);
         dropdown = include.findViewById(R.id.post_dropdown);
+        swipeRefreshLayout = findViewById(R.id.fullpost_swipe_container);
+        backButton = findViewById(R.id.fullpost_back);
+        more = findViewById(R.id.fullpost_more);
         mViewPager = findViewById(R.id.fullpost_viewpager);
         mTabLayout = findViewById(R.id.fullpost_tablayout);
         usericon = findViewById(R.id.fpac_user_icon);
@@ -79,9 +81,19 @@ public class FullPostActivity extends AppCompatActivity {
 
         addCommentDialog.setCaller(edit_comment, commentsFragment);
         addCommentDialog.setPost(post);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Might have problem as new data does not come in
+                swipeRefreshLayout.setRefreshing(true);
+                setPost(post);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: ？？？ 有空研究一下下面两行干啥玩意儿的
                 Intent backIntent = new Intent();
                 setResult(RESULT_OK, backIntent);
                 finish();
@@ -156,36 +168,7 @@ public class FullPostActivity extends AppCompatActivity {
 
             }
         });
-        int comments_count = post.getComments().size();
-        comments_counter.setText(comments_count + "");
-        comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
-        comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddComment();
-            }
-        });
-        dropdown.setVisibility(View.GONE);
-        Bitmap icon = User.user.getIcon();
-        usericon.setImageBitmap((icon == null) ? ((BitmapDrawable)getDrawable(R.drawable.user_icon)).getBitmap() : icon);
-        edit_comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddComment();
-            }
-        });
 
-        pagerAdapter = new TabPagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(commentsFragment, "Comments");
-        pagerAdapter.addFragment(ratingsFragment, "Ratings");
-        mViewPager.setAdapter(pagerAdapter);
-        setPost(post);
-
-        if (intent.getStringExtra(ADD_COMMENT) != null) showAddComment();
-    }
-
-    private void setPost(final Post post){
-        User user = User.findUser(post.getUserid());
         poster_icon.setClickable(true);
         poster_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,11 +179,19 @@ public class FullPostActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
-        username.setText(user.getName());
-        if (user.getIcon() == null) poster_icon.setImageResource(R.drawable.user_icon);
-        else poster_icon.setImageBitmap(user.getIcon());
-        time.setText(TimeText(post.getTime()));
-        content.setText(post.getContent());
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddComment();
+            }
+        });
+        dropdown.setVisibility(View.GONE);
+        edit_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddComment();
+            }
+        });
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -215,6 +206,27 @@ public class FullPostActivity extends AppCompatActivity {
                 }
             }
         });
+
+        pagerAdapter = new TabPagerAdapter(getSupportFragmentManager());
+        pagerAdapter.addFragment(commentsFragment, "Comments");
+        pagerAdapter.addFragment(ratingsFragment, "Ratings");
+        mViewPager.setAdapter(pagerAdapter);
+        setPost(post);
+
+        if (intent.getStringExtra(ADD_COMMENT) != null) showAddComment();
+    }
+
+    private void setPost(final Post post){
+        User user = User.findUser(post.getUserid());
+        username.setText(user.getName());
+        Bitmap icon = user.getIcon();
+        if (icon == null) poster_icon.setImageResource(R.drawable.user_icon);
+        else poster_icon.setImageBitmap(icon);
+        time.setText(TimeText(post.getTime()));
+        content.setText(post.getContent());
+        int comments_count = post.getComments().size();
+        comments_counter.setText(comments_count + "");
+        comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
         setCollect(User.user.hasCollected(post));
         collect.setOnClickListener(new View.OnClickListener() {
             @Override
