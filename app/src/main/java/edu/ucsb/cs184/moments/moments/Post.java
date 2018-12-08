@@ -25,7 +25,11 @@ public class Post implements Parcelable {
     protected Post(Parcel in) {
         userid = in.readString();
         content = in.readString();
-        time = in.readLong();
+        if (in.readByte() == 0) {
+            time = null;
+        } else {
+            time = in.readLong();
+        }
         comments = in.createTypedArrayList(Comment.CREATOR);
         ratings = in.createTypedArrayList(Rating.CREATOR);
     }
@@ -64,7 +68,7 @@ public class Post implements Parcelable {
                 count++;
         return count;
     }
-    public Boolean isAnonymous() { return userid.equals(User.ANONYMOUS); }
+    public Boolean IsAnonymous() { return userid.equals(User.ANONYMOUS); }
     public void addComment(Comment comment) { comments.add(comment); }
     public void addRating(Rating rating) { ratings.add(rating); }
     public void removeComment(Comment comment) { comments.remove(comment); }
@@ -103,6 +107,8 @@ public class Post implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeLong(time);
         }
+        dest.writeTypedList(comments);
+        dest.writeTypedList(ratings);
     }
 
     public static class Key implements Parcelable {
