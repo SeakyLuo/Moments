@@ -49,6 +49,7 @@ public class GroupPostsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EditPostActivity.class);
+                intent.putExtra(EditPostActivity.GROUP, group);
                 startActivityForResult(intent, REQUEST_POST);
             }
         });

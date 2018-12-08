@@ -228,6 +228,15 @@ public class FirebaseHelper {
         }).start();
     }
 
+    public static void updatePost(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }).start();
+    }
+
     public static void setOnUDBReceivedListener(OnUDBReceivedListener listener){
         uReceivedListener = listener;
     }

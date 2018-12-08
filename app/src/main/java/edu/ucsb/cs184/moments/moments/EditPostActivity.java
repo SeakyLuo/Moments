@@ -13,19 +13,20 @@ import java.util.Calendar;
 
 public class EditPostActivity extends AppCompatActivity {
 
-    public static final String POST = "Post";
+    public static final String POST = "Post", GROUP = "Group";
     public static final int MAKE_POST = 0;
 
     private ImageButton back;
     private ImageButton send;
     private EditText edit_content;
+    private Intent intent;
     private Class caller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_post);
-        Intent intent = getIntent();
+        intent = getIntent();
         caller = intent.getClass();
 
         edit_content = findViewById(R.id.edit_content);
@@ -46,7 +47,7 @@ public class EditPostActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Boolean hasText = s.toString().trim().length() != 0;
+                Boolean hasText = hasText();
                 send.setClickable(hasText);
                 send.setImageResource(hasText ? R.drawable.ic_send : R.drawable.ic_send_unclickable);
             }
@@ -55,7 +56,7 @@ public class EditPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String content = edit_content.getText().toString();
-                if (content.length() == 0){
+                if (content.isEmpty()){
                     close();
                 }else {
                     // ask save to draft box
@@ -83,12 +84,16 @@ public class EditPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String content = edit_content.getText().toString();
-                if (content.trim().length() == 0) return;
-                Intent intent = new Intent(getApplicationContext(), caller);
+                if (content.trim().isEmpty()) return;
+                Intent callBack = new Intent();
                 Post post = getPost();
-                intent.putExtra(POST, post);
-                User.user.makePost(post);
-                setResult(RESULT_OK, intent);
+                callBack.putExtra(POST, post);
+                Group group = intent.getParcelableExtra(GROUP);
+                if (group == null)
+                    User.user.addPost(post);
+                else
+                    group.addPost(post);
+                setResult(RESULT_OK, callBack);
                 close();
             }
         });
@@ -96,6 +101,10 @@ public class EditPostActivity extends AppCompatActivity {
 
     private Post getPost(){
         return new Post(User.user.getId(), edit_content.getText().toString(), Calendar.getInstance().getTimeInMillis());
+    }
+
+    private boolean hasText(){
+        return !edit_content.toString().trim().isEmpty();
     }
 
     private void close(){

@@ -62,7 +62,7 @@ public class AddCommentDialog extends DialogFragment {
                 Comment user_comment = null;
                 if (post != null) user_comment = new Comment(User.user.getId(), content, new Date().getTime(), post.GetKey());
                 else if (comment != null) user_comment = new Comment(User.user.getId(), content, new Date().getTime(), comment.GetKey());
-                User.user.makeComment(comment);
+                User.user.addComment(comment);
                 fragment.addComment(user_comment);
                 dismiss();
             }

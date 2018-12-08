@@ -95,7 +95,7 @@ public class PostAdapter extends CustomAdapter {
                     collect(!User.user.hasCollected(data));
                 }
             });
-            int comments_count = data.getComments().size();
+            int comments_count = data.comments_count();
             comments_counter.setText(comments_count + "");
             comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
             comment.setOnClickListener(new View.OnClickListener() {

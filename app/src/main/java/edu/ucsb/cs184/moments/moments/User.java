@@ -202,29 +202,20 @@ public class User implements Parcelable {
         return data;
     }
     public void PostNotification(Post post, boolean remove){
-        if (remove && postsNotification.contains(post.GetKey())) postsNotification.remove(post.GetKey());
+        if (remove) postsNotification.remove(post.GetKey());
         else postsNotification.add(0, post.GetKey());
         upload("postsNotification", postsNotification);
     }
     public void CommentNotification(Comment comment, boolean remove){
-        if (remove && commentsNotification.contains(comment.GetKey())) commentsNotification.remove(comment.GetKey());
+        if (remove) commentsNotification.remove(comment.GetKey());
         else commentsNotification.add(0, comment.GetKey());
         upload("commentsNotification", commentsNotification);
     }
-    public void RatingNotification(Rating rating){
-        boolean update = false;
-        for (Rating.Key key: (ArrayList<Rating.Key>) ratingsNotification.clone()){
-            if (rating.GetKey().equals(key)){
-                if (rating.getRating() == 0) ratingsNotification.remove(key);
-                else ratingsNotification.set(ratingsNotification.indexOf(key), rating.GetKey());
-                update = true;
-                break;
-            }
-        }
-        if(!update){
-            ratingsNotification.add(0, rating.GetKey());
-        }
-        upload("ratingsNotification", commentsNotification);
+    public boolean RatingNotification(Rating rating, boolean remove){
+        boolean result = ratingsNotification.remove(rating.GetKey());
+        if (!remove) ratingsNotification.add(0, rating.GetKey());
+        upload("ratingsNotification", ratingsNotification);
+        return result;
     }
     public void FollowerNotification(String followerid, boolean remove){
         if (remove) followers.remove(followerid);
@@ -287,7 +278,7 @@ public class User implements Parcelable {
         searchHistory.clear();
         upload("searchHistory", searchHistory);
     }
-    public void makePost(Post post){
+    public void addPost(Post post){
         posts.add(0, post);
         upload("posts", posts);
         timeline.add(0, post.GetKey());
@@ -309,7 +300,7 @@ public class User implements Parcelable {
             upload("collections", collections);
         }
     }
-    public void makeComment(Comment comment) {
+    public void addComment(Comment comment) {
         commentsMade.add(0, comment);
         Post.findPost(comment.getPostKey()).addComment(comment);
         upload("commentsMade", commentsMade);
@@ -364,7 +355,7 @@ public class User implements Parcelable {
     }
     public void rate(Rating rating){
         boolean remove = rating.getRating() == 0;
-        findUser(rating.getUserid()).RatingNotification(rating);
+        findUser(rating.getUserid()).RatingNotification(rating, remove);
         if (remove) Post.findPost(rating.GetPostKey()).removeRating(rating);
         else Post.findPost(rating.GetPostKey()).addRating(rating);
     }

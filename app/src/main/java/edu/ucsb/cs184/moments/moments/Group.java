@@ -65,14 +65,16 @@ public class Group implements Parcelable {
         upload("icon", icon);
     }
     public String getName() { return name; }
-    public void setName(String name) {
+    public void setName(String name) { this.name = name; }
+    public void modifyName(String name){
         this.name = name;
         upload("name", name);
     }
     public String getIntro() { return intro; }
-    public void setIntro(String intro) {
+    public void setIntro(String intro) { this.intro = intro; }
+    public void modifyIntro(String intro) {
         this.intro = intro;
-        upload("icon", icon);
+        upload("intro", intro);
     }
     public ArrayList<String> getMembers() { return members; }
     public ArrayList<Post> getPosts() { return posts; }
@@ -82,14 +84,14 @@ public class Group implements Parcelable {
         upload("members", members);
     }
     public void addPost(Post post){
-        posts.add(post);
+        posts.add(0, post);
         upload("posts", posts);
     }
     public void removeMember(String userid){
         members.remove(userid);
         upload("members", members);
     }
-    public void deletePost(Post post){
+    public void removePost(Post post){
         posts.remove(post);
         upload("posts", posts);
     }

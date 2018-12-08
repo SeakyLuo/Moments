@@ -223,7 +223,7 @@ public class FullPostActivity extends AppCompatActivity {
         else poster_icon.setImageBitmap(icon);
         time.setText(TimeText(post.getTime()));
         content.setText(post.getContent());
-        int comments_count = post.getComments().size();
+        int comments_count = post.comments_count();
         comments_counter.setText(comments_count + "");
         comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
         setCollect(User.user.hasCollected(post));

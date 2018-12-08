@@ -15,6 +15,7 @@ public class Post implements Parcelable {
     private Long time;
     private ArrayList<Comment> comments = new ArrayList<>();
     private ArrayList<Rating> ratings = new ArrayList<>();
+
     public Post() {}
     public Post(String userid, String content, Long time){
         this.userid = userid;
@@ -50,8 +51,8 @@ public class Post implements Parcelable {
     public String getUserid() { return userid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
-    public int comments_received() { return comments.size(); }
-    public ArrayList<Comment> getComments() { return  comments; }
+    public int comments_count() { return comments.size(); }
+    public ArrayList<Comment> getComments() { return comments; }
     public int ratings_received() { return ratings.size(); }
     public float ratings_avg(){
         float sum = 0;
@@ -73,10 +74,27 @@ public class Post implements Parcelable {
     }
     public boolean IsAnonymous() { return userid.equals(User.ANONYMOUS); }
     public boolean containsKeyword(String keyword) { return content.contains(keyword); }
-    public void addComment(Comment comment) { comments.add(comment); }
-    public void addRating(Rating rating) { ratings.add(rating); }
-    public void removeComment(Comment comment) { comments.remove(comment); }
-    public void removeRating(Rating rating) { ratings.remove(rating); }
+    public void addComment(Comment comment){
+        comments.add(comment);
+        upload("comments", comments);
+    }
+    public void addRating(Rating rating){
+        ratings.add(0, rating);
+        upload("comments", comments);
+    }
+    public boolean removeComment(Comment comment){
+        boolean result = comments.remove(comment);
+        if (result) upload("comments", comments);
+        return result;
+    }
+    public boolean removeRating(Rating rating){
+        boolean result = ratings.remove(rating);
+        if (result) upload("ratings", ratings);
+        return result;
+    }
+    private void upload(String key, Object value){
+
+    }
 
     @Override
     public String toString(){
