@@ -35,7 +35,7 @@ public class User implements Parcelable {
     private ArrayList<Post.Key> postsNotification = new ArrayList<>();
     private ArrayList<Rating.Key> ratingsNotification = new ArrayList<>();
     private ArrayList<Post.Key> timeline = new ArrayList<>();
-    private ArrayList<String> searchHistory = new ArrayList<>();
+    private ArrayList<SearchPair> searchHistory = new ArrayList<>();
 
     public User(){}
 
@@ -65,7 +65,37 @@ public class User implements Parcelable {
         postsNotification = in.createTypedArrayList(Post.Key.CREATOR);
         ratingsNotification = in.createTypedArrayList(Rating.Key.CREATOR);
         timeline = in.createTypedArrayList(Post.Key.CREATOR);
-        searchHistory = in.createStringArrayList();
+        searchHistory = in.createTypedArrayList(SearchPair.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(intro);
+        dest.writeParcelable(icon, flags);
+        dest.writeInt(user_number);
+        dest.writeString(gender);
+        dest.writeTypedList(posts);
+        dest.writeTypedList(drafts);
+        dest.writeTypedList(collections);
+        dest.writeTypedList(commentsMade);
+        dest.writeTypedList(commentsRecv);
+        dest.writeTypedList(ratingsMade);
+        dest.writeTypedList(ratingsRecv);
+        dest.writeStringList(groups);
+        dest.writeStringList(followers);
+        dest.writeStringList(following);
+        dest.writeTypedList(commentsNotification);
+        dest.writeTypedList(postsNotification);
+        dest.writeTypedList(ratingsNotification);
+        dest.writeTypedList(timeline);
+        dest.writeTypedList(searchHistory);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -117,7 +147,7 @@ public class User implements Parcelable {
     public ArrayList<Comment> getCommentsMade() { return commentsMade; }
     public ArrayList<String> getFollowers() { return followers; }
     public ArrayList<String> getFollowing() { return following; }
-    public ArrayList<String> getSearchHistory() { return searchHistory; }
+    public ArrayList<SearchPair> getSearchHistory() { return searchHistory; }
     public ArrayList<Comment> getCommentsRecv() {
         ArrayList<Comment> data = new ArrayList<>();
         for (Comment.Key key: commentsRecv){
@@ -238,13 +268,20 @@ public class User implements Parcelable {
         this.gender = gender;
         upload("gender", gender);
     }
-    public void addHistory(String history){
-        searchHistory.remove(history);
-        searchHistory.add(0, history);
+    public boolean addHistory(SearchPair pair){
+        boolean remove = searchHistory.remove(pair);
+        searchHistory.add(0, pair);
+        upload("searchHistory", searchHistory);
+        return remove;
+    }
+    public void removeHistory(String history){
+        for (int i = 0; i < searchHistory.size(); i++)
+            if (searchHistory.get(i).keyword.equals(history))
+                searchHistory.remove(i);
         upload("searchHistory", searchHistory);
     }
-    public void removeHistory(String content){
-        searchHistory.remove(content);
+    public void clearHistory(){
+        searchHistory.clear();
         upload("searchHistory", searchHistory);
     }
     public void makePost(Post post){
@@ -346,35 +383,5 @@ public class User implements Parcelable {
     public static User findUser(String id){
         if (User.user != null && User.user.getId().equals(id)) return User.user;
         return FirebaseHelper.findUser(id);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(name);
-        dest.writeString(intro);
-        dest.writeParcelable(icon, flags);
-        dest.writeInt(user_number);
-        dest.writeString(gender);
-        dest.writeTypedList(posts);
-        dest.writeTypedList(drafts);
-        dest.writeTypedList(collections);
-        dest.writeTypedList(commentsMade);
-        dest.writeTypedList(commentsRecv);
-        dest.writeTypedList(ratingsMade);
-        dest.writeTypedList(ratingsRecv);
-        dest.writeStringList(groups);
-        dest.writeStringList(followers);
-        dest.writeStringList(following);
-        dest.writeTypedList(commentsNotification);
-        dest.writeTypedList(postsNotification);
-        dest.writeTypedList(ratingsNotification);
-        dest.writeTypedList(timeline);
-        dest.writeStringList(searchHistory);
     }
 }

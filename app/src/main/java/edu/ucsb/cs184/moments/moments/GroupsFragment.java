@@ -59,7 +59,7 @@ public class GroupsFragment extends Fragment {
                         return true;
                     case R.id.join_a_group:
                         intent = new Intent(context, SearchActivity.class);
-                        intent.putExtra(SearchActivity.TAB, SearchActivity.GROUPS);
+                        intent.putExtra(SearchActivity.TAB, SearchPair.GROUPS);
                         startActivity(intent);
                         return true;
                 }

@@ -18,13 +18,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static edu.ucsb.cs184.moments.moments.SearchPair.GROUPS;
+import static edu.ucsb.cs184.moments.moments.SearchPair.HISTORY;
+import static edu.ucsb.cs184.moments.moments.SearchPair.POSTS;
+import static edu.ucsb.cs184.moments.moments.SearchPair.USERS;
+import static edu.ucsb.cs184.moments.moments.SearchPair.types;
+
 public class SearchActivity extends AppCompatActivity {
-    public static final String TAB = "TAB";
-    public static final String POSTS = "Posts";
-    public static final String USERS = "Users";
-    public static final String GROUPS = "Groups";
-    public static final String HISTORY = "History";
-    private static final String[] tabIndices = {POSTS, USERS, GROUPS, HISTORY};
+    public static final String TAB = "tab";
     private static final String[] textHints = {"Search Post Content", "Search Users", "Search Groups", "Search History"};
     private ArrayList<RecyclerViewFragment> fragments = new ArrayList<>();
     private RecyclerViewFragment postsFragment, usersFragment, groupsFragment, historyFragment;
@@ -86,10 +87,7 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     keyword = v.getText().toString().trim();
-                    if (position == 3){
-                        setCurrentTab(POSTS);
-                    }
-                    search(keyword);
+                    search(keyword, types[position]);
                     return true;
                 }
                 return false;
@@ -104,8 +102,8 @@ public class SearchActivity extends AppCompatActivity {
                 String new_keyword = searchBar.getText().toString();
                 // if keyword is not changed, don't search
                 // Refresh is ignored for now
-                if (keyword != null && !keyword.isEmpty() && !keyword.equals(new_keyword) && !tabIndices[position].equals(HISTORY)){
-                    search(keyword);
+                if (keyword != null && !keyword.isEmpty() && !keyword.equals(new_keyword) && !types[position].equals(HISTORY)){
+                    search(keyword, types[position]);
                 }
                 searchBar.setHint(textHints[position]);
                 tab.select();
@@ -122,7 +120,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
         adapter = new TabPagerAdapter(getSupportFragmentManager());
-        adapter.addFragments(fragments, Arrays.asList(tabIndices));
+        adapter.addFragments(fragments, Arrays.asList(types));
         mViewPager.setAdapter(adapter);
 
         String searchTab = intent.getStringExtra(TAB);
@@ -130,7 +128,7 @@ public class SearchActivity extends AppCompatActivity {
         else setCurrentTab(searchTab);
     }
 
-    public void search(final String keyword){
+    private void search(final String keyword, final String type){
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setIndeterminate(true);
         dialog.setMessage("Searching...");
@@ -140,40 +138,51 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    switch (position){
-                        case 0:
+                    switch (type){
+                        case POSTS:
                             postsFragment.setData(FirebaseHelper.searchPosts(keyword));
                             break;
-                        case 1:
+                        case USERS:
                             usersFragment.setData(FirebaseHelper.searchUsers(keyword));
                             break;
-                        case 2:
+                        case GROUPS:
                             groupsFragment.setData(FirebaseHelper.searchGroups(keyword));
                             break;
-                        case 3:
+                        case HISTORY:
                             postsFragment.setData(FirebaseHelper.searchPosts(keyword));
-                            historyFragment.addElement(keyword);
+                            setCurrentTab(POSTS);
                             break;
                     }
                 }catch (Exception e) {
                     e.printStackTrace();
                 }finally {
-                    User.user.addHistory(keyword);
+                    if(User.user.addHistory(new SearchPair(keyword, type.equals(HISTORY) ? POSTS : type))){
+                        try {
+                            historyFragment.setData(User.user.getSearchHistory());
+                        } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     dialog.dismiss();
                 }
             }
         });
     }
 
-    public RecyclerViewFragment getFragmentAt(String tab){
-        return fragments.get(Arrays.asList(tabIndices).indexOf(tab));
+    public void searchHistory(SearchPair pair){
+        search(pair.keyword, pair.type);
+        setCurrentTab(pair.type);
     }
 
-    public void setCurrentTab(String tab){
-        mTabLayout.getTabAt(Arrays.asList(tabIndices).indexOf(tab)).select();
+    private RecyclerViewFragment getFragmentAt(String tab){
+        return fragments.get(Arrays.asList(types).indexOf(tab));
     }
 
-    public void setupFragments(){
+    private void setCurrentTab(String tab){
+        mTabLayout.getTabAt(Arrays.asList(types).indexOf(tab)).select();
+    }
+
+    private void setupFragments(){
         postsFragment = new RecyclerViewFragment();
         usersFragment = new RecyclerViewFragment();
         groupsFragment = new RecyclerViewFragment();
@@ -181,7 +190,9 @@ public class SearchActivity extends AppCompatActivity {
         postsFragment.setAdapter(new PostAdapter());
         usersFragment.setAdapter(new UserAdapter());
         groupsFragment.setAdapter(new SearchGroupsAdapter());
-        historyFragment.setAdapter(new SearchHistoryAdapter());
+        SearchHistoryAdapter historyAdapter = new SearchHistoryAdapter();
+        historyAdapter.setSearchActivity(this);
+        historyFragment.setAdapter(historyAdapter);
         usersFragment.setShowDivider(true);
         groupsFragment.setShowDivider(true);
         historyFragment.setShowDivider(true);

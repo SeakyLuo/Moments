@@ -155,7 +155,8 @@ public class RecyclerViewFragment extends Fragment {
         return adapter.hasData();
     }
     private boolean isValidType(Object obj){
-        return obj instanceof Post || obj instanceof Comment || obj instanceof User || obj instanceof Group || obj instanceof String;
+        return obj instanceof Post || obj instanceof Comment || obj instanceof User ||
+                obj instanceof Group || obj instanceof String || obj instanceof SearchPair;
     }
 
     public void clear(){

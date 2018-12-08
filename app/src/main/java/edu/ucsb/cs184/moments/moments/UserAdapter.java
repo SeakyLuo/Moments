@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class UserAdapter extends CustomAdapter{
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_search_user, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_listuser, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }

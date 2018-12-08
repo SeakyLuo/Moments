@@ -44,12 +44,8 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
         notifyItemInserted(0);
     }
     public void removeElement(Object object){
-        int index = data.indexOf(object);
-        removeElementAt(index);
-    }
-    public void removeElementAt(int index){
-        data.remove(index);
-        notifyItemRemoved(index);
+        data.remove(object);
+        notifyDataSetChanged();
     }
     // Shouldn't be called
     public List<Object> getData(){

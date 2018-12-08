@@ -19,7 +19,6 @@ public class EditPostActivity extends AppCompatActivity {
     private ImageButton back;
     private ImageButton send;
     private EditText edit_content;
-    private SaveAsDraftDialog saveAsDraftDialog;
     private Class caller;
 
     @Override
@@ -33,8 +32,6 @@ public class EditPostActivity extends AppCompatActivity {
         back = findViewById(R.id.edit_cancel);
         send = findViewById(R.id.edit_send);
         // TODO: if this activity is initiated by UserDraftbox and the post is published, remember to delete from user draftbox
-        saveAsDraftDialog = new SaveAsDraftDialog();
-        saveAsDraftDialog.setActivity(this);
 
         edit_content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -59,13 +56,26 @@ public class EditPostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String content = edit_content.getText().toString();
                 if (content.length() == 0){
-                    finish();
-                    overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
-                }
-                else {
+                    close();
+                }else {
                     // ask save to draft box
-                    saveAsDraftDialog.setPost(getPost());
-                    saveAsDraftDialog.show(getSupportFragmentManager(), SaveAsDraftDialog.SAVE_AS_DRAFT);
+                    String save_as_draft = getString(R.string.save_as_draft);
+                    final AskYesNoDialog askYesNoDialog = new AskYesNoDialog();
+                    askYesNoDialog.showNow(getSupportFragmentManager(), save_as_draft);
+                    askYesNoDialog.setMessage(save_as_draft);
+                    askYesNoDialog.setOnYesListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            User.user.saveAsDraft(getPost());
+                            close();
+                        }
+                    });
+                    askYesNoDialog.setOnNoListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            close();
+                        }
+                    });
                 }
             }
         });
@@ -79,13 +89,17 @@ public class EditPostActivity extends AppCompatActivity {
                 intent.putExtra(POST, post);
                 User.user.makePost(post);
                 setResult(RESULT_OK, intent);
-                finish();
-                overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
+                close();
             }
         });
     }
 
     private Post getPost(){
         return new Post(User.user.getId(), edit_content.getText().toString(), Calendar.getInstance().getTimeInMillis());
+    }
+
+    private void close(){
+        finish();
+        overridePendingTransition(R.anim.push_down_in,R.anim.push_down_out);
     }
 }

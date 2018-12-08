@@ -119,7 +119,7 @@ public class UserProfileActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(user.getName());
         username.setText(user.getName());
         user_number.setText("#" + user.getNumber());
-        if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.INVISIBLE);
+        if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.GONE);
         else{
             gender.setVisibility(View.VISIBLE);
             gender.setImageDrawable(user.getGender().equals(getString(R.string.male)) ? getDrawable(R.drawable.ic_male) : getDrawable(R.drawable.ic_female));
@@ -150,7 +150,7 @@ public class UserProfileActivity extends AppCompatActivity {
         posts_count.setText("Posts: " + user.getPosts().size());
         if (userid.equals(User.user.getId())){
             follow.setImageResource(R.drawable.ic_edit);
-            message.setVisibility(View.INVISIBLE);
+            message.setVisibility(View.GONE);
             follow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
