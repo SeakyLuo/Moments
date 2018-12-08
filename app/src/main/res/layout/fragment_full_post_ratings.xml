@@ -30,7 +30,8 @@
                 android:progressTint="@color/Gold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:secondaryProgressTint="@android:color/transparent" />
 
             <TextView
                 android:id="@+id/fpr_rating_text"
