@@ -188,17 +188,26 @@ public class Post implements Parcelable {
         public int compare(Post o1, Post o2) { return new TimeComparator().compare(o1.GetKey(), o2.GetKey()); }
     }
 
+    public static class RatingComparator implements Comparator<Post> {
+        @Override
+        public int compare(Post o1, Post o2) {
+            int result = Double.compare(o1.ratings_avg(), o2.ratings_avg());
+            if (result == 0) return new TimeComparator().compare(o1.GetKey(), o2.GetKey());
+            return result;
+        }
+    }
+
+    public static class PopularityComparator implements Comparator<Post>{
+        @Override
+        public int compare(Post o1, Post o2) {
+            return new RatingComparator().compare(o1, o2);
+        }
+    }
+
     public static class TimeComparator implements Comparator<Key> {
         @Override
         public int compare(Key o1, Key o2) {
             return Long.compare(o2.time, o1.time) ;
-        }
-    }
-
-    public static class RatingComparator implements Comparator<Post> {
-        @Override
-        public int compare(Post o1, Post o2) {
-            return Double.compare(o1.ratings_avg(), o2.ratings_avg());
         }
     }
 }

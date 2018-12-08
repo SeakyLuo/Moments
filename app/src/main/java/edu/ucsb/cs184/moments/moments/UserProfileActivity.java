@@ -18,6 +18,9 @@ import android.widget.TextView;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class UserProfileActivity extends AppCompatActivity {
 
     public static final String USERID = "userid";
@@ -103,25 +106,44 @@ public class UserProfileActivity extends AppCompatActivity {
                 helper.setOnItemSelectedListener(new PopupMenuHelper.onItemSelectListener() {
                     @Override
                     public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
+                        ArrayList<Post> data = user.getPosts();
                         switch (menuItem.getItemId()){
+                            case R.id.sb_most_popular:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.most_recent));
+                                Collections.sort(data, new Post.PopularityComparator());
+                                break;
+                            case R.id.sb_least_popular:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.least_recent));
+                                Collections.sort(data, new Post.PopularityComparator());
+                                Collections.reverse(data);
+                                break;
                             case R.id.sb_highest_rating:
                                 sortBy.setText(SORTBY + ": " + getString(R.string.highest_rating));
-//                                fragment.gotoTop();
-                                return true;
+                                Collections.sort(data, new Post.RatingComparator());
+                                break;
                             case R.id.sb_lowest_rating:
                                 sortBy.setText(SORTBY + ": " + getString(R.string.lowest_rating));
-//                                fragment.gotoTop();
-                                return true;
+                                Collections.sort(data, new Post.RatingComparator());
+                                Collections.reverse(data);
+                                break;
                             case R.id.sb_latest:
                                 sortBy.setText(SORTBY + ": " + getString(R.string.most_recent));
-//                                fragment.gotoTop();
-                                return true;
+                                break;
                             case R.id.sb_oldest:
                                 sortBy.setText(SORTBY + ": " + getString(R.string.least_recent));
-//                                fragment.gotoTop();
-                                return true;
+                                Collections.sort(data, new Post.PostComparator());
+                                Collections.reverse(data);
+                                break;
+                            default:
+                                return false;
                         }
-                        return false;
+                        try {
+                            fragment.setData(data);
+                        } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                            e.printStackTrace();
+                        }
+                        fragment.gotoTop();
+                        return true;
                     }
                 });
                 helper.show();
