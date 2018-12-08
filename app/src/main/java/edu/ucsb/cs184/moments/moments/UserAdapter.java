@@ -20,24 +20,34 @@ public class UserAdapter extends CustomAdapter{
     }
 
     public class ViewHolder extends CustomAdapter.CustomViewHolder{
-        TextView name, number;
+        TextView number, name, intro, followers;
+        ImageView icon;
         ImageButton follow;
-        ImageView icon, gender;
         User data;
         public ViewHolder(@NonNull View view) {
             super(view);
-            name = view.findViewById(R.id.su_name);
             number = view.findViewById(R.id.su_number);
-            follow = view.findViewById(R.id.su_follow);
             icon = view.findViewById(R.id.su_icon);
-            gender = view.findViewById(R.id.su_gender);
+            name = view.findViewById(R.id.su_name);
+            intro = view.findViewById(R.id.su_intro);
+            followers = view.findViewById(R.id.su_followers);
+            follow = view.findViewById(R.id.su_follow);
         }
 
         @Override
         public void setData(Object object){
             data = (User) object;
             final String id = data.getId();
-            name.setText(data.getName());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, UserProfileActivity.class);
+                    intent.putExtra(UserProfileActivity.USERID, data.getId());
+                    context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                }
+            });
             number.setText("#" + data.getNumber());
             follow.setVisibility(User.user.getId().equals(id) ? View.GONE : View.VISIBLE);
             follow.setImageResource(IconHelper.followImage(id));
@@ -51,19 +61,9 @@ public class UserAdapter extends CustomAdapter{
             });
             if (data.GetIcon() == null) icon.setImageResource(R.drawable.user_icon);
             else icon.setImageBitmap(data.GetIcon());
-            String user_gender = data.getGender();
-            gender.setVisibility(user_gender.equals(User.UNKNOWN) ? View.GONE : View.VISIBLE);
-            gender.setImageResource(data.getGender().equals(User.MALE) ? R.drawable.ic_male : R.drawable.ic_female);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, UserProfileActivity.class);
-                    intent.putExtra(UserProfileActivity.USERID, data.getId());
-                    context.startActivity(intent);
-                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
-                }
-            });
+            name.setText(data.getName());
+            intro.setText(data.getIntro());
+            followers.setText("Followers: " + data.getFollowers());
         }
     }
 }

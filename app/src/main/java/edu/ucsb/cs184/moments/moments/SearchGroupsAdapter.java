@@ -17,39 +17,44 @@ public class SearchGroupsAdapter extends CustomAdapter{
     }
 
     public class ViewHolder extends CustomAdapter.CustomViewHolder {
-        TextView name, number;
-        ImageButton join;
+        TextView number, name, intro, members;
         ImageView icon;
+        ImageButton join;
         Group data;
         public ViewHolder(@NonNull View view) {
             super(view);
-            name = view.findViewById(R.id.sg_name);
             number = view.findViewById(R.id.sg_number);
-            join = view.findViewById(R.id.sg_join);
             icon = view.findViewById(R.id.sg_icon);
+            name = view.findViewById(R.id.sg_name);
+            intro = view.findViewById(R.id.sg_intro);
+            members = view.findViewById(R.id.sg_followers);
+            join = view.findViewById(R.id.sg_join);
         }
 
         @Override
         public void setData(Object object){
             data = (Group) object;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Show Group Profile
+                }
+            });
             name.setText(data.getName());
-            number.setText(data.getNumber());
-            if (User.user.inGroup(data.getId())) join.setVisibility(View.INVISIBLE);
+            number.setText("#" + data.getNumber());
+            if (User.user.inGroup(data.getId())) join.setVisibility(View.GONE);
             else join.setVisibility(View.VISIBLE);
             join.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     User.user.joinGroup(data.getId());
-                    join.setVisibility(View.INVISIBLE);
+                    join.setVisibility(View.GONE);
                 }
             });
             icon.setImageBitmap(data.GetIcon());
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Show Group File
-                }
-            });
+            name.setText(data.getName());
+            intro.setText(data.getIntro());
+            members.setText("Members: " + data.getMembers().size());
         }
     }
 }
