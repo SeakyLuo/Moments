@@ -36,22 +36,17 @@ public class UserAdapter extends CustomAdapter{
         @Override
         public void setData(Object object){
             data = (User) object;
+            final String id = data.getId();
             name.setText(data.getName());
             number.setText("#" + data.getNumber());
-            follow.setVisibility(User.user.getId().equals(data.getId()) ? View.INVISIBLE : View.VISIBLE);
-            follow.setImageResource(User.user.isFollowing(data.getId()) ? R.drawable.ic_unfollow : R.drawable.ic_follow);
+            follow.setVisibility(User.user.getId().equals(id) ? View.INVISIBLE : View.VISIBLE);
+            follow.setImageResource(IconHelper.followImage(id));
             follow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String id = data.getId();
-                    if (User.user.isFollowing(id)){
-                        User.user.unfollow(id);
-                        follow.setImageResource(R.drawable.ic_follow);
-                    }
-                    else{
-                        User.user.follow(id);
-                        follow.setImageResource(R.drawable.ic_unfollow);
-                    }
+                    if (User.user.isFollowing(id)) User.user.unfollow(id);
+                    else  User.user.follow(id);
+                    follow.setImageResource(IconHelper.followImage(id));
                 }
             });
             if (data.getIcon() == null) icon.setImageResource(R.drawable.user_icon);

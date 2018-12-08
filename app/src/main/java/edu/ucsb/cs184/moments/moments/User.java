@@ -161,8 +161,9 @@ public class User implements Parcelable {
     public ArrayList<Comment.Key> getCommentsNotification() { return commentsNotification; }
     public ArrayList<Rating.Key> getRatingssNotification() { return ratingsNotification; }
     public boolean IsAnonymous() { return id.equals(ANONYMOUS); }
+    public boolean mutualFollow(String userid) { return !id.equals(userid) && following.contains(userid) && findUser(userid).following.contains(id); }
     public boolean inGroup(String groupid) { return groups.contains(groupid); }
-    public boolean isFollowing(String userid) { return following.contains(userid); }
+    public boolean isFollowing(String userid) { return !id.equals(userid) &&  following.contains(userid); }
     public boolean hasCollected(Post post) { return collections.contains(post.GetKey()); }
     public boolean hasNewPost() { return postsNotification.size() != 0; }
     public boolean hasNewComment() { return commentsNotification.size() != 0; }

@@ -29,7 +29,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView icon, gender;
     private TextView username, user_number, intro, following, followers, posts_count;
-    private ImageButton follow, message;
+    private ImageButton  edit, follow, message;
     private FrameLayout up_timeline;
     private RecyclerViewFragment fragment;
 
@@ -52,13 +52,13 @@ public class UserProfileActivity extends AppCompatActivity {
         intro = include.findViewById(R.id.up_intro);
         following = include.findViewById(R.id.up_following);
         followers = include.findViewById(R.id.up_followers);
+        edit = include.findViewById(R.id.up_edit);
         follow = include.findViewById(R.id.up_follow);
         posts_count = include.findViewById(R.id.up_posts);
         message = include.findViewById(R.id.up_message);
         up_timeline = include.findViewById(R.id.up_timeline);
         fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostAdapter());
-        fragment.show(getSupportFragmentManager(), R.id.up_timeline);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,45 +148,46 @@ public class UserProfileActivity extends AppCompatActivity {
         });
         intro.setText("Intro: " + user.getIntro());
         posts_count.setText("Posts: " + user.getPosts().size());
-        if (userid.equals(User.user.getId())){
-            follow.setImageResource(R.drawable.ic_edit);
-            message.setVisibility(View.GONE);
-            follow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent eup = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
-                    eup.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
-                    startActivityForResult(eup, EditUserProfileActivity.FINISH);
-                }
-            });
-        }else{
-            message.setVisibility(View.VISIBLE);
-            follow.setImageResource(User.user.isFollowing(userid) ? R.drawable.ic_unfollow : R.drawable.ic_follow);
-            follow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (User.user.isFollowing(userid)){
-                        User.user.unfollow(userid);
-                        follow.setImageResource(R.drawable.ic_follow);
-                    }
-                    else{
-                        User.user.follow(userid);
-                        follow.setImageResource(R.drawable.ic_unfollow);
-                    }
-                }
-            });
-        }
+        boolean self = userid.equals(User.user.getId());
+        edit.setVisibility(self ? View.VISIBLE : View.GONE);
+        message.setVisibility(self ? View.VISIBLE : View.GONE);
+        follow.setVisibility(self ? View.VISIBLE : View.GONE);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
+                intent.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
+                startActivityForResult(intent, EditUserProfileActivity.FINISH);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+            }
+        });
+        setFollow(userid);
+        follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (User.user.isFollowing(userid)) User.user.unfollow(userid);
+                else User.user.follow(userid);
+                setFollow(userid);
+            }
+        });
         try {
             fragment.addElements(user.getPosts());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        fragment.show(getSupportFragmentManager(), R.id.up_timeline);
     }
 
-    public static String FollowCount(int count){
+    private static String FollowCount(int count){
         if (count > 1000000) return count / 1000000 + " M";
         else if (count > 1000) return count / 1000 + " K";
         return count + "";
+    }
+
+    private void setFollow(String userid){
+        int followImage = IconHelper.followImage(userid);
+        follow.setImageResource(followImage);
+        follow.setBackground(getDrawable(followImage == R.drawable.ic_unfollow ? R.drawable.button_border_green : R.drawable.button_border_orange));
     }
 
     @Override
