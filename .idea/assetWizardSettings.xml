@@ -16,13 +16,28 @@
                             <entry key="actionbar">
                               <value>
                                 <PersistentState>
+                                  <option name="children">
+                                    <map>
+                                      <entry key="image">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="paddingPercent" value="15" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\mutual.png" />
-                                      <entry key="outputName" value="ic_mutual" />
+                                      <entry key="imageAsset" value="C:\Users\Seaky\Desktop\MomentsIcons\down.png" />
+                                      <entry key="outputName" value="ic_down_blue" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="ffc800" />
+                                      <entry key="themeColor" value="3f51b5" />
                                     </map>
                                   </option>
                                 </PersistentState>

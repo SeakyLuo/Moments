@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.jude.swipbackhelper.SwipeBackHelper;
+
 import java.util.ArrayList;
 
 public class FollowListActivity extends AppCompatActivity {
@@ -31,6 +33,7 @@ public class FollowListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow_list);
+        SwipeBackHelper.onCreate(this);
         intent = getIntent();
         title = intent.getStringExtra(TITLE);
 
@@ -107,5 +110,17 @@ public class FollowListActivity extends AppCompatActivity {
         } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        SwipeBackHelper.onPostCreate(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SwipeBackHelper.onDestroy(this);
     }
 }

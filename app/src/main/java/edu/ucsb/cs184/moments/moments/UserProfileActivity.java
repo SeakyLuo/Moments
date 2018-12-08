@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +21,7 @@ import com.jude.swipbackhelper.SwipeBackHelper;
 public class UserProfileActivity extends AppCompatActivity {
 
     public static final String USERID = "userid";
+    public static final String SORTBY = "Sort By";
     private Button sortBy;
     private ImageButton back, search;
     private View include;
@@ -30,7 +30,6 @@ public class UserProfileActivity extends AppCompatActivity {
     private ImageView icon, gender;
     private TextView username, user_number, intro, following, followers, posts_count;
     private ImageButton  edit, follow, message;
-    private FrameLayout up_timeline;
     private RecyclerViewFragment fragment;
 
     @Override
@@ -41,25 +40,33 @@ public class UserProfileActivity extends AppCompatActivity {
 
         back = findViewById(R.id.up_back);
         search = findViewById(R.id.up_search);
-        include = findViewById(R.id.content_user_profile);
         toolbar = findViewById(R.id.up_toolbar);
         collapsingToolbarLayout = findViewById(R.id.up_ctoolbar);
-        sortBy = include.findViewById(R.id.up_sortby_button);
-        icon = include.findViewById(R.id.up_usericon);
-        gender = include.findViewById(R.id.up_gender);
-        username = include.findViewById(R.id.up_username);
-        user_number = include.findViewById(R.id.up_user_number);
-        intro = include.findViewById(R.id.up_intro);
-        following = include.findViewById(R.id.up_following);
-        followers = include.findViewById(R.id.up_followers);
-        edit = include.findViewById(R.id.up_edit);
-        follow = include.findViewById(R.id.up_follow);
-        posts_count = include.findViewById(R.id.up_posts);
-        message = include.findViewById(R.id.up_message);
-        up_timeline = include.findViewById(R.id.up_timeline);
+        sortBy = findViewById(R.id.up_sortby_button);
+        icon = findViewById(R.id.up_usericon);
+        gender = findViewById(R.id.up_gender);
+        username = findViewById(R.id.up_username);
+        user_number = findViewById(R.id.up_user_number);
+        intro = findViewById(R.id.up_intro);
+        following = findViewById(R.id.up_following);
+        followers = findViewById(R.id.up_followers);
+        edit = findViewById(R.id.up_edit);
+        follow = findViewById(R.id.up_follow);
+        posts_count = findViewById(R.id.up_posts);
+        message = findViewById(R.id.up_message);
         fragment = new RecyclerViewFragment();
-        fragment.setAdapter(new PostAdapter());
+        PostAdapter adapter = new PostAdapter();
+        adapter.setUsericonClickable(false);
+        fragment.setAdapter(adapter);
 
+        collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
+        collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
+        setSupportActionBar(toolbar);
+        setUserProfile(getIntent().getStringExtra(USERID));
+    }
+
+    private void setUserProfile(final String userid){
+        final User user = User.findUser(userid);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +92,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         });
+        sortBy.setText(SORTBY);
         sortBy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,12 +102,20 @@ public class UserProfileActivity extends AppCompatActivity {
                     public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.sb_highest_rating:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.highest_rating));
+//                                fragment.gotoTop();
                                 return true;
                             case R.id.sb_lowest_rating:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.lowest_rating));
+//                                fragment.gotoTop();
                                 return true;
-                            case R.id.sb_lastest:
+                            case R.id.sb_latest:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.most_recent));
+//                                fragment.gotoTop();
                                 return true;
                             case R.id.sb_oldest:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.least_recent));
+//                                fragment.gotoTop();
                                 return true;
                         }
                         return false;
@@ -108,14 +124,12 @@ public class UserProfileActivity extends AppCompatActivity {
                 helper.show();
             }
         });
-        collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
-        collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
-        setSupportActionBar(toolbar);
-        setUserProfile(getIntent().getStringExtra(USERID));
-    }
-
-    private void setUserProfile(final String userid){
-        final User user = User.findUser(userid);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.gotoTop();
+            }
+        });
         collapsingToolbarLayout.setTitle(user.getName());
         username.setText(user.getName());
         user_number.setText("#" + user.getNumber());
@@ -171,7 +185,7 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
         try {
-            fragment.addElements(user.getPosts());
+            fragment.addElements(0, user.getPosts());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,9 +2,9 @@
 <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:background="@android:color/transparent"
-                android:drawableRight="@drawable/ic_down"
+                android:drawableRight="@drawable/ic_down_blue"
                 android:text="@string/sort_by"
                 android:textAllCaps="false"
                 android:textColor="@color/design_default_color_primary"
@@ -171,14 +171,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
-
         </android.support.constraint.ConstraintLayout>
 
         <FrameLayout
             android:id="@+id/up_timeline"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </LinearLayout>
-
 </android.support.v4.widget.NestedScrollView>

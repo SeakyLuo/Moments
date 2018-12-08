@@ -20,6 +20,9 @@ import java.util.Calendar;
 
 public class PostAdapter extends CustomAdapter {
 
+    private boolean usericonClickable = true;
+    public void setUsericonClickable(boolean clickable) { usericonClickable = clickable; }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_post, parent, false);
@@ -65,7 +68,7 @@ public class PostAdapter extends CustomAdapter {
 
         public void setData(Object object) {
             data = (Post) object;
-            User user = User.findUser(data.getUserid());
+            final User user = User.findUser(data.getUserid());
             view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -76,10 +79,10 @@ public class PostAdapter extends CustomAdapter {
                     ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
-            usericon.setClickable(true);
             usericon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (!usericonClickable) return;
                     Intent intent = new Intent(context, UserProfileActivity.class);
                     intent.putExtra(UserProfileActivity.USERID, data.getUserid());
                     context.startActivity(intent);

@@ -37,9 +37,7 @@ public class FullPostActivity extends AppCompatActivity {
     private ImageButton backButton;
     private View include;
     private ImageView poster_icon;
-    private TextView username;
-    private TextView time;
-    private TextView content;
+    private TextView username, time, content, comments_counter;
     private RatingBar ratingBar;
     private ImageButton comment, collect, share, dropdown;
     private ImageView usericon;
@@ -67,6 +65,7 @@ public class FullPostActivity extends AppCompatActivity {
         poster_icon = include.findViewById(R.id.post_usericon);
         username = include.findViewById(R.id.post_username);
         time = include.findViewById(R.id.post_time);
+        comments_counter = include.findViewById(R.id.post_comments_counter);
         content = include.findViewById(R.id.post_content);
         ratingBar = include.findViewById(R.id.post_ratingBar);
         comment = include.findViewById(R.id.post_comment);
@@ -150,6 +149,9 @@ public class FullPostActivity extends AppCompatActivity {
 
             }
         });
+        int comments_count = post.getComments().size();
+        comments_counter.setText(comments_count + "");
+        comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -124,7 +124,7 @@ public class RecyclerViewFragment extends Fragment {
         this.adapter = adapter;
     }
 
-    public void addHiddenView(View view) { hideViews.add(view); }
+    public void addHiddenView(View view) { if (view != null) hideViews.add(view); }
 
     public void addElement(Object obj) throws UnsupportedDataException {
         if (isValidType(obj)) adapter.addElement(obj);

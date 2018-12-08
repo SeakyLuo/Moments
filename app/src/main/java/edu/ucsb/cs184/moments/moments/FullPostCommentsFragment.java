@@ -48,7 +48,7 @@ public class FullPostCommentsFragment extends Fragment {
                             case R.id.sb_lowest_rating:
                                 sortby_text.setText("Sort By " + getString(R.string.lowest_rating));
                                 return true;
-                            case R.id.sb_lastest:
+                            case R.id.sb_latest:
                                 sortby_text.setText("Sort By " + getString(R.string.most_recent));
                                 return true;
                             case R.id.sb_oldest:
