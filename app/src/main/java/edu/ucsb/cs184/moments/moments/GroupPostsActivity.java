@@ -98,6 +98,7 @@ public class GroupPostsActivity extends AppCompatActivity {
             case EditPostActivity.MAKE_POST:
                 try {
                     fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
+                    fragment.gotoTop();
                 }catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
                 }finally {

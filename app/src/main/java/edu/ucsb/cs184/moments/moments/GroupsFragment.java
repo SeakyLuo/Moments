@@ -31,7 +31,6 @@ public class GroupsFragment extends Fragment {
     private ImageButton add;
     private DrawerLayout drawer;
     private BottomNavigationView nav;
-    private GroupAdapter adapter;
     private RecyclerViewFragment fragment;
 
     @Nullable
@@ -75,9 +74,12 @@ public class GroupsFragment extends Fragment {
         });
         fragment = new RecyclerViewFragment();
         fragment.setShowDivider(true);
-        adapter = new GroupAdapter();
-        adapter.addElements(User.user.getGroups());
-        fragment.setAdapter(adapter);
+        fragment.setAdapter(new GroupAdapter());
+        try {
+            fragment.setData(User.user.getGroups());
+        } catch (RecyclerViewFragment.UnsupportedDataException e) {
+            e.printStackTrace();
+        }
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -105,16 +107,16 @@ public class GroupsFragment extends Fragment {
         this.nav = nav;
     }
 
-    public void addGroup(Group group){
-        adapter.addElement(group);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == CREATE_GROUP){
-            addGroup((Group) data.getParcelableExtra(GROUP));
+            try {
+                fragment.addElement(data.getParcelableExtra(GROUP));
+            } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

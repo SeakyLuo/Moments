@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
@@ -67,6 +68,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
 
     public static class SettingsFragment extends PreferenceFragment {
         private Preference icon, name, number, sortby, quit;
+        private EditTextPreference intro;
         private boolean init = false;
         private Group group;
         @Override
@@ -77,6 +79,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
             icon = findPreference("Group Icon");
             name = findPreference("Group Name");
             number = findPreference("Group Number");
+            intro = (EditTextPreference) findPreference("Group Intro");
             sortby = findPreference(getString(R.string.sort_by));
             quit = findPreference(getString(R.string.quit_group));
             icon.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -85,6 +88,15 @@ public class GroupSettingsActivity extends AppCompatActivity {
                     Intent intent = new Intent(getContext(), UploadIconActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    return false;
+                }
+            });
+            intro.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String data = newValue.toString();
+                    group.modifyIntro(data);
+                    intro.setSummary(data);
                     return false;
                 }
             });
@@ -99,7 +111,6 @@ public class GroupSettingsActivity extends AppCompatActivity {
             name.setDefaultValue(group.getName());
             number.setSummary(group.getNumber() + "");
             // TODO: save group settings
-            // Default
             sortby.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -107,6 +118,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+            if (!group.getIntro().isEmpty()) intro.setSummary(group.getIntro());
             quit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {

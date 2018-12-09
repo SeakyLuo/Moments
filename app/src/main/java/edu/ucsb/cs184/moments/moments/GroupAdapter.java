@@ -93,7 +93,7 @@ public class GroupAdapter extends CustomAdapter {
                 time.setText(TimeText(Calendar.getInstance().getTimeInMillis()));
                 content.setText("You " + (data.IsManager(User.user.getId()) ? "created" : "joined") + " a new group.");
             }else{
-                Post post = posts.get(posts.size() - 1);
+                Post post = posts.get(0);
                 time.setText(TimeText(post.getTime()));
                 content.setText(User.findUser(post.getUserid()).getName() + ": " + post.getContent());
             }
