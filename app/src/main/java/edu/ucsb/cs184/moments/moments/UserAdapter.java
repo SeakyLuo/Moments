@@ -63,7 +63,7 @@ public class UserAdapter extends CustomAdapter{
             else icon.setImageBitmap(data.GetIcon());
             name.setText(data.getName());
             intro.setText(data.getIntro());
-            followers.setText("Followers: " + data.getFollowers());
+            followers.setText("Followers: " + data.getFollowers().size());
         }
     }
 }

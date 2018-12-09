@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 public class GroupPostsActivity extends AppCompatActivity {
@@ -69,7 +70,7 @@ public class GroupPostsActivity extends AppCompatActivity {
             }
         });
         title.setText(group.getName());
-        icon.setImageBitmap(group.GetIcon());
+        Glide.with(this).load(group.GetIcon()).into(icon);
         fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostAdapter());
         fragment.addHiddenView(fab);

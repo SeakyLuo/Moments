@@ -114,9 +114,8 @@ public class User implements Parcelable {
     public void setNumber(int number){ this.user_number = number; }
     public int getNumber() { return user_number; }
     public Bitmap GetIcon() {
-        if (icon == null)
-            icon = FirebaseHelper.getIcon(FirebaseHelper.USER_ICON, id);
         return icon;
+//        return FirebaseHelper.getIcon(FirebaseHelper.USER_ICON, id);
     }
     public void SetIcon(Bitmap bitmap){ icon = bitmap; }
     public String getName() { return name; }

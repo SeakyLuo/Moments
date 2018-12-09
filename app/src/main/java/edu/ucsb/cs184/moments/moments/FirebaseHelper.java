@@ -197,7 +197,7 @@ public class FirebaseHelper {
     }
     public static ArrayList<Group> searchGroups(String keyword) {
         ArrayList<Group> data = new ArrayList<>();
-        for (DataSnapshot ds: uds.getChildren()){
+        for (DataSnapshot ds: gds.getChildren()){
             Group group = ds.getValue(Group.class);
             if (group.containsKeyword(keyword))
                 data.add(group);
@@ -320,6 +320,7 @@ public class FirebaseHelper {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -329,15 +330,12 @@ public class FirebaseHelper {
         });
     }
 
-    public static Bitmap getIcon(final String type, final String id){
-        StorageReference imagesRef;
+    public static StorageReference getIcon(final String type, final String id){
         switch (type){
             case USER_ICON:
-                imagesRef = usr.child(id + ".jpg");
-                return null;
+                return usr.child(id + ".jpg");
             case GROUP_ICON:
-                imagesRef = gsr.child(id + ".jpg");
-                return null;
+                return gsr.child(id + ".jpg");
             default:
                 return null;
         }

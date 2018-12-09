@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -70,7 +71,8 @@ public class Group implements Parcelable {
     public void setId(String id) { if (id != null) this.id = id; }
     public String getId() { return id; }
     public String getManagerid() { return managerid; }
-    public void setManagerid(String userid) {
+    public void setManagerid(String userid) { this.managerid = userid; }
+    public void modifyManager(String userid){
         this.managerid = userid;
         upload("managerid", managerid);
     }
@@ -90,11 +92,11 @@ public class Group implements Parcelable {
     }
     public ArrayList<String> getMembers() { return members; }
     public ArrayList<Post> getPosts() { return posts; }
-    public void SetIcon(Bitmap bitmap) { icon = bitmap; }
-    public Bitmap GetIcon() {
-        if (icon == null)
-            icon = FirebaseHelper.getIcon(FirebaseHelper.GROUP_ICON, id);
-        return icon;
+    public void SetIcon(Bitmap bitmap){
+        icon = bitmap;
+    }
+    public StorageReference GetIcon(){
+        return FirebaseHelper.getIcon(FirebaseHelper.GROUP_ICON, id);
     }
 
     public void addMember(String userid){

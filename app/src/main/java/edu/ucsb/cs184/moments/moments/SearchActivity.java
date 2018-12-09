@@ -170,6 +170,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void searchHistory(SearchPair pair){
+        searchBar.setText(pair.keyword);
         search(pair.keyword, pair.type);
         setCurrentTab(pair.type);
     }
