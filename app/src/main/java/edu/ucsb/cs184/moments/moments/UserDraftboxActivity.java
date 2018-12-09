@@ -36,13 +36,15 @@ public class UserDraftboxActivity extends AppCompatActivity {
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: to be implemented
+                clear.setTextColor(getColor(R.color.aluminum));
+                User.user.clearDrafts();
+                fragment.clear();
             }
         });
         // TODO: to be implemented
         fragment.setAdapter(new PostAdapter());
         try {
-            fragment.addElements(User.user.getDrafts());
+            fragment.setData(User.user.getDrafts());
         } catch (Exception e) {
             e.printStackTrace();
         }

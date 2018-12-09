@@ -173,9 +173,10 @@ public class User implements Parcelable {
     public boolean inGroup(String groupid) { return groups.contains(groupid); }
     public boolean isFollowing(String userid) { return !id.equals(userid) &&  following.contains(userid); }
     public boolean hasCollected(Post post) { return collections.contains(post.GetKey()); }
-    public boolean hasNewPost() { return postsNotification.size() != 0; }
-    public boolean hasNewComment() { return commentsNotification.size() != 0; }
-    public boolean hasNewRating() { return ratingsNotification.size() != 0; }
+    public boolean hasNewPost() { return postsNotification.size() > 0; }
+    public boolean hasNewComment() { return commentsNotification.size() > 0; }
+    public boolean hasNewRating() { return ratingsNotification.size() > 0; }
+    public boolean hasDrafts() { return drafts.size() > 0; }
     public boolean hasPosted(Post post) { return id.equals(post.getUserid()); }
     public boolean containsKeyword(String keyword) { return name.contains(keyword) || Integer.toString(user_number).contains(keyword); }
     public ArrayList<Post.Key> getPostKeys() {
@@ -370,6 +371,11 @@ public class User implements Parcelable {
     }
     public void saveAsDraft(Post post){
         drafts.add(0, post);
+        upload("drafts", drafts);
+    }
+    public void removeDraft(Post post){
+        drafts.remove(post);
+        upload("drafts", drafts);
     }
     private void upload(String key, Object value){
         FirebaseHelper.updateUser(id, key, value);
