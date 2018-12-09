@@ -43,16 +43,16 @@ public class CollectionsActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                try {
-//                    fragment.setData(User.user.getCollections());
-//                } catch (RecyclerViewFragment.UnsupportedDataException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    fragment.setData(User.user.getCollections());
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         fragment.show(getSupportFragmentManager(), R.id.collections_content);
     }
 

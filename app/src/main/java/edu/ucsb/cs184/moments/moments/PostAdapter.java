@@ -68,7 +68,7 @@ public class PostAdapter extends CustomAdapter {
                 @Override
                 public void onClick(View widget) {
                     User user = User.findUserWithName(name);
-                    if (name == null)
+                    if (user == null)
                         Toast.makeText(context, "User " + name + "not found!" , Toast.LENGTH_SHORT).show();
                     else{
                         Intent intent = new Intent(context, UserProfileActivity.class);

@@ -109,6 +109,25 @@ public class Post implements Parcelable {
         if (result) upload("ratings", ratings);
         return result;
     }
+    public ArrayList<String> findAtUsers(){
+        ArrayList<String> data = new ArrayList<>();
+        String substr = content;
+        int index = substr.indexOf("@");
+        while(index != -1){
+            int space = substr.indexOf(" ");
+            if (space == -1){
+                space = substr.length();
+            }
+            data.add(substr.substring(index + 1, space));
+            try{
+                substr = substr.substring(space + 1);
+                index = substr.indexOf("@");
+            }catch (StringIndexOutOfBoundsException e){
+                break;
+            }
+        };
+        return data;
+    }
     private void upload(String key, Object value){
         FirebaseHelper.updatePost(this, key, value);
     }
@@ -126,6 +145,15 @@ public class Post implements Parcelable {
     }
     public static Post findPost(Key key) { return FirebaseHelper.findPost(key); }
     public static Post findPost(Key key, String groupid) { return FirebaseHelper.findPostInGroup(key, groupid); }
+    public static Post powerfulFindPost(Key key){
+        Post post = findPost(key);
+        if (post != null) return post;
+        for (Group group: User.findUser(post.getUserid()).getGroups())
+            for (Post p: group.getPosts())
+                if (p.GetKey().equals(key))
+                    return p;
+        return null;
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {

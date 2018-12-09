@@ -166,7 +166,7 @@ public class User implements Parcelable {
     public ArrayList<Post> getAtMe() {
         ArrayList<Post> data = new ArrayList<>();
         for (Post.Key key: (ArrayList<Post.Key>) atMe.clone()){
-            Post post = Post.findPost(key);
+            Post post = Post.powerfulFindPost(key);
             if (post == null) atMe.remove(key);
             else data.add(post);
         }
