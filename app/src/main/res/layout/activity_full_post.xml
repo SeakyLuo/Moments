@@ -52,7 +52,9 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/fullpost_swipe_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/fullpost_toolbar"
+       >
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -108,8 +110,8 @@
                 <edu.ucsb.cs184.moments.moments.TabViewPager
                     android:id="@+id/fullpost_viewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="100dp" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
@@ -122,7 +124,6 @@
         android:background="?android:attr/colorBackgroundFloating"
         android:contentInsetStart="0dp"
         android:elevation="4dp"
-        android:layout_marginBottom="0dp"
         android:minHeight="?attr/actionBarSize"
         app:contentInsetStart="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
