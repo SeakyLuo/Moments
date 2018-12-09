@@ -1,5 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.view.menu.MenuBuilder;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,6 +62,7 @@ public class GroupAdapter extends CustomAdapter {
                     Intent intent = new Intent(context, GroupPostsActivity.class);
                     intent.putExtra(GroupsFragment.GROUP, data);
                     context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             view.setOnLongClickListener(new View.OnLongClickListener() {
@@ -85,15 +89,13 @@ public class GroupAdapter extends CustomAdapter {
         public void setData(Object object) {
             data = (Group) object;
             group_name.setText(data.getName());
-            group_icon.setImageBitmap(data.GetIcon());
+            Glide.with(context).load(data.GetIcon()).into(group_icon);
             ArrayList<Post> posts = data.getPosts();
             if (posts.size() == 0){
                 time.setText(TimeText(Calendar.getInstance().getTimeInMillis()));
-                String managerid = data.getManagerid();
-                String name = User.findUser(managerid).getName();
-                content.setText(managerid.equals(User.user.getId()) ? "You" : name + " created a new group.");
+                content.setText("You " + (data.IsManager(User.user.getId()) ? "created" : "joined") + " a new group.");
             }else{
-                Post post = posts.get(posts.size() - 1);
+                Post post = posts.get(0);
                 time.setText(TimeText(post.getTime()));
                 content.setText(User.findUser(post.getUserid()).getName() + ": " + post.getContent());
             }

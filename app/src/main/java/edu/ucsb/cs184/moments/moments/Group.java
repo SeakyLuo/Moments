@@ -4,17 +4,20 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Group implements Parcelable {
     private String id;
     private String managerid;
     private String name;
     private int group_number;
-    private Bitmap icon;
+    private String icon = "group_icon.png";
     private String intro = "";
+    // private group?
     private ArrayList<String> members = new ArrayList<>();
     private ArrayList<Post> posts = new ArrayList<>();
 
@@ -31,7 +34,7 @@ public class Group implements Parcelable {
         managerid = in.readString();
         name = in.readString();
         group_number = in.readInt();
-        icon = in.readParcelable(Bitmap.class.getClassLoader());
+        icon = in.readString();
         intro = in.readString();
         members = in.createStringArrayList();
         posts = in.createTypedArrayList(Post.CREATOR);
@@ -43,7 +46,7 @@ public class Group implements Parcelable {
         dest.writeString(managerid);
         dest.writeString(name);
         dest.writeInt(group_number);
-        dest.writeParcelable(icon, flags);
+        dest.writeString(icon);
         dest.writeString(intro);
         dest.writeStringList(members);
         dest.writeTypedList(posts);
@@ -69,10 +72,12 @@ public class Group implements Parcelable {
     public void setId(String id) { if (id != null) this.id = id; }
     public String getId() { return id; }
     public String getManagerid() { return managerid; }
-    public void setManagerid(String userid) {
+    public void setManagerid(String userid) { this.managerid = userid; }
+    public void modifyManager(String userid){
         this.managerid = userid;
         upload("managerid", managerid);
     }
+    public boolean IsManager(String userid) { return managerid.equals(userid); }
     public void setNumber(int number) { this.group_number = number; }
     public int getNumber() { return group_number;}
     public String getName() { return name; }
@@ -89,11 +94,13 @@ public class Group implements Parcelable {
     }
     public ArrayList<String> getMembers() { return members; }
     public ArrayList<Post> getPosts() { return posts; }
-    public void SetIcon(Bitmap bitmap) { icon = bitmap; }
-    public Bitmap GetIcon() {
-        if (icon == null)
-            icon = FirebaseHelper.getIcon(FirebaseHelper.GROUP_ICON, id);
-        return icon;
+    public void modifyIcon(Bitmap bitmap){
+        this.icon = id + ".jpg";
+        upload("icon", icon);
+        FirebaseHelper.uploadIcon(bitmap, FirebaseHelper.GROUP_ICON, icon);
+    }
+    public StorageReference GetIcon(){
+        return FirebaseHelper.getIcon(FirebaseHelper.GROUP_ICON, icon);
     }
 
     public void addMember(String userid){
@@ -107,6 +114,8 @@ public class Group implements Parcelable {
     public void removeMember(String userid){
         members.remove(userid);
         upload("members", members);
+        if (members.size() == 0)
+            FirebaseHelper.removeGroup(id);
     }
     public void removePost(Post post){
         posts.remove(post);
@@ -130,5 +139,10 @@ public class Group implements Parcelable {
         if (obj == null) return false;
         if (!(obj instanceof Group)) return false;
         return id.equals(((Group) obj).id);
+    }
+
+    public static class GroupComparator implements Comparator<Group> {
+        @Override
+        public int compare(Group o1, Group o2) { return new Post.TimeComparator().compare(o1.posts.get(0).GetKey(), o2.posts.get(0).GetKey()); }
     }
 }

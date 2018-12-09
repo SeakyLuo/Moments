@@ -7,6 +7,7 @@
     <color name="BlackGray">#242424</color>
     <color name="Orange">#FFC800</color>
     <color name="DeepGreen">#00C575</color>
+    <color name="DeepBlue">#0064FF</color>
 
     <color name="login_primary">#E43F3F</color>
     <color name="login_primary_dark">#E12929</color>

@@ -2,8 +2,14 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.view.menu.MenuBuilder;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,11 +21,14 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class PostAdapter extends CustomAdapter {
 
+    public static final int FULL_POST = 1;
     private boolean usericonClickable = true;
     public void setUsericonClickable(boolean clickable) { usericonClickable = clickable; }
 
@@ -43,6 +52,49 @@ public class PostAdapter extends CustomAdapter {
         long delta_day = delta_hour / 24;
         if (delta_day < 7) return delta_day + " day"+ ((delta_day == 1) ? "" : "s") +" ago";
         return new SimpleDateFormat("yyyy-MM-dd").format(time);
+    }
+
+    public static void setContent(final Context context, TextView textView, final Post post){
+        String substr = post.getContent();
+        int index = substr.indexOf("@");
+        SpannableString spannableString = new SpannableString(post.getContent());
+        while(index != -1){
+            int space = substr.indexOf(" ");
+            if (space == -1){
+                space = substr.length();
+            }
+            final String name = substr.substring(index + 1, space);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    User user = User.findUserWithName(name);
+                    if (user == null)
+                        Toast.makeText(context, "User " + name + " not found!" , Toast.LENGTH_SHORT).show();
+                    else{
+                        Intent intent = new Intent(context, UserProfileActivity.class);
+                        intent.putExtra(UserProfileActivity.USERID, user.getId());
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    }
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setColor(context.getColor(R.color.DeepBlue));
+                    ds.setUnderlineText(false);
+                }
+            };
+            spannableString.setSpan(clickableSpan, index, space, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            try{
+                substr = substr.substring(space + 1);
+                index = substr.indexOf("@");
+            }catch (StringIndexOutOfBoundsException e){
+                break;
+            }
+        }
+        textView.setText(spannableString);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     public class ViewHolder extends CustomAdapter.CustomViewHolder {
@@ -75,18 +127,20 @@ public class PostAdapter extends CustomAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, FullPostActivity.class);
                     intent.putExtra(FullPostActivity.POST, data);
-                    context.startActivity(intent);
-                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    // TODO: these two lines are problematic
+                    activity.startActivityForResult(intent, FULL_POST);
+                    activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             usericon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!usericonClickable) return;
+                    if (!usericonClickable || data.IsAnonymous()) return;
                     Intent intent = new Intent(context, UserProfileActivity.class);
                     intent.putExtra(UserProfileActivity.USERID, data.getUserid());
-                    context.startActivity(intent);
-                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    // TODO: these two lines are problematic
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             collect.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +158,8 @@ public class PostAdapter extends CustomAdapter {
                     Intent intent = new Intent(context, FullPostActivity.class);
                     intent.putExtra(FullPostActivity.POST, data);
                     intent.putExtra(FullPostActivity.ADD_COMMENT, FullPostActivity.ADD_COMMENT);
-                    context.startActivity(intent);
-                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -116,10 +170,8 @@ public class PostAdapter extends CustomAdapter {
                         Toast.makeText(context, "You can't rate your own post!", Toast.LENGTH_SHORT).show();
                         ratingBar.setRating(data.ratings_avg());
                     }else{
-                        if (rating == 0)
-                            ratingBar.setRating(data.ratings_avg());
-                        else
-                            User.user.rate(new Rating(User.user.getId(), (int) rating, Calendar.getInstance().getTimeInMillis(), data.GetKey()));
+                        User.user.rate(new Rating(User.user.getId(), (int) rating, Calendar.getInstance().getTimeInMillis(), data.GetKey()));
+                        if (rating == 0) ratingBar.setRating(data.ratings_avg());
                     }
                 }
             });
@@ -161,14 +213,15 @@ public class PostAdapter extends CustomAdapter {
                     helper.show();
                 }
             });
-            if (user.GetIcon() == null) usericon.setImageResource(R.drawable.user_icon);
-            else usericon.setImageBitmap(user.GetIcon());
+            Glide.with(context).load(user.GetIcon()).into(usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
-            content.setText(data.getContent());
-            ratingBar.setRating(data.ratings_avg());
+            setContent(context, content, data);
+            Rating rating = data.hasRated();
+            ratingBar.setRating((rating == null) ? data.ratings_avg() : rating.getRating());
             setCollect(User.user.hasCollected(data));
         }
+
 
         public void setCollect(boolean Collect){
             collect.setImageResource(Collect ? R.drawable.ic_heart_filled : R.drawable.ic_heart);

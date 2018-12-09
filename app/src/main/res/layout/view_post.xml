@@ -99,6 +99,7 @@
             android:background="@android:drawable/screen_background_light_transparent"
             android:numStars="5"
             android:progressTint="@color/Gold"
+            android:secondaryProgressTint="@android:color/transparent"
             android:stepSize="1"
             app:layout_constraintEnd_toEndOf="@+id/post_content"
             app:layout_constraintStart_toStartOf="@+id/post_content" />

@@ -26,7 +26,7 @@ public class FirebaseHelper {
     private static StorageReference usr, gsr;
     private static DatabaseReference db;
     private static DatabaseReference udb, gdb, uc, gc, uudb;
-    private static DataSnapshot uds, gds, ucds, gcds;
+    private static DataSnapshot uds, gds, gcds;
     private static OnUDBReceivedListener uReceivedListener;
     private static OnGDBReceivedListener gReceivedListener;
     private static ArrayList<OnDataUpdatesListener> updateListeners = new ArrayList<>();
@@ -48,17 +48,17 @@ public class FirebaseHelper {
                 if (User.firebaseUser != null){
                     uudb = udb.child(User.firebaseUser.getUid());
                     User.user = uds.child(User.firebaseUser.getUid()).getValue(User.class);
-//                    uudb.addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                            User.user = dataSnapshot.getValue(User.class);
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                        }
-//                    });
+                    uudb.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User.user = dataSnapshot.getValue(User.class);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
                 if (uReceivedListener != null) uReceivedListener.onUDBReceived();
             }
@@ -109,18 +109,6 @@ public class FirebaseHelper {
 
             }
         });
-        uc = db.child("user_count");
-        uc.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ucds = dataSnapshot;
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         gc = db.child("group_count");
         gc.addValueEventListener(new ValueEventListener() {
             @Override
@@ -144,9 +132,6 @@ public class FirebaseHelper {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int number = ucds.getValue(Integer.class);
-                user.setNumber(number);
-                uc.setValue(++number);
                 udb.child(user.getId()).setValue(user);
                 if (uInsertionListener != null) uInsertionListener.afterUserInserted(user);
             }
@@ -168,6 +153,10 @@ public class FirebaseHelper {
         }).start();
     }
 
+    public static void removeGroup(final String id){
+        gdb.child(id).removeValue();
+    }
+
     public static User findUser(String id){
         return uds.child(id).getValue(User.class);
     }
@@ -186,7 +175,7 @@ public class FirebaseHelper {
         }
         return data;
     }
-    public static ArrayList<User> searchUsers(String keyword) {
+    public static ArrayList<User> searchUsers(String keyword){
         ArrayList<User> data = new ArrayList<>();
         for (DataSnapshot ds: uds.getChildren()){
             User user = ds.getValue(User.class);
@@ -195,9 +184,9 @@ public class FirebaseHelper {
         }
         return data;
     }
-    public static ArrayList<Group> searchGroups(String keyword) {
+    public static ArrayList<Group> searchGroups(String keyword){
         ArrayList<Group> data = new ArrayList<>();
-        for (DataSnapshot ds: uds.getChildren()){
+        for (DataSnapshot ds: gds.getChildren()){
             Group group = ds.getValue(Group.class);
             if (group.containsKeyword(keyword))
                 data.add(group);
@@ -205,9 +194,19 @@ public class FirebaseHelper {
         return data;
     }
 
-    public static Post findPost(Post.Key key) {
+    public static Post findPost(Post.Key key){
         for (DataSnapshot ds: uds.child(key.userid).child("posts").getChildren()){
             Post data = ds.getValue(Post.class);
+            ArrayList<Rating> arrayList = (ArrayList<Rating>) ds.child("ratings").getValue();
+            if (data.GetKey().equals(key))
+                return data;
+        }
+        return null;
+    }
+    public static Post findPostInGroup(Post.Key key, String id){
+        for (DataSnapshot ds: gds.child(id).child("posts").getChildren()){
+            Post data = ds.getValue(Post.class);
+            ArrayList<Rating> arrayList = (ArrayList<Rating>) ds.child("ratings").getValue();
             if (data.GetKey().equals(key))
                 return data;
         }
@@ -242,13 +241,42 @@ public class FirebaseHelper {
         }).start();
     }
 
-    public static void updatePost(){
+    public static void updatePost(final Post post, final String key, final Object value){
         new Thread(new Runnable() {
             @Override
             public void run() {
-
+                if (udb == null) return;
+                int index = 0;
+                if (post.postedInGroup()){
+                    for (DataSnapshot ds: gds.child(post.getGroupid() + "/posts/").getChildren()){
+                        Post data = ds.getValue(Post.class);
+                        if (data.equals(post)){
+                            gdb.child(post.getGroupid() + "/posts/" + index + "/" + key).setValue(value);
+                            return;
+                        }
+                        index++;
+                    }
+                }else{
+                    for (DataSnapshot ds: uds.child(post.getUserid()).child("posts").getChildren()){
+                        Post data = ds.getValue(Post.class);
+                        if (data.equals(post)){
+                            udb.child(post.getUserid() + "/" + "posts/" + index + "/" + key).setValue(value);
+                            return;
+                        }
+                        index++;
+                    }
+                }
             }
         }).start();
+    }
+
+    public static User findUserWithName(String name){
+        for (DataSnapshot ds: uds.getChildren()){
+            User user = ds.getValue(User.class);
+            if (user.getName().equals(name))
+                return user;
+        }
+        return null;
     }
 
     public static void setOnUDBReceivedListener(OnUDBReceivedListener listener){
@@ -267,7 +295,7 @@ public class FirebaseHelper {
         gInsertionListener = listener;
     }
 
-    public static boolean initFinished() { return uds != null && gds != null && ucds != null && gcds != null; }
+    public static boolean initFinished() { return uds != null && gds != null && gcds != null; }
 
     public static void uploadIcon(final Bitmap bitmap, final String type, final String id){
         new Thread(new Runnable() {
@@ -278,7 +306,7 @@ public class FirebaseHelper {
         }).start();
     }
 
-    private static void UploadIcon(Bitmap bitmap, String type, String id) {
+    private static void UploadIcon(Bitmap bitmap, String type, String url) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -286,10 +314,10 @@ public class FirebaseHelper {
         StorageReference imagesRef;
         switch (type){
             case USER_ICON:
-                imagesRef = usr.child(id + ".jpg");
+                imagesRef = usr.child(url);
                 break;
             case GROUP_ICON:
-                 imagesRef = gsr.child(id + ".jpg");
+                 imagesRef = gsr.child(url);
                  break;
             default:
                 return;
@@ -299,6 +327,7 @@ public class FirebaseHelper {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -308,15 +337,12 @@ public class FirebaseHelper {
         });
     }
 
-    public static Bitmap getIcon(final String type, final String id){
-        StorageReference imagesRef;
+    public static StorageReference getIcon(final String type, final String url){
         switch (type){
             case USER_ICON:
-                imagesRef = usr.child(id + ".jpg");
-                return null;
+                return usr.child(url);
             case GROUP_ICON:
-                imagesRef = gsr.child(id + ".jpg");
-                return null;
+                return gsr.child(url);
             default:
                 return null;
         }

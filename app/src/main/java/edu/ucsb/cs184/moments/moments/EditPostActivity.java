@@ -13,26 +13,29 @@ import java.util.Calendar;
 
 public class EditPostActivity extends AppCompatActivity {
 
-    public static final String POST = "Post", GROUP = "Group";
-    public static final int MAKE_POST = 0;
+    public static final String POST = "Post", GROUP = "Group", DRAFT = "Draft";
+    public static final int EDIT_POST = 0;
 
-    private ImageButton back;
-    private ImageButton send;
+    private ImageButton back, send;
+    private ImageButton hashtag, at;
     private EditText edit_content;
     private Intent intent;
-    private Class caller;
+    private Group group;
+    private Post draft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_post);
         intent = getIntent();
-        caller = intent.getClass();
 
         edit_content = findViewById(R.id.edit_content);
         back = findViewById(R.id.edit_cancel);
         send = findViewById(R.id.edit_send);
-        // TODO: if this activity is initiated by UserDraftbox and the post is published, remember to delete from user draftbox
+        at = findViewById(R.id.edit_at);
+        hashtag = findViewById(R.id.edit_hashtag);
+        group = intent.getParcelableExtra(GROUP);
+        draft = intent.getParcelableExtra(DRAFT);
 
         edit_content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -52,6 +55,7 @@ public class EditPostActivity extends AppCompatActivity {
                 send.setImageResource(hasText ? R.drawable.ic_send : R.drawable.ic_send_unclickable);
             }
         });
+        if (draft != null) edit_content.setText(draft.getContent());
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,14 +64,15 @@ public class EditPostActivity extends AppCompatActivity {
                     close();
                 }else {
                     // ask save to draft box
-                    String save_as_draft = getString(R.string.save_as_draft);
+                    String message = getString(draft == null ? R.string.save_as_draft : R.string.update_draft);
                     final AskYesNoDialog askYesNoDialog = new AskYesNoDialog();
-                    askYesNoDialog.showNow(getSupportFragmentManager(), save_as_draft);
-                    askYesNoDialog.setMessage(save_as_draft);
+                    askYesNoDialog.showNow(getSupportFragmentManager(), message);
+                    askYesNoDialog.setMessage(message);
                     askYesNoDialog.setOnYesListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            User.user.saveAsDraft(getPost());
+                            if (draft != null) User.user.removeDraft(draft);
+                            User.user.addDraft(getPost());
                             close();
                         }
                     });
@@ -80,6 +85,20 @@ public class EditPostActivity extends AppCompatActivity {
                 }
             }
         });
+        at.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit_content.setText(edit_content.getText() + "@");
+            }
+        });
+        hashtag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = edit_content.getText() + "##";
+                edit_content.setText(text);
+                edit_content.setSelection(text.length() - 1);
+            }
+        });
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,12 +106,14 @@ public class EditPostActivity extends AppCompatActivity {
                 if (content.trim().isEmpty()) return;
                 Intent callBack = new Intent();
                 Post post = getPost();
+                for (String name: post.findAtUsers()){
+                    User user = User.findUserWithName(name);
+                    if (user != null) user.atMe(post);
+                }
                 callBack.putExtra(POST, post);
-                Group group = intent.getParcelableExtra(GROUP);
-                if (group == null)
-                    User.user.addPost(post);
-                else
-                    group.addPost(post);
+                if (group == null) User.user.addPost(post);
+                else group.addPost(post);
+                if (draft != null) User.user.removeDraft(draft);
                 setResult(RESULT_OK, callBack);
                 close();
             }
@@ -100,7 +121,10 @@ public class EditPostActivity extends AppCompatActivity {
     }
 
     private Post getPost(){
-        return new Post(User.user.getId(), edit_content.getText().toString(), Calendar.getInstance().getTimeInMillis());
+        if (group == null)
+            return new Post(User.user.getId(), edit_content.getText().toString(), Calendar.getInstance().getTimeInMillis());
+        else
+            return new Post(User.user.getId(), edit_content.getText().toString(), Calendar.getInstance().getTimeInMillis(), group.getId());
     }
 
     private boolean hasText(){

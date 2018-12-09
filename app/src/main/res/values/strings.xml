@@ -37,6 +37,8 @@
     </string-array>
 
     <string-array name="sortby">
+        <item>Most Popular</item>
+        <item>Least Popular</item>
         <item>Most Recent</item>
         <item>Least Recent</item>
         <item>Highest Rating</item>
@@ -51,6 +53,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="save_as_draft">Do you want to save this post as draft?</string>
+    <string name="update_draft">Do you want to update this draft?</string>
+    <string name="clear_draft">Do you want to delete all the drafts?</string>
     <string name="groups">Groups</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="action_settings">Settings</string>
@@ -165,4 +169,6 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="most_popular">Most Popular</string>
+    <string name="least_popular">Least Popular</string>
 </resources>

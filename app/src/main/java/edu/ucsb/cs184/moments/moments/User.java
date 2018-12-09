@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -18,8 +19,7 @@ public class User implements Parcelable {
     private String id;
     private String name;
     private String intro = "";
-    private Bitmap icon;
-    private int user_number = 0;
+    private String icon = "user_icon.jpg";
     private String gender = "Unknown";
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> drafts = new ArrayList<>();
@@ -32,6 +32,7 @@ public class User implements Parcelable {
     private ArrayList<String> groups = new ArrayList<>();  // id
     private ArrayList<String> followers = new ArrayList<>();  // id
     private ArrayList<String> following = new ArrayList<>();  // id
+    private ArrayList<Post.Key> atMe = new ArrayList<>();
     private ArrayList<Comment.Key> commentsNotification = new ArrayList<>();
     private ArrayList<Post.Key> postsNotification = new ArrayList<>();
     private ArrayList<Rating.Key> ratingsNotification = new ArrayList<>();
@@ -49,8 +50,7 @@ public class User implements Parcelable {
         id = in.readString();
         name = in.readString();
         intro = in.readString();
-        icon = in.readParcelable(Bitmap.class.getClassLoader());
-        user_number = in.readInt();
+        icon = in.readString();
         gender = in.readString();
         posts = in.createTypedArrayList(Post.CREATOR);
         drafts = in.createTypedArrayList(Post.CREATOR);
@@ -62,6 +62,7 @@ public class User implements Parcelable {
         groups = in.createStringArrayList();
         followers = in.createStringArrayList();
         following = in.createStringArrayList();
+        atMe = in.createTypedArrayList(Post.Key.CREATOR);
         commentsNotification = in.createTypedArrayList(Comment.Key.CREATOR);
         postsNotification = in.createTypedArrayList(Post.Key.CREATOR);
         ratingsNotification = in.createTypedArrayList(Rating.Key.CREATOR);
@@ -74,8 +75,7 @@ public class User implements Parcelable {
         dest.writeString(id);
         dest.writeString(name);
         dest.writeString(intro);
-        dest.writeParcelable(icon, flags);
-        dest.writeInt(user_number);
+        dest.writeString(icon);
         dest.writeString(gender);
         dest.writeTypedList(posts);
         dest.writeTypedList(drafts);
@@ -87,6 +87,7 @@ public class User implements Parcelable {
         dest.writeStringList(groups);
         dest.writeStringList(followers);
         dest.writeStringList(following);
+        dest.writeTypedList(atMe);
         dest.writeTypedList(commentsNotification);
         dest.writeTypedList(postsNotification);
         dest.writeTypedList(ratingsNotification);
@@ -111,14 +112,14 @@ public class User implements Parcelable {
         }
     };
 
-    public void setNumber(int number){ this.user_number = number; }
-    public int getNumber() { return user_number; }
-    public Bitmap GetIcon() {
-        if (icon == null)
-            icon = FirebaseHelper.getIcon(FirebaseHelper.USER_ICON, id);
-        return icon;
+    public StorageReference GetIcon() {
+        return FirebaseHelper.getIcon(FirebaseHelper.USER_ICON, icon);
     }
-    public void SetIcon(Bitmap bitmap){ icon = bitmap; }
+    public void modifyIcon(Bitmap bitmap){
+        this.icon = id + ".jpg";
+        upload("icon", icon);
+        FirebaseHelper.uploadIcon(bitmap, FirebaseHelper.USER_ICON, icon);
+    }
     public String getName() { return name; }
     public void setName(String name){ this.name = name; }
     public String getId() { return id; }
@@ -162,6 +163,15 @@ public class User implements Parcelable {
         }
         return data;
     }
+    public ArrayList<Post> getAtMe() {
+        ArrayList<Post> data = new ArrayList<>();
+        for (Post.Key key: (ArrayList<Post.Key>) atMe.clone()){
+            Post post = Post.powerfulFindPost(key);
+            if (post == null) atMe.remove(key);
+            else data.add(post);
+        }
+        return data;
+    }
     public ArrayList<Post.Key> getPostsNotification() { return postsNotification; }
     public ArrayList<Comment.Key> getCommentsNotification() { return commentsNotification; }
     public ArrayList<Rating.Key> getRatingssNotification() { return ratingsNotification; }
@@ -170,10 +180,12 @@ public class User implements Parcelable {
     public boolean inGroup(String groupid) { return groups.contains(groupid); }
     public boolean isFollowing(String userid) { return !id.equals(userid) &&  following.contains(userid); }
     public boolean hasCollected(Post post) { return collections.contains(post.GetKey()); }
-    public boolean hasNewPost() { return postsNotification.size() != 0; }
-    public boolean hasNewComment() { return commentsNotification.size() != 0; }
-    public boolean hasNewRating() { return ratingsNotification.size() != 0; }
-    public boolean containsKeyword(String keyword) { return name.contains(keyword) || Integer.toString(user_number).contains(keyword); }
+    public boolean hasNewPost() { return postsNotification.size() > 0; }
+    public boolean hasNewComment() { return commentsNotification.size() > 0; }
+    public boolean hasNewRating() { return ratingsNotification.size() > 0; }
+    public boolean hasDrafts() { return drafts.size() > 0; }
+    public boolean hasPosted(Post post) { return id.equals(post.getUserid()); }
+    public boolean containsKeyword(String keyword) { return name.contains(keyword); }
     public ArrayList<Post.Key> getPostKeys() {
         ArrayList<Post.Key> data = new ArrayList<>();
         for (Post post: posts) data.add(post.GetKey());
@@ -204,6 +216,11 @@ public class User implements Parcelable {
         }
         if (remove || fix) upload("timeline", timeline);
         return data;
+    }
+    public void AtMeNotification(Post post, boolean remove){
+        if (remove) atMe.remove(post.GetKey());
+        else atMe.add(0, post.GetKey());
+        upload("atMe", atMe);
     }
     public void PostNotification(Post post, boolean remove){
         if (remove) postsNotification.remove(post.GetKey());
@@ -254,10 +271,6 @@ public class User implements Parcelable {
         this.name = name;
         upload("name", name);
     }
-    public void modifyIcon(Bitmap icon){
-        this.icon = icon;
-        upload("icon", icon);
-    }
     public void modifyIntro(String intro){
         this.intro = intro;
         upload("intro", intro);
@@ -277,6 +290,10 @@ public class User implements Parcelable {
             if (searchHistory.get(i).keyword.equals(history))
                 searchHistory.remove(i);
         upload("searchHistory", searchHistory);
+    }
+    public void clearDrafts(){
+        drafts.clear();
+        upload("drafts", drafts);
     }
     public void clearHistory(){
         searchHistory.clear();
@@ -359,12 +376,22 @@ public class User implements Parcelable {
     }
     public void rate(Rating rating){
         boolean remove = rating.getRating() == 0;
-        findUser(rating.getUserid()).RatingNotification(rating, remove);
-        if (remove) Post.findPost(rating.GetPostKey()).removeRating(rating);
-        else Post.findPost(rating.GetPostKey()).addRating(rating);
+        Post post = Post.findPost(rating.GetPostKey());
+        findUser(rating.GetPosterId()).RatingNotification(rating, remove);
+        post.removeRating(rating);
+        if (!remove) post.addRating(rating);
     }
-    public void saveAsDraft(Post post){
+    public void addDraft(Post post){
         drafts.add(0, post);
+        upload("drafts", drafts);
+    }
+    public void removeDraft(Post post){
+        drafts.remove(post);
+        upload("drafts", drafts);
+    }
+    public void atMe(Post post){
+        atMe.add(0, post.GetKey());
+        upload("atMe", atMe);
     }
     private void upload(String key, Object value){
         FirebaseHelper.updateUser(id, key, value);
@@ -387,5 +414,9 @@ public class User implements Parcelable {
     public static User findUser(String id){
         if (User.user != null && User.user.getId().equals(id)) return User.user;
         return FirebaseHelper.findUser(id);
+    }
+    public static User findUserWithName(String name){
+        if (User.user != null && User.user.getName().equals(name)) return User.user;
+        return FirebaseHelper.findUserWithName(name);
     }
 }

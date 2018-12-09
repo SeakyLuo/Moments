@@ -9,23 +9,45 @@ import com.google.gson.Gson;
 import java.util.Comparator;
 
 public class Rating implements Parcelable {
-    private String userid;  //rater
+    private String raterId;
     private int rating;
     private Long time;
     private Post.Key postKey;
     public Rating(){}
-    public Rating(String userid, int rating, Long time, Post.Key postKey){
-        this.userid = userid;
+    public Rating(String raterId, int rating, Long time, Post.Key postKey){
+        this.raterId = raterId;
         this.rating = rating;
         this.time = time;
         this.postKey = postKey;
     }
 
     protected Rating(Parcel in) {
-        userid = in.readString();
+        raterId = in.readString();
         rating = in.readInt();
-        time = in.readLong();
+        if (in.readByte() == 0) {
+            time = null;
+        } else {
+            time = in.readLong();
+        }
         postKey = in.readParcelable(Post.Key.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(raterId);
+        dest.writeInt(rating);
+        if (time == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(time);
+        }
+        dest.writeParcelable(postKey, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Rating> CREATOR = new Creator<Rating>() {
@@ -40,14 +62,15 @@ public class Rating implements Parcelable {
         }
     };
 
-    public Boolean IsAnonymous() { return userid.equals(User.ANONYMOUS); }
-    public String getUserid() { return userid; }
+    public Boolean IsAnonymous() { return raterId.equals(User.ANONYMOUS); }
+    public String getRaterId() { return raterId; }
+    public String GetPosterId() { return postKey.userid; }
     public int getRating() { return rating; }
     public Long getTime() { return time; }
     public Post.Key GetPostKey() {
         return postKey;
     }
-    public Key GetKey(){ return new Key(userid, time, postKey); }
+    public Key GetKey(){ return new Key(raterId, time, postKey); }
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj == null)
@@ -62,19 +85,6 @@ public class Rating implements Parcelable {
     }
     public static Rating fromJson(String json){
         return (new Gson()).fromJson(json, Rating.class);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(userid);
-        dest.writeInt(rating);
-        dest.writeLong(time);
-        dest.writeParcelable(postKey, 0);
     }
 
     public static class Key implements Parcelable{

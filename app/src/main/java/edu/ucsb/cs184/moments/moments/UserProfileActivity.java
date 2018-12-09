@@ -16,7 +16,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jude.swipbackhelper.SwipeBackHelper;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -27,7 +31,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
     private ImageView icon, gender;
-    private TextView username, user_number, intro, following, followers, posts_count;
+    private TextView username, intro, following, followers, posts_count;
     private ImageButton  edit, follow, message;
     private RecyclerViewFragment fragment;
     private String userid;
@@ -49,7 +53,6 @@ public class UserProfileActivity extends AppCompatActivity {
         icon = findViewById(R.id.up_usericon);
         gender = findViewById(R.id.up_gender);
         username = findViewById(R.id.up_username);
-        user_number = findViewById(R.id.up_user_number);
         intro = findViewById(R.id.up_intro);
         following = findViewById(R.id.up_following);
         followers = findViewById(R.id.up_followers);
@@ -103,25 +106,44 @@ public class UserProfileActivity extends AppCompatActivity {
                 helper.setOnItemSelectedListener(new PopupMenuHelper.onItemSelectListener() {
                     @Override
                     public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
+                        ArrayList<Post> data = user.getPosts();
                         switch (menuItem.getItemId()){
+                            case R.id.sb_most_popular:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.most_popular));
+                                Collections.sort(data, new Post.PopularityComparator());
+                                break;
+                            case R.id.sb_least_popular:
+                                sortBy.setText(SORTBY + ": " + getString(R.string.least_popular));
+                                Collections.sort(data, new Post.PopularityComparator());
+                                Collections.reverse(data);
+                                break;
                             case R.id.sb_highest_rating:
                                 sortBy.setText(SORTBY + ": " + getString(R.string.highest_rating));
-//                                fragment.gotoTop();
-                                return true;
+                                Collections.sort(data, new Post.RatingComparator());
+                                break;
                             case R.id.sb_lowest_rating:
                                 sortBy.setText(SORTBY + ": " + getString(R.string.lowest_rating));
-//                                fragment.gotoTop();
-                                return true;
+                                Collections.sort(data, new Post.RatingComparator());
+                                Collections.reverse(data);
+                                break;
                             case R.id.sb_latest:
                                 sortBy.setText(SORTBY + ": " + getString(R.string.most_recent));
-//                                fragment.gotoTop();
-                                return true;
+                                break;
                             case R.id.sb_oldest:
                                 sortBy.setText(SORTBY + ": " + getString(R.string.least_recent));
-//                                fragment.gotoTop();
-                                return true;
+                                Collections.sort(data, new Post.PostComparator());
+                                Collections.reverse(data);
+                                break;
+                            default:
+                                return false;
                         }
-                        return false;
+                        try {
+                            fragment.setData(data);
+                        } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                            e.printStackTrace();
+                        }
+                        fragment.gotoTop();
+                        return true;
                     }
                 });
                 helper.show();
@@ -157,6 +179,8 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
+                // TODO: Remove the line below
+                icon.setImageResource(R.drawable.user_icon);
                 intent.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
                 startActivityForResult(intent, EditUserProfileActivity.FINISH);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
@@ -175,8 +199,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void setUserProfile(){
         collapsingToolbarLayout.setTitle(user.getName());
+        Glide.with(this).load(user.GetIcon()).into(icon);
         username.setText(user.getName());
-        user_number.setText("#" + user.getNumber());
         if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.GONE);
         else{
             gender.setVisibility(View.VISIBLE);
@@ -205,7 +229,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setFollow(String userid){
-        int followImage = IconHelper.followImage(userid);
+        int followImage = UploadIconActivity.followImage(userid);
         follow.setImageResource(followImage);
         follow.setBackground(getDrawable(followImage == R.drawable.ic_unfollow ? R.drawable.button_border_green : R.drawable.button_border_orange));
     }

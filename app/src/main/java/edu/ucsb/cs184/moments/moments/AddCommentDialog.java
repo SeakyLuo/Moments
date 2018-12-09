@@ -3,6 +3,7 @@ package edu.ucsb.cs184.moments.moments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,6 +24,12 @@ public class AddCommentDialog extends DialogFragment {
     private ImageButton camera, gallery, at, send;
     private Post post;
     private Comment comment;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getDialog().getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+    }
 
     @Nullable
     @Override
@@ -63,7 +70,7 @@ public class AddCommentDialog extends DialogFragment {
                 if (post != null) user_comment = new Comment(User.user.getId(), content, new Date().getTime(), post.GetKey());
                 else if (comment != null) user_comment = new Comment(User.user.getId(), content, new Date().getTime(), comment.GetKey());
                 User.user.addComment(comment);
-                fragment.addComment(user_comment);
+                fragment.addElement(user_comment);
                 dismiss();
             }
         });

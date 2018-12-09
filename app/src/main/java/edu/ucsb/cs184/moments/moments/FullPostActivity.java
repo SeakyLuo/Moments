@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,6 +18,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import java.text.SimpleDateFormat;
@@ -28,7 +28,7 @@ public class FullPostActivity extends AppCompatActivity {
 
     public static final String POST = "post";
     public static final String ADD_COMMENT = "Add Comment";
-    public static final int DELETE_POST = 1;
+    public static final String DELETE_POST = "Delete Post";
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TabViewPager mViewPager;
@@ -47,6 +47,7 @@ public class FullPostActivity extends AppCompatActivity {
     private FullPostCommentsFragment commentsFragment;
     private FullPostRatingsFragment ratingsFragment;
     private AddCommentDialog addCommentDialog;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class FullPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_post);
         SwipeBackHelper.onCreate(this);
 
-        Intent intent = getIntent();
+        intent = getIntent();
         post = intent.getParcelableExtra(POST);
 
         commentsFragment = new FullPostCommentsFragment();
@@ -84,7 +85,7 @@ public class FullPostActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                post = Post.findPost(post.GetKey());
+                post = Post.refresh(post);
                 setPost(post);
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -92,9 +93,7 @@ public class FullPostActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: ？？？ 有空研究一下下面两行干啥玩意儿的
-                Intent backIntent = new Intent();
-                setResult(RESULT_OK, backIntent);
+                setResult(RESULT_CANCELED);
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
@@ -103,7 +102,7 @@ public class FullPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final PopupMenuHelper helper = new PopupMenuHelper(R.menu.fullpost_more_menu, FullPostActivity.this, more);
-                if (post.getUserid().equals(User.user.getId())){
+                if (User.user.hasPosted(post)){
                     helper.hideItem(R.id.fullpost_more_follow);
                 }else{
                     helper.hideItem(R.id.fullpost_more_delete);
@@ -127,7 +126,8 @@ public class FullPostActivity extends AppCompatActivity {
                                 User.user.removePost(post);
                                 Intent intent = new Intent();
                                 intent.putExtra(POST, post);
-                                setResult(FullPostActivity.DELETE_POST, intent);
+                                intent.putExtra(DELETE_POST, true);
+                                setResult(RESULT_OK, intent);
                                 finish();
                                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
                                 return true;
@@ -167,7 +167,6 @@ public class FullPostActivity extends AppCompatActivity {
 
             }
         });
-
         poster_icon.setClickable(true);
         poster_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,21 +210,19 @@ public class FullPostActivity extends AppCompatActivity {
         pagerAdapter.addFragment(ratingsFragment, "Ratings");
         mViewPager.setAdapter(pagerAdapter);
         setPost(post);
-
         if (intent.getStringExtra(ADD_COMMENT) != null) showAddComment();
     }
 
     private void setPost(final Post post){
         User user = User.findUser(post.getUserid());
         username.setText(user.getName());
-        Bitmap icon = user.GetIcon();
-        if (icon == null) poster_icon.setImageResource(R.drawable.user_icon);
-        else poster_icon.setImageBitmap(icon);
+        Glide.with(this).load(user.GetIcon()).into(poster_icon);
         time.setText(TimeText(post.getTime()));
-        content.setText(post.getContent());
+        PostAdapter.setContent(getApplicationContext(), content, post);
         int comments_count = post.comments_count();
         comments_counter.setText(comments_count + "");
         comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
+        commentsFragment.setData(post.getComments());
         setCollect(User.user.hasCollected(post));
         collect.setOnClickListener(new View.OnClickListener() {
             @Override

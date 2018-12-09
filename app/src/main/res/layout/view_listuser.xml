@@ -14,43 +14,17 @@
             android:layout_width="@dimen/user_icon_post"
             android:layout_height="@dimen/user_icon_post"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout"
             app:srcCompat="@drawable/user_icon" />
-
-        <TextView
-            android:id="@+id/su_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Name"
-            android:textColor="@color/BlackGray"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@+id/su_follow"
-            app:layout_constraintStart_toEndOf="@+id/su_icon"
-            app:layout_constraintTop_toTopOf="@+id/su_icon" />
-
-        <TextView
-            android:id="@+id/su_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="#10000000"
-            app:layout_constraintBottom_toBottomOf="@id/su_icon"
-            app:layout_constraintStart_toEndOf="@+id/su_icon" />
 
         <ImageButton
             android:id="@+id/su_follow"
             android:layout_width="@dimen/button_size_small"
             android:layout_height="@dimen/button_size_small"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:background="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -58,15 +32,52 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_follow" />
 
-        <ImageView
-            android:id="@+id/su_gender"
-            android:layout_width="@dimen/icon_size_small"
-            android:layout_height="@dimen/icon_size_small"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/su_number"
-            app:layout_constraintStart_toEndOf="@+id/su_number"
-            app:layout_constraintTop_toTopOf="@+id/su_number"
-            app:srcCompat="@drawable/ic_male" />
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/su_follow"
+            app:layout_constraintStart_toEndOf="@+id/su_icon"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/su_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="User Name"
+                android:textColor="@color/BlackGray"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/su_intro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:text="Intro"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/su_followers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:text="Followers"
+                android:textColor="@color/base"
+                android:textSize="14sp" />
+        </LinearLayout>
+
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

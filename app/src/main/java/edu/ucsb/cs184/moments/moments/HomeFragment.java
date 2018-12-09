@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EditPostActivity.class);
-                startActivityForResult(intent, EditPostActivity.MAKE_POST);
+                startActivityForResult(intent, EditPostActivity.EDIT_POST);
                 getActivity().overridePendingTransition(R.anim.push_down_in, R.anim.push_up_out);
             }
         });
@@ -66,14 +66,8 @@ public class HomeFragment extends Fragment {
         });
         fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostAdapter());
-        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refresh();
-            }
-        });
         try {
-            fragment.addElements(0, User.user.getTimeline());
+            fragment.setData(User.user.getTimeline());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,7 +96,6 @@ public class HomeFragment extends Fragment {
                     User.user.refreshTimeline();
                     fragment.setData(User.user.getTimeline());
                     fragment.refresh();
-                    fragment.gotoTop();
                 } catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
                 }
@@ -133,24 +126,22 @@ public class HomeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         switch (requestCode){
-            case EditPostActivity.MAKE_POST:
+            case EditPostActivity.EDIT_POST:
                 try {
                     fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
                     fragment.gotoTop();
                 }catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
-                }finally {
-                    break;
                 }
-            case FullPostActivity.DELETE_POST:
+                break;
+            case PostAdapter.FULL_POST:
                 try {
-                    fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
-                    fragment.gotoTop();
+                    if (data.getBooleanExtra(FullPostActivity.DELETE_POST, false))
+                        fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
                 }catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
-                }finally {
-                    break;
                 }
+                break;
         }
     }
 }

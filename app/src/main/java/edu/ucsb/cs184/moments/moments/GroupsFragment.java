@@ -10,12 +10,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -27,11 +31,11 @@ public class GroupsFragment extends Fragment {
 
     private View view;
     private Context context;
+    private Toolbar toolbar;
     private ImageButton menu;
     private ImageButton add;
     private DrawerLayout drawer;
     private BottomNavigationView nav;
-    private GroupAdapter adapter;
     private RecyclerViewFragment fragment;
 
     @Nullable
@@ -39,8 +43,15 @@ public class GroupsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_groups, container, false);
         context = getContext();
+        toolbar = view.findViewById(R.id.groups_toolbar);
         menu = view.findViewById(R.id.menu_groups);
         add = view.findViewById(R.id.groups_add);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.gotoTop();
+            }
+        });
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,9 +86,12 @@ public class GroupsFragment extends Fragment {
         });
         fragment = new RecyclerViewFragment();
         fragment.setShowDivider(true);
-        adapter = new GroupAdapter();
-        adapter.addElements(User.user.getGroups());
-        fragment.setAdapter(adapter);
+        fragment.setAdapter(new GroupAdapter());
+        try {
+            fragment.setData(User.user.getGroups());
+        } catch (RecyclerViewFragment.UnsupportedDataException e) {
+            e.printStackTrace();
+        }
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -95,6 +109,13 @@ public class GroupsFragment extends Fragment {
             @Override
             public void run() {
                 User.user.refreshGroups();
+                ArrayList<Group> data = User.user.getGroups();
+                Collections.sort(data, new Group.GroupComparator());
+                try {
+                    fragment.setData(data);
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
                 fragment.gotoTop();
             }
         }).start();
@@ -105,16 +126,16 @@ public class GroupsFragment extends Fragment {
         this.nav = nav;
     }
 
-    public void addGroup(Group group){
-        adapter.addElement(group);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == CREATE_GROUP){
-            addGroup((Group) data.getParcelableExtra(GROUP));
+            try {
+                fragment.addElement(data.getParcelableExtra(GROUP));
+            } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

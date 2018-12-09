@@ -15,7 +15,10 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,12 +56,12 @@ public class MainActivity extends AppCompatActivity {
                         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.nav_user_collections:
-                        intent = new Intent(getApplicationContext(), UserCollectionsActivity.class);
+                        intent = new Intent(getApplicationContext(), CollectionsActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.nav_user_draftbox:
-                        intent = new Intent(getApplicationContext(), UserDraftboxActivity.class);
+                        intent = new Intent(getApplicationContext(), DraftboxActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
@@ -77,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         View header = dNavigationView.getHeaderView(0);
+        Glide.with(this).load(User.user.GetIcon()).into((ImageView) header.findViewById(R.id.nav_usericon));
         ((TextView) header.findViewById(R.id.nav_username)).setText(User.user.getName());
         header.findViewById(R.id.nav_usericon).setOnClickListener(new View.OnClickListener() {
             @Override

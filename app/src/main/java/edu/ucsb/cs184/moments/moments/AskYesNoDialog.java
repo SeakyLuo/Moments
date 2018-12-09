@@ -38,7 +38,7 @@ public class AskYesNoDialog extends DialogFragment {
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (yesListener != null) noListener.onClick(v);
+                if (noListener != null) noListener.onClick(v);
                 dismiss();
             }
         });
@@ -48,4 +48,6 @@ public class AskYesNoDialog extends DialogFragment {
     public void setMessage(String message) {
         this.message.setText(message);
     }
+    public void setYesText(String text) { yes.setText(text); }
+    public void setNoText(String text) { no.setText(text); }
 }

@@ -13,6 +13,7 @@ public class Post implements Parcelable {
     private String userid;
     private String content;
     private Long time;
+    private String groupid;
     private ArrayList<Comment> comments = new ArrayList<>();
     private ArrayList<Rating> ratings = new ArrayList<>();
 
@@ -23,6 +24,13 @@ public class Post implements Parcelable {
         this.time = time;
     }
 
+    public Post(String userid, String content, Long time, String groupid){
+        this.userid = userid;
+        this.content = content;
+        this.time = time;
+        this.groupid = groupid;
+    }
+
     protected Post(Parcel in) {
         userid = in.readString();
         content = in.readString();
@@ -31,6 +39,7 @@ public class Post implements Parcelable {
         } else {
             time = in.readLong();
         }
+        groupid = in.readString();
         comments = in.createTypedArrayList(Comment.CREATOR);
         ratings = in.createTypedArrayList(Rating.CREATOR);
     }
@@ -49,11 +58,18 @@ public class Post implements Parcelable {
 
     public Key GetKey() { return new Key(userid, time); }
     public String getUserid() { return userid; }
+    public String getGroupid() { return groupid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
     public int comments_count() { return comments.size(); }
     public ArrayList<Comment> getComments() { return comments; }
     public int ratings_received() { return ratings.size(); }
+    public Rating hasRated() {
+        for (Rating rating: ratings)
+            if (rating.getRaterId().equals(User.user.getId()))
+                return rating;
+        return null;
+    }
     public float ratings_avg(){
         float sum = 0;
         int count = ratings.size();
@@ -73,6 +89,7 @@ public class Post implements Parcelable {
         return count;
     }
     public boolean IsAnonymous() { return userid.equals(User.ANONYMOUS); }
+    public boolean postedInGroup() { return groupid != null; }
     public boolean containsKeyword(String keyword) { return content.contains(keyword); }
     public void addComment(Comment comment){
         comments.add(comment);
@@ -80,7 +97,7 @@ public class Post implements Parcelable {
     }
     public void addRating(Rating rating){
         ratings.add(0, rating);
-        upload("comments", comments);
+        upload("ratings", ratings);
     }
     public boolean removeComment(Comment comment){
         boolean result = comments.remove(comment);
@@ -92,8 +109,27 @@ public class Post implements Parcelable {
         if (result) upload("ratings", ratings);
         return result;
     }
+    public ArrayList<String> findAtUsers(){
+        ArrayList<String> data = new ArrayList<>();
+        String substr = content;
+        int index = substr.indexOf("@");
+        while(index != -1){
+            int space = substr.indexOf(" ");
+            if (space == -1){
+                space = substr.length();
+            }
+            data.add(substr.substring(index + 1, space));
+            try{
+                substr = substr.substring(space + 1);
+                index = substr.indexOf("@");
+            }catch (StringIndexOutOfBoundsException e){
+                break;
+            }
+        };
+        return data;
+    }
     private void upload(String key, Object value){
-
+        FirebaseHelper.updatePost(this, key, value);
     }
 
     @Override
@@ -103,7 +139,21 @@ public class Post implements Parcelable {
     public static Post fromJson(String json){
         return (new Gson()).fromJson(json, Post.class);
     }
+    public static Post refresh(Post post){
+        post = post.postedInGroup() ? findPost(post.GetKey(), post.groupid) : findPost(post.GetKey());
+        return post;
+    }
     public static Post findPost(Key key) { return FirebaseHelper.findPost(key); }
+    public static Post findPost(Key key, String groupid) { return FirebaseHelper.findPostInGroup(key, groupid); }
+    public static Post powerfulFindPost(Key key){
+        Post post = findPost(key);
+        if (post != null) return post;
+        for (Group group: User.findUser(key.userid).getGroups())
+            for (Post p: group.getPosts())
+                if (p.GetKey().equals(key))
+                    return p;
+        return null;
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -127,6 +177,7 @@ public class Post implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeLong(time);
         }
+        dest.writeString(groupid);
         dest.writeTypedList(comments);
         dest.writeTypedList(ratings);
     }
@@ -188,17 +239,30 @@ public class Post implements Parcelable {
         public int compare(Post o1, Post o2) { return new TimeComparator().compare(o1.GetKey(), o2.GetKey()); }
     }
 
+    public static class RatingComparator implements Comparator<Post> {
+        @Override
+        public int compare(Post o1, Post o2) {
+            int result = Double.compare(o1.ratings_avg(), o2.ratings_avg());
+            for (int i = 1; i <= 5; i++){
+                result = o1.counting_star(i) - o2.counting_star(i);
+                if (result != 0)
+                    return result;
+            }
+            return new TimeComparator().compare(o1.GetKey(), o2.GetKey());
+        }
+    }
+
+    public static class PopularityComparator implements Comparator<Post>{
+        @Override
+        public int compare(Post o1, Post o2) {
+            return new RatingComparator().compare(o1, o2);
+        }
+    }
+
     public static class TimeComparator implements Comparator<Key> {
         @Override
         public int compare(Key o1, Key o2) {
             return Long.compare(o2.time, o1.time) ;
-        }
-    }
-
-    public static class RatingComparator implements Comparator<Post> {
-        @Override
-        public int compare(Post o1, Post o2) {
-            return Double.compare(o1.ratings_avg(), o2.ratings_avg());
         }
     }
 }

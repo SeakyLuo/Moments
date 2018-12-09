@@ -52,6 +52,7 @@ public class SearchHistoryAdapter extends CustomAdapter{
                         @Override
                         public void onClick(View v) {
                             clear();
+                            User.user.clearHistory();
                         }
                     });
                     return true;

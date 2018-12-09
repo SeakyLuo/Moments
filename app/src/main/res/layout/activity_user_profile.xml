@@ -103,11 +103,13 @@
 
                     <ImageView
                         android:id="@+id/up_usericon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/user_icon_profile"
+                        android:layout_height="@dimen/user_icon_profile"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:clickable="true"
+                        android:elevation="4dp"
+                        android:scaleType="centerCrop"
                         android:src="@android:drawable/sym_def_app_icon"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -125,15 +127,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/up_usericon" />
 
                     <TextView
-                        android:id="@+id/up_user_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="#10000000"
-                        app:layout_constraintStart_toStartOf="@+id/up_username"
-                        app:layout_constraintTop_toBottomOf="@+id/up_username" />
-
-                    <TextView
                         android:id="@+id/up_intro"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -143,9 +136,8 @@
                         android:textColor="@color/BlackGray"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@+id/up_user_number"
-                        app:layout_constraintTop_toBottomOf="@+id/up_user_number" />
+                        app:layout_constraintStart_toStartOf="@+id/up_username"
+                        app:layout_constraintTop_toBottomOf="@+id/up_username" />
 
                     <TextView
                         android:id="@+id/up_followers"
@@ -204,10 +196,10 @@
                         android:id="@+id/up_gender"
                         android:layout_width="@dimen/icon_size_small"
                         android:layout_height="@dimen/icon_size_small"
-                        android:layout_marginStart="8dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/up_user_number"
-                        app:layout_constraintStart_toEndOf="@+id/up_user_number"
-                        app:layout_constraintTop_toTopOf="@+id/up_user_number"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/up_username"
+                        app:layout_constraintStart_toEndOf="@+id/up_username"
+                        app:layout_constraintTop_toTopOf="@+id/up_username"
                         app:srcCompat="@drawable/ic_male" />
 
                 </android.support.constraint.ConstraintLayout>

@@ -1,16 +1,19 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CommentAdapter extends CustomAdapter {
+import com.bumptech.glide.Glide;
+
+public class FullPostCommentAdapter extends CustomAdapter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_comment, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_fullpost_comment, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -29,16 +32,19 @@ public class CommentAdapter extends CustomAdapter {
 
         public ViewHolder(View view) {
             super(view);
-            usericon = view.findViewById(R.id.comment_usericon);
-            username = view.findViewById(R.id.comment_username);
-            time = view.findViewById(R.id.comment_time);
-            content = view.findViewById(R.id.comment_content);
-            replies = view.findViewById(R.id.comment_replies);
+            usericon = view.findViewById(R.id.fpcomment_usericon);
+            username = view.findViewById(R.id.fpcomment_username);
+            time = view.findViewById(R.id.fpcomment_time);
+            content = view.findViewById(R.id.fpcomment_content);
+            replies = view.findViewById(R.id.fpcomment_replies);
             usericon.setClickable(true);
             usericon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(context, UserProfileActivity.class);
+                    intent.putExtra(UserProfileActivity.USERID, data.getUserid());
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             view.setClickable(true);
@@ -57,7 +63,7 @@ public class CommentAdapter extends CustomAdapter {
         public void setData(Object obj) {
             data = (Comment) obj;
             User user = User.findUser(data.getUserid());
-            usericon.setImageBitmap(user.GetIcon());
+            Glide.with(context).load(user.GetIcon()).into(usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             content.setText(data.getContent());

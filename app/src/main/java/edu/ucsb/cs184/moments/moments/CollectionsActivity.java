@@ -1,30 +1,35 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
 
-public class UserDraftboxActivity extends AppCompatActivity {
+public class CollectionsActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
     private ImageButton back;
     private RecyclerViewFragment fragment;
-    private Button clear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_draftbox);
+        setContentView(R.layout.activity_collections);
         SwipeBackHelper.onCreate(this);
 
-        back = findViewById(R.id.ud_back);
-        clear = findViewById(R.id.ud_clear);
+        toolbar = findViewById(R.id.collections_toolbar);
+        back = findViewById(R.id.collections_back);
         fragment = new RecyclerViewFragment();
 
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.gotoTop();
+            }
+        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -32,21 +37,23 @@ public class UserDraftboxActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
-        clear.setTextColor(getColor((User.user.getDrafts().size() == 0) ? R.color.aluminum : Color.BLACK));
-        clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: to be implemented
-            }
-        });
-        // TODO: to be implemented
         fragment.setAdapter(new PostAdapter());
         try {
-            fragment.addElements(User.user.getDrafts());
+            fragment.setData(User.user.getCollections());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        fragment.show(getSupportFragmentManager(), R.id.content_draftbox);
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    fragment.setData(User.user.getCollections());
+                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        fragment.show(getSupportFragmentManager(), R.id.collections_content);
     }
 
     @Override

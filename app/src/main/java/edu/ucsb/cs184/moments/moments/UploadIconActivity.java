@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -28,12 +29,11 @@ import java.util.Date;
 
 public class UploadIconActivity extends AppCompatActivity {
 
-    public static final int cameraCode = 0;
-    public static final int galleryCode = 1;
-    public static final int iconCode = 2;
+    public static final int CAMERA_CODE = 0;
+    public static final int GALLERY_CODE = 1;
+    public static final int ICON_CODE = 2;
     public static final String imagePath = "Moments";
-    public static final String ICON = "Icon";
-    public static final String GROUP = "Group";
+    public static final String ICON = "Icon", GROUP = "Group";
 
     private Context context;
     private Intent callerIntent;
@@ -78,25 +78,24 @@ public class UploadIconActivity extends AppCompatActivity {
         });
     }
 
-    public void openGallery(){
+    private void openGallery(){
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, galleryCode);
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, GALLERY_CODE);
         }else{
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, galleryCode);
+            startActivityForResult(intent, GALLERY_CODE);
         }
     }
 
-    public void openCamera(){
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, cameraCode);
-        }
-        else{
+    private void openCamera(){
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_CODE);
+        }else{
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(newImageFileName()));
             // Ensure that there's a camera activity to handle the intent
             if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(intent, cameraCode);
+                startActivityForResult(intent, CAMERA_CODE);
             }
         }
     }
@@ -122,9 +121,29 @@ public class UploadIconActivity extends AppCompatActivity {
             // Return the file target for the photo based on filename
             File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
             // wrap File object into a content provider, required for API >= 24
-            return FileProvider.getUriForFile(UploadIconActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
+            return FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
         }
         return null;
+    }
+
+    public static int followImage(String id){
+        return User.user.mutualFollow(id) ? R.drawable.ic_mutual :
+                User.user.isFollowing(id) ? R.drawable.ic_unfollow : R.drawable.ic_follow;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length == 0 || grantResults[0] == PackageManager.PERMISSION_DENIED)
+            return;
+        switch (requestCode){
+            case CAMERA_CODE:
+                openCamera();
+                break;
+            case GALLERY_CODE:
+                openGallery();
+                break;
+        }
     }
 
     @Override
@@ -134,23 +153,26 @@ public class UploadIconActivity extends AppCompatActivity {
         Uri imageUri = null;
         String path = "";
         Bitmap image= null;
-        if (requestCode == cameraCode){
-            imageUri = getPhotoFileUri(imageFileName);
-            path = imageUri.getPath();
-            path = path.substring(path.indexOf("/storage"));
-            image = BitmapFactory.decodeFile(path);
-        } else if (requestCode == galleryCode){
-            imageUri = data.getData();
-            path = getPath(context, imageUri);
-            try {
-                image = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        switch (requestCode){
+            case CAMERA_CODE:
+                imageUri = getPhotoFileUri(imageFileName);
+                path = imageUri.getPath();
+                path = path.substring(path.indexOf("/storage"));
+                image = BitmapFactory.decodeFile(path);
+                break;
+            case GALLERY_CODE:
+                imageUri = data.getData();
+                path = getPath(context, imageUri);
+                try {
+                    image = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
         icon.setImageBitmap(image);
-        User.user.SetIcon(image);
-        if (caller == UserProfileActivity.class) User.user.SetIcon(image);
+        if (caller == UserProfileActivity.class) User.user.modifyIcon(image);
+        else if (caller == GroupSettingsActivity.class) ((Group) callerIntent.getParcelableExtra(GROUP)).modifyIcon(image);
         Intent intent = new Intent(UploadIconActivity.this, caller);
         intent.putExtra(ICON, image);
         setResult(RESULT_OK, intent);

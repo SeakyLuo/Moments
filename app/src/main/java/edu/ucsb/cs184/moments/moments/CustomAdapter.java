@@ -1,5 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import java.util.List;
 
 public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
     protected List<Object> data = new ArrayList<>();
+    protected Activity activity;
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -20,7 +22,10 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         holder.setData(data.get(position));
+        if (activity != null) holder.setActivity(activity);
     }
+
+    public void setActivity(Activity activity) { this.activity = activity; }
 
     public void setData(List data){
         this.data = data;
@@ -70,11 +75,14 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
     public static abstract class CustomViewHolder extends RecyclerView.ViewHolder{
         protected View view;
         protected Context context;
+        protected Activity activity;
         public CustomViewHolder(@NonNull View view) {
             super(view);
             this.view = view;
             this.context = view.getContext();
+            this.activity = (Activity) this.context;
         }
+        public void setActivity(Activity activity) { this.activity = activity; }
         public abstract void setData(Object object);
     }
 }

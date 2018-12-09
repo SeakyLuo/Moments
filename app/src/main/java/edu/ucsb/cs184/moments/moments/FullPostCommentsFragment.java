@@ -14,12 +14,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class FullPostCommentsFragment extends Fragment {
 
     private Context context;
     private Button sortby_button;
     private TextView sortby_text;
     private RecyclerViewFragment fragment;
+    private boolean init = false;
+    private ArrayList<Comment> comments;
 
     @Nullable
     @Override
@@ -31,9 +35,10 @@ public class FullPostCommentsFragment extends Fragment {
         sortby_text = view.findViewById(R.id.fpc_sortby_text);
         fragment = new RecyclerViewFragment();
 
-        fragment.setAdapter(new CommentAdapter());
+        fragment.setAdapter(new FullPostCommentAdapter());
         fragment.setShowDivider(true);
         fragment.setSwipeEnabled(false);
+
         fragment.show(getFragmentManager(), R.id.fpc_content);
         sortby_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +48,12 @@ public class FullPostCommentsFragment extends Fragment {
                     @Override
                     public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
                         switch (menuItem.getItemId()){
+                            case R.id.sb_most_popular:
+                                sortby_text.setText("Sort By " + getString(R.string.most_popular));
+                                return true;
+                            case R.id.sb_least_popular:
+                                sortby_text.setText("Sort By " + getString(R.string.least_popular));
+                                return true;
                             case R.id.sb_highest_rating:
                                 sortby_text.setText("Sort By " + getString(R.string.highest_rating));
                                 return true;
@@ -62,13 +73,23 @@ public class FullPostCommentsFragment extends Fragment {
                 helper.show();
             }
         });
-
+        init = true;
+        if (comments != null) setData(comments);
         return view;
     }
 
-    public void addComment(Comment comment){
+    public void addElement(Comment comment){
         try {
             fragment.addElement(comment);
+        } catch (RecyclerViewFragment.UnsupportedDataException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setData(ArrayList<Comment> comments){
+        try {
+            this.comments = comments;
+            if (init) fragment.setData(comments);
         } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();
         }
