@@ -8,6 +8,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Group implements Parcelable {
     private String id;
@@ -134,5 +135,10 @@ public class Group implements Parcelable {
         if (obj == null) return false;
         if (!(obj instanceof Group)) return false;
         return id.equals(((Group) obj).id);
+    }
+
+    public static class GroupComparator implements Comparator<Group> {
+        @Override
+        public int compare(Group o1, Group o2) { return new Post.TimeComparator().compare(o1.posts.get(0).GetKey(), o2.posts.get(0).GetKey()); }
     }
 }

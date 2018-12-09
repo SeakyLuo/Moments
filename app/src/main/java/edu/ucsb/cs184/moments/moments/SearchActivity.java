@@ -224,6 +224,10 @@ public class SearchActivity extends AppCompatActivity {
         SearchHistoryAdapter historyAdapter = new SearchHistoryAdapter();
         historyAdapter.setSearchActivity(this);
         historyFragment.setAdapter(historyAdapter);
+        postsFragment.setSwipeEnabled(false);
+        usersFragment.setSwipeEnabled(false);
+        groupsFragment.setSwipeEnabled(false);
+        historyFragment.setSwipeEnabled(false);
         usersFragment.setShowDivider(true);
         groupsFragment.setShowDivider(true);
         historyFragment.setShowDivider(true);

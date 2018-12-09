@@ -98,12 +98,11 @@ public class GroupPostsActivity extends AppCompatActivity {
             case EditPostActivity.MAKE_POST:
                 try {
                     fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
-                    fragment.gotoTop();
                 }catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
-                }finally {
-                    break;
                 }
+                fragment.gotoTop();
+                break;
             case PostAdapter.FULL_POST:
                 try {
                     if (data.getStringExtra(FullPostActivity.DELETE_POST) != null)
@@ -116,6 +115,7 @@ public class GroupPostsActivity extends AppCompatActivity {
                 if (data.getStringExtra(GroupSettingsActivity.QUIT) != null){
                     close();
                 }
+                break;
 
         }
     }

@@ -101,7 +101,7 @@ public class FullPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final PopupMenuHelper helper = new PopupMenuHelper(R.menu.fullpost_more_menu, FullPostActivity.this, more);
-                if (post.getUserid().equals(User.user.getId())){
+                if (User.user.hasPosted(post)){
                     helper.hideItem(R.id.fullpost_more_follow);
                 }else{
                     helper.hideItem(R.id.fullpost_more_delete);

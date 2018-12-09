@@ -2,6 +2,7 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -9,6 +10,7 @@ import com.jude.swipbackhelper.SwipeBackHelper;
 
 public class UserCollectionsActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
     private ImageButton back;
     private RecyclerViewFragment fragment;
 
@@ -18,9 +20,16 @@ public class UserCollectionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_collections);
         SwipeBackHelper.onCreate(this);
 
+        toolbar = findViewById(R.id.uc_toolbar);
         back = findViewById(R.id.uc_back);
         fragment = new RecyclerViewFragment();
 
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.gotoTop();
+            }
+        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

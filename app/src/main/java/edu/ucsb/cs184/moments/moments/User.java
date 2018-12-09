@@ -172,6 +172,7 @@ public class User implements Parcelable {
     public boolean hasNewPost() { return postsNotification.size() != 0; }
     public boolean hasNewComment() { return commentsNotification.size() != 0; }
     public boolean hasNewRating() { return ratingsNotification.size() != 0; }
+    public boolean hasPosted(Post post) { return id.equals(post.getUserid()); }
     public boolean containsKeyword(String keyword) { return name.contains(keyword) || Integer.toString(user_number).contains(keyword); }
     public ArrayList<Post.Key> getPostKeys() {
         ArrayList<Post.Key> data = new ArrayList<>();
