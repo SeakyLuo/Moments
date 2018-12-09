@@ -32,7 +32,7 @@ public class User implements Parcelable {
     private ArrayList<String> groups = new ArrayList<>();  // id
     private ArrayList<String> followers = new ArrayList<>();  // id
     private ArrayList<String> following = new ArrayList<>();  // id
-    private ArrayList<Post.Key> atmeNotification = new ArrayList<>();
+    private ArrayList<Post.Key> atMe = new ArrayList<>();
     private ArrayList<Comment.Key> commentsNotification = new ArrayList<>();
     private ArrayList<Post.Key> postsNotification = new ArrayList<>();
     private ArrayList<Rating.Key> ratingsNotification = new ArrayList<>();
@@ -50,7 +50,7 @@ public class User implements Parcelable {
         id = in.readString();
         name = in.readString();
         intro = in.readString();
-        icon = in.readParcelable(Bitmap.class.getClassLoader());
+        icon = in.readString();
         gender = in.readString();
         posts = in.createTypedArrayList(Post.CREATOR);
         drafts = in.createTypedArrayList(Post.CREATOR);
@@ -62,6 +62,7 @@ public class User implements Parcelable {
         groups = in.createStringArrayList();
         followers = in.createStringArrayList();
         following = in.createStringArrayList();
+        atMe = in.createTypedArrayList(Post.Key.CREATOR);
         commentsNotification = in.createTypedArrayList(Comment.Key.CREATOR);
         postsNotification = in.createTypedArrayList(Post.Key.CREATOR);
         ratingsNotification = in.createTypedArrayList(Rating.Key.CREATOR);
@@ -86,6 +87,7 @@ public class User implements Parcelable {
         dest.writeStringList(groups);
         dest.writeStringList(followers);
         dest.writeStringList(following);
+        dest.writeTypedList(atMe);
         dest.writeTypedList(commentsNotification);
         dest.writeTypedList(postsNotification);
         dest.writeTypedList(ratingsNotification);
@@ -109,6 +111,7 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
     public StorageReference GetIcon() {
         return FirebaseHelper.getIcon(FirebaseHelper.USER_ICON, icon);
     }
@@ -160,7 +163,15 @@ public class User implements Parcelable {
         }
         return data;
     }
-    public ArrayList<Post.Key> getAtmeNotification() { return atmeNotification; }
+    public ArrayList<Post> getAtMe() {
+        ArrayList<Post> data = new ArrayList<>();
+        for (Post.Key key: (ArrayList<Post.Key>) atMe.clone()){
+            Post post = Post.findPost(key);
+            if (post == null) atMe.remove(key);
+            else data.add(post);
+        }
+        return data;
+    }
     public ArrayList<Post.Key> getPostsNotification() { return postsNotification; }
     public ArrayList<Comment.Key> getCommentsNotification() { return commentsNotification; }
     public ArrayList<Rating.Key> getRatingssNotification() { return ratingsNotification; }
@@ -207,9 +218,9 @@ public class User implements Parcelable {
         return data;
     }
     public void AtMeNotification(Post post, boolean remove){
-        if (remove) atmeNotification.remove(post.GetKey());
-        else atmeNotification.add(0, post.GetKey());
-        upload("atmeNotification", atmeNotification);
+        if (remove) atMe.remove(post.GetKey());
+        else atMe.add(0, post.GetKey());
+        upload("atMe", atMe);
     }
     public void PostNotification(Post post, boolean remove){
         if (remove) postsNotification.remove(post.GetKey());
@@ -377,6 +388,14 @@ public class User implements Parcelable {
     public void removeDraft(Post post){
         drafts.remove(post);
         upload("drafts", drafts);
+    }
+    public void atMe(Post post){
+        atMe.add(0, post.GetKey());
+        upload("atMe", atMe);
+    }
+    public void removeAtMe(Post post){
+        atMe.remove(post.GetKey());
+        upload("atMe", atMe);
     }
     private void upload(String key, Object value){
         FirebaseHelper.updateUser(id, key, value);

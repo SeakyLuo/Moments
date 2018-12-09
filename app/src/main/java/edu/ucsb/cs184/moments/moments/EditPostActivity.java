@@ -90,6 +90,8 @@ public class EditPostActivity extends AppCompatActivity {
                 if (content.trim().isEmpty()) return;
                 Intent callBack = new Intent();
                 Post post = getPost();
+                // TODO: atme
+//                user.atMe(post);
                 callBack.putExtra(POST, post);
                 if (group == null) User.user.addPost(post);
                 else group.addPost(post);

@@ -64,6 +64,7 @@ public class RecyclerViewFragment extends Fragment {
             public void onRefresh() {
                 for (OnRefreshListener listener: listeners)
                     listener.onRefresh();
+                refresh();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -74,6 +75,9 @@ public class RecyclerViewFragment extends Fragment {
     public void setlMargin(int lMargin) { this.lMargin = lMargin; }
     public void settMargin(int tMargin) { this.tMargin = tMargin; }
     public void setrMargin(int rMargin) { this.rMargin = rMargin; }
+    public void setMargin(int l, int t, int r, int b){
+        tMargin = t; bMargin = b; lMargin = l; rMargin = r;
+    }
 
     public void setShowDivider(boolean showDivider){
         this.showDivider = showDivider;

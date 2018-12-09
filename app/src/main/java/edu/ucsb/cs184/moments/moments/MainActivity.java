@@ -56,12 +56,12 @@ public class MainActivity extends AppCompatActivity {
                         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.nav_user_collections:
-                        intent = new Intent(getApplicationContext(), UserCollectionsActivity.class);
+                        intent = new Intent(getApplicationContext(), CollectionsActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.nav_user_draftbox:
-                        intent = new Intent(getApplicationContext(), UserDraftboxActivity.class);
+                        intent = new Intent(getApplicationContext(), DraftboxActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;

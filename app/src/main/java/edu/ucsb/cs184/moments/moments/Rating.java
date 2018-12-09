@@ -24,8 +24,30 @@ public class Rating implements Parcelable {
     protected Rating(Parcel in) {
         raterId = in.readString();
         rating = in.readInt();
-        time = in.readLong();
+        if (in.readByte() == 0) {
+            time = null;
+        } else {
+            time = in.readLong();
+        }
         postKey = in.readParcelable(Post.Key.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(raterId);
+        dest.writeInt(rating);
+        if (time == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(time);
+        }
+        dest.writeParcelable(postKey, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Rating> CREATOR = new Creator<Rating>() {
@@ -63,19 +85,6 @@ public class Rating implements Parcelable {
     }
     public static Rating fromJson(String json){
         return (new Gson()).fromJson(json, Rating.class);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(raterId);
-        dest.writeInt(rating);
-        dest.writeLong(time);
-        dest.writeParcelable(postKey, 0);
     }
 
     public static class Key implements Parcelable{

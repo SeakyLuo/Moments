@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
 
-public class UserDraftboxActivity extends AppCompatActivity {
+public class DraftboxActivity extends AppCompatActivity {
 
     private ImageButton back;
     private RecyclerViewFragment fragment;
@@ -19,11 +19,11 @@ public class UserDraftboxActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_draftbox);
+        setContentView(R.layout.activity_draftbox);
         SwipeBackHelper.onCreate(this);
 
-        back = findViewById(R.id.ud_back);
-        clear = findViewById(R.id.ud_clear);
+        back = findViewById(R.id.draftbox_back);
+        clear = findViewById(R.id.draftbox_clear);
         fragment = new RecyclerViewFragment();
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -50,21 +50,14 @@ public class UserDraftboxActivity extends AppCompatActivity {
                 });
             }
         });
-        // TODO: to be implemented
         fragment.setAdapter(new DraftAdapter());
         try {
             fragment.setData(User.user.getDrafts());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                fragment.refresh();
-            }
-        });
         fragment.setShowDivider(true);
-        fragment.show(getSupportFragmentManager(), R.id.content_draftbox);
+        fragment.show(getSupportFragmentManager(), R.id.draftbox_content);
     }
 
     private void setClear(){

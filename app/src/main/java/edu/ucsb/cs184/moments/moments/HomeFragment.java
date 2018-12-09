@@ -66,12 +66,6 @@ public class HomeFragment extends Fragment {
         });
         fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostAdapter());
-        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refresh();
-            }
-        });
         try {
             fragment.setData(User.user.getTimeline());
         } catch (Exception e) {
@@ -102,7 +96,6 @@ public class HomeFragment extends Fragment {
                     User.user.refreshTimeline();
                     fragment.setData(User.user.getTimeline());
                     fragment.refresh();
-                    fragment.gotoTop();
                 } catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
                 }

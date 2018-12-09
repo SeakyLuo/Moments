@@ -54,10 +54,10 @@ public class PostAdapter extends CustomAdapter {
         return new SimpleDateFormat("yyyy-MM-dd").format(time);
     }
 
-    public static void setContent(final Context context, TextView textView, final String content){
-        String substr = content;
+    public static void setContent(final Context context, TextView textView, final Post post){
+        String substr = post.getContent();
         int index = substr.indexOf("@");
-        SpannableString spannableString = new SpannableString(content);
+        SpannableString spannableString = new SpannableString(post.getContent());
         while(index != -1){
             int space = substr.indexOf(" ");
             if (space == -1){
@@ -216,7 +216,7 @@ public class PostAdapter extends CustomAdapter {
             Glide.with(context).load(user.GetIcon()).into(usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
-            setContent(context, content, data.getContent());
+            setContent(context, content, data);
             Rating rating = data.hasRated();
             ratingBar.setRating((rating == null) ? data.ratings_avg() : rating.getRating());
             setCollect(User.user.hasCollected(data));

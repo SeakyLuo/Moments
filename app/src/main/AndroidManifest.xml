@@ -65,11 +65,11 @@
             android:label="UserProfileActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".UserCollectionsActivity"
+            android:name=".CollectionsActivity"
             android:label="UserCollectionsActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".UserDraftboxActivity"
+            android:name=".DraftboxActivity"
             android:label="UserDraftboxActivity"
             android:theme="@style/AppTheme" />
         <activity

@@ -8,7 +8,7 @@ import android.widget.ImageButton;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
 
-public class UserCollectionsActivity extends AppCompatActivity {
+public class CollectionsActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private ImageButton back;
@@ -17,11 +17,11 @@ public class UserCollectionsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_collections);
+        setContentView(R.layout.activity_collections);
         SwipeBackHelper.onCreate(this);
 
-        toolbar = findViewById(R.id.uc_toolbar);
-        back = findViewById(R.id.uc_back);
+        toolbar = findViewById(R.id.collections_toolbar);
+        back = findViewById(R.id.collections_back);
         fragment = new RecyclerViewFragment();
 
         toolbar.setOnClickListener(new View.OnClickListener() {
@@ -43,17 +43,17 @@ public class UserCollectionsActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                try {
-                    fragment.setData(User.user.getCollections());
-                } catch (RecyclerViewFragment.UnsupportedDataException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        fragment.show(getSupportFragmentManager(), R.id.content_collections);
+//        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                try {
+//                    fragment.setData(User.user.getCollections());
+//                } catch (RecyclerViewFragment.UnsupportedDataException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+        fragment.show(getSupportFragmentManager(), R.id.collections_content);
     }
 
     @Override

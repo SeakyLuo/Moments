@@ -39,9 +39,9 @@ public class Post implements Parcelable {
         } else {
             time = in.readLong();
         }
+        groupid = in.readString();
         comments = in.createTypedArrayList(Comment.CREATOR);
         ratings = in.createTypedArrayList(Rating.CREATOR);
-        groupid = in.readString();
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
@@ -149,9 +149,9 @@ public class Post implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeLong(time);
         }
+        dest.writeString(groupid);
         dest.writeTypedList(comments);
         dest.writeTypedList(ratings);
-        dest.writeString(groupid);
     }
 
     public static class Key implements Parcelable {
