@@ -26,7 +26,7 @@ public class FirebaseHelper {
     private static StorageReference usr, gsr;
     private static DatabaseReference db;
     private static DatabaseReference udb, gdb, uc, gc, uudb;
-    private static DataSnapshot uds, gds, ucds, gcds;
+    private static DataSnapshot uds, gds, gcds;
     private static OnUDBReceivedListener uReceivedListener;
     private static OnGDBReceivedListener gReceivedListener;
     private static ArrayList<OnDataUpdatesListener> updateListeners = new ArrayList<>();
@@ -109,18 +109,6 @@ public class FirebaseHelper {
 
             }
         });
-        uc = db.child("user_count");
-        uc.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ucds = dataSnapshot;
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         gc = db.child("group_count");
         gc.addValueEventListener(new ValueEventListener() {
             @Override
@@ -144,9 +132,6 @@ public class FirebaseHelper {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int number = ucds.getValue(Integer.class);
-                user.setNumber(number);
-                uc.setValue(++number);
                 udb.child(user.getId()).setValue(user);
                 if (uInsertionListener != null) uInsertionListener.afterUserInserted(user);
             }
@@ -306,7 +291,7 @@ public class FirebaseHelper {
         gInsertionListener = listener;
     }
 
-    public static boolean initFinished() { return uds != null && gds != null && ucds != null && gcds != null; }
+    public static boolean initFinished() { return uds != null && gds != null && gcds != null; }
 
     public static void uploadIcon(final Bitmap bitmap, final String type, final String id){
         new Thread(new Runnable() {

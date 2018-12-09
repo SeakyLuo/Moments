@@ -20,7 +20,6 @@ public class User implements Parcelable {
     private String name;
     private String intro = "";
     private String icon = "user_icon.jpg";
-    private int user_number = 0;
     private String gender = "Unknown";
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> drafts = new ArrayList<>();
@@ -51,7 +50,6 @@ public class User implements Parcelable {
         name = in.readString();
         intro = in.readString();
         icon = in.readParcelable(Bitmap.class.getClassLoader());
-        user_number = in.readInt();
         gender = in.readString();
         posts = in.createTypedArrayList(Post.CREATOR);
         drafts = in.createTypedArrayList(Post.CREATOR);
@@ -76,7 +74,6 @@ public class User implements Parcelable {
         dest.writeString(name);
         dest.writeString(intro);
         dest.writeString(icon);
-        dest.writeInt(user_number);
         dest.writeString(gender);
         dest.writeTypedList(posts);
         dest.writeTypedList(drafts);
@@ -111,9 +108,6 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
-
-    public void setNumber(int number){ this.user_number = number; }
-    public int getNumber() { return user_number; }
     public StorageReference GetIcon() {
         return FirebaseHelper.getIcon(FirebaseHelper.USER_ICON, icon);
     }
@@ -178,7 +172,7 @@ public class User implements Parcelable {
     public boolean hasNewRating() { return ratingsNotification.size() > 0; }
     public boolean hasDrafts() { return drafts.size() > 0; }
     public boolean hasPosted(Post post) { return id.equals(post.getUserid()); }
-    public boolean containsKeyword(String keyword) { return name.contains(keyword) || Integer.toString(user_number).contains(keyword); }
+    public boolean containsKeyword(String keyword) { return name.contains(keyword); }
     public ArrayList<Post.Key> getPostKeys() {
         ArrayList<Post.Key> data = new ArrayList<>();
         for (Post post: posts) data.add(post.GetKey());

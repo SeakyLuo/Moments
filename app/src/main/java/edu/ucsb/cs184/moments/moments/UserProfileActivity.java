@@ -31,7 +31,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
     private ImageView icon, gender;
-    private TextView username, user_number, intro, following, followers, posts_count;
+    private TextView username, intro, following, followers, posts_count;
     private ImageButton  edit, follow, message;
     private RecyclerViewFragment fragment;
     private String userid;
@@ -53,7 +53,6 @@ public class UserProfileActivity extends AppCompatActivity {
         icon = findViewById(R.id.up_usericon);
         gender = findViewById(R.id.up_gender);
         username = findViewById(R.id.up_username);
-        user_number = findViewById(R.id.up_user_number);
         intro = findViewById(R.id.up_intro);
         following = findViewById(R.id.up_following);
         followers = findViewById(R.id.up_followers);
@@ -202,7 +201,6 @@ public class UserProfileActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(user.getName());
         Glide.with(this).load(user.GetIcon()).into(icon);
         username.setText(user.getName());
-        user_number.setText("#" + user.getNumber());
         if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.GONE);
         else{
             gender.setVisibility(View.VISIBLE);

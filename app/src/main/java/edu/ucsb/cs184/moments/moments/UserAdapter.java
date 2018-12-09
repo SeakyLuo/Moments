@@ -22,13 +22,12 @@ public class UserAdapter extends CustomAdapter{
     }
 
     public class ViewHolder extends CustomAdapter.CustomViewHolder{
-        TextView number, name, intro, followers;
+        TextView name, intro, followers;
         ImageView icon;
         ImageButton follow;
         User data;
         public ViewHolder(@NonNull View view) {
             super(view);
-            number = view.findViewById(R.id.su_number);
             icon = view.findViewById(R.id.su_icon);
             name = view.findViewById(R.id.su_name);
             intro = view.findViewById(R.id.su_intro);
@@ -50,7 +49,6 @@ public class UserAdapter extends CustomAdapter{
                     ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
-            number.setText("#" + data.getNumber());
             follow.setVisibility(User.user.getId().equals(id) ? View.GONE : View.VISIBLE);
             follow.setImageResource(UploadIconActivity.followImage(id));
             follow.setOnClickListener(new View.OnClickListener() {
