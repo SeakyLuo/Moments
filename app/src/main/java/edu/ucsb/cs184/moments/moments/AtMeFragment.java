@@ -20,12 +20,22 @@ public class AtMeFragment extends Fragment {
         context = getContext();
         fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostAdapter());
+        refresh();
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+        fragment.show(getFragmentManager(), R.id.atme_content);
+        return view;
+    }
+
+    private void refresh(){
         try {
             fragment.setData(User.user.getAtMe());
         } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();
         }
-        fragment.show(getFragmentManager(), R.id.atme_content);
-        return view;
     }
 }
