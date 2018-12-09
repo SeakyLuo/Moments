@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/sb_most_popular"
-        android:title="@string/most_recent" />
+        android:title="@string/most_popular" />
     <item
         android:id="@+id/sb_least_popular"
-        android:title="@string/least_recent" />
+        android:title="@string/least_popular" />
     <item
         android:id="@+id/sb_latest"
         android:title="@string/most_recent" />
