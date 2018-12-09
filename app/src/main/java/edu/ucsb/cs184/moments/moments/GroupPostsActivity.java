@@ -1,11 +1,8 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -18,12 +15,9 @@ import com.jude.swipbackhelper.SwipeBackHelper;
 
 public class GroupPostsActivity extends AppCompatActivity {
 
-    public static final int REQUEST_POST = 0;
+    public static final int SETTINGS = 2;
 
-    private Context context;
-    private DrawerLayout drawer;
     private Toolbar toolbar;
-    private BottomNavigationView nav;
     private TextView title;
     private ImageView icon;
     private ImageButton back;
@@ -41,32 +35,40 @@ public class GroupPostsActivity extends AppCompatActivity {
         data = getIntent();
         group = data.getParcelableExtra(GroupsFragment.GROUP);
 
+        toolbar = findViewById(R.id.gp_toolbar);
         fab = findViewById(R.id.gp_fab);
         back = findViewById(R.id.gp_back);
         more = findViewById(R.id.gp_more);
         title = findViewById(R.id.gp_title);
         icon = findViewById(R.id.gp_icon);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.gotoTop();
+            }
+        });
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EditPostActivity.class);
                 intent.putExtra(EditPostActivity.GROUP, group);
-                startActivityForResult(intent, REQUEST_POST);
+                startActivityForResult(intent, EditPostActivity.MAKE_POST);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                overridePendingTransition(R.anim.push_left_in,R.anim.push_right_out);
+                close();
             }
         });
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GroupPostsActivity.this, GroupSettingsActivity.class);
-                intent.putExtra("", group);
-                startActivity(intent);
+                intent.putExtra(GroupSettingsActivity.GROUP, group);
+                startActivityForResult(intent, SETTINGS);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
         title.setText(group.getName());
@@ -96,14 +98,25 @@ public class GroupPostsActivity extends AppCompatActivity {
                 }finally {
                     break;
                 }
-            case FullPostActivity.DELETE_POST:
+            case PostAdapter.FULL_POST:
                 try {
-                    fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
+                    if (data.getStringExtra(FullPostActivity.DELETE_POST) != null)
+                        fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
                 } catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
                 }
                 break;
+            case SETTINGS:
+                if (data.getStringExtra(GroupSettingsActivity.QUIT) != null){
+                    close();
+                }
+
         }
+    }
+
+    private void close(){
+        finish();
+        overridePendingTransition(R.anim.push_left_in,R.anim.push_right_out);
     }
 
     @Override

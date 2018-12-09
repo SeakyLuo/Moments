@@ -91,9 +91,7 @@ public class GroupAdapter extends CustomAdapter {
             ArrayList<Post> posts = data.getPosts();
             if (posts.size() == 0){
                 time.setText(TimeText(Calendar.getInstance().getTimeInMillis()));
-                String managerid = data.getManagerid();
-                String name = User.findUser(managerid).getName();
-                content.setText(managerid.equals(User.user.getId()) ? "You" : name + " created a new group.");
+                content.setText("You " + (data.IsManager(User.user.getId()) ? "created" : "joined") + " a new group.");
             }else{
                 Post post = posts.get(posts.size() - 1);
                 time.setText(TimeText(post.getTime()));

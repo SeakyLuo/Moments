@@ -76,6 +76,7 @@ public class Group implements Parcelable {
         this.managerid = userid;
         upload("managerid", managerid);
     }
+    public boolean IsManager(String userid) { return managerid.equals(userid); }
     public void setNumber(int number) { this.group_number = number; }
     public int getNumber() { return group_number;}
     public String getName() { return name; }

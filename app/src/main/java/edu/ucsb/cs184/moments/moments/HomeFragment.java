@@ -142,10 +142,9 @@ public class HomeFragment extends Fragment {
                 }finally {
                     break;
                 }
-            case FullPostActivity.DELETE_POST:
+            case PostAdapter.FULL_POST:
                 try {
                     fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
-                    fragment.gotoTop();
                 }catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
                 }finally {

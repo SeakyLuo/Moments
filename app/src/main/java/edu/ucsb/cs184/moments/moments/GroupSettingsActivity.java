@@ -2,6 +2,7 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -14,8 +15,9 @@ import com.jude.swipbackhelper.SwipeBackHelper;
 
 public class GroupSettingsActivity extends AppCompatActivity {
 
+    public static final String GROUP = "Group", QUIT = "Quit";
     private static final String SETTINGS = "Settings";
-    private static Group group;
+    private Group group;
     private ImageButton back;
 
     @Override
@@ -23,17 +25,20 @@ public class GroupSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         SwipeBackHelper.onCreate(this);
         setContentView(R.layout.activity_group_settings);
-        group = (Group) getIntent().getSerializableExtra(GroupsFragment.GROUP);
+        Intent intent = getIntent();
+        group = intent.getParcelableExtra(GroupsFragment.GROUP);
 
         back = findViewById(R.id.gs_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
 
         Fragment fragment = new SettingsFragment();
+        ((SettingsFragment) fragment).setData(group);
         // this fragment must be from android.app.Fragment,
         // if you use support fragment, it will not work
 
@@ -61,28 +66,33 @@ public class GroupSettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment {
+        private Preference name, number, sortby, quit;
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             // here we should call settings ui
             addPreferencesFromResource(R.xml.group_preference);
-            Group group = GroupSettingsActivity.group;
-            Preference group_name = findPreference("Group Name");
-            group_name.setSummary(group.getName());
-            group_name.setDefaultValue(group.getName());
-            Preference group_number = findPreference("Group Number");
-            group_number.setSummary(group.getNumber() + "");
-            Preference sortby = findPreference(getString(R.string.sort_by));
+            name = findPreference("Group Name");
+            number = findPreference("Group Number");
+            sortby = findPreference(getString(R.string.sort_by));
+            quit = findPreference(getString(R.string.quit_group));
+        }
+
+        public void setData(final Group group){
+            name.setSummary(group.getName());
+            name.setDefaultValue(group.getName());
+            number.setSummary(group.getNumber() + "");
             // TODO: save group settings
-//            sortby.setSummary();
-            Preference quit = findPreference(getString(R.string.quit_group));
+            // Default
+            sortby.setSummary("Most Recent");
             quit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-//                    User.user.quitGroup(group.getId());
-//                    activity.finish();
-                    // TODO: needs another finish
+                    User.user.quitGroup(group.getId());
+                    getActivity().finish();
                     getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
+                    Intent intent = new Intent();
+                    intent.putExtra(QUIT, QUIT);
                     return true;
                 }
             });

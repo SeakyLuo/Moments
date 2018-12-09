@@ -20,6 +20,7 @@ import java.util.Calendar;
 
 public class PostAdapter extends CustomAdapter {
 
+    public static final int FULL_POST = 1;
     private boolean usericonClickable = true;
     public void setUsericonClickable(boolean clickable) { usericonClickable = clickable; }
 
@@ -75,7 +76,7 @@ public class PostAdapter extends CustomAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, FullPostActivity.class);
                     intent.putExtra(FullPostActivity.POST, data);
-                    context.startActivity(intent);
+                    ((Activity) context).startActivityForResult(intent, FULL_POST);
                     ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });

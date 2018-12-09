@@ -28,7 +28,7 @@ public class FullPostActivity extends AppCompatActivity {
 
     public static final String POST = "post";
     public static final String ADD_COMMENT = "Add Comment";
-    public static final int DELETE_POST = 1;
+    public static final String DELETE_POST = "Delete Post";
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private TabViewPager mViewPager;
@@ -92,9 +92,7 @@ public class FullPostActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: ？？？ 有空研究一下下面两行干啥玩意儿的
-                Intent backIntent = new Intent();
-                setResult(RESULT_OK, backIntent);
+                setResult(RESULT_CANCELED);
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
@@ -127,7 +125,8 @@ public class FullPostActivity extends AppCompatActivity {
                                 User.user.removePost(post);
                                 Intent intent = new Intent();
                                 intent.putExtra(POST, post);
-                                setResult(FullPostActivity.DELETE_POST, intent);
+                                intent.putExtra(DELETE_POST, DELETE_POST);
+                                setResult(RESULT_OK, intent);
                                 finish();
                                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
                                 return true;
@@ -167,7 +166,6 @@ public class FullPostActivity extends AppCompatActivity {
 
             }
         });
-
         poster_icon.setClickable(true);
         poster_icon.setOnClickListener(new View.OnClickListener() {
             @Override
