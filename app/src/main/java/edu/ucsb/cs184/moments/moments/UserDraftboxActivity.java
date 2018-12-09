@@ -42,12 +42,13 @@ public class UserDraftboxActivity extends AppCompatActivity {
             }
         });
         // TODO: to be implemented
-        fragment.setAdapter(new PostAdapter());
+        fragment.setAdapter(new DraftsAdapter());
         try {
             fragment.setData(User.user.getDrafts());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        fragment.setShowDivider(true);
         fragment.show(getSupportFragmentManager(), R.id.content_draftbox);
     }
 
