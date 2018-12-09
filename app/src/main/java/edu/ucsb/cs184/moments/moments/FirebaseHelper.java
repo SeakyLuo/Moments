@@ -48,17 +48,17 @@ public class FirebaseHelper {
                 if (User.firebaseUser != null){
                     uudb = udb.child(User.firebaseUser.getUid());
                     User.user = uds.child(User.firebaseUser.getUid()).getValue(User.class);
-//                    uudb.addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                            User.user = dataSnapshot.getValue(User.class);
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                        }
-//                    });
+                    uudb.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User.user = dataSnapshot.getValue(User.class);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
                 if (uReceivedListener != null) uReceivedListener.onUDBReceived();
             }
