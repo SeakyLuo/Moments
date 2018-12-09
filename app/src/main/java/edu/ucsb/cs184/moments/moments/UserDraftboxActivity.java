@@ -1,7 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -34,13 +33,21 @@ public class UserDraftboxActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
-        clear.setTextColor(getColor((User.user.getDrafts().size() == 0) ? R.color.aluminum : Color.BLACK));
+        setClear();
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clear.setTextColor(getColor(R.color.aluminum));
-                User.user.clearDrafts();
-                fragment.clear();
+                AskYesNoDialog dialog = new AskYesNoDialog();
+                dialog.showNow(getSupportFragmentManager(), "Clear");
+                dialog.setMessage(getString(R.string.clear_draft));
+                dialog.setOnYesListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clear.setTextColor(getColor(R.color.aluminum));
+                        User.user.clearDrafts();
+                        fragment.clear();
+                    }
+                });
             }
         });
         // TODO: to be implemented
@@ -52,6 +59,10 @@ public class UserDraftboxActivity extends AppCompatActivity {
         }
         fragment.setShowDivider(true);
         fragment.show(getSupportFragmentManager(), R.id.content_draftbox);
+    }
+
+    private void setClear(){
+        clear.setTextColor(getColor((User.user.getDrafts().size() == 0) ? R.color.aluminum : R.color.BlackGray));
     }
 
     @Override
@@ -73,6 +84,7 @@ public class UserDraftboxActivity extends AppCompatActivity {
         switch (requestCode){
             case EditPostActivity.EDIT_POST:
                 fragment.refresh();
+                setClear();
                 break;
         }
     }

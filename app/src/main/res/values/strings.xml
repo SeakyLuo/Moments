@@ -54,6 +54,7 @@
     <string name="no">No</string>
     <string name="save_as_draft">Do you want to save this post as draft?</string>
     <string name="update_draft">Do you want to update this draft?</string>
+    <string name="clear_draft">Do you want to delete all the drafts?</string>
     <string name="groups">Groups</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="action_settings">Settings</string>

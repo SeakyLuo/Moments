@@ -38,6 +38,7 @@ public class RecyclerViewFragment extends Fragment {
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         recyclerView.setLayoutManager(linearLayout);
         recyclerView.setAdapter(adapter);
+        adapter.setActivity(getActivity());
         if (showDivider) recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

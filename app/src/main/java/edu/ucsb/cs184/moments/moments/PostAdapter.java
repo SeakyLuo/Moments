@@ -1,7 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.view.menu.MenuBuilder;
 import android.view.LayoutInflater;
@@ -78,8 +77,9 @@ public class PostAdapter extends CustomAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, FullPostActivity.class);
                     intent.putExtra(FullPostActivity.POST, data);
-                    ((Activity) context).startActivityForResult(intent, FULL_POST);
-                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    // TODO: these two lines are problematic
+                    activity.startActivityForResult(intent, FULL_POST);
+                    activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             usericon.setOnClickListener(new View.OnClickListener() {
@@ -88,8 +88,9 @@ public class PostAdapter extends CustomAdapter {
                     if (!usericonClickable || data.IsAnonymous()) return;
                     Intent intent = new Intent(context, UserProfileActivity.class);
                     intent.putExtra(UserProfileActivity.USERID, data.getUserid());
-                    context.startActivity(intent);
-                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    // TODO: these two lines are problematic
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             collect.setOnClickListener(new View.OnClickListener() {
@@ -107,8 +108,8 @@ public class PostAdapter extends CustomAdapter {
                     Intent intent = new Intent(context, FullPostActivity.class);
                     intent.putExtra(FullPostActivity.POST, data);
                     intent.putExtra(FullPostActivity.ADD_COMMENT, FullPostActivity.ADD_COMMENT);
-                    context.startActivity(intent);
-                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {

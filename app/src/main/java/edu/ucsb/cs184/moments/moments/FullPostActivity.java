@@ -47,6 +47,7 @@ public class FullPostActivity extends AppCompatActivity {
     private FullPostCommentsFragment commentsFragment;
     private FullPostRatingsFragment ratingsFragment;
     private AddCommentDialog addCommentDialog;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class FullPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_post);
         SwipeBackHelper.onCreate(this);
 
-        Intent intent = getIntent();
+        intent = getIntent();
         post = intent.getParcelableExtra(POST);
 
         commentsFragment = new FullPostCommentsFragment();
@@ -125,7 +126,7 @@ public class FullPostActivity extends AppCompatActivity {
                                 User.user.removePost(post);
                                 Intent intent = new Intent();
                                 intent.putExtra(POST, post);
-                                intent.putExtra(DELETE_POST, DELETE_POST);
+                                intent.putExtra(DELETE_POST, true);
                                 setResult(RESULT_OK, intent);
                                 finish();
                                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
@@ -209,7 +210,6 @@ public class FullPostActivity extends AppCompatActivity {
         pagerAdapter.addFragment(ratingsFragment, "Ratings");
         mViewPager.setAdapter(pagerAdapter);
         setPost(post);
-
         if (intent.getStringExtra(ADD_COMMENT) != null) showAddComment();
     }
 

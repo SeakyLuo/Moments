@@ -1,6 +1,5 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ public class DraftAdapter extends CustomAdapter{
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_post, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_draft, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -39,13 +38,14 @@ public class DraftAdapter extends CustomAdapter{
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, FullPostActivity.class);
+                    Intent intent = new Intent(context, EditPostActivity.class);
                     intent.putExtra(EditPostActivity.DRAFT, data);
-                    intent.putExtra(FullPostActivity.POST, data);
-                    ((Activity) context).startActivityForResult(intent, EditPostActivity.EDIT_POST);
-                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    intent.putExtra(EditPostActivity.POST, data);
+                    activity.startActivityForResult(intent, EditPostActivity.EDIT_POST);
+                    activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
+            view.setLongClickable(true);
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {

@@ -53,6 +53,7 @@ public class EditPostActivity extends AppCompatActivity {
                 send.setImageResource(hasText ? R.drawable.ic_send : R.drawable.ic_send_unclickable);
             }
         });
+        if (draft != null) edit_content.setText(draft.getContent());
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

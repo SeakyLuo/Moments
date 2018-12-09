@@ -139,17 +139,16 @@ public class HomeFragment extends Fragment {
                     fragment.gotoTop();
                 }catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
-                }finally {
-                    break;
                 }
+                break;
             case PostAdapter.FULL_POST:
                 try {
-                    fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
+                    if (data.getBooleanExtra(FullPostActivity.DELETE_POST, false))
+                        fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
                 }catch (RecyclerViewFragment.UnsupportedDataException e) {
                     e.printStackTrace();
-                }finally {
-                    break;
                 }
+                break;
         }
     }
 }
