@@ -57,6 +57,12 @@ public class UserDraftboxActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fragment.refresh();
+            }
+        });
         fragment.setShowDivider(true);
         fragment.show(getSupportFragmentManager(), R.id.content_draftbox);
     }

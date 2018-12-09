@@ -19,7 +19,7 @@ public class DraftAdapter extends CustomAdapter{
     }
 
     public static String TimeText(Long time){
-        return new SimpleDateFormat("HH:ss yyyy/MM/dd").format(time);
+        return new SimpleDateFormat("HH:mm yyyy/MM/dd").format(time);
     }
 
     public class ViewHolder extends CustomAdapter.CustomViewHolder {
@@ -51,11 +51,12 @@ public class DraftAdapter extends CustomAdapter{
                 public boolean onLongClick(View v) {
                     AskYesNoDialog dialog = new AskYesNoDialog();
                     dialog.showNow(((AppCompatActivity) v.getContext()).getSupportFragmentManager(), "Delete");
-                    dialog.setMessage("Do you want to delete this post?");
+                    dialog.setMessage("Do you want to delete this draft?");
                     dialog.setOnYesListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             User.user.removeDraft(data);
+                            notifyDataSetChanged();
                         }
                     });
                     return false;

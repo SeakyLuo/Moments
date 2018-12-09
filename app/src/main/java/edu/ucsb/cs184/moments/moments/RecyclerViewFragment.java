@@ -25,6 +25,7 @@ public class RecyclerViewFragment extends Fragment {
     private CustomAdapter adapter;
     private boolean showDivider = false;
     private boolean swipeEnabled = true;
+    private int lMargin = 0, rMargin = 0, tMargin = 0, bMargin = 0;
     private ArrayList<View> hideViews = new ArrayList<>();
     private ArrayList<OnRefreshListener> listeners = new ArrayList<>();
 
@@ -36,6 +37,8 @@ public class RecyclerViewFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerview);
         LinearLayoutManager linearLayout = new LinearLayoutManager(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(lMargin, tMargin, rMargin, bMargin);
         recyclerView.setLayoutManager(linearLayout);
         recyclerView.setAdapter(adapter);
         adapter.setActivity(getActivity());
@@ -66,6 +69,11 @@ public class RecyclerViewFragment extends Fragment {
         });
         return view;
     }
+
+    public void setbMargin(int bMargin) { this.bMargin = bMargin; }
+    public void setlMargin(int lMargin) { this.lMargin = lMargin; }
+    public void settMargin(int tMargin) { this.tMargin = tMargin; }
+    public void setrMargin(int rMargin) { this.rMargin = rMargin; }
 
     public void setShowDivider(boolean showDivider){
         this.showDivider = showDivider;
