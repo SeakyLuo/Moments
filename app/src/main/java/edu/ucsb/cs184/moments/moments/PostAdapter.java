@@ -15,6 +15,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -160,8 +162,7 @@ public class PostAdapter extends CustomAdapter {
                     helper.show();
                 }
             });
-            if (user.GetIcon() == null) usericon.setImageResource(R.drawable.user_icon);
-            else usericon.setImageBitmap(user.GetIcon());
+            Glide.with(context).load(user.GetIcon()).into(usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             content.setText(data.getContent());

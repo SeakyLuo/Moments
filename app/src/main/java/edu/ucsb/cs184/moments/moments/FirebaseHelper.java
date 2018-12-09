@@ -308,7 +308,7 @@ public class FirebaseHelper {
         }).start();
     }
 
-    private static void UploadIcon(Bitmap bitmap, String type, String id) {
+    private static void UploadIcon(Bitmap bitmap, String type, String url) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -316,10 +316,10 @@ public class FirebaseHelper {
         StorageReference imagesRef;
         switch (type){
             case USER_ICON:
-                imagesRef = usr.child(id + ".jpg");
+                imagesRef = usr.child(url);
                 break;
             case GROUP_ICON:
-                 imagesRef = gsr.child(id + ".jpg");
+                 imagesRef = gsr.child(url);
                  break;
             default:
                 return;
@@ -339,12 +339,12 @@ public class FirebaseHelper {
         });
     }
 
-    public static StorageReference getIcon(final String type, final String id){
+    public static StorageReference getIcon(final String type, final String url){
         switch (type){
             case USER_ICON:
-                return usr.child(id + ".jpg");
+                return usr.child(url);
             case GROUP_ICON:
-                return gsr.child(id + ".jpg");
+                return gsr.child(url);
             default:
                 return null;
         }

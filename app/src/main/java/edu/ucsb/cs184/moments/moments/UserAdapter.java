@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 public class UserAdapter extends CustomAdapter{
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -50,17 +52,16 @@ public class UserAdapter extends CustomAdapter{
             });
             number.setText("#" + data.getNumber());
             follow.setVisibility(User.user.getId().equals(id) ? View.GONE : View.VISIBLE);
-            follow.setImageResource(IconHelper.followImage(id));
+            follow.setImageResource(UploadIconActivity.followImage(id));
             follow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (User.user.isFollowing(id)) User.user.unfollow(id);
                     else  User.user.follow(id);
-                    follow.setImageResource(IconHelper.followImage(id));
+                    follow.setImageResource(UploadIconActivity.followImage(id));
                 }
             });
-            if (data.GetIcon() == null) icon.setImageResource(R.drawable.user_icon);
-            else icon.setImageBitmap(data.GetIcon());
+            Glide.with(context).load(data.GetIcon()).into(icon);
             name.setText(data.getName());
             intro.setText(data.getIntro());
             followers.setText("Followers: " + data.getFollowers().size());

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class User implements Parcelable {
     private String id;
     private String name;
     private String intro = "";
-    private Bitmap icon;
+    private String icon = "user_icon.jpg";
     private int user_number = 0;
     private String gender = "Unknown";
     private ArrayList<Post> posts = new ArrayList<>();
@@ -74,7 +75,7 @@ public class User implements Parcelable {
         dest.writeString(id);
         dest.writeString(name);
         dest.writeString(intro);
-        dest.writeParcelable(icon, flags);
+        dest.writeString(icon);
         dest.writeInt(user_number);
         dest.writeString(gender);
         dest.writeTypedList(posts);
@@ -113,11 +114,14 @@ public class User implements Parcelable {
 
     public void setNumber(int number){ this.user_number = number; }
     public int getNumber() { return user_number; }
-    public Bitmap GetIcon() {
-        return icon;
-//        return FirebaseHelper.getIcon(FirebaseHelper.USER_ICON, id);
+    public StorageReference GetIcon() {
+        return FirebaseHelper.getIcon(FirebaseHelper.USER_ICON, icon);
     }
-    public void SetIcon(Bitmap bitmap){ icon = bitmap; }
+    public void modifyIcon(Bitmap bitmap){
+        this.icon = id + ".jpg";
+        upload("icon", icon);
+        FirebaseHelper.uploadIcon(bitmap, FirebaseHelper.USER_ICON, icon);
+    }
     public String getName() { return name; }
     public void setName(String name){ this.name = name; }
     public String getId() { return id; }
@@ -253,10 +257,6 @@ public class User implements Parcelable {
     public void modifyName(String name){
         this.name = name;
         upload("name", name);
-    }
-    public void modifyIcon(Bitmap icon){
-        this.icon = icon;
-        upload("icon", icon);
     }
     public void modifyIntro(String intro){
         this.intro = intro;

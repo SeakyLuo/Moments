@@ -227,7 +227,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void setFollow(String userid){
-        int followImage = IconHelper.followImage(userid);
+        int followImage = UploadIconActivity.followImage(userid);
         follow.setImageResource(followImage);
         follow.setBackground(getDrawable(followImage == R.drawable.ic_unfollow ? R.drawable.button_border_green : R.drawable.button_border_orange));
     }

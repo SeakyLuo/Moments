@@ -15,7 +15,7 @@ public class Group implements Parcelable {
     private String managerid;
     private String name;
     private int group_number;
-    private Bitmap icon;
+    private String icon = "group_icon.jpg";
     private String intro = "";
     // private group?
     private ArrayList<String> members = new ArrayList<>();
@@ -34,7 +34,7 @@ public class Group implements Parcelable {
         managerid = in.readString();
         name = in.readString();
         group_number = in.readInt();
-        icon = in.readParcelable(Bitmap.class.getClassLoader());
+        icon = in.readString();
         intro = in.readString();
         members = in.createStringArrayList();
         posts = in.createTypedArrayList(Post.CREATOR);
@@ -46,7 +46,7 @@ public class Group implements Parcelable {
         dest.writeString(managerid);
         dest.writeString(name);
         dest.writeInt(group_number);
-        dest.writeParcelable(icon, flags);
+        dest.writeString(icon);
         dest.writeString(intro);
         dest.writeStringList(members);
         dest.writeTypedList(posts);
@@ -94,11 +94,13 @@ public class Group implements Parcelable {
     }
     public ArrayList<String> getMembers() { return members; }
     public ArrayList<Post> getPosts() { return posts; }
-    public void SetIcon(Bitmap bitmap){
-        icon = bitmap;
+    public void modifyIcon(Bitmap bitmap){
+        this.icon = id + ".jpg";
+        upload("icon", icon);
+        FirebaseHelper.uploadIcon(bitmap, FirebaseHelper.GROUP_ICON, icon);
     }
     public StorageReference GetIcon(){
-        return FirebaseHelper.getIcon(FirebaseHelper.GROUP_ICON, id);
+        return FirebaseHelper.getIcon(FirebaseHelper.GROUP_ICON, icon);
     }
 
     public void addMember(String userid){

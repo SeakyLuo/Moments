@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 public class CommentAdapter extends CustomAdapter {
 
     @Override
@@ -57,7 +59,7 @@ public class CommentAdapter extends CustomAdapter {
         public void setData(Object obj) {
             data = (Comment) obj;
             User user = User.findUser(data.getUserid());
-            usericon.setImageBitmap(user.GetIcon());
+            Glide.with(context).load(user.GetIcon()).into(usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             content.setText(data.getContent());

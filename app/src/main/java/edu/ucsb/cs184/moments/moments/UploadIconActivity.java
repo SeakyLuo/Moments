@@ -127,6 +127,11 @@ public class UploadIconActivity extends AppCompatActivity {
         return null;
     }
 
+    public static int followImage(String id){
+        return User.user.mutualFollow(id) ? R.drawable.ic_mutual :
+                User.user.isFollowing(id) ? R.drawable.ic_unfollow : R.drawable.ic_follow;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -149,8 +154,7 @@ public class UploadIconActivity extends AppCompatActivity {
             }
         }
         icon.setImageBitmap(image);
-        User.user.SetIcon(image);
-        if (caller == UserProfileActivity.class) User.user.SetIcon(image);
+        if (caller == UserProfileActivity.class) User.user.modifyIcon(image);
         Intent intent = new Intent(UploadIconActivity.this, caller);
         intent.putExtra(ICON, image);
         setResult(RESULT_OK, intent);

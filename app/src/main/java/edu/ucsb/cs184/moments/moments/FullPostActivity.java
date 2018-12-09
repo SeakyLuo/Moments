@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,6 +18,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import java.text.SimpleDateFormat;
@@ -216,9 +216,7 @@ public class FullPostActivity extends AppCompatActivity {
     private void setPost(final Post post){
         User user = User.findUser(post.getUserid());
         username.setText(user.getName());
-        Bitmap icon = user.GetIcon();
-        if (icon == null) poster_icon.setImageResource(R.drawable.user_icon);
-        else poster_icon.setImageBitmap(icon);
+        Glide.with(this).load(user.GetIcon()).into(poster_icon);
         time.setText(TimeText(post.getTime()));
         content.setText(post.getContent());
         int comments_count = post.comments_count();
