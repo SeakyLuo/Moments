@@ -32,6 +32,7 @@ public class User implements Parcelable {
     private ArrayList<String> groups = new ArrayList<>();  // id
     private ArrayList<String> followers = new ArrayList<>();  // id
     private ArrayList<String> following = new ArrayList<>();  // id
+    private ArrayList<Post.Key> atmeNotification = new ArrayList<>();
     private ArrayList<Comment.Key> commentsNotification = new ArrayList<>();
     private ArrayList<Post.Key> postsNotification = new ArrayList<>();
     private ArrayList<Rating.Key> ratingsNotification = new ArrayList<>();
@@ -159,6 +160,7 @@ public class User implements Parcelable {
         }
         return data;
     }
+    public ArrayList<Post.Key> getAtmeNotification() { return atmeNotification; }
     public ArrayList<Post.Key> getPostsNotification() { return postsNotification; }
     public ArrayList<Comment.Key> getCommentsNotification() { return commentsNotification; }
     public ArrayList<Rating.Key> getRatingssNotification() { return ratingsNotification; }
@@ -203,6 +205,11 @@ public class User implements Parcelable {
         }
         if (remove || fix) upload("timeline", timeline);
         return data;
+    }
+    public void AtMeNotification(Post post, boolean remove){
+        if (remove) atmeNotification.remove(post.GetKey());
+        else atmeNotification.add(0, post.GetKey());
+        upload("atmeNotification", atmeNotification);
     }
     public void PostNotification(Post post, boolean remove){
         if (remove) postsNotification.remove(post.GetKey());

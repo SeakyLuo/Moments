@@ -35,7 +35,7 @@ public class FullPostCommentsFragment extends Fragment {
         sortby_text = view.findViewById(R.id.fpc_sortby_text);
         fragment = new RecyclerViewFragment();
 
-        fragment.setAdapter(new CommentAdapter());
+        fragment.setAdapter(new FullPostCommentAdapter());
         fragment.setShowDivider(true);
         fragment.setSwipeEnabled(false);
 
