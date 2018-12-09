@@ -79,6 +79,7 @@ public class FullPostActivity extends AppCompatActivity {
         usericon = findViewById(R.id.fpac_user_icon);
         edit_comment = findViewById(R.id.fpac_editcomment);
 
+        commentsFragment.setData(post.getComments());
         addCommentDialog.setCaller(edit_comment, commentsFragment);
         addCommentDialog.setPost(post);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
-public class DraftsAdapter extends CustomAdapter{
+public class DraftAdapter extends CustomAdapter{
     public static final int FULL_POST = 1;
 
     @Override

@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class FullPostCommentsFragment extends Fragment {
 
     private Context context;
@@ -34,6 +36,7 @@ public class FullPostCommentsFragment extends Fragment {
         fragment.setAdapter(new CommentAdapter());
         fragment.setShowDivider(true);
         fragment.setSwipeEnabled(false);
+
         fragment.show(getFragmentManager(), R.id.fpc_content);
         sortby_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,9 +69,17 @@ public class FullPostCommentsFragment extends Fragment {
         return view;
     }
 
-    public void addComment(Comment comment){
+    public void addElement(Comment comment){
         try {
             fragment.addElement(comment);
+        } catch (RecyclerViewFragment.UnsupportedDataException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setData(ArrayList<Comment> comments){
+        try {
+            fragment.setData(comments);
         } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();
         }

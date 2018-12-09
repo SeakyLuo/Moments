@@ -42,7 +42,7 @@ public class UserDraftboxActivity extends AppCompatActivity {
             }
         });
         // TODO: to be implemented
-        fragment.setAdapter(new DraftsAdapter());
+        fragment.setAdapter(new DraftAdapter());
         try {
             fragment.setData(User.user.getDrafts());
         } catch (Exception e) {

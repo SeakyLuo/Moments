@@ -1,5 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +42,10 @@ public class CommentAdapter extends CustomAdapter {
             usericon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(context, UserProfileActivity.class);
+                    intent.putExtra(UserProfileActivity.USERID, data.getUserid());
+                    context.startActivity(intent);
+                    ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });
             view.setClickable(true);
