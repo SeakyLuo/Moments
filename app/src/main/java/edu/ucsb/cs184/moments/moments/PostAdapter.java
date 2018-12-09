@@ -56,23 +56,31 @@ public class PostAdapter extends CustomAdapter {
 
     public static void setContent(final Context context, TextView textView, final Post post){
         String substr = post.getContent();
-        int index = substr.indexOf("@");
+        int at = substr.indexOf("@"), hashtag = substr.indexOf("#");
         SpannableString spannableString = new SpannableString(post.getContent());
-        while(index != -1){
-            int space = substr.indexOf(" ");
-            if (space == -1){
-                space = substr.length();
-            }
-            final String name = substr.substring(index + 1, space);
+        while (at != -1 || hashtag != -1){
+            final int start = (at < 0) ? hashtag : ((at < hashtag || hashtag < 0) ? at : hashtag);
+            final boolean isAt = start == at;
+            int end = isAt ? substr.indexOf(" ") : substr.substring(1).indexOf("#");
+            if (end == -1) end = substr.length();
+            final String target = substr.substring(start + (isAt ? 1 : 0), end + (isAt ? 0 : 2));
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View widget) {
-                    User user = User.findUserWithName(name);
-                    if (user == null)
-                        Toast.makeText(context, "User " + name + " not found!" , Toast.LENGTH_SHORT).show();
-                    else{
-                        Intent intent = new Intent(context, UserProfileActivity.class);
-                        intent.putExtra(UserProfileActivity.USERID, user.getId());
+                    if (isAt){
+                        User user = User.findUserWithName(target);
+                        if (user == null)
+                            Toast.makeText(context, "User " + target + " not found!" , Toast.LENGTH_SHORT).show();
+                        else{
+                            Intent intent = new Intent(context, UserProfileActivity.class);
+                            intent.putExtra(UserProfileActivity.USERID, user.getId());
+                            context.startActivity(intent);
+                            ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                        }
+                    }else{
+                        Intent intent = new Intent(context, SearchActivity.class);
+                        intent.putExtra(SearchActivity.TAB, SearchPair.POSTS);
+                        intent.putExtra(SearchActivity.KEYWORD, target);
                         context.startActivity(intent);
                         ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                     }
@@ -85,10 +93,11 @@ public class PostAdapter extends CustomAdapter {
                     ds.setUnderlineText(false);
                 }
             };
-            spannableString.setSpan(clickableSpan, index, space, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableString.setSpan(clickableSpan, start, end + (isAt ? 0 : 2), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             try{
-                substr = substr.substring(space + 1);
-                index = substr.indexOf("@");
+                substr = substr.substring(end + 1);
+                at = substr.indexOf("@");
+                hashtag = substr.substring(1).indexOf("#");
             }catch (StringIndexOutOfBoundsException e){
                 break;
             }

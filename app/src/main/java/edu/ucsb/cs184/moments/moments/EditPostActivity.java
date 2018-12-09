@@ -8,6 +8,9 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.Calendar;
 
@@ -18,6 +21,7 @@ public class EditPostActivity extends AppCompatActivity {
 
     private ImageButton back, send;
     private ImageButton hashtag, at;
+    private ImageView usericon;
     private EditText edit_content;
     private Intent intent;
     private Group group;
@@ -30,6 +34,7 @@ public class EditPostActivity extends AppCompatActivity {
         intent = getIntent();
 
         edit_content = findViewById(R.id.edit_content);
+        usericon = findViewById(R.id.edit_usericon);
         back = findViewById(R.id.edit_cancel);
         send = findViewById(R.id.edit_send);
         at = findViewById(R.id.edit_at);
@@ -55,6 +60,7 @@ public class EditPostActivity extends AppCompatActivity {
                 send.setImageResource(hasText ? R.drawable.ic_send : R.drawable.ic_send_unclickable);
             }
         });
+        Glide.with(this).load(User.user.GetIcon()).into(usericon);
         if (draft != null) edit_content.setText(draft.getContent());
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +94,9 @@ public class EditPostActivity extends AppCompatActivity {
         at.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                edit_content.setText(edit_content.getText() + "@");
+                String text = edit_content.getText() + "@";
+                edit_content.setText(text);
+                edit_content.setSelection(text.length());
             }
         });
         hashtag.setOnClickListener(new View.OnClickListener() {
