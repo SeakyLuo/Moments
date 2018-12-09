@@ -215,8 +215,12 @@ public class Post implements Parcelable {
         @Override
         public int compare(Post o1, Post o2) {
             int result = Double.compare(o1.ratings_avg(), o2.ratings_avg());
-            if (result == 0) return new TimeComparator().compare(o1.GetKey(), o2.GetKey());
-            return result;
+            for (int i = 1; i <= 5; i++){
+                result = o1.counting_star(i) - o2.counting_star(i);
+                if (result != 0)
+                    return result;
+            }
+            return new TimeComparator().compare(o1.GetKey(), o2.GetKey());
         }
     }
 

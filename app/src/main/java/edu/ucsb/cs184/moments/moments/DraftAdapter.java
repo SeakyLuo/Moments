@@ -2,6 +2,7 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,21 @@ public class DraftAdapter extends CustomAdapter{
                     intent.putExtra(FullPostActivity.POST, data);
                     ((Activity) context).startActivityForResult(intent, FULL_POST);
                     ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                }
+            });
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    AskYesNoDialog dialog = new AskYesNoDialog();
+                    dialog.showNow(((AppCompatActivity) v.getContext()).getSupportFragmentManager(), "Delete");
+                    dialog.setMessage("Do you want to delete this post?");
+                    dialog.setOnYesListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            User.user.removeDraft(data);
+                        }
+                    });
+                    return false;
                 }
             });
             time.setText(TimeText(data.getTime()));
