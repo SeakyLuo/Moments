@@ -20,18 +20,18 @@ public class EditPostActivity extends AppCompatActivity {
     private ImageButton send;
     private EditText edit_content;
     private Intent intent;
-    private Class caller;
+    private Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_post);
         intent = getIntent();
-        caller = intent.getClass();
 
         edit_content = findViewById(R.id.edit_content);
         back = findViewById(R.id.edit_cancel);
         send = findViewById(R.id.edit_send);
+        group = intent.getParcelableExtra(GROUP);
         // TODO: if this activity is initiated by UserDraftbox and the post is published, remember to delete from user draftbox
 
         edit_content.addTextChangedListener(new TextWatcher() {
@@ -88,7 +88,6 @@ public class EditPostActivity extends AppCompatActivity {
                 Intent callBack = new Intent();
                 Post post = getPost();
                 callBack.putExtra(POST, post);
-                Group group = intent.getParcelableExtra(GROUP);
                 if (group == null)
                     User.user.addPost(post);
                 else
@@ -100,7 +99,10 @@ public class EditPostActivity extends AppCompatActivity {
     }
 
     private Post getPost(){
-        return new Post(User.user.getId(), edit_content.getText().toString(), Calendar.getInstance().getTimeInMillis());
+        if (group == null)
+            return new Post(User.user.getId(), edit_content.getText().toString(), Calendar.getInstance().getTimeInMillis());
+        else
+            return new Post(User.user.getId(), edit_content.getText().toString(), Calendar.getInstance().getTimeInMillis(), group.getId());
     }
 
     private boolean hasText(){

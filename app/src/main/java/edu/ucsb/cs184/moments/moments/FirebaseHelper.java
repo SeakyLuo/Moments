@@ -242,11 +242,31 @@ public class FirebaseHelper {
         }).start();
     }
 
-    public static void updatePost(){
+    public static void updatePost(final Post post, final String key, final Object value){
         new Thread(new Runnable() {
             @Override
             public void run() {
-
+                if (udb == null) return;
+                int index = 0;
+                if (post.postedInGroup()){
+                    for (DataSnapshot ds: gds.child(post.getGroupid() + "/posts/").getChildren()){
+                        Post data = ds.getValue(Post.class);
+                        if (data.equals(post)){
+                            gdb.child(post.getGroupid() + "/posts/" + index + "/" + key).setValue(value);
+                            return;
+                        }
+                        index++;
+                    }
+                }else{
+                    for (DataSnapshot ds: uds.child(post.getUserid()).child("posts").getChildren()){
+                        Post data = ds.getValue(Post.class);
+                        if (data.equals(post)){
+                            udb.child(post.getUserid() + "/" + "posts/" + index + "/" + key).setValue(value);
+                            return;
+                        }
+                        index++;
+                    }
+                }
             }
         }).start();
     }

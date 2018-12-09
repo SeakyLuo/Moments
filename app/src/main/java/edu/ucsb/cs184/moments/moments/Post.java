@@ -13,6 +13,7 @@ public class Post implements Parcelable {
     private String userid;
     private String content;
     private Long time;
+    private String groupid;
     private ArrayList<Comment> comments = new ArrayList<>();
     private ArrayList<Rating> ratings = new ArrayList<>();
 
@@ -21,6 +22,13 @@ public class Post implements Parcelable {
         this.userid = userid;
         this.content = content;
         this.time = time;
+    }
+
+    public Post(String userid, String content, Long time, String groupid){
+        this.userid = userid;
+        this.content = content;
+        this.time = time;
+        this.groupid = groupid;
     }
 
     protected Post(Parcel in) {
@@ -33,6 +41,7 @@ public class Post implements Parcelable {
         }
         comments = in.createTypedArrayList(Comment.CREATOR);
         ratings = in.createTypedArrayList(Rating.CREATOR);
+        groupid = in.readString();
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
@@ -49,6 +58,7 @@ public class Post implements Parcelable {
 
     public Key GetKey() { return new Key(userid, time); }
     public String getUserid() { return userid; }
+    public String getGroupid() { return groupid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
     public int comments_count() { return comments.size(); }
@@ -73,6 +83,7 @@ public class Post implements Parcelable {
         return count;
     }
     public boolean IsAnonymous() { return userid.equals(User.ANONYMOUS); }
+    public boolean postedInGroup() { return groupid != null; }
     public boolean containsKeyword(String keyword) { return content.contains(keyword); }
     public void addComment(Comment comment){
         comments.add(comment);
@@ -93,7 +104,7 @@ public class Post implements Parcelable {
         return result;
     }
     private void upload(String key, Object value){
-
+        FirebaseHelper.updatePost(this, key, value);
     }
 
     @Override
@@ -129,6 +140,7 @@ public class Post implements Parcelable {
         }
         dest.writeTypedList(comments);
         dest.writeTypedList(ratings);
+        dest.writeString(groupid);
     }
 
     public static class Key implements Parcelable {
