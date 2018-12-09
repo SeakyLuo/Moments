@@ -79,7 +79,6 @@ public class FullPostActivity extends AppCompatActivity {
         usericon = findViewById(R.id.fpac_user_icon);
         edit_comment = findViewById(R.id.fpac_editcomment);
 
-        commentsFragment.setData(post.getComments());
         addCommentDialog.setCaller(edit_comment, commentsFragment);
         addCommentDialog.setPost(post);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -223,6 +222,7 @@ public class FullPostActivity extends AppCompatActivity {
         int comments_count = post.comments_count();
         comments_counter.setText(comments_count + "");
         comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
+        commentsFragment.setData(post.getComments());
         setCollect(User.user.hasCollected(post));
         collect.setOnClickListener(new View.OnClickListener() {
             @Override

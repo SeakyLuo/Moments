@@ -15,7 +15,7 @@ public class Group implements Parcelable {
     private String managerid;
     private String name;
     private int group_number;
-    private String icon = "group_icon.jpg";
+    private String icon = "group_icon.png";
     private String intro = "";
     // private group?
     private ArrayList<String> members = new ArrayList<>();

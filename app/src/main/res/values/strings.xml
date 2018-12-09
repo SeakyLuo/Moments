@@ -37,6 +37,8 @@
     </string-array>
 
     <string-array name="sortby">
+        <item>Most Popular</item>
+        <item>Least Popular</item>
         <item>Most Recent</item>
         <item>Least Recent</item>
         <item>Highest Rating</item>

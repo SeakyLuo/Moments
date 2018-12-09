@@ -22,6 +22,8 @@ public class FullPostCommentsFragment extends Fragment {
     private Button sortby_button;
     private TextView sortby_text;
     private RecyclerViewFragment fragment;
+    private boolean init = false;
+    private ArrayList<Comment> comments;
 
     @Nullable
     @Override
@@ -46,6 +48,12 @@ public class FullPostCommentsFragment extends Fragment {
                     @Override
                     public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
                         switch (menuItem.getItemId()){
+                            case R.id.sb_most_popular:
+                                sortby_text.setText("Sort By " + getString(R.string.most_popular));
+                                return true;
+                            case R.id.sb_least_popular:
+                                sortby_text.setText("Sort By " + getString(R.string.least_popular));
+                                return true;
                             case R.id.sb_highest_rating:
                                 sortby_text.setText("Sort By " + getString(R.string.highest_rating));
                                 return true;
@@ -65,7 +73,8 @@ public class FullPostCommentsFragment extends Fragment {
                 helper.show();
             }
         });
-
+        init = true;
+        if (comments != null) setData(comments);
         return view;
     }
 
@@ -79,7 +88,8 @@ public class FullPostCommentsFragment extends Fragment {
 
     public void setData(ArrayList<Comment> comments){
         try {
-            fragment.setData(comments);
+            this.comments = comments;
+            if (init) fragment.setData(comments);
         } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();
         }
