@@ -186,7 +186,7 @@ public class FirebaseHelper {
         }
         return data;
     }
-    public static ArrayList<User> searchUsers(String keyword) {
+    public static ArrayList<User> searchUsers(String keyword){
         ArrayList<User> data = new ArrayList<>();
         for (DataSnapshot ds: uds.getChildren()){
             User user = ds.getValue(User.class);
@@ -195,7 +195,7 @@ public class FirebaseHelper {
         }
         return data;
     }
-    public static ArrayList<Group> searchGroups(String keyword) {
+    public static ArrayList<Group> searchGroups(String keyword){
         ArrayList<Group> data = new ArrayList<>();
         for (DataSnapshot ds: gds.getChildren()){
             Group group = ds.getValue(Group.class);
@@ -205,8 +205,17 @@ public class FirebaseHelper {
         return data;
     }
 
-    public static Post findPost(Post.Key key) {
+    public static Post findPost(Post.Key key){
         for (DataSnapshot ds: uds.child(key.userid).child("posts").getChildren()){
+            Post data = ds.getValue(Post.class);
+            ArrayList<Rating> arrayList = (ArrayList<Rating>) ds.child("ratings").getValue();
+            if (data.GetKey().equals(key))
+                return data;
+        }
+        return null;
+    }
+    public static Post findPostInGroup(Post.Key key, String id){
+        for (DataSnapshot ds: gds.child(id).child("posts").getChildren()){
             Post data = ds.getValue(Post.class);
             ArrayList<Rating> arrayList = (ArrayList<Rating>) ds.child("ratings").getValue();
             if (data.GetKey().equals(key))

@@ -59,8 +59,6 @@ public class Post implements Parcelable {
     public Key GetKey() { return new Key(userid, time); }
     public String getUserid() { return userid; }
     public String getGroupid() { return groupid; }
-    // Should NOT be called
-    public void setGroupid(String groupid) { this.groupid = groupid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
     public int comments_count() { return comments.size(); }
@@ -122,7 +120,12 @@ public class Post implements Parcelable {
     public static Post fromJson(String json){
         return (new Gson()).fromJson(json, Post.class);
     }
+    public static Post refresh(Post post){
+        post = post.postedInGroup() ? findPost(post.GetKey(), post.groupid) : findPost(post.GetKey());
+        return post;
+    }
     public static Post findPost(Key key) { return FirebaseHelper.findPost(key); }
+    public static Post findPost(Key key, String groupid) { return FirebaseHelper.findPostInGroup(key, groupid); }
 
     @Override
     public boolean equals(@Nullable Object obj) {
