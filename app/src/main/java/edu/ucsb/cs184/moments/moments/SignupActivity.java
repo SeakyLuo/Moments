@@ -149,6 +149,9 @@ public class SignupActivity extends AppCompatActivity {
         }else if (name.trim().length() > 40) {
             _nameText.setError("Username cannot have more than 40 characters");
             valid = false;
+        }else if (name.contains(" ")){
+            _nameText.setError("You cannot have space in your name.");
+            valid = false;
         }else if (FirebaseHelper.findUserWithName(name) != null){
             _nameText.setError("This name has been used.");
             valid = false;
