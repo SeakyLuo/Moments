@@ -59,11 +59,23 @@ public class Post implements Parcelable {
     public Key GetKey() { return new Key(userid, time); }
     public String getUserid() { return userid; }
     public String getGroupid() { return groupid; }
+    // Should NOT be called
+    public void setGroupid(String groupid) { this.groupid = groupid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
     public int comments_count() { return comments.size(); }
+    // Should NOT be called
+    public void setComments(ArrayList<Comment> comments) { this.comments = comments; }
     public ArrayList<Comment> getComments() { return comments; }
+    // Should NOT be called
+    public void setRatings(ArrayList<Rating> ratings) { this.ratings = ratings; }
     public int ratings_received() { return ratings.size(); }
+    public Rating hasRated() {
+        for (Rating rating: ratings)
+            if (rating.getRaterId().equals(User.user.getId()))
+                return rating;
+        return null;
+    }
     public float ratings_avg(){
         float sum = 0;
         int count = ratings.size();

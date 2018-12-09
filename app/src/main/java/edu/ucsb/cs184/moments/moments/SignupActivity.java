@@ -111,8 +111,7 @@ public class SignupActivity extends AppCompatActivity {
                     FirebaseHelper.insertUser(User.user);
                 } else {
                     progressDialog.dismiss();
-                    String a = task.getException().toString(), b = task.getResult().toString();
-                    onSignupFailed(a);
+                    onSignupFailed(task.getException().toString());
                 }
             }
         });

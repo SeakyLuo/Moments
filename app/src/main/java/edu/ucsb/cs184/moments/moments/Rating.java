@@ -10,7 +10,6 @@ import java.util.Comparator;
 
 public class Rating implements Parcelable {
     private String raterId;
-    private String posterId;
     private int rating;
     private Long time;
     private Post.Key postKey;
@@ -20,7 +19,6 @@ public class Rating implements Parcelable {
         this.rating = rating;
         this.time = time;
         this.postKey = postKey;
-        this.posterId = postKey.userid;
     }
 
     protected Rating(Parcel in) {
@@ -44,7 +42,7 @@ public class Rating implements Parcelable {
 
     public Boolean IsAnonymous() { return raterId.equals(User.ANONYMOUS); }
     public String getRaterId() { return raterId; }
-    public String getPosterId() { return posterId; }
+    public String GetPosterId() { return postKey.userid; }
     public int getRating() { return rating; }
     public Long getTime() { return time; }
     public Post.Key GetPostKey() {

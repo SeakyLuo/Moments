@@ -15,6 +15,7 @@ public class Group implements Parcelable {
     private int group_number;
     private Bitmap icon;
     private String intro = "";
+    // private group?
     private ArrayList<String> members = new ArrayList<>();
     private ArrayList<Post> posts = new ArrayList<>();
 
