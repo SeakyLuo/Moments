@@ -123,7 +123,8 @@ public class FullPostActivity extends AppCompatActivity {
                                 Toast.makeText(FullPostActivity.this,"Copied!",Toast. LENGTH_SHORT).show();
                                 return true;
                             case R.id.fullpost_more_delete:
-                                User.user.removePost(post);
+                                if (post.postedInGroup()) Group.findGroup(post.getGroupid()).removePost(post);
+                                else User.user.removePost(post);
                                 Intent intent = new Intent();
                                 intent.putExtra(POST, post);
                                 intent.putExtra(DELETE_POST, true);

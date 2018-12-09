@@ -54,7 +54,7 @@ public class CreateGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!finishClickable()) return;
-                Group group = new Group(name.getText().toString(), User.user.getId());
+                Group group = new Group(name.getText().toString(), User.user);
                 FirebaseHelper.setAfterGroupInsertionListener(new FirebaseHelper.AfterGroupInsertedListener() {
                     @Override
                     public void afterGroupInserted(Group group) {

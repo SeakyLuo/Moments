@@ -8,6 +8,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 
 public class Group implements Parcelable {
@@ -24,10 +25,11 @@ public class Group implements Parcelable {
 
     public Group(){}
 
-    public Group(String name, String managerid){
+    public Group(String name, User manager){
         this.name = name;
-        this.managerid = managerid;
+        this.managerid = manager.getId();
         this.members.add(managerid);
+        messages.add(new Message(manager.getName() + " created this group.", Calendar.getInstance().getTimeInMillis()));
     }
 
     protected Group(Parcel in) {
@@ -109,6 +111,7 @@ public class Group implements Parcelable {
     public void addMember(String userid){
         members.add(userid);
         upload("members", members);
+        addMessage(new Message(User.findUser(userid).getName() + " joined this group." , Calendar.getInstance().getTimeInMillis()));
     }
     public void addPost(Post post){
         posts.add(0, post);
@@ -123,6 +126,24 @@ public class Group implements Parcelable {
     public void removePost(Post post){
         posts.remove(post);
         upload("posts", posts);
+    }
+    public void addMessage(Message message){
+        messages.add(0, message);
+        upload("messages", messages);
+    }
+    public Message latestActivity(){
+        if (messages.size() == 0){
+            messages.add(new Message(User.findUser(managerid).getName() + " created this group.",
+                    posts.size() > 0 ? posts.get(posts.size() - 1).getTime() - 1 : Calendar.getInstance().getTimeInMillis()));
+            upload("messages", messages);
+        }
+        Message activity = messages.get(0);
+        if (posts.size() > 0){
+            Post post = posts.get(0);
+            if (post.getTime() > activity.getTime())
+                activity = new Message(User.findUser(post.getUserid()).getName() + ": " + post.getContent(), post.getTime());
+        }
+        return activity;
     }
     private void upload(String key, Object value){
         FirebaseHelper.updateGroup(id, key, value);

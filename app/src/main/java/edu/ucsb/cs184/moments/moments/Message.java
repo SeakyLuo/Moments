@@ -6,31 +6,33 @@ import android.os.Parcelable;
 import com.google.gson.Gson;
 
 public class Message implements Parcelable {
-    private Long time;
     private String content;
-    public Message(Long time, String content){
-        this.time = time;
+    private Long time;
+    public Message(String content, Long time){
         this.content = content;
+        this.time = time;
     }
+    public String getContent() { return content; }
+    public Long getTime() { return time; }
 
     protected Message(Parcel in) {
+        content = in.readString();
         if (in.readByte() == 0) {
             time = null;
         } else {
             time = in.readLong();
         }
-        content = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(content);
         if (time == null) {
             dest.writeByte((byte) 0);
         } else {
             dest.writeByte((byte) 1);
             dest.writeLong(time);
         }
-        dest.writeString(content);
     }
 
     @Override
