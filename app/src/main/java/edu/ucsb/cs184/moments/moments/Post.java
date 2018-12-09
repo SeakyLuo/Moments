@@ -148,7 +148,7 @@ public class Post implements Parcelable {
     public static Post powerfulFindPost(Key key){
         Post post = findPost(key);
         if (post != null) return post;
-        for (Group group: User.findUser(post.getUserid()).getGroups())
+        for (Group group: User.findUser(key.userid).getGroups())
             for (Post p: group.getPosts())
                 if (p.GetKey().equals(key))
                     return p;
