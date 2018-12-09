@@ -110,11 +110,11 @@ public class UserProfileActivity extends AppCompatActivity {
                         ArrayList<Post> data = user.getPosts();
                         switch (menuItem.getItemId()){
                             case R.id.sb_most_popular:
-                                sortBy.setText(SORTBY + ": " + getString(R.string.most_recent));
+                                sortBy.setText(SORTBY + ": " + getString(R.string.most_popular));
                                 Collections.sort(data, new Post.PopularityComparator());
                                 break;
                             case R.id.sb_least_popular:
-                                sortBy.setText(SORTBY + ": " + getString(R.string.least_recent));
+                                sortBy.setText(SORTBY + ": " + getString(R.string.least_popular));
                                 Collections.sort(data, new Post.PopularityComparator());
                                 Collections.reverse(data);
                                 break;
