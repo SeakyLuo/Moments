@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 
 public class DraftAdapter extends CustomAdapter{
-    public static final int FULL_POST = 1;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -41,8 +40,9 @@ public class DraftAdapter extends CustomAdapter{
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, FullPostActivity.class);
+                    intent.putExtra(EditPostActivity.DRAFT, data);
                     intent.putExtra(FullPostActivity.POST, data);
-                    ((Activity) context).startActivityForResult(intent, FULL_POST);
+                    ((Activity) context).startActivityForResult(intent, EditPostActivity.EDIT_POST);
                     ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
             });

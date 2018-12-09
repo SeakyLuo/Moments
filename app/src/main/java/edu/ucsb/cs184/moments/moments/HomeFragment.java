@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EditPostActivity.class);
-                startActivityForResult(intent, EditPostActivity.MAKE_POST);
+                startActivityForResult(intent, EditPostActivity.EDIT_POST);
                 getActivity().overridePendingTransition(R.anim.push_down_in, R.anim.push_up_out);
             }
         });
@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         switch (requestCode){
-            case EditPostActivity.MAKE_POST:
+            case EditPostActivity.EDIT_POST:
                 try {
                     fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
                     fragment.gotoTop();

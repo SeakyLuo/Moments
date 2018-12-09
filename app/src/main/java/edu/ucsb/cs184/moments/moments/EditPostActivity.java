@@ -13,14 +13,15 @@ import java.util.Calendar;
 
 public class EditPostActivity extends AppCompatActivity {
 
-    public static final String POST = "Post", GROUP = "Group";
-    public static final int MAKE_POST = 0;
+    public static final String POST = "Post", GROUP = "Group", DRAFT = "Draft";
+    public static final int EDIT_POST = 0;
 
     private ImageButton back;
     private ImageButton send;
     private EditText edit_content;
     private Intent intent;
     private Group group;
+    private Post draft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class EditPostActivity extends AppCompatActivity {
         back = findViewById(R.id.edit_cancel);
         send = findViewById(R.id.edit_send);
         group = intent.getParcelableExtra(GROUP);
-        // TODO: if this activity is initiated by UserDraftbox and the post is published, remember to delete from user draftbox
+        draft = intent.getParcelableExtra(DRAFT);
 
         edit_content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -60,13 +61,14 @@ public class EditPostActivity extends AppCompatActivity {
                     close();
                 }else {
                     // ask save to draft box
-                    String save_as_draft = getString(R.string.save_as_draft);
+                    String message = getString(draft == null ? R.string.save_as_draft : R.string.update_draft);
                     final AskYesNoDialog askYesNoDialog = new AskYesNoDialog();
-                    askYesNoDialog.showNow(getSupportFragmentManager(), save_as_draft);
-                    askYesNoDialog.setMessage(save_as_draft);
+                    askYesNoDialog.showNow(getSupportFragmentManager(), message);
+                    askYesNoDialog.setMessage(message);
                     askYesNoDialog.setOnYesListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            if (draft != null) User.user.removeDraft(draft);
                             User.user.saveAsDraft(getPost());
                             close();
                         }
@@ -88,10 +90,9 @@ public class EditPostActivity extends AppCompatActivity {
                 Intent callBack = new Intent();
                 Post post = getPost();
                 callBack.putExtra(POST, post);
-                if (group == null)
-                    User.user.addPost(post);
-                else
-                    group.addPost(post);
+                if (group == null) User.user.addPost(post);
+                else group.addPost(post);
+                if (draft != null) User.user.removeDraft(draft);
                 setResult(RESULT_OK, callBack);
                 close();
             }

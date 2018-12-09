@@ -85,7 +85,7 @@ public class PostAdapter extends CustomAdapter {
             usericon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!usericonClickable) return;
+                    if (!usericonClickable || data.IsAnonymous()) return;
                     Intent intent = new Intent(context, UserProfileActivity.class);
                     intent.putExtra(UserProfileActivity.USERID, data.getUserid());
                     context.startActivity(intent);

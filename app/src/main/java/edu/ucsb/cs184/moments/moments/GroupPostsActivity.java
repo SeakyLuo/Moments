@@ -52,7 +52,7 @@ public class GroupPostsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), EditPostActivity.class);
                 intent.putExtra(EditPostActivity.GROUP, group);
-                startActivityForResult(intent, EditPostActivity.MAKE_POST);
+                startActivityForResult(intent, EditPostActivity.EDIT_POST);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
@@ -95,7 +95,7 @@ public class GroupPostsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         switch (requestCode){
-            case EditPostActivity.MAKE_POST:
+            case EditPostActivity.EDIT_POST:
                 try {
                     fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
                 }catch (RecyclerViewFragment.UnsupportedDataException e) {
