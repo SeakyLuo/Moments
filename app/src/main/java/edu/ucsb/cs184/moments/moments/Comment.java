@@ -41,8 +41,16 @@ public class Comment implements Parcelable {
         } else {
             time = in.readLong();
         }
-        postKey = in.readParcelable(Post.Key.class.getClassLoader());
-        parent = in.readParcelable(Key.class.getClassLoader());
+        if (in.readByte() == 0) {
+            postKey = null;
+        } else {
+            postKey = in.readParcelable(Post.Key.class.getClassLoader());
+        }
+        if (in.readByte() == 0) {
+            parent = null;
+        } else {
+            parent = in.readParcelable(Key.class.getClassLoader());
+        }
         replies = in.createTypedArrayList(Comment.CREATOR);
         ratings = in.createTypedArrayList(Rating.CREATOR);
     }
@@ -57,8 +65,18 @@ public class Comment implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeLong(time);
         }
-        dest.writeParcelable(postKey, flags);
-        dest.writeParcelable(parent, flags);
+        if (postKey == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeParcelable(postKey, flags);
+        }
+        if (parent == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeParcelable(parent, flags);
+        }
         dest.writeTypedList(replies);
         dest.writeTypedList(ratings);
     }
@@ -163,6 +181,12 @@ public class Comment implements Parcelable {
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(userid);
             dest.writeLong(time);
+        }
+    }
+    public static class CommentComparator implements Comparator<Comment> {
+        @Override
+        public int compare(Comment o1, Comment o2) {
+            return new TimeComparator().compare(o1.GetKey(), o2.GetKey());
         }
     }
     public static class TimeComparator implements Comparator<Key> {

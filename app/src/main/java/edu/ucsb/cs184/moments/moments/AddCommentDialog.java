@@ -24,6 +24,7 @@ public class AddCommentDialog extends DialogFragment {
     private ImageButton camera, gallery, at, send;
     private Post post;
     private Comment comment;
+    private View.OnClickListener onSendListener;
 
     @Override
     public void onStart() {
@@ -66,11 +67,11 @@ public class AddCommentDialog extends DialogFragment {
             public void onClick(View v) {
                 String content = edit_comment.getText().toString();
                 if (content.trim().length() == 0) return;
-                Comment user_comment = null;
-                if (post != null) user_comment = new Comment(User.user.getId(), content, new Date().getTime(), post.GetKey());
-                else if (comment != null) user_comment = new Comment(User.user.getId(), content, new Date().getTime(), comment.GetKey());
+                if (post != null) comment = new Comment(User.user.getId(), content, new Date().getTime(), post.GetKey());
+                else if (comment != null) comment = new Comment(User.user.getId(), content, new Date().getTime(), comment.GetKey());
                 User.user.addComment(comment);
-                fragment.addElement(user_comment);
+                fragment.addElement(comment);
+                if (onSendListener != null) onSendListener.onClick(v);
                 dismiss();
             }
         });
@@ -83,5 +84,9 @@ public class AddCommentDialog extends DialogFragment {
     public void setCaller(EditText editText, FullPostCommentsFragment fragment){
         parent_comment = editText;
         this.fragment = fragment;
+    }
+
+    public void setOnSendListener(View.OnClickListener onSendListener){
+        this.onSendListener = onSendListener;
     }
 }

@@ -82,6 +82,12 @@ public class FullPostActivity extends AppCompatActivity {
 
         addCommentDialog.setCaller(edit_comment, commentsFragment);
         addCommentDialog.setPost(post);
+        addCommentDialog.setOnSendListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit_comment.setText("");
+            }
+        });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

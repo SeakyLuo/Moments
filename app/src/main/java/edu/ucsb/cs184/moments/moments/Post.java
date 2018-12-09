@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 public class Post implements Parcelable {
@@ -62,7 +63,7 @@ public class Post implements Parcelable {
     public String getContent() { return content; }
     public Long getTime() { return time; }
     public int comments_count() { return comments.size(); }
-    public ArrayList<Comment> getComments() { return comments; }
+    public ArrayList<Comment> getComments() { Collections.sort(comments, new Comment.CommentComparator());upload("comments", comments); return comments; }
     public int ratings_received() { return ratings.size(); }
     public Rating hasRated() {
         for (Rating rating: ratings)
@@ -92,7 +93,7 @@ public class Post implements Parcelable {
     public boolean postedInGroup() { return groupid != null; }
     public boolean containsKeyword(String keyword) { return content.contains(keyword); }
     public void addComment(Comment comment){
-        comments.add(comment);
+        comments.add(0, comment);
         upload("comments", comments);
     }
     public void addRating(Rating rating){
