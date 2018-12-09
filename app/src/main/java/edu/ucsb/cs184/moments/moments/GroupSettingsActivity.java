@@ -48,7 +48,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
             // activity is created for the first time, so basically
             // add the fragment to activity if and only if activity is new
             // when activity rotates, do nothing
-            transaction.add(R.id.settings_content, fragment, SETTINGS);
+            transaction.add(R.id.gs_content, fragment, SETTINGS);
         }
         transaction.commit();
     }
@@ -66,25 +66,47 @@ public class GroupSettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment {
-        private Preference name, number, sortby, quit;
+        private Preference icon, name, number, sortby, quit;
+        private boolean init = false;
+        private Group group;
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             // here we should call settings ui
-            addPreferencesFromResource(R.xml.group_preference);
+            addPreferencesFromResource(R.xml.group_preferences);
+            icon = findPreference("Group Icon");
             name = findPreference("Group Name");
             number = findPreference("Group Number");
             sortby = findPreference(getString(R.string.sort_by));
             quit = findPreference(getString(R.string.quit_group));
+            icon.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(getContext(), UploadIconActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    return false;
+                }
+            });
+            init = true;
+            if (group != null) setData(group);
         }
 
-        public void setData(final Group group){
+        public void setData(Group data){
+            group = data;
+            if (!init) return;
             name.setSummary(group.getName());
             name.setDefaultValue(group.getName());
             number.setSummary(group.getNumber() + "");
             // TODO: save group settings
             // Default
-            sortby.setSummary("Most Recent");
+            sortby.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    sortby.setSummary(newValue.toString());
+                    return true;
+                }
+            });
             quit.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {

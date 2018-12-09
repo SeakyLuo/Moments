@@ -22,7 +22,7 @@
     <EditTextPreference
         android:id="@+id/pg_intro"
         android:hint="Introduction"
-        android:summary="Introduction"
+        android:summary="Introduce this group"
         android:ellipsize="end"
         android:selectAllOnFocus="true"
         android:singleLine="true"

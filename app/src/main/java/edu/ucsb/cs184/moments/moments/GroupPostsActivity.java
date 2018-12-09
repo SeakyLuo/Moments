@@ -76,6 +76,11 @@ public class GroupPostsActivity extends AppCompatActivity {
         fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostAdapter());
         fragment.addHiddenView(fab);
+        try {
+            fragment.setData(group.getPosts());
+        } catch (RecyclerViewFragment.UnsupportedDataException e) {
+            e.printStackTrace();
+        }
         fragment.show(getSupportFragmentManager(), R.id.gp_content);
     }
 
