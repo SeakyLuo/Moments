@@ -97,14 +97,14 @@ public class CreateGroupActivity extends AppCompatActivity {
     private void uploadIcon(){
         Intent uu = new Intent(CreateGroupActivity.this, UploadIconActivity.class);
         uu.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
-        startActivityForResult(uu, UploadIconActivity.iconCode);
+        startActivityForResult(uu, UploadIconActivity.ICON_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
-        if (requestCode == UploadIconActivity.iconCode){
+        if (requestCode == UploadIconActivity.ICON_CODE){
             icon.setImageBitmap((Bitmap) data.getParcelableExtra(UploadIconActivity.ICON));
         }
     }

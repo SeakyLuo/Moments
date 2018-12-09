@@ -58,7 +58,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent ui = new Intent(EditUserProfileActivity.this, UploadIconActivity.class);
-                startActivityForResult(ui, UploadIconActivity.galleryCode);
+                startActivityForResult(ui, UploadIconActivity.GALLERY_CODE);
             }
         });
         name.setOnClickListener(new View.OnClickListener() {

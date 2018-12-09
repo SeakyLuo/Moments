@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import java.util.ArrayList;
@@ -179,6 +180,8 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
+                // TODO: Remove the line below
+                icon.setImageResource(R.drawable.user_icon);
                 intent.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
                 startActivityForResult(intent, EditUserProfileActivity.FINISH);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
@@ -197,6 +200,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void setUserProfile(){
         collapsingToolbarLayout.setTitle(user.getName());
+        Glide.with(this).load(user.GetIcon()).into(icon);
         username.setText(user.getName());
         user_number.setText("#" + user.getNumber());
         if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.GONE);

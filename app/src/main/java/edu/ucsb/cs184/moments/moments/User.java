@@ -278,6 +278,10 @@ public class User implements Parcelable {
                 searchHistory.remove(i);
         upload("searchHistory", searchHistory);
     }
+    public void clearDrafts(){
+        drafts.clear();
+        upload("drafts", drafts);
+    }
     public void clearHistory(){
         searchHistory.clear();
         upload("searchHistory", searchHistory);
