@@ -114,6 +114,8 @@ public class Group implements Parcelable {
     public void removeMember(String userid){
         members.remove(userid);
         upload("members", members);
+        if (members.size() == 0)
+            FirebaseHelper.removeGroup(id);
     }
     public void removePost(Post post){
         posts.remove(post);

@@ -16,8 +16,8 @@ public class EditPostActivity extends AppCompatActivity {
     public static final String POST = "Post", GROUP = "Group", DRAFT = "Draft";
     public static final int EDIT_POST = 0;
 
-    private ImageButton back;
-    private ImageButton send;
+    private ImageButton back, send;
+    private ImageButton hashtag, at;
     private EditText edit_content;
     private Intent intent;
     private Group group;
@@ -32,6 +32,8 @@ public class EditPostActivity extends AppCompatActivity {
         edit_content = findViewById(R.id.edit_content);
         back = findViewById(R.id.edit_cancel);
         send = findViewById(R.id.edit_send);
+        at = findViewById(R.id.edit_at);
+        hashtag = findViewById(R.id.edit_hashtag);
         group = intent.getParcelableExtra(GROUP);
         draft = intent.getParcelableExtra(DRAFT);
 
@@ -81,6 +83,20 @@ public class EditPostActivity extends AppCompatActivity {
                         }
                     });
                 }
+            }
+        });
+        at.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit_content.setText(edit_content.getText() + "@");
+            }
+        });
+        hashtag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = edit_content.getText() + "##";
+                edit_content.setText(text);
+                edit_content.setSelection(text.length() - 1);
             }
         });
         send.setOnClickListener(new View.OnClickListener() {

@@ -153,6 +153,10 @@ public class FirebaseHelper {
         }).start();
     }
 
+    public static void removeGroup(final String id){
+        gdb.child(id).removeValue();
+    }
+
     public static User findUser(String id){
         return uds.child(id).getValue(User.class);
     }
