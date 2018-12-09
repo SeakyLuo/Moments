@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
-        android:id="@+id/pg_icon"
+        android:id="@+id/gp_icon"
         android:key="Group Icon"
         android:title="Group Icon"/>
     <EditTextPreference
-        android:id="@+id/pg_name"
+        android:id="@+id/gp_name"
         android:defaultValue="Group Name"
         android:summary="Group Name"
         android:selectAllOnFocus="true"
@@ -15,12 +14,17 @@
         android:key="Group Name"
         android:title="Group Name" />
     <Preference
-        android:id="@+id/pg_group_number"
+        android:id="@+id/gp_group_number"
         android:title="Group Number"
         android:key="Group Number"
         android:summary="10000000"/>
+    <Preference
+        android:id="@+id/gp_group_members"
+        android:key="Group Members"
+        android:title="Group Members"
+        android:summary="0"/>
     <EditTextPreference
-        android:id="@+id/pg_intro"
+        android:id="@+id/gp_intro"
         android:hint="Introduction"
         android:summary="Introduce this group"
         android:ellipsize="end"
@@ -41,7 +45,7 @@
         android:key="@string/receive_notification"
         android:title="@string/receive_notification" />
     <Preference
-        android:id="@+id/pg_quit_group"
+        android:id="@+id/gp_quit_group"
         android:key="@string/quit_group"
         android:title="@string/quit_group"/>
 

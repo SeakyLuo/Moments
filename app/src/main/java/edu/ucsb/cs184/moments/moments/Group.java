@@ -20,6 +20,7 @@ public class Group implements Parcelable {
     // private group?
     private ArrayList<String> members = new ArrayList<>();
     private ArrayList<Post> posts = new ArrayList<>();
+    private ArrayList<Message> messages = new ArrayList<>();
 
     public Group(){}
 
@@ -93,6 +94,8 @@ public class Group implements Parcelable {
         upload("intro", intro);
     }
     public ArrayList<String> getMembers() { return members; }
+    public int getMemberSize() { return members.size(); }
+    public boolean hasMember(String userid) { return members.contains(userid); }
     public ArrayList<Post> getPosts() { return posts; }
     public void modifyIcon(Bitmap bitmap){
         this.icon = id + ".jpg";
