@@ -64,11 +64,7 @@ public class Post implements Parcelable {
     public String getContent() { return content; }
     public Long getTime() { return time; }
     public int comments_count() { return comments.size(); }
-    // Should NOT be called
-    public void setComments(ArrayList<Comment> comments) { this.comments = comments; }
     public ArrayList<Comment> getComments() { return comments; }
-    // Should NOT be called
-    public void setRatings(ArrayList<Rating> ratings) { this.ratings = ratings; }
     public int ratings_received() { return ratings.size(); }
     public Rating hasRated() {
         for (Rating rating: ratings)

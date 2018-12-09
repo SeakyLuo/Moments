@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
             }
         });
         try {
-            fragment.addElements(0, User.user.getTimeline());
+            fragment.setData(User.user.getTimeline());
         } catch (Exception e) {
             e.printStackTrace();
         }

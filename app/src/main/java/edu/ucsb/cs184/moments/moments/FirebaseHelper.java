@@ -208,6 +208,7 @@ public class FirebaseHelper {
     public static Post findPost(Post.Key key) {
         for (DataSnapshot ds: uds.child(key.userid).child("posts").getChildren()){
             Post data = ds.getValue(Post.class);
+            ArrayList<Rating> arrayList = (ArrayList<Rating>) ds.child("ratings").getValue();
             if (data.GetKey().equals(key))
                 return data;
         }
