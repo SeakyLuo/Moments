@@ -70,7 +70,7 @@ public class EditPostActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             if (draft != null) User.user.removeDraft(draft);
-                            User.user.saveAsDraft(getPost());
+                            User.user.addDraft(getPost());
                             close();
                         }
                     });

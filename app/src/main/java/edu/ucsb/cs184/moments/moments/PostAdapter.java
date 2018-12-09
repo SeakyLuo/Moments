@@ -1,8 +1,15 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.view.menu.MenuBuilder;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +52,49 @@ public class PostAdapter extends CustomAdapter {
         long delta_day = delta_hour / 24;
         if (delta_day < 7) return delta_day + " day"+ ((delta_day == 1) ? "" : "s") +" ago";
         return new SimpleDateFormat("yyyy-MM-dd").format(time);
+    }
+
+    public static void setContent(final Context context, TextView textView, final String content){
+        String substr = content;
+        int index = substr.indexOf("@");
+        SpannableString spannableString = new SpannableString(content);
+        while(index != -1){
+            int space = substr.indexOf(" ");
+            if (space == -1){
+                space = substr.length();
+            }
+            final String name = substr.substring(index + 1, space);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    User user = User.findUserWithName(name);
+                    if (name == null)
+                        Toast.makeText(context, "User " + name + "not found!" , Toast.LENGTH_SHORT).show();
+                    else{
+                        Intent intent = new Intent(context, UserProfileActivity.class);
+                        intent.putExtra(UserProfileActivity.USERID, user.getId());
+                        context.startActivity(intent);
+                        ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    }
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setColor(context.getColor(R.color.DeepBlue));
+                    ds.setUnderlineText(false);
+                }
+            };
+            spannableString.setSpan(clickableSpan, index, space, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            try{
+                substr = substr.substring(space + 1);
+                index = substr.indexOf("@");
+            }catch (StringIndexOutOfBoundsException e){
+                break;
+            }
+        }
+        textView.setText(spannableString);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     public class ViewHolder extends CustomAdapter.CustomViewHolder {
@@ -166,11 +216,12 @@ public class PostAdapter extends CustomAdapter {
             Glide.with(context).load(user.GetIcon()).into(usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
-            content.setText(data.getContent());
+            setContent(context, content, data.getContent());
             Rating rating = data.hasRated();
             ratingBar.setRating((rating == null) ? data.ratings_avg() : rating.getRating());
             setCollect(User.user.hasCollected(data));
         }
+
 
         public void setCollect(boolean Collect){
             collect.setImageResource(Collect ? R.drawable.ic_heart_filled : R.drawable.ic_heart);

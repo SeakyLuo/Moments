@@ -281,6 +281,15 @@ public class FirebaseHelper {
         }).start();
     }
 
+    public static User findUserWithName(String name){
+        for (DataSnapshot ds: uds.getChildren()){
+            User user = ds.getValue(User.class);
+            if (user.getName().equals(name))
+                return user;
+        }
+        return null;
+    }
+
     public static void setOnUDBReceivedListener(OnUDBReceivedListener listener){
         uReceivedListener = listener;
     }

@@ -369,7 +369,7 @@ public class User implements Parcelable {
         post.removeRating(rating);
         if (!remove) post.addRating(rating);
     }
-    public void saveAsDraft(Post post){
+    public void addDraft(Post post){
         drafts.add(0, post);
         upload("drafts", drafts);
     }
@@ -398,5 +398,9 @@ public class User implements Parcelable {
     public static User findUser(String id){
         if (User.user != null && User.user.getId().equals(id)) return User.user;
         return FirebaseHelper.findUser(id);
+    }
+    public static User findUserWithName(String name){
+        if (User.user != null && User.user.getName().equals(name)) return User.user;
+        return FirebaseHelper.findUserWithName(name);
     }
 }
