@@ -393,10 +393,6 @@ public class User implements Parcelable {
         atMe.add(0, post.GetKey());
         upload("atMe", atMe);
     }
-    public void removeAtMe(Post post){
-        atMe.remove(post.GetKey());
-        upload("atMe", atMe);
-    }
     private void upload(String key, Object value){
         FirebaseHelper.updateUser(id, key, value);
     }
