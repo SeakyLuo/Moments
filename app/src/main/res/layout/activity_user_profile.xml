@@ -76,131 +76,131 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/up_swipeFreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/up_swipeFreshLayout"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:nestedScrollingEnabled="false"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/up_cardview"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="0dp">
+                    android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="vertical">
 
-                    <android.support.constraint.ConstraintLayout
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/up_cardview"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="0dp">
 
-                        <ImageView
-                            android:id="@+id/up_usericon"
-                            android:layout_width="@dimen/user_icon_profile"
-                            android:layout_height="@dimen/user_icon_profile"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:clickable="true"
-                            android:elevation="4dp"
-                            android:scaleType="centerCrop"
-                            android:src="@android:drawable/sym_def_app_icon"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        <android.support.constraint.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/up_username"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:maxLines="1"
-                            android:text="Username"
-                            android:textColor="@color/BlackGray"
-                            android:textSize="19sp"
-                            app:layout_constraintStart_toStartOf="@+id/up_usericon"
-                            app:layout_constraintTop_toBottomOf="@+id/up_usericon" />
+                            <ImageView
+                                android:id="@+id/up_usericon"
+                                android:layout_width="@dimen/user_icon_profile"
+                                android:layout_height="@dimen/user_icon_profile"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="16dp"
+                                android:clickable="true"
+                                android:elevation="4dp"
+                                android:scaleType="centerCrop"
+                                android:src="@android:drawable/sym_def_app_icon"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/up_intro"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:text="Intro: "
-                            android:textColor="@color/BlackGray"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@+id/up_username"
-                            app:layout_constraintTop_toBottomOf="@+id/up_username" />
+                            <TextView
+                                android:id="@+id/up_username"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:maxLines="1"
+                                android:text="Username"
+                                android:textColor="@color/BlackGray"
+                                android:textSize="19sp"
+                                app:layout_constraintStart_toStartOf="@+id/up_usericon"
+                                app:layout_constraintTop_toBottomOf="@+id/up_usericon" />
 
-                        <TextView
-                            android:id="@+id/up_followers"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="28dp"
-                            android:clickable="true"
-                            android:text="Followers: 0"
-                            app:layout_constraintBottom_toBottomOf="@+id/up_following"
-                            app:layout_constraintStart_toEndOf="@+id/up_following" />
+                            <TextView
+                                android:id="@+id/up_intro"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:text="Intro: "
+                                android:textColor="@color/BlackGray"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/up_username"
+                                app:layout_constraintTop_toBottomOf="@+id/up_username" />
 
-                        <TextView
-                            android:id="@+id/up_following"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="16dp"
-                            android:clickable="true"
-                            android:text="Following: 0"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="@+id/up_intro"
-                            app:layout_constraintTop_toBottomOf="@+id/up_intro" />
+                            <TextView
+                                android:id="@+id/up_followers"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="28dp"
+                                android:clickable="true"
+                                android:text="Followers: 0"
+                                app:layout_constraintBottom_toBottomOf="@+id/up_following"
+                                app:layout_constraintStart_toEndOf="@+id/up_following" />
 
-                        <ImageButton
-                            android:id="@+id/up_message"
-                            android:layout_width="@dimen/button_size"
-                            android:layout_height="@dimen/button_size_small"
-                            android:layout_marginEnd="16dp"
-                            android:background="@drawable/button_border_green"
-                            app:layout_constraintEnd_toStartOf="@+id/up_follow"
-                            app:layout_constraintTop_toTopOf="@+id/up_edit"
-                            app:srcCompat="@drawable/ic_mail" />
+                            <TextView
+                                android:id="@+id/up_following"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="16dp"
+                                android:clickable="true"
+                                android:text="Following: 0"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/up_intro"
+                                app:layout_constraintTop_toBottomOf="@+id/up_intro" />
 
-                        <ImageButton
-                            android:id="@+id/up_follow"
-                            android:layout_width="@dimen/button_size"
-                            android:layout_height="@dimen/button_size_small"
-                            android:layout_marginEnd="16dp"
-                            android:background="@drawable/button_border_orange"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/up_message"
-                            app:srcCompat="@drawable/ic_follow" />
+                            <ImageButton
+                                android:id="@+id/up_message"
+                                android:layout_width="@dimen/button_size"
+                                android:layout_height="@dimen/button_size_small"
+                                android:layout_marginEnd="16dp"
+                                android:background="@drawable/button_border_green"
+                                app:layout_constraintEnd_toStartOf="@+id/up_follow"
+                                app:layout_constraintTop_toTopOf="@+id/up_edit"
+                                app:srcCompat="@drawable/ic_mail" />
 
-                        <ImageButton
-                            android:id="@+id/up_edit"
-                            android:layout_width="@dimen/button_size"
-                            android:layout_height="@dimen/button_size_small"
-                            android:layout_marginEnd="16dp"
-                            android:background="@drawable/button_border_orange"
-                            app:layout_constraintEnd_toStartOf="@+id/up_message"
-                            app:layout_constraintTop_toTopOf="@+id/up_usericon"
-                            app:srcCompat="@drawable/ic_edit" />
+                            <ImageButton
+                                android:id="@+id/up_follow"
+                                android:layout_width="@dimen/button_size"
+                                android:layout_height="@dimen/button_size_small"
+                                android:layout_marginEnd="16dp"
+                                android:background="@drawable/button_border_orange"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/up_message"
+                                app:srcCompat="@drawable/ic_follow" />
 
-                        <ImageView
-                            android:id="@+id/up_gender"
-                            android:layout_width="@dimen/icon_size_small"
-                            android:layout_height="@dimen/icon_size_small"
-                            android:layout_marginStart="12dp"
-                            app:layout_constraintBottom_toBottomOf="@+id/up_username"
-                            app:layout_constraintStart_toEndOf="@+id/up_username"
-                            app:layout_constraintTop_toTopOf="@+id/up_username"
-                            app:srcCompat="@drawable/ic_male" />
+                            <ImageButton
+                                android:id="@+id/up_edit"
+                                android:layout_width="@dimen/button_size"
+                                android:layout_height="@dimen/button_size_small"
+                                android:layout_marginEnd="16dp"
+                                android:background="@drawable/button_border_orange"
+                                app:layout_constraintEnd_toStartOf="@+id/up_message"
+                                app:layout_constraintTop_toTopOf="@+id/up_usericon"
+                                app:srcCompat="@drawable/ic_edit" />
+
+                            <ImageView
+                                android:id="@+id/up_gender"
+                                android:layout_width="@dimen/icon_size_small"
+                                android:layout_height="@dimen/icon_size_small"
+                                android:layout_marginStart="12dp"
+                                app:layout_constraintBottom_toBottomOf="@+id/up_username"
+                                app:layout_constraintStart_toEndOf="@+id/up_username"
+                                app:layout_constraintTop_toTopOf="@+id/up_username"
+                                app:srcCompat="@drawable/ic_male" />
 
                     </android.support.constraint.ConstraintLayout>
                 </android.support.v7.widget.CardView>
@@ -247,8 +247,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
-        </android.support.v4.widget.SwipeRefreshLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.design.widget.CoordinatorLayout>
