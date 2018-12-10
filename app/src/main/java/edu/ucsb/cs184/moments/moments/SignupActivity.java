@@ -143,19 +143,7 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
         String cpassword = _cpasswordText.getText().toString();
 
-        if (name.trim().length() < 2) {
-            _nameText.setError("Username should have at least 2 characters");
-            valid = false;
-        }else if (name.trim().length() > 40) {
-            _nameText.setError("Username cannot have more than 40 characters");
-            valid = false;
-        }else if (name.contains(" ")){
-            _nameText.setError("You cannot have space in your name.");
-            valid = false;
-        }else if (FirebaseHelper.findUserWithName(name) != null){
-            _nameText.setError("This name has been used.");
-            valid = false;
-        }
+        valid = checkName(_nameText, name);
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _emailText.setError(LoginActivity.INVALID_EMAIL);
             valid = false;
@@ -169,6 +157,24 @@ public class SignupActivity extends AppCompatActivity {
         }
         if (!cpassword.equals(password)) {
             _cpasswordText.setError("Passwords NOT match!");
+            valid = false;
+        }
+        return valid;
+    }
+
+    public static boolean checkName(EditText editText, String name){
+        boolean valid = true;
+        if (name.trim().length() < 2) {
+            editText.setError("Username should have at least 2 characters");
+            valid = false;
+        }else if (name.trim().length() > 40) {
+            editText.setError("Username cannot have more than 40 characters");
+            valid = false;
+        }else if (name.contains(" ")){
+            editText.setError("You cannot have space in your name.");
+            valid = false;
+        }else if (FirebaseHelper.findUserWithName(name) != null){
+            editText.setError("This name has been used.");
             valid = false;
         }
         return valid;

@@ -270,6 +270,7 @@ public class FullPostActivity extends AppCompatActivity {
     }
 
     private void showAddComment(){
-        addCommentDialog.showNow(getSupportFragmentManager(), ADD_COMMENT);
+        if (!addCommentDialog.isAdded())
+            addCommentDialog.showNow(getSupportFragmentManager(), ADD_COMMENT);
     }
 }

@@ -37,7 +37,7 @@ public class InputDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (cancelListener != null)
-                    cancelListener.onClick(text.getText().toString());
+                    cancelListener.onClick(text);
                 dismiss();
             }
         });
@@ -45,7 +45,7 @@ public class InputDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (saveListener != null)
-                    saveListener.onClick(text.getText().toString());
+                    saveListener.onClick(text);
                 dismiss();
             }
         });
@@ -62,6 +62,6 @@ public class InputDialog extends DialogFragment {
     public void setOnSaveListener(OnClickListener listener) { saveListener = listener; }
 
     public interface OnClickListener{
-        void onClick(String text);
+        void onClick(EditText editText);
     }
 }

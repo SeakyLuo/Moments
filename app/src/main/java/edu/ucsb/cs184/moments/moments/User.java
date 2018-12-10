@@ -246,7 +246,7 @@ public class User implements Parcelable {
         upload("followers", followers);
     }
     public void refreshTimeline(){
-        timeline.addAll(postsNotification);
+        timeline.addAll(0, postsNotification);
         Collections.sort(timeline, new Post.TimeComparator());
         upload("timeline", timeline);
         postsNotification.clear();
@@ -256,14 +256,14 @@ public class User implements Parcelable {
 
     }
     public void refreshCommentsRecv(){
-        commentsRecv.addAll(commentsNotification);
+        commentsRecv.addAll(0, commentsNotification);
         Collections.sort(commentsRecv, new Comment.TimeComparator());
         upload("commentsRecv", commentsRecv);
         commentsNotification.clear();
         upload("commentsNotification", commentsNotification);
     }
     public void refreshRatingsRecv(){
-        ratingsRecv.addAll(ratingsNotification);
+        ratingsRecv.addAll(0, ratingsNotification);
         Collections.sort(ratingsRecv, new Rating.TimeComparator());
         upload("ratingsRecv", ratingsRecv);
         ratingsNotification.clear();
