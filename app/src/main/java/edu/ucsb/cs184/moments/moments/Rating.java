@@ -29,7 +29,11 @@ public class Rating implements Parcelable {
         } else {
             time = in.readLong();
         }
-        postKey = in.readParcelable(Post.Key.class.getClassLoader());
+        if (in.readByte() == 0) {
+            postKey = null;
+        } else {
+            postKey = in.readParcelable(Post.Key.class.getClassLoader());
+        }
     }
 
     @Override

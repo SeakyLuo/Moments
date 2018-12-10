@@ -14,7 +14,7 @@ public class Comment implements Parcelable {
     private String content;
     private Long time;
     private Post.Key postKey;
-    private Comment.Key parent;
+//    private Comment.Key parent;
 
     private ArrayList<Comment> replies = new ArrayList<>();
     private ArrayList<Rating> ratings = new ArrayList<>();
@@ -30,7 +30,7 @@ public class Comment implements Parcelable {
         this.userid = userid;
         this.content = content;
         this.time = time;
-        this.parent = parent;
+//        this.parent = parent;
     }
 
     protected Comment(Parcel in) {
@@ -46,11 +46,11 @@ public class Comment implements Parcelable {
         } else {
             postKey = in.readParcelable(Post.Key.class.getClassLoader());
         }
-        if (in.readByte() == 0) {
-            parent = null;
-        } else {
-            parent = in.readParcelable(Key.class.getClassLoader());
-        }
+//        if (in.readByte() == 0) {
+//            parent = null;
+//        } else {
+//            parent = in.readParcelable(Key.class.getClassLoader());
+//        }
         replies = in.createTypedArrayList(Comment.CREATOR);
         ratings = in.createTypedArrayList(Rating.CREATOR);
     }
@@ -71,12 +71,12 @@ public class Comment implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeParcelable(postKey, flags);
         }
-        if (parent == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeParcelable(parent, flags);
-        }
+//        if (parent == null) {
+//            dest.writeByte((byte) 0);
+//        } else {
+//            dest.writeByte((byte) 1);
+//            dest.writeParcelable(parent, flags);
+//        }
         dest.writeTypedList(replies);
         dest.writeTypedList(ratings);
     }
@@ -114,8 +114,8 @@ public class Comment implements Parcelable {
     public Long getTime() { return time; }
     public Key GetKey() { return new Key(userid, time); }
     public Post.Key getPostKey() { return postKey; }
-    public Comment.Key getParent() { return parent; }
-    public Boolean hasParent() { return parent == null; }
+//    public Comment.Key getParent() { return parent; }
+//    public Boolean hasParent() { return parent == null; }
 
     @Override
     public boolean equals(@Nullable Object obj) {
