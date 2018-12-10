@@ -23,8 +23,7 @@ public class RecyclerViewFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private CustomAdapter adapter;
-    private boolean showDivider = false;
-    private boolean swipeEnabled = true;
+    private boolean showDivider = false, swipeEnabled = true, nestedScrolling = true;
     private int lMargin = 0, rMargin = 0, tMargin = 0, bMargin = 0;
     private ArrayList<View> hideViews = new ArrayList<>();
     private ArrayList<OnRefreshListener> listeners = new ArrayList<>();
@@ -40,6 +39,7 @@ public class RecyclerViewFragment extends Fragment {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(lMargin, tMargin, rMargin, bMargin);
         recyclerView.setLayoutManager(linearLayout);
+        recyclerView.setNestedScrollingEnabled(nestedScrolling);
         recyclerView.setAdapter(adapter);
         adapter.setActivity(getActivity());
         if (showDivider) recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
@@ -79,6 +79,7 @@ public class RecyclerViewFragment extends Fragment {
         tMargin = t; bMargin = b; lMargin = l; rMargin = r;
     }
 
+    public void setNestedScrollingEnabled(boolean enabled){ nestedScrolling = enabled; }
     public void setShowDivider(boolean showDivider){
         this.showDivider = showDivider;
     }
