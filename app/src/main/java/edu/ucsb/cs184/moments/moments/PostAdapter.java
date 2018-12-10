@@ -55,16 +55,30 @@ public class PostAdapter extends CustomAdapter {
     }
 
     public static void setContent(final Context context, TextView textView, final String content){
-        String substr = content;
-        int at = substr.indexOf("@"), hashtag = substr.indexOf("#");
+        int at, hashtag, start = 0, end;
         SpannableString spannableString = new SpannableString(content);
-        while (at != -1 || hashtag != -1){
-            final int start = (at < 0) ? hashtag : ((at < hashtag || hashtag < 0) ? at : hashtag);
+        while (true){
+            at = content.substring(start).indexOf("@");
+            hashtag = content.substring(start).indexOf("#");
+            if (at < 0 && hashtag < 0) break;
+            if (at != -1) at += start;
+            if (hashtag != -1) hashtag += start;
+            start = (at < 0) ? hashtag : ((at < hashtag || hashtag < 0) ? at : hashtag);
             final boolean isAt = start == at;
-            int end = isAt ? substr.indexOf(" ") : (substr.substring(1).indexOf("#") + 1);
-            if (end == -1) end = substr.length();
-            final String target = substr.substring(start + (isAt ? 1 : 0), end + (isAt ? 0 : 1));
-            if (!target.isEmpty()){
+            // if last char, break
+            if (start + 1 == content.length()) break;
+            if (isAt){
+                end = content.substring(start + 1).indexOf(" ");
+                if (end == -1) end = content.length();
+                else end += start + 1;
+            }else{
+                end = content.substring(start + 1).indexOf("#");
+                if (end == -1) break;
+                else end += start + 1;
+            }
+            String word = content.substring(start + 1, end);
+            if (!word.isEmpty()){
+                final String target = isAt ? word : ("#" + word + "#");
                 ClickableSpan clickableSpan = new ClickableSpan() {
                     @Override
                     public void onClick(View widget) {
@@ -96,13 +110,8 @@ public class PostAdapter extends CustomAdapter {
                 };
                 spannableString.setSpan(clickableSpan, start, end + (isAt ? 0 : 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            try{
-                substr = substr.substring(end + (isAt ? 1 : 2));
-                at = substr.indexOf("@");
-                hashtag = substr.indexOf("#");
-            }catch (StringIndexOutOfBoundsException e){
-                break;
-            }
+            if (end + 1 == content.length()) break;
+            start = end + 1;
         }
         textView.setText(spannableString);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
