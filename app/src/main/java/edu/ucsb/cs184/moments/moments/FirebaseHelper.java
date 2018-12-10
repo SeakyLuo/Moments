@@ -213,19 +213,15 @@ public class FirebaseHelper {
         return null;
     }
     public static Comment findComment(Comment.Key key){
-        for (DataSnapshot ds: uds.child(key.userid).child("posts/comments").getChildren()){
-            Comment data = ds.getValue(Comment.class);
-            if (data.GetKey().equals(key))
+        for (Comment data: Post.powerfulFindPost(key.postKey).getComments())
+            if (data.equals(key))
                 return data;
-        }
         return null;
     }
     public static Rating findRating(Rating.Key key){
-        for (DataSnapshot ds: uds.child(key.userid).child("posts/ratings").getChildren()){
-            Rating data = ds.getValue(Rating.class);
-            if (data.GetKey().equals(key))
+        for (Rating data: Post.powerfulFindPost(key.postKey).getRatings())
+            if (data.equals(key))
                 return data;
-        }
         return null;
     }
 

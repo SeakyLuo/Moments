@@ -112,7 +112,7 @@ public class Comment implements Parcelable {
     public String getUserid() { return userid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
-    public Key GetKey() { return new Key(userid, time); }
+    public Key GetKey() { return new Key(userid, time, postKey); }
     public Post.Key getPostKey() { return postKey; }
 //    public Comment.Key getParent() { return parent; }
 //    public Boolean hasParent() { return parent == null; }
@@ -137,15 +137,30 @@ public class Comment implements Parcelable {
     public static class Key implements Parcelable{
         String userid;
         Long time;
+        Post.Key postKey;
         public Key() {}
-        public Key(String userid, Long time){
+        public Key(String userid, Long time, Post.Key postKey){
             this.userid = userid;
             this.time = time;
+            this.postKey = postKey;
         }
 
         protected Key(Parcel in) {
             userid = in.readString();
             time = in.readLong();
+            postKey = in.readParcelable(Post.Key.class.getClassLoader());
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(userid);
+            dest.writeLong(time);
+            dest.writeParcelable(postKey, flags);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
         public static final Creator<Key> CREATOR = new Creator<Key>() {
@@ -167,18 +182,7 @@ public class Comment implements Parcelable {
             if (!(obj instanceof Key))
                 return false;
             Key k = (Key) obj;
-            return time.equals(k.time) && userid.equals(k.userid);
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(userid);
-            dest.writeLong(time);
+            return postKey.equals(k.postKey) && userid.equals(k.userid);
         }
     }
     public static class CommentComparator implements Comparator<Comment> {
