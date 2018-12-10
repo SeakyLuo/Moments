@@ -19,7 +19,7 @@ public class User implements Parcelable {
     private String id;
     private String name;
     private String intro = "";
-    private String icon = "user_icon.jpg";
+    private String icon;
     private String gender = "Unknown";
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> drafts = new ArrayList<>();
@@ -43,6 +43,7 @@ public class User implements Parcelable {
     public User(String id, String name){
         this.name = name;
         this.id = id;
+        this.icon = "user_icon.jpg";
     }
 
     protected User(Parcel in) {
@@ -56,6 +57,7 @@ public class User implements Parcelable {
         collections = in.createTypedArrayList(Post.Key.CREATOR);
         commentsRecv = in.createTypedArrayList(Comment.Key.CREATOR);
         ratingsRecv = in.createTypedArrayList(Rating.Key.CREATOR);
+        messages = in.createTypedArrayList(Message.CREATOR);
         groups = in.createStringArrayList();
         followers = in.createStringArrayList();
         following = in.createStringArrayList();
@@ -65,34 +67,6 @@ public class User implements Parcelable {
         ratingsNotification = in.createTypedArrayList(Rating.Key.CREATOR);
         timeline = in.createTypedArrayList(Post.Key.CREATOR);
         searchHistory = in.createTypedArrayList(SearchPair.CREATOR);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(name);
-        dest.writeString(intro);
-        dest.writeString(icon);
-        dest.writeString(gender);
-        dest.writeTypedList(posts);
-        dest.writeTypedList(drafts);
-        dest.writeTypedList(collections);
-        dest.writeTypedList(commentsRecv);
-        dest.writeTypedList(ratingsRecv);
-        dest.writeStringList(groups);
-        dest.writeStringList(followers);
-        dest.writeStringList(following);
-        dest.writeTypedList(atMe);
-        dest.writeTypedList(commentsNotification);
-        dest.writeTypedList(postsNotification);
-        dest.writeTypedList(ratingsNotification);
-        dest.writeTypedList(timeline);
-        dest.writeTypedList(searchHistory);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -108,6 +82,7 @@ public class User implements Parcelable {
     };
 
     public StorageReference GetIcon() {
+        if (icon == null) icon = "user_icon.jpg";
         return FirebaseHelper.getIcon(FirebaseHelper.USER_ICON, icon);
     }
     public void modifyIcon(Bitmap bitmap){
@@ -182,7 +157,8 @@ public class User implements Parcelable {
     public boolean IsAnonymous() { return id.equals(ANONYMOUS); }
     public boolean mutualFollow(String userid) { return !id.equals(userid) && following.contains(userid) && findUser(userid).following.contains(id); }
     public boolean inGroup(String groupid) { return groups.contains(groupid); }
-    public boolean isFollowing(String userid) { return !id.equals(userid) &&  following.contains(userid); }
+    public boolean isFollowing(String userid) { return !id.equals(userid) && following.contains(userid); }
+    public boolean isUser(String userid) { return id.equals(userid); }
     public boolean hasCollected(Post post) { return collections.contains(post.GetKey()); }
     public boolean hasNewPost() { return postsNotification.size() > 0; }
     public boolean hasNewComment() { return commentsNotification.size() > 0; }
@@ -247,17 +223,22 @@ public class User implements Parcelable {
         else followers.add(0, followerid);
         upload("followers", followers);
     }
-    public void refreshTimeline(){
+    public int refreshTimeline(){
+        int count = postsNotification.size();
         timeline.addAll(0, postsNotification);
         Collections.sort(timeline, new Post.TimeComparator());
         upload("timeline", timeline);
         postsNotification.clear();
         upload("postsNotification", postsNotification);
+        return count;
     }
     public void refreshGroups(){
 
     }
     public void refreshCommentsRecv(){
+        for (Comment.Key key: (ArrayList<Comment.Key>) commentsNotification.clone())
+            if (!key.postKey.userid.equals(id))
+                commentsNotification.remove(key);
         commentsRecv.addAll(0, commentsNotification);
         Collections.sort(commentsRecv, new Comment.TimeComparator());
         upload("commentsRecv", commentsRecv);
@@ -410,5 +391,34 @@ public class User implements Parcelable {
     public static User findUserWithName(String name){
         if (User.user != null && User.user.getName().equals(name)) return User.user;
         return FirebaseHelper.findUserWithName(name);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(intro);
+        dest.writeString(icon);
+        dest.writeString(gender);
+        dest.writeTypedList(posts);
+        dest.writeTypedList(drafts);
+        dest.writeTypedList(collections);
+        dest.writeTypedList(commentsRecv);
+        dest.writeTypedList(ratingsRecv);
+        dest.writeTypedList(messages);
+        dest.writeStringList(groups);
+        dest.writeStringList(followers);
+        dest.writeStringList(following);
+        dest.writeTypedList(atMe);
+        dest.writeTypedList(commentsNotification);
+        dest.writeTypedList(postsNotification);
+        dest.writeTypedList(ratingsNotification);
+        dest.writeTypedList(timeline);
+        dest.writeTypedList(searchHistory);
     }
 }

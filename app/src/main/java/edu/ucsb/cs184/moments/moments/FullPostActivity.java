@@ -153,14 +153,6 @@ public class FullPostActivity extends AppCompatActivity {
                 int position = tab.getPosition();
                 mViewPager.setCurrentItem(position, true);
                 tab.select();
-                switch (position){
-                    case 0:
-                        //
-                        break;
-                    case 1:
-                        ratingsFragment.setRating(post);
-                        break;
-                }
             }
 
             @Override
@@ -173,6 +165,7 @@ public class FullPostActivity extends AppCompatActivity {
 
             }
         });
+        mViewPager.setSwipeable(false);
         poster_icon.setClickable(true);
         poster_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,6 +225,7 @@ public class FullPostActivity extends AppCompatActivity {
         comments_counter.setText(comments_count + "");
         comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
         commentsFragment.setData(post.getComments());
+        ratingsFragment.setRating(post);
         setCollect(User.user.hasCollected(post));
         collect.setOnClickListener(new View.OnClickListener() {
             @Override

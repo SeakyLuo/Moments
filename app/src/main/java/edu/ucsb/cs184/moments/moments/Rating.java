@@ -77,10 +77,8 @@ public class Rating implements Parcelable {
     public Key GetKey(){ return new Key(raterId, time, postKey); }
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj == null)
-            return false;
-        if (!(obj instanceof Post))
-            return false;
+        if (obj == null) return false;
+        if (!(obj instanceof Rating)) return false;
         return GetKey().equals(((Rating) obj).GetKey());
     }
     @Override
@@ -135,10 +133,8 @@ public class Rating implements Parcelable {
 
         @Override
         public boolean equals(@Nullable Object obj) {
-            if (obj == null)
-                return false;
-            if (!(obj instanceof Key))
-                return false;
+            if (obj == null) return false;
+            if (!(obj instanceof Key)) return false;
             Key k = (Key) obj;
             return postKey.equals(k.postKey) && userid.equals(k.userid);
         }

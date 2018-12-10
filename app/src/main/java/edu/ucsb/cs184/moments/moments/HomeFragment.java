@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -93,7 +94,9 @@ public class HomeFragment extends Fragment {
                     // TODO: see below
                     // Not a good algorithm
                     // Should add new posts only
-                    User.user.refreshTimeline();
+                    int count = User.user.refreshTimeline();
+                    if (count > 0)
+                        Toast.makeText(getContext(),  count+ " new post" + (count > 1 ? "s" : "") + "!", Toast.LENGTH_SHORT).show();
                     fragment.setData(User.user.getTimeline());
                     fragment.refresh();
                 } catch (RecyclerViewFragment.UnsupportedDataException e) {

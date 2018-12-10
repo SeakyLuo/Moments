@@ -184,12 +184,12 @@ public class PostAdapter extends CustomAdapter {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                     if (!fromUser) return;
-                    if (data.getUserid().equals(User.user.getId())){
+                    if (User.user.isUser(data.getUserid())){
                         Toast.makeText(context, "You can't rate your own post!", Toast.LENGTH_SHORT).show();
                         ratingBar.setRating(data.ratings_avg());
                     }else{
                         User.user.rate(new Rating(User.user.getId(), (int) rating, Calendar.getInstance().getTimeInMillis(), data.GetKey()));
-                        if (rating == 0) ratingBar.setRating(data.ratings_avg());
+                        if (rating == 0f) ratingBar.setRating(data.ratings_avg());
                     }
                 }
             });
