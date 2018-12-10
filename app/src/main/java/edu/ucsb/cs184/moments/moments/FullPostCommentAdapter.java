@@ -1,6 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,12 +59,6 @@ public class FullPostCommentAdapter extends CustomAdapter {
                 }
             });
             view.setLongClickable(true);
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return false;
-                }
-            });
         }
 
         @Override
@@ -75,6 +70,17 @@ public class FullPostCommentAdapter extends CustomAdapter {
             time.setText(TimeText(data.getTime()));
             PostAdapter.setContent(context, content, data.getContent());
             replies.setText("Replies: " + data.getComments().size());
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    CommentLongClickDialog dialog = new CommentLongClickDialog();
+                    dialog.showNow(((AppCompatActivity) activity).getSupportFragmentManager(), "CommentLongClick");
+                    dialog.setComment(data);
+                    // TODO: add support for comment parent
+                    dialog.setParent(Post.findPost(data.getPostKey()));
+                    return false;
+                }
+            });
         }
     }
 }

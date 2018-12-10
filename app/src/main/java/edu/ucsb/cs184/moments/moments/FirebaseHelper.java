@@ -251,8 +251,7 @@ public class FirebaseHelper {
                 if (post.postedInGroup()){
                     if (gds == null || gdb == null) return;
                     for (DataSnapshot ds: gds.child(post.getGroupid() + "/posts/").getChildren()){
-                        Post data = ds.getValue(Post.class);
-                        if (data.equals(post)){
+                        if (ds.getValue(Post.class).equals(post)){
                             gdb.child(post.getGroupid() + "/posts/" + index + "/" + key).setValue(value);
                             return;
                         }
@@ -261,8 +260,7 @@ public class FirebaseHelper {
                 }else{
                     if (uds == null || udb == null) return;
                     for (DataSnapshot ds: uds.child(post.getUserid() + "/posts/").getChildren()){
-                        Post data = ds.getValue(Post.class);
-                        if (data.equals(post)){
+                        if (ds.getValue(Post.class).equals(post)){
                             udb.child(post.getUserid() + "/posts/" + index + "/" + key).setValue(value);
                             return;
                         }
