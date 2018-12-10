@@ -264,7 +264,7 @@ public class Post implements Parcelable {
     public static class PopularityComparator implements Comparator<Post>{
         @Override
         public int compare(Post o1, Post o2) {
-            return new RatingComparator().compare(o1, o2);
+            return new RatingComparator().compare(o1, o2) + o2.getComments().size() - o1.getComments().size();
         }
     }
 
