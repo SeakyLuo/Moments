@@ -29,7 +29,11 @@ public class Rating implements Parcelable {
         } else {
             time = in.readLong();
         }
-        postKey = in.readParcelable(Post.Key.class.getClassLoader());
+        if (in.readByte() == 0) {
+            postKey = null;
+        } else {
+            postKey = in.readParcelable(Post.Key.class.getClassLoader());
+        }
     }
 
     @Override
@@ -86,6 +90,7 @@ public class Rating implements Parcelable {
     public static Rating fromJson(String json){
         return (new Gson()).fromJson(json, Rating.class);
     }
+    public static Rating findRating(Key key){ return FirebaseHelper.findRating(key); }
 
     public static class Key implements Parcelable{
         String userid;

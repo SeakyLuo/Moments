@@ -213,11 +213,15 @@ public class FirebaseHelper {
         return null;
     }
     public static Comment findComment(Comment.Key key){
-        for (DataSnapshot ds: uds.child(key.userid).child("posts").getChildren()){
-            Comment data = ds.getValue(Comment.class);
+        for (Comment data: Post.powerfulFindPost(key.postKey).getComments())
             if (data.GetKey().equals(key))
                 return data;
-        }
+        return null;
+    }
+    public static Rating findRating(Rating.Key key){
+        for (Rating data: Post.powerfulFindPost(key.postKey).getRatings())
+            if (data.GetKey().equals(key))
+                return data;
         return null;
     }
 

@@ -1,20 +1,56 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.Gson;
 
-import java.util.Date;
-
-public class Message {
-    private int senderid;
-    private int receiverid;
-    private Date date;
+public class Message implements Parcelable {
     private String content;
-    public Message(int sender, int receiver, Date date, String content){
-        senderid = sender;
-        receiverid = receiver;
-        this.date = date;
+    private Long time;
+    public Message(String content, Long time){
         this.content = content;
+        this.time = time;
     }
+    public String getContent() { return content; }
+    public Long getTime() { return time; }
+
+    protected Message(Parcel in) {
+        content = in.readString();
+        if (in.readByte() == 0) {
+            time = null;
+        } else {
+            time = in.readLong();
+        }
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(content);
+        if (time == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(time);
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Message> CREATOR = new Creator<Message>() {
+        @Override
+        public Message createFromParcel(Parcel in) {
+            return new Message(in);
+        }
+
+        @Override
+        public Message[] newArray(int size) {
+            return new Message[size];
+        }
+    };
 
     @Override
     public String toString(){

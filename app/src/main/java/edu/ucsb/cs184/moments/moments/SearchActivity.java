@@ -25,7 +25,7 @@ import static edu.ucsb.cs184.moments.moments.SearchPair.USERS;
 import static edu.ucsb.cs184.moments.moments.SearchPair.types;
 
 public class SearchActivity extends AppCompatActivity {
-    public static final String TAB = "tab";
+    public static final String TAB = "tab", KEYWORD = "keyword";
     private static final String[] textHints = {"Search Post Content", "Search Users", "Search Groups", "Search History"};
     private ArrayList<RecyclerViewFragment> fragments = new ArrayList<>();
     private RecyclerViewFragment postsFragment, usersFragment, groupsFragment, historyFragment;
@@ -124,8 +124,14 @@ public class SearchActivity extends AppCompatActivity {
         mViewPager.setAdapter(adapter);
 
         String searchTab = intent.getStringExtra(TAB);
-        if (searchTab == null) setCurrentTab(POSTS);
-        else setCurrentTab(searchTab);
+        searchTab = searchTab == null ? POSTS : searchTab;
+        setCurrentTab(searchTab);
+        String searchKeyword = intent.getStringExtra(KEYWORD);
+        if (searchKeyword != null){
+            keyword = searchKeyword;
+            searchBar.setText(keyword);
+            search(keyword, searchTab);
+        }
     }
 
     private void search(final String keyword, final String type){

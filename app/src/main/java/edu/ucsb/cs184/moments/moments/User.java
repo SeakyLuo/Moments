@@ -24,9 +24,7 @@ public class User implements Parcelable {
     private ArrayList<Post> posts = new ArrayList<>();
     private ArrayList<Post> drafts = new ArrayList<>();
     private ArrayList<Post.Key> collections = new ArrayList<>();
-    private ArrayList<Comment> commentsMade = new ArrayList<>();
     private ArrayList<Comment.Key> commentsRecv = new ArrayList<>();
-    private ArrayList<Rating> ratingsMade = new ArrayList<>();
     private ArrayList<Rating.Key> ratingsRecv = new ArrayList<>();
     private ArrayList<Message> messages = new ArrayList<>();
     private ArrayList<String> groups = new ArrayList<>();  // id
@@ -55,9 +53,7 @@ public class User implements Parcelable {
         posts = in.createTypedArrayList(Post.CREATOR);
         drafts = in.createTypedArrayList(Post.CREATOR);
         collections = in.createTypedArrayList(Post.Key.CREATOR);
-        commentsMade = in.createTypedArrayList(Comment.CREATOR);
         commentsRecv = in.createTypedArrayList(Comment.Key.CREATOR);
-        ratingsMade = in.createTypedArrayList(Rating.CREATOR);
         ratingsRecv = in.createTypedArrayList(Rating.Key.CREATOR);
         groups = in.createStringArrayList();
         followers = in.createStringArrayList();
@@ -80,9 +76,7 @@ public class User implements Parcelable {
         dest.writeTypedList(posts);
         dest.writeTypedList(drafts);
         dest.writeTypedList(collections);
-        dest.writeTypedList(commentsMade);
         dest.writeTypedList(commentsRecv);
-        dest.writeTypedList(ratingsMade);
         dest.writeTypedList(ratingsRecv);
         dest.writeStringList(groups);
         dest.writeStringList(followers);
@@ -150,16 +144,24 @@ public class User implements Parcelable {
         if (update) upload("collections", collections);
         return data;
     }
-    public ArrayList<Comment> getCommentsMade() { return commentsMade; }
     public ArrayList<String> getFollowers() { return followers; }
     public ArrayList<String> getFollowing() { return following; }
     public ArrayList<SearchPair> getSearchHistory() { return searchHistory; }
     public ArrayList<Comment> getCommentsRecv() {
         ArrayList<Comment> data = new ArrayList<>();
-        for (Comment.Key key: commentsRecv){
+        for (Comment.Key key: (ArrayList<Comment.Key>) commentsRecv.clone()){
             Comment comment = Comment.findComment(key);
-            if (comment != null)
-                data.add(comment);
+            if (comment != null) data.add(comment);
+            else commentsRecv.remove(key);
+        }
+        return data;
+    }
+    public ArrayList<Rating> getRatingsRecv() {
+        ArrayList<Rating> data = new ArrayList<>();
+        for (Rating.Key key: (ArrayList<Rating.Key>) ratingsRecv.clone()){
+            Rating rating = Rating.findRating(key);
+            if (rating != null) data.add(rating);
+            else ratingsRecv.remove(rating);
         }
         return data;
     }
@@ -174,7 +176,7 @@ public class User implements Parcelable {
     }
     public ArrayList<Post.Key> getPostsNotification() { return postsNotification; }
     public ArrayList<Comment.Key> getCommentsNotification() { return commentsNotification; }
-    public ArrayList<Rating.Key> getRatingssNotification() { return ratingsNotification; }
+    public ArrayList<Rating.Key> getRatingsNotification() { return ratingsNotification; }
     public boolean IsAnonymous() { return id.equals(ANONYMOUS); }
     public boolean mutualFollow(String userid) { return !id.equals(userid) && following.contains(userid) && findUser(userid).following.contains(id); }
     public boolean inGroup(String groupid) { return groups.contains(groupid); }
@@ -244,7 +246,7 @@ public class User implements Parcelable {
         upload("followers", followers);
     }
     public void refreshTimeline(){
-        timeline.addAll(postsNotification);
+        timeline.addAll(0, postsNotification);
         Collections.sort(timeline, new Post.TimeComparator());
         upload("timeline", timeline);
         postsNotification.clear();
@@ -254,14 +256,14 @@ public class User implements Parcelable {
 
     }
     public void refreshCommentsRecv(){
-        commentsRecv.addAll(commentsNotification);
+        commentsRecv.addAll(0, commentsNotification);
         Collections.sort(commentsRecv, new Comment.TimeComparator());
         upload("commentsRecv", commentsRecv);
         commentsNotification.clear();
         upload("commentsNotification", commentsNotification);
     }
     public void refreshRatingsRecv(){
-        ratingsRecv.addAll(ratingsNotification);
+        ratingsRecv.addAll(0, ratingsNotification);
         Collections.sort(ratingsRecv, new Rating.TimeComparator());
         upload("ratingsRecv", ratingsRecv);
         ratingsNotification.clear();
@@ -320,18 +322,6 @@ public class User implements Parcelable {
             collections.remove(post.GetKey());
             upload("collections", collections);
         }
-    }
-    public void addComment(Comment comment) {
-        commentsMade.add(0, comment);
-        Post.findPost(comment.getPostKey()).addComment(comment);
-        upload("commentsMade", commentsMade);
-        findUser(comment.getUserid()).CommentNotification(comment, false);
-    }
-    public void removeComment(Comment comment, boolean made) {
-        commentsMade.remove(comment);
-        Post.findPost(comment.getPostKey()).removeComment(comment);
-        upload("commentsMade", commentsMade);
-        findUser(comment.getUserid()).CommentNotification(comment, true);
     }
     public void follow(String userid) {
         following.add(0, userid);

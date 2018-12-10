@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -90,15 +89,9 @@ public class GroupAdapter extends CustomAdapter {
             data = (Group) object;
             group_name.setText(data.getName());
             Glide.with(context).load(data.GetIcon()).into(group_icon);
-            ArrayList<Post> posts = data.getPosts();
-            if (posts.size() == 0){
-                time.setText(TimeText(Calendar.getInstance().getTimeInMillis()));
-                content.setText("You " + (data.IsManager(User.user.getId()) ? "created" : "joined") + " a new group.");
-            }else{
-                Post post = posts.get(0);
-                time.setText(TimeText(post.getTime()));
-                content.setText(User.findUser(post.getUserid()).getName() + ": " + post.getContent());
-            }
+            Message message = data.latestActivity();
+            time.setText(TimeText(message.getTime()));
+            content.setText(message.getContent());
         }
         public void setQuiet(boolean isQuiet){
             quiet.setVisibility(isQuiet ? View.VISIBLE : View.INVISIBLE);

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class SearchListActivity extends AppCompatActivity {
 
     public static final String ADAPTER = "adapter", DATA = "data";
-    public static final String POST = "Posts", FOLLOWER = "Followers", FOLLOWING = "Following";
+    public static final String POST = "Posts", FOLLOWER = "Followers", FOLLOWING = "Following", MEMBER = "Members";
 
     private EditText searchBar;
     private ImageButton backButton, clearButton;
@@ -56,6 +56,9 @@ public class SearchListActivity extends AppCompatActivity {
                 clearButton.setVisibility(View.GONE);
                 try {
                     switch (adapter) {
+                        case MEMBER:
+                            fragment.setData(data);
+                            break;
                         case FOLLOWER:
                             fragment.setData(data);
                             break;
@@ -100,22 +103,17 @@ public class SearchListActivity extends AppCompatActivity {
         });
         try {
             switch (adapter){
+                case MEMBER:
+                    setUsers();
+                    break;
                 case FOLLOWER:
-                    fragment.setAdapter(new UserAdapter());
-                    for (String id: intent.getStringArrayListExtra(DATA))
-                        data.add(User.findUser(id));
-                    fragment.setData(data);
+                    setUsers();
                     break;
                 case FOLLOWING:
-                    fragment.setAdapter(new UserAdapter());
-                    for (String id: intent.getStringArrayListExtra(DATA))
-                        data.add(User.findUser(id));
-                    fragment.setData(data);
+                    setUsers();
                     break;
                 case POST:
-                    fragment.setAdapter(new PostAdapter());
-                    data = intent.getParcelableArrayListExtra(DATA);
-                    fragment.setData(new ArrayList<Post>());
+                    setPosts();
                     break;
             }
         } catch (RecyclerViewFragment.UnsupportedDataException e) {
@@ -124,9 +122,25 @@ public class SearchListActivity extends AppCompatActivity {
         fragment.show(getSupportFragmentManager(), R.id.sl_content);
     }
 
+    private void setUsers() throws RecyclerViewFragment.UnsupportedDataException {
+        fragment.setAdapter(new UserAdapter());
+        for (String id: intent.getStringArrayListExtra(DATA))
+            data.add(User.findUser(id));
+        fragment.setData(data);
+    }
+
+    private void setPosts() throws RecyclerViewFragment.UnsupportedDataException {
+        fragment.setAdapter(new PostAdapter());
+        data = intent.getParcelableArrayListExtra(DATA);
+        fragment.setData(new ArrayList<Post>());
+    }
+
     private void search(String keyword){
         try {
             switch (adapter){
+                case MEMBER:
+                    fragment.setData(SearchActivity.searchUsers(keyword));
+                    break;
                 case FOLLOWER:
                     fragment.setData(SearchActivity.searchUsers(keyword));
                     break;

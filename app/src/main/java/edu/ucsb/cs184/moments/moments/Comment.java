@@ -14,7 +14,7 @@ public class Comment implements Parcelable {
     private String content;
     private Long time;
     private Post.Key postKey;
-    private Comment.Key parent;
+//    private Comment.Key parent;
 
     private ArrayList<Comment> replies = new ArrayList<>();
     private ArrayList<Rating> ratings = new ArrayList<>();
@@ -30,7 +30,7 @@ public class Comment implements Parcelable {
         this.userid = userid;
         this.content = content;
         this.time = time;
-        this.parent = parent;
+//        this.parent = parent;
     }
 
     protected Comment(Parcel in) {
@@ -41,8 +41,16 @@ public class Comment implements Parcelable {
         } else {
             time = in.readLong();
         }
-        postKey = in.readParcelable(Post.Key.class.getClassLoader());
-        parent = in.readParcelable(Key.class.getClassLoader());
+        if (in.readByte() == 0) {
+            postKey = null;
+        } else {
+            postKey = in.readParcelable(Post.Key.class.getClassLoader());
+        }
+//        if (in.readByte() == 0) {
+//            parent = null;
+//        } else {
+//            parent = in.readParcelable(Key.class.getClassLoader());
+//        }
         replies = in.createTypedArrayList(Comment.CREATOR);
         ratings = in.createTypedArrayList(Rating.CREATOR);
     }
@@ -57,8 +65,18 @@ public class Comment implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeLong(time);
         }
-        dest.writeParcelable(postKey, flags);
-        dest.writeParcelable(parent, flags);
+        if (postKey == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeParcelable(postKey, flags);
+        }
+//        if (parent == null) {
+//            dest.writeByte((byte) 0);
+//        } else {
+//            dest.writeByte((byte) 1);
+//            dest.writeParcelable(parent, flags);
+//        }
         dest.writeTypedList(replies);
         dest.writeTypedList(ratings);
     }
@@ -91,13 +109,16 @@ public class Comment implements Parcelable {
             sum += ratings.get(i).getRating();
         return sum / count;
     }
+    public void addComment(Comment comment){
+        replies.add(comment);
+    }
     public String getUserid() { return userid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
-    public Key GetKey() { return new Key(userid, time); }
+    public Key GetKey() { return new Key(userid, time, postKey); }
     public Post.Key getPostKey() { return postKey; }
-    public Comment.Key getParent() { return parent; }
-    public Boolean hasParent() { return parent == null; }
+//    public Comment.Key getParent() { return parent; }
+//    public Boolean hasParent() { return parent == null; }
 
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -114,22 +135,35 @@ public class Comment implements Parcelable {
     public static Comment fromJson(String json){
         return (new Gson()).fromJson(json, Comment.class);
     }
-    public static Comment findComment(Key key){
-        return FirebaseHelper.findComment(key);
-    }
+    public static Comment findComment(Key key) { return FirebaseHelper.findComment(key); }
 
     public static class Key implements Parcelable{
         String userid;
         Long time;
+        Post.Key postKey;
         public Key() {}
-        public Key(String userid, Long time){
+        public Key(String userid, Long time, Post.Key postKey){
             this.userid = userid;
             this.time = time;
+            this.postKey = postKey;
         }
 
         protected Key(Parcel in) {
             userid = in.readString();
             time = in.readLong();
+            postKey = in.readParcelable(Post.Key.class.getClassLoader());
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(userid);
+            dest.writeLong(time);
+            dest.writeParcelable(postKey, flags);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
         public static final Creator<Key> CREATOR = new Creator<Key>() {
@@ -151,18 +185,13 @@ public class Comment implements Parcelable {
             if (!(obj instanceof Key))
                 return false;
             Key k = (Key) obj;
-            return time.equals(k.time) && userid.equals(k.userid);
+            return postKey.equals(k.postKey) && userid.equals(k.userid);
         }
-
+    }
+    public static class CommentComparator implements Comparator<Comment> {
         @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(userid);
-            dest.writeLong(time);
+        public int compare(Comment o1, Comment o2) {
+            return new TimeComparator().compare(o1.GetKey(), o2.GetKey());
         }
     }
     public static class TimeComparator implements Comparator<Key> {

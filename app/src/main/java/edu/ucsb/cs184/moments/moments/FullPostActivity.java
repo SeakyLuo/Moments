@@ -82,6 +82,12 @@ public class FullPostActivity extends AppCompatActivity {
 
         addCommentDialog.setCaller(edit_comment, commentsFragment);
         addCommentDialog.setPost(post);
+        addCommentDialog.setOnSendListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit_comment.setText("");
+            }
+        });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -123,7 +129,8 @@ public class FullPostActivity extends AppCompatActivity {
                                 Toast.makeText(FullPostActivity.this,"Copied!",Toast. LENGTH_SHORT).show();
                                 return true;
                             case R.id.fullpost_more_delete:
-                                User.user.removePost(post);
+                                if (post.postedInGroup()) Group.findGroup(post.getGroupid()).removePost(post);
+                                else User.user.removePost(post);
                                 Intent intent = new Intent();
                                 intent.putExtra(POST, post);
                                 intent.putExtra(DELETE_POST, true);
@@ -218,7 +225,7 @@ public class FullPostActivity extends AppCompatActivity {
         username.setText(user.getName());
         Glide.with(this).load(user.GetIcon()).into(poster_icon);
         time.setText(TimeText(post.getTime()));
-        PostAdapter.setContent(getApplicationContext(), content, post);
+        PostAdapter.setContent(getApplicationContext(), content, post.getContent());
         int comments_count = post.comments_count();
         comments_counter.setText(comments_count + "");
         comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
@@ -263,6 +270,7 @@ public class FullPostActivity extends AppCompatActivity {
     }
 
     private void showAddComment(){
-        addCommentDialog.showNow(getSupportFragmentManager(), ADD_COMMENT);
+        if (!addCommentDialog.isAdded())
+            addCommentDialog.showNow(getSupportFragmentManager(), ADD_COMMENT);
     }
 }

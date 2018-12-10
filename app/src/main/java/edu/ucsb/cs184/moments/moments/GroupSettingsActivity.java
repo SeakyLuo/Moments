@@ -1,5 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -67,10 +68,11 @@ public class GroupSettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment {
-        private Preference icon, name, number, sortby, quit;
+        private Preference icon, name, number, member, sortby, quit;
         private EditTextPreference intro;
         private boolean init = false;
         private Group group;
+        private Activity activity;
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -79,6 +81,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
             icon = findPreference("Group Icon");
             name = findPreference("Group Name");
             number = findPreference("Group Number");
+            member = findPreference("Group Members");
             intro = (EditTextPreference) findPreference("Group Intro");
             sortby = findPreference(getString(R.string.sort_by));
             quit = findPreference(getString(R.string.quit_group));
@@ -101,6 +104,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
                     return false;
                 }
             });
+            activity = getActivity();
             init = true;
             if (group != null) setData(group);
         }
@@ -111,6 +115,18 @@ public class GroupSettingsActivity extends AppCompatActivity {
             name.setSummary(group.getName());
             name.setDefaultValue(group.getName());
             number.setSummary(group.getNumber() + "");
+            member.setSummary(group.getMemberSize() + "");
+            member.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(activity, SearchListActivity.class);
+                    intent.putExtra(SearchListActivity.ADAPTER, SearchListActivity.MEMBER);
+                    intent.putExtra(SearchListActivity.DATA, group.getMembers());
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                    return true;
+                }
+            });
             // TODO: save group settings
             sortby.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -124,10 +140,11 @@ public class GroupSettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     User.user.quitGroup(group.getId());
-                    getActivity().finish();
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
+                    activity.finish();
+                    activity.overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
                     Intent intent = new Intent();
                     intent.putExtra(QUIT, QUIT);
+                    activity.setResult(RESULT_OK, intent);
                     return true;
                 }
             });

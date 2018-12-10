@@ -56,7 +56,7 @@ public class SearchGroupsAdapter extends CustomAdapter{
             Glide.with(context).load(data.GetIcon()).into(icon);
             name.setText(data.getName());
             intro.setText(data.getIntro());
-            members.setText("Members: " + data.getMembers().size());
+            members.setText("Members: " + data.getMemberSize());
         }
     }
 }

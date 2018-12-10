@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -61,9 +62,12 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 dialog.setContent(User.user.getName());
                 dialog.setOnSaveListener(new InputDialog.OnClickListener() {
                     @Override
-                    public void onClick(String text) {
-                        setName(text);
-                        User.user.modifyName(text);
+                    public void onClick(EditText editText) {
+                        String name = editText.getText().toString();
+                        if (SignupActivity.checkName(editText, name)){
+                            setName(name);
+                            User.user.modifyName(name);
+                        }
                     }
                 });
             }
@@ -91,7 +95,8 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 dialog.setContent(User.user.getIntro());
                 dialog.setOnSaveListener(new InputDialog.OnClickListener() {
                     @Override
-                    public void onClick(String text) {
+                    public void onClick(EditText editText) {
+                        String text = editText.getText().toString();
                         setIntro(text);
                         User.user.modifyIntro(text);
                     }

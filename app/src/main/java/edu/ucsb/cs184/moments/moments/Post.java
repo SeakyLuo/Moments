@@ -63,6 +63,7 @@ public class Post implements Parcelable {
     public Long getTime() { return time; }
     public int comments_count() { return comments.size(); }
     public ArrayList<Comment> getComments() { return comments; }
+    public ArrayList<Rating> getRatings() { return ratings; }
     public int ratings_received() { return ratings.size(); }
     public Rating hasRated() {
         for (Rating rating: ratings)
@@ -92,7 +93,7 @@ public class Post implements Parcelable {
     public boolean postedInGroup() { return groupid != null; }
     public boolean containsKeyword(String keyword) { return content.contains(keyword); }
     public void addComment(Comment comment){
-        comments.add(comment);
+        comments.add(0, comment);
         upload("comments", comments);
     }
     public void addRating(Rating rating){
@@ -200,6 +201,22 @@ public class Post implements Parcelable {
             }
         }
 
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(userid);
+            if (time == null) {
+                dest.writeByte((byte) 0);
+            } else {
+                dest.writeByte((byte) 1);
+                dest.writeLong(time);
+            }
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
         public static final Creator<Key> CREATOR = new Creator<Key>() {
             @Override
             public Key createFromParcel(Parcel in) {
@@ -214,23 +231,10 @@ public class Post implements Parcelable {
 
         @Override
         public boolean equals(@Nullable Object obj) {
-            if (obj == null)
-                return false;
-            if (!(obj instanceof Key))
-                return false;
+            if (obj == null) return false;
+            if (!(obj instanceof Key)) return false;
             Key k = (Key) obj;
             return time.equals(k.time) && userid.equals(k.userid);
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(userid);
-            dest.writeLong(time);
         }
     }
 
