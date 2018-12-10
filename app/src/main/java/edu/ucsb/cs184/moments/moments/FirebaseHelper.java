@@ -247,9 +247,9 @@ public class FirebaseHelper {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (udb == null) return;
                 int index = 0;
                 if (post.postedInGroup()){
+                    if (gds == null || gdb == null) return;
                     for (DataSnapshot ds: gds.child(post.getGroupid() + "/posts/").getChildren()){
                         Post data = ds.getValue(Post.class);
                         if (data.equals(post)){
@@ -259,10 +259,11 @@ public class FirebaseHelper {
                         index++;
                     }
                 }else{
-                    for (DataSnapshot ds: uds.child(post.getUserid()).child("posts").getChildren()){
+                    if (uds == null || udb == null) return;
+                    for (DataSnapshot ds: uds.child(post.getUserid() + "/posts/").getChildren()){
                         Post data = ds.getValue(Post.class);
                         if (data.equals(post)){
-                            udb.child(post.getUserid() + "/" + "posts/" + index + "/" + key).setValue(value);
+                            udb.child(post.getUserid() + "/posts/" + index + "/" + key).setValue(value);
                             return;
                         }
                         index++;
