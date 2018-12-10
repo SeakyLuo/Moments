@@ -34,6 +34,27 @@ public class RecyclerViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.recycler_view, container, false);
         swipeRefreshLayout = view.findViewById(R.id.swipe_container);
         recyclerView = view.findViewById(R.id.recyclerview);
+        swipeRefreshLayout.setEnabled(swipeEnabled);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                for (OnRefreshListener listener: listeners)
+                    listener.onRefresh();
+                refresh();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        SetRecyclerView(recyclerView);
+        return view;
+    }
+
+    public RecyclerView getRecyclerView() { return recyclerView; }
+
+    public void setRecyclerView(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+        SetRecyclerView(recyclerView);
+    }
+    private void SetRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayout = new LinearLayoutManager(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -58,17 +79,6 @@ public class RecyclerViewFragment extends Fragment {
                 }
             }
         });
-        swipeRefreshLayout.setEnabled(swipeEnabled);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                for (OnRefreshListener listener: listeners)
-                    listener.onRefresh();
-                refresh();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-        return view;
     }
 
     public void setbMargin(int bMargin) { this.bMargin = bMargin; }

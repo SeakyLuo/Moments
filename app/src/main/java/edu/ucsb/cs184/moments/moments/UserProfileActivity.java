@@ -6,8 +6,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +34,8 @@ public class UserProfileActivity extends AppCompatActivity {
     private ImageView icon, gender;
     private TextView username, intro, following, followers, posts_count;
     private ImageButton  edit, follow, message;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView recyclerView;
     private RecyclerViewFragment fragment;
     private String userid;
     private User user;
@@ -59,11 +63,21 @@ public class UserProfileActivity extends AppCompatActivity {
         follow = findViewById(R.id.up_follow);
         posts_count = findViewById(R.id.up_posts);
         message = findViewById(R.id.up_message);
+        recyclerView = findViewById(R.id.up_timeline);
+//        swipeRefreshLayout = findViewById(R.id.up_swipeFreshLayout);
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refresh();
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
         fragment = new RecyclerViewFragment();
         PostAdapter adapter = new PostAdapter();
         adapter.setUsericonClickable(false);
+        fragment.setSwipeEnabled(false);
         fragment.setAdapter(adapter);
-        fragment.show(getSupportFragmentManager(), R.id.up_timeline);
+        fragment.setRecyclerView(recyclerView);
 
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
@@ -191,10 +205,10 @@ public class UserProfileActivity extends AppCompatActivity {
                 setFollow(userid);
             }
         });
-        setUserProfile();
+        setUserProfile(user);
     }
 
-    private void setUserProfile(){
+    private void setUserProfile(User user){
         collapsingToolbarLayout.setTitle(user.getName());
         FirebaseHelper.setIcon(user.GetIcon(), this, icon);
         username.setText(user.getName());
@@ -219,6 +233,11 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void refresh(){
+        user = User.findUser(userid);
+        setUserProfile(user);
+    }
+
     private static String FollowCount(int count){
         if (count > 1000000) return count / 1000000 + " M";
         else if (count > 1000) return count / 1000 + " K";
@@ -236,8 +255,7 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == EditUserProfileActivity.FINISH){
-            user = User.findUser(userid);
-            setUserProfile();
+            refresh();
         }
     }
 
