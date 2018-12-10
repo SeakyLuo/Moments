@@ -167,7 +167,7 @@ public class PostAdapter extends CustomAdapter {
                     collect(!User.user.hasCollected(data));
                 }
             });
-            int comments_count = data.comments_count();
+            int comments_count = data.comments_recv();
             comments_counter.setText(comments_count + "");
             comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
             comment.setOnClickListener(new View.OnClickListener() {
@@ -175,7 +175,7 @@ public class PostAdapter extends CustomAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, FullPostActivity.class);
                     intent.putExtra(FullPostActivity.POST, data);
-                    intent.putExtra(FullPostActivity.ADD_COMMENT, FullPostActivity.ADD_COMMENT);
+                    intent.putExtra(FullPostActivity.ADD_COMMENT, true);
                     activity.startActivity(intent);
                     activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }

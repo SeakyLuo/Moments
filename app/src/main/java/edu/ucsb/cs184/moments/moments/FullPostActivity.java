@@ -210,7 +210,7 @@ public class FullPostActivity extends AppCompatActivity {
         pagerAdapter.addFragment(ratingsFragment, "Ratings");
         mViewPager.setAdapter(pagerAdapter);
         setPost(post);
-        if (intent.getStringExtra(ADD_COMMENT) != null) showAddComment();
+        if (intent.getBooleanExtra(ADD_COMMENT, false)) showAddComment();
     }
 
     private void setPost(final Post post){
@@ -221,7 +221,7 @@ public class FullPostActivity extends AppCompatActivity {
         PostAdapter.setContent(getApplicationContext(), content, post.getContent());
         Rating rating = post.hasRated();
         if (rating != null) ratingBar.setRating(rating.getRating());
-        int comments_count = post.comments_count();
+        int comments_count = post.comments_recv();
         comments_counter.setText(comments_count + "");
         comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
         commentsFragment.setData(post.getComments());

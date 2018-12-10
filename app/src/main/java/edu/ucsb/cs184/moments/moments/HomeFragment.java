@@ -33,7 +33,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        search = view.findViewById(R.id.search_home);
+        search = view.findViewById(R.id.home_search);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
                 getActivity().overridePendingTransition(R.anim.push_down_in, R.anim.push_up_out);
             }
         });
-        menu = view.findViewById(R.id.menu_home);
+        menu = view.findViewById(R.id.home_menu);
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +73,6 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
         fragment.addHiddenView(fab);
-        fragment.addHiddenView(toolbar);
         fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.home_content);
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {

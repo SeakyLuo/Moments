@@ -24,8 +24,8 @@ public class RatingAdapter extends CustomAdapter {
             super(view);
             time = view.findViewById(R.id.rating_time);
             content = view.findViewById(R.id.rating_content);
-            name = view.findViewById(R.id.rating_username);
-            icon = view.findViewById(R.id.rating_usericon);
+            name = view.findViewById(R.id.rating_name);
+            icon = view.findViewById(R.id.rating_icon);
         }
 
         public void setData(Object object) {

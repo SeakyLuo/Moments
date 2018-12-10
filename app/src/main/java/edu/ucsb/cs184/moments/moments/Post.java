@@ -61,13 +61,13 @@ public class Post implements Parcelable {
     public String getGroupid() { return groupid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
-    public int comments_count() { return comments.size(); }
+    public int comments_recv() { return comments.size(); }
     public ArrayList<Comment> getComments() { return comments; }
     public ArrayList<Rating> getRatings() { return ratings; }
-    public int ratings_received() { return ratings.size(); }
+    public int ratings_recv() { return ratings.size(); }
     public Rating hasRated() {
         for (Rating rating: ratings)
-            if (rating.getRaterId().equals(User.user.getId()))
+            if (User.user.isUser(rating.getRaterId()))
                 return rating;
         return null;
     }
