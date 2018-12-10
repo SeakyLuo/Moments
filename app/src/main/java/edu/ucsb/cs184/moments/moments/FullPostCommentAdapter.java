@@ -65,7 +65,7 @@ public class FullPostCommentAdapter extends CustomAdapter {
         public void setData(Object obj) {
             data = (Comment) obj;
             User user = User.findUser(data.getUserid());
-            Glide.with(context).load(user.GetIcon()).into(usericon);
+            FirebaseHelper.setImageWithGlide(user.GetIcon(), context, usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             PostAdapter.setContent(context, content, data.getContent());

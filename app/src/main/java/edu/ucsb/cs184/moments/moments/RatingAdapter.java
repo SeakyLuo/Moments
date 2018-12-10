@@ -33,7 +33,7 @@ public class RatingAdapter extends CustomAdapter {
         public void setData(Object object) {
             data = (Rating) object;
             User user = User.findUser(data.getRaterId());
-            Glide.with(context).load(user.GetIcon()).into(usericon);
+            FirebaseHelper.setImageWithGlide(user.GetIcon(), context, usericon);
             username.setText(user.getName());
             view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {

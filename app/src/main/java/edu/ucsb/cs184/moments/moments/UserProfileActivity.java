@@ -199,7 +199,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void setUserProfile(){
         collapsingToolbarLayout.setTitle(user.getName());
-        Glide.with(this).load(user.GetIcon()).into(icon);
+        FirebaseHelper.setImageWithGlide(user.GetIcon(), this, icon);
         username.setText(user.getName());
         if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.GONE);
         else{

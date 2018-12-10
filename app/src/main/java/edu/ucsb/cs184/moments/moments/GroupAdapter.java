@@ -88,7 +88,7 @@ public class GroupAdapter extends CustomAdapter {
         public void setData(Object object) {
             data = (Group) object;
             group_name.setText(data.getName());
-            Glide.with(context).load(data.GetIcon()).into(group_icon);
+            FirebaseHelper.setImageWithGlide(data.GetIcon(), context, group_icon);
             Message message = data.latestActivity();
             time.setText(TimeText(message.getTime()));
             content.setText(message.getContent());

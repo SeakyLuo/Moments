@@ -53,7 +53,7 @@ public class SearchGroupsAdapter extends CustomAdapter{
                     join.setVisibility(View.GONE);
                 }
             });
-            Glide.with(context).load(data.GetIcon()).into(icon);
+            FirebaseHelper.setImageWithGlide(data.GetIcon(), context, icon);
             name.setText(data.getName());
             intro.setText(data.getIntro());
             members.setText("Members: " + data.getMemberSize());

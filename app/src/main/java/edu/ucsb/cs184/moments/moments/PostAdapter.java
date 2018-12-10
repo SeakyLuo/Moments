@@ -224,7 +224,7 @@ public class PostAdapter extends CustomAdapter {
                     helper.show();
                 }
             });
-            Glide.with(context).load(user.GetIcon()).into(usericon);
+            FirebaseHelper.setImageWithGlide(user.GetIcon(), context, usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             setContent(context, content, data.getContent());

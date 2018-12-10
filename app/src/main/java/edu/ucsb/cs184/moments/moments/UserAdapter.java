@@ -59,7 +59,7 @@ public class UserAdapter extends CustomAdapter{
                     follow.setImageResource(UploadIconActivity.followImage(id));
                 }
             });
-            Glide.with(context).load(data.GetIcon()).into(icon);
+            FirebaseHelper.setImageWithGlide(data.GetIcon(), context, icon);
             name.setText(data.getName());
             intro.setText(data.getIntro());
             followers.setText("Followers: " + data.getFollowers().size());

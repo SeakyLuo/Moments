@@ -33,7 +33,7 @@ public class CommentAdapter extends CustomAdapter {
         public void setData(Object object) {
             data = (Comment) object;
             User user = User.findUser(data.getUserid());
-            Glide.with(context).load(user.GetIcon()).into(usericon);
+            FirebaseHelper.setImageWithGlide(user.GetIcon(), context, usericon);
             username.setText(user.getName());
             view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {

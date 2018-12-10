@@ -184,7 +184,7 @@ public class FullPostActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
-        Glide.with(this).load(User.user.GetIcon()).into(comment_usericon);
+        FirebaseHelper.setImageWithGlide(User.user.GetIcon(), this, comment_usericon);
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,7 +224,7 @@ public class FullPostActivity extends AppCompatActivity {
     private void setPost(final Post post){
         User user = User.findUser(post.getUserid());
         username.setText(user.getName());
-        Glide.with(this).load(user.GetIcon()).into(poster_icon);
+        FirebaseHelper.setImageWithGlide(user.GetIcon(), this, poster_icon);
         time.setText(TimeText(post.getTime()));
         PostAdapter.setContent(getApplicationContext(), content, post.getContent());
         Rating rating = post.hasRated();

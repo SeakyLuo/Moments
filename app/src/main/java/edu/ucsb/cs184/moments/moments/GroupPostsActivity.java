@@ -72,7 +72,7 @@ public class GroupPostsActivity extends AppCompatActivity {
             }
         });
         title.setText(group.getName());
-        Glide.with(this).load(group.GetIcon()).into(icon);
+        FirebaseHelper.setImageWithGlide(group.GetIcon(), this, icon);
         fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostAdapter());
         fragment.addHiddenView(fab);
