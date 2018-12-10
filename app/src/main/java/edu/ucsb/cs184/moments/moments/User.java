@@ -149,10 +149,19 @@ public class User implements Parcelable {
     public ArrayList<SearchPair> getSearchHistory() { return searchHistory; }
     public ArrayList<Comment> getCommentsRecv() {
         ArrayList<Comment> data = new ArrayList<>();
-        for (Comment.Key key: commentsRecv){
+        for (Comment.Key key: (ArrayList<Comment.Key>) commentsRecv.clone()){
             Comment comment = Comment.findComment(key);
-            if (comment != null)
-                data.add(comment);
+            if (comment != null) data.add(comment);
+            else commentsRecv.remove(key);
+        }
+        return data;
+    }
+    public ArrayList<Rating> getRatingsRecv() {
+        ArrayList<Rating> data = new ArrayList<>();
+        for (Rating.Key key: (ArrayList<Rating.Key>) ratingsRecv.clone()){
+            Rating rating = Rating.findRating(key);
+            if (rating != null) data.add(rating);
+            else ratingsRecv.remove(rating);
         }
         return data;
     }

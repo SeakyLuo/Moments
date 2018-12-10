@@ -33,7 +33,8 @@ public class RatingsFragment extends Fragment {
 
     private void refresh(){
         try {
-            fragment.setData(User.user.getRatingsNotification());
+            User.user.refreshRatingsRecv();
+            fragment.setData(User.user.getRatingsRecv());
         } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();
         }

@@ -21,7 +21,7 @@ public class AddCommentDialog extends DialogFragment {
     private EditText edit_comment;
     private EditText parent_comment;
     private FullPostCommentsFragment fragment;
-    private ImageButton camera, gallery, at, send;
+    private ImageButton camera, gallery, at, hashtag, send;
     private Post post;
     private Comment comment;
     private View.OnClickListener onSendListener;
@@ -41,6 +41,7 @@ public class AddCommentDialog extends DialogFragment {
         camera = view.findViewById(R.id.ac_camera);
         gallery = view.findViewById(R.id.ac_gallery);
         at = view.findViewById(R.id.ac_at);
+        hashtag = view.findViewById(R.id.ac_hashtag);
         send = view.findViewById(R.id.ac_send);
 
         edit_comment.addTextChangedListener(new TextWatcher() {
@@ -60,6 +61,22 @@ public class AddCommentDialog extends DialogFragment {
                 send.setClickable(hasText);
                 send.setImageResource(hasText ? R.drawable.ic_add_comment : R.drawable.ic_add_comment_unclickable);
                 if (parent_comment != null) parent_comment.setText(s);
+            }
+        });
+        at.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = edit_comment.getText() + "@";
+                edit_comment.setText(text);
+                edit_comment.setSelection(text.length());
+            }
+        });
+        hashtag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = edit_comment.getText() + "##";
+                edit_comment.setText(text);
+                edit_comment.setSelection(text.length() - 1);
             }
         });
         send.setOnClickListener(new View.OnClickListener() {

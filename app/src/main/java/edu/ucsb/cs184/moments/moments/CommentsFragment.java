@@ -33,6 +33,7 @@ public class CommentsFragment extends Fragment {
 
     private void refresh(){
         try {
+            User.user.refreshCommentsRecv();
             fragment.setData(User.user.getCommentsRecv());
         } catch (RecyclerViewFragment.UnsupportedDataException e) {
             e.printStackTrace();

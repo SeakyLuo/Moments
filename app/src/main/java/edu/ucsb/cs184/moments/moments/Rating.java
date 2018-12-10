@@ -90,6 +90,7 @@ public class Rating implements Parcelable {
     public static Rating fromJson(String json){
         return (new Gson()).fromJson(json, Rating.class);
     }
+    public static Rating findRating(Key key){ return FirebaseHelper.findRating(key); }
 
     public static class Key implements Parcelable{
         String userid;

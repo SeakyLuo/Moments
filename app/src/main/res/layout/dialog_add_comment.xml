@@ -78,6 +78,17 @@
                     app:srcCompat="@drawable/ic_at" />
 
                 <ImageButton
+                    android:id="@+id/ac_hashtag"
+                    android:layout_width="@dimen/button_size"
+                    android:layout_height="@dimen/button_size"
+                    android:background="@android:drawable/screen_background_light_transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ac_at"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:srcCompat="@drawable/ic_hashtag" />
+
+                <ImageButton
                     android:id="@+id/ac_send"
                     android:layout_width="@dimen/button_size"
                     android:layout_height="@dimen/button_size"

@@ -132,9 +132,7 @@ public class Comment implements Parcelable {
     public static Comment fromJson(String json){
         return (new Gson()).fromJson(json, Comment.class);
     }
-    public static Comment findComment(Key key){
-        return FirebaseHelper.findComment(key);
-    }
+    public static Comment findComment(Key key) { return FirebaseHelper.findComment(key); }
 
     public static class Key implements Parcelable{
         String userid;
