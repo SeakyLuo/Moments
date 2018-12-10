@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -48,11 +46,11 @@ public class GroupAdapter extends CustomAdapter {
 
         public ViewHolder(final View view) {
             super(view);
-            group_icon = view.findViewById(R.id.view_group_icon);
-            group_name = view.findViewById(R.id.view_group_name);
-            time = view.findViewById(R.id.view_group_time);
-            content = view.findViewById(R.id.view_group_content);
-            quiet = view.findViewById(R.id.view_group_quiet);
+            group_icon = view.findViewById(R.id.group_icon);
+            group_name = view.findViewById(R.id.group_name);
+            time = view.findViewById(R.id.group_time);
+            content = view.findViewById(R.id.group_content);
+            quiet = view.findViewById(R.id.group_quiet);
             view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -88,13 +86,13 @@ public class GroupAdapter extends CustomAdapter {
         public void setData(Object object) {
             data = (Group) object;
             group_name.setText(data.getName());
-            Glide.with(context).load(data.GetIcon()).into(group_icon);
+            FirebaseHelper.setIcon(data.GetIcon(), activity, group_icon);
             Message message = data.latestActivity();
             time.setText(TimeText(message.getTime()));
             content.setText(message.getContent());
         }
         public void setQuiet(boolean isQuiet){
-            quiet.setVisibility(isQuiet ? View.VISIBLE : View.INVISIBLE);
+            quiet.setVisibility(isQuiet ? View.VISIBLE : View.GONE);
         }
     } 
 }

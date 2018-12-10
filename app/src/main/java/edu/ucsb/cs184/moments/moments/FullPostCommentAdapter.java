@@ -1,13 +1,12 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 public class FullPostCommentAdapter extends CustomAdapter {
 
@@ -58,23 +57,28 @@ public class FullPostCommentAdapter extends CustomAdapter {
                 }
             });
             view.setLongClickable(true);
-            view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return false;
-                }
-            });
         }
 
         @Override
         public void setData(Object obj) {
             data = (Comment) obj;
             User user = User.findUser(data.getUserid());
-            Glide.with(context).load(user.GetIcon()).into(usericon);
+            FirebaseHelper.setIcon(user.GetIcon(), activity, usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             PostAdapter.setContent(context, content, data.getContent());
             replies.setText("Replies: " + data.getComments().size());
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    CommentLongClickDialog dialog = new CommentLongClickDialog();
+                    dialog.showNow(((AppCompatActivity) activity).getSupportFragmentManager(), "CommentLongClick");
+                    dialog.setComment(data);
+                    // TODO: add support for comment parent
+                    dialog.setParent(Post.findPost(data.getPostKey()));
+                    return false;
+                }
+            });
         }
     }
 }

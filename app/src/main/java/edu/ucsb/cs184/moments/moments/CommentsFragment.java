@@ -4,15 +4,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.BottomNavigationView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class CommentsFragment extends Fragment {
+public class CommentsFragment extends NotificationFragment {
 
     private Context context;
     private RecyclerViewFragment fragment;
+    private BottomNavigationView nav;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -27,11 +28,13 @@ public class CommentsFragment extends Fragment {
                 refresh();
             }
         });
+        if (nav != null) fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.comments_content);
         return view;
     }
 
-    private void refresh(){
+    @Override
+    public void refresh(){
         try {
             User.user.refreshCommentsRecv();
             fragment.setData(User.user.getCommentsRecv());

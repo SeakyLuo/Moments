@@ -61,13 +61,13 @@ public class Post implements Parcelable {
     public String getGroupid() { return groupid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
-    public int comments_count() { return comments.size(); }
+    public int comments_recv() { return comments.size(); }
     public ArrayList<Comment> getComments() { return comments; }
     public ArrayList<Rating> getRatings() { return ratings; }
-    public int ratings_received() { return ratings.size(); }
+    public int ratings_recv() { return ratings.size(); }
     public Rating hasRated() {
         for (Rating rating: ratings)
-            if (rating.getRaterId().equals(User.user.getId()))
+            if (User.user.isUser(rating.getRaterId()))
                 return rating;
         return null;
     }
@@ -155,6 +155,10 @@ public class Post implements Parcelable {
                     return p;
         return null;
     }
+    public static Post powerfulFindPost(Post post){
+        if (post.postedInGroup()) return findPost(post.GetKey(), post.groupid);
+        else return findPost(post.GetKey());
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -201,22 +205,6 @@ public class Post implements Parcelable {
             }
         }
 
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(userid);
-            if (time == null) {
-                dest.writeByte((byte) 0);
-            } else {
-                dest.writeByte((byte) 1);
-                dest.writeLong(time);
-            }
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
         public static final Creator<Key> CREATOR = new Creator<Key>() {
             @Override
             public Key createFromParcel(Parcel in) {
@@ -236,6 +224,22 @@ public class Post implements Parcelable {
             Key k = (Key) obj;
             return time.equals(k.time) && userid.equals(k.userid);
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(userid);
+            if (time == null) {
+                dest.writeByte((byte) 0);
+            } else {
+                dest.writeByte((byte) 1);
+                dest.writeLong(time);
+            }
+        }
     }
 
     public static class PostComparator implements Comparator<Post> {
@@ -246,9 +250,10 @@ public class Post implements Parcelable {
     public static class RatingComparator implements Comparator<Post> {
         @Override
         public int compare(Post o1, Post o2) {
-            int result = Double.compare(o1.ratings_avg(), o2.ratings_avg());
+            int result = Double.compare(o2.ratings_avg(), o1.ratings_avg());
+            if (result != 0) return result;
             for (int i = 1; i <= 5; i++){
-                result = o1.counting_star(i) - o2.counting_star(i);
+                result = o2.counting_star(i) - o1.counting_star(i);
                 if (result != 0)
                     return result;
             }
@@ -259,7 +264,7 @@ public class Post implements Parcelable {
     public static class PopularityComparator implements Comparator<Post>{
         @Override
         public int compare(Post o1, Post o2) {
-            return new RatingComparator().compare(o1, o2);
+            return new RatingComparator().compare(o1, o2) + o2.getComments().size() - o1.getComments().size();
         }
     }
 

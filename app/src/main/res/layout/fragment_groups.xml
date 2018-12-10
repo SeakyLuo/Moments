@@ -23,7 +23,7 @@
             android:layout_height="match_parent">
 
             <ImageButton
-                android:id="@+id/menu_groups"
+                android:id="@+id/groups_menu"
                 android:layout_width="@dimen/button_size"
                 android:layout_height="@dimen/button_size"
                 android:background="@android:drawable/screen_background_light_transparent"
@@ -45,7 +45,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/title_groups"
+                android:id="@+id/groups_title"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="4dp"
@@ -56,7 +56,7 @@
                 android:textColor="@color/BlackGray"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/menu_groups"
+                app:layout_constraintStart_toEndOf="@+id/groups_menu"
                 app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>

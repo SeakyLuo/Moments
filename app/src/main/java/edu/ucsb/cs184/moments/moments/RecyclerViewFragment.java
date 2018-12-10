@@ -23,8 +23,7 @@ public class RecyclerViewFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private CustomAdapter adapter;
-    private boolean showDivider = false;
-    private boolean swipeEnabled = true;
+    private boolean showDivider = false, swipeEnabled = true, nestedScrolling = true;
     private int lMargin = 0, rMargin = 0, tMargin = 0, bMargin = 0;
     private ArrayList<View> hideViews = new ArrayList<>();
     private ArrayList<OnRefreshListener> listeners = new ArrayList<>();
@@ -35,11 +34,33 @@ public class RecyclerViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.recycler_view, container, false);
         swipeRefreshLayout = view.findViewById(R.id.swipe_container);
         recyclerView = view.findViewById(R.id.recyclerview);
+        swipeRefreshLayout.setEnabled(swipeEnabled);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                for (OnRefreshListener listener: listeners)
+                    listener.onRefresh();
+                refresh();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        SetRecyclerView(recyclerView);
+        return view;
+    }
+
+    public RecyclerView getRecyclerView() { return recyclerView; }
+
+    public void setRecyclerView(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+        SetRecyclerView(recyclerView);
+    }
+    private void SetRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayout = new LinearLayoutManager(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(lMargin, tMargin, rMargin, bMargin);
         recyclerView.setLayoutManager(linearLayout);
+        recyclerView.setNestedScrollingEnabled(nestedScrolling);
         recyclerView.setAdapter(adapter);
         adapter.setActivity(getActivity());
         if (showDivider) recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
@@ -58,17 +79,6 @@ public class RecyclerViewFragment extends Fragment {
                 }
             }
         });
-        swipeRefreshLayout.setEnabled(swipeEnabled);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                for (OnRefreshListener listener: listeners)
-                    listener.onRefresh();
-                refresh();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-        return view;
     }
 
     public void setbMargin(int bMargin) { this.bMargin = bMargin; }
@@ -79,6 +89,7 @@ public class RecyclerViewFragment extends Fragment {
         tMargin = t; bMargin = b; lMargin = l; rMargin = r;
     }
 
+    public void setNestedScrollingEnabled(boolean enabled){ nestedScrolling = enabled; }
     public void setShowDivider(boolean showDivider){
         this.showDivider = showDivider;
     }
@@ -120,7 +131,7 @@ public class RecyclerViewFragment extends Fragment {
         return adapter.hasData();
     }
     private boolean isValidType(Object obj){
-        return obj instanceof Post || obj instanceof Comment || obj instanceof User ||
+        return obj instanceof Post || obj instanceof Comment || obj instanceof User || obj instanceof Message ||
                 obj instanceof Group || obj instanceof String || obj instanceof SearchPair;
     }
 

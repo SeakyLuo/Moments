@@ -11,8 +11,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 public class UserAdapter extends CustomAdapter{
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -59,7 +57,7 @@ public class UserAdapter extends CustomAdapter{
                     follow.setImageResource(UploadIconActivity.followImage(id));
                 }
             });
-            Glide.with(context).load(data.GetIcon()).into(icon);
+            FirebaseHelper.setIcon(data.GetIcon(), activity, icon);
             name.setText(data.getName());
             intro.setText(data.getIntro());
             followers.setText("Followers: " + data.getFollowers().size());

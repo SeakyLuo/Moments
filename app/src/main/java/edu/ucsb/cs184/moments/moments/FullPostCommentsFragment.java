@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ public class FullPostCommentsFragment extends Fragment {
     private Button sortby_button;
     private TextView sortby_text;
     private RecyclerViewFragment fragment;
+    private RecyclerView recyclerView;
     private boolean init = false;
     private ArrayList<Comment> comments;
 
@@ -33,13 +35,14 @@ public class FullPostCommentsFragment extends Fragment {
         context = getContext();
         sortby_button = view.findViewById(R.id.fpc_sortby_button);
         sortby_text = view.findViewById(R.id.fpc_sortby_text);
+        recyclerView = view.findViewById(R.id.fpc_content);
         fragment = new RecyclerViewFragment();
 
         fragment.setAdapter(new FullPostCommentAdapter());
         fragment.setShowDivider(true);
         fragment.setSwipeEnabled(false);
+        fragment.setRecyclerView(recyclerView);
 
-        fragment.show(getFragmentManager(), R.id.fpc_content);
         sortby_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
