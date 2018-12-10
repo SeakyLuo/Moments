@@ -116,6 +116,7 @@ public class Comment implements Parcelable {
         replies.remove(reply);
     }
     public String getUserid() { return userid; }
+    public String GetPosterId() { return postKey.userid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }
     public Key GetKey() { return new Key(userid, time, postKey); }
