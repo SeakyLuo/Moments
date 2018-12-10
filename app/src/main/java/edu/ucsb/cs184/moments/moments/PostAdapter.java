@@ -54,10 +54,10 @@ public class PostAdapter extends CustomAdapter {
         return new SimpleDateFormat("yyyy-MM-dd").format(time);
     }
 
-    public static void setContent(final Context context, TextView textView, final Post post){
-        String substr = post.getContent();
+    public static void setContent(final Context context, TextView textView, final String content){
+        String substr = content;
         int at = substr.indexOf("@"), hashtag = substr.indexOf("#");
-        SpannableString spannableString = new SpannableString(post.getContent());
+        SpannableString spannableString = new SpannableString(content);
         while (at != -1 || hashtag != -1){
             final int start = (at < 0) ? hashtag : ((at < hashtag || hashtag < 0) ? at : hashtag);
             final boolean isAt = start == at;
@@ -225,7 +225,7 @@ public class PostAdapter extends CustomAdapter {
             Glide.with(context).load(user.GetIcon()).into(usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
-            setContent(context, content, data);
+            setContent(context, content, data.getContent());
             Rating rating = data.hasRated();
             ratingBar.setRating((rating == null) ? data.ratings_avg() : rating.getRating());
             setCollect(User.user.hasCollected(data));

@@ -57,6 +57,13 @@ public class FullPostCommentAdapter extends CustomAdapter {
 //                    context.startActivity(intent);
                 }
             });
+            view.setLongClickable(true);
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return false;
+                }
+            });
         }
 
         @Override
@@ -66,6 +73,7 @@ public class FullPostCommentAdapter extends CustomAdapter {
             Glide.with(context).load(user.GetIcon()).into(usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
+            PostAdapter.setContent(context, content, data.getContent());
             content.setText(data.getContent());
             int number = data.getComments().size();
             replies.setText(number + " Repl" + ((number == 1) ? "y" : "ies"));

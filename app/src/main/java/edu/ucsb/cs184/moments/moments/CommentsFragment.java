@@ -27,7 +27,7 @@ public class CommentsFragment extends Fragment {
                 refresh();
             }
         });
-        fragment.show(getFragmentManager(), R.id.comment_content);
+        fragment.show(getFragmentManager(), R.id.comments_content);
         return view;
     }
 
