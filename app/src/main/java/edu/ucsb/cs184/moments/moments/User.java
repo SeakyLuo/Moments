@@ -366,7 +366,7 @@ public class User implements Parcelable {
     }
     public void rate(Rating rating){
         boolean remove = rating.getRating() == 0;
-        Post post = Post.findPost(rating.GetPostKey());
+        Post post = Post.findPost(rating.getPostKey());
         findUser(rating.GetPosterId()).RatingNotification(rating, remove);
         post.removeRating(rating);
         if (!remove) post.addRating(rating);

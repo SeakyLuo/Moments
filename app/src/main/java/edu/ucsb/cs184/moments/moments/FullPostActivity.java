@@ -90,7 +90,7 @@ public class FullPostActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                post = Post.refresh(post);
+                post = Post.powerfulFindPost(post);
                 setPost(post);
                 swipeRefreshLayout.setRefreshing(false);
             }

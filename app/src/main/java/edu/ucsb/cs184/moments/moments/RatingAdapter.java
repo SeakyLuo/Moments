@@ -38,7 +38,7 @@ public class RatingAdapter extends CustomAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, FullPostActivity.class);
-                    intent.putExtra(FullPostActivity.POST, Post.findPost(data.GetPostKey()));
+                    intent.putExtra(FullPostActivity.POST, Post.findPost(data.getPostKey()));
                     activity.startActivity(intent);
                     activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }

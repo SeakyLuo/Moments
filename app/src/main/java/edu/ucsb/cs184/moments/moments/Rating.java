@@ -71,7 +71,7 @@ public class Rating implements Parcelable {
     public String GetPosterId() { return postKey.userid; }
     public int getRating() { return rating; }
     public Long getTime() { return time; }
-    public Post.Key GetPostKey() {
+    public Post.Key getPostKey() {
         return postKey;
     }
     public Key GetKey(){ return new Key(raterId, time, postKey); }

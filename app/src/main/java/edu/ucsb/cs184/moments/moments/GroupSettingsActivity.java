@@ -89,6 +89,7 @@ public class GroupSettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     Intent intent = new Intent(getContext(), UploadIconActivity.class);
+                    intent.putExtra(UploadIconActivity.CALLER, UploadIconActivity.GROUP);
                     intent.putExtra(UploadIconActivity.GROUP, group);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);

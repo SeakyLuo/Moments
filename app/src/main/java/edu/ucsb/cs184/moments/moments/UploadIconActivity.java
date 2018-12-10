@@ -33,24 +33,23 @@ public class UploadIconActivity extends AppCompatActivity {
     public static final int GALLERY_CODE = 1;
     public static final int ICON_CODE = 2;
     public static final String imagePath = "Moments";
-    public static final String ICON = "Icon", GROUP = "Group";
+    public static final String ICON = "Icon", GROUP = "Group", USER = "User", CALLER = "Caller";
 
     private Context context;
     private Intent callerIntent;
-    private Class caller;
     private ImageButton back;
     private ImageView icon;
     private ImageButton camera;
     private String imageFileName;
+    private Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_usericon);
+        SwipeBackHelper.onCreate(this);
         context = getApplicationContext();
         callerIntent = getIntent();
-        caller = callerIntent.getClass();
-        SwipeBackHelper.onCreate(this);
 
         back = findViewById(R.id.uu_back);
         icon = findViewById(R.id.uu_usericon);
@@ -63,7 +62,11 @@ public class UploadIconActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
-        icon.setImageBitmap((Bitmap) callerIntent.getParcelableExtra(ICON));
+        group = callerIntent.getParcelableExtra(GROUP);
+        if (group == null)
+            icon.setImageBitmap((Bitmap) callerIntent.getParcelableExtra(ICON));
+        else
+            FirebaseHelper.setIcon(group.GetIcon(), this, icon);
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +82,7 @@ public class UploadIconActivity extends AppCompatActivity {
     }
 
     private void openGallery(){
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, GALLERY_CODE);
         }else{
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -88,7 +91,7 @@ public class UploadIconActivity extends AppCompatActivity {
     }
 
     private void openCamera(){
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_CODE);
         }else{
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -171,9 +174,15 @@ public class UploadIconActivity extends AppCompatActivity {
                 break;
         }
         icon.setImageBitmap(image);
-        if (caller == UserProfileActivity.class) User.user.modifyIcon(image);
-        else if (caller == GroupSettingsActivity.class) ((Group) callerIntent.getParcelableExtra(GROUP)).modifyIcon(image);
-        Intent intent = new Intent(UploadIconActivity.this, caller);
+        switch (callerIntent.getStringExtra(CALLER)){
+            case USER:
+                User.user.modifyIcon(image);
+                break;
+            case GROUP:
+                group.modifyIcon(image);
+                break;
+        }
+        Intent intent = new Intent();
         intent.putExtra(ICON, image);
         setResult(RESULT_OK, intent);
     }

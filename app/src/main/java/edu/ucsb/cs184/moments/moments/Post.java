@@ -155,6 +155,10 @@ public class Post implements Parcelable {
                     return p;
         return null;
     }
+    public static Post powerfulFindPost(Post post){
+        if (post.postedInGroup()) return findPost(post.GetKey(), post.groupid);
+        else return findPost(post.GetKey());
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {

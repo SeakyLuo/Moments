@@ -2,6 +2,7 @@ package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -50,6 +51,8 @@ public class EditUserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent ui = new Intent(EditUserProfileActivity.this, UploadIconActivity.class);
+                ui.putExtra(UploadIconActivity.CALLER, UploadIconActivity.USER);
+                ui.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
                 startActivityForResult(ui, UploadIconActivity.GALLERY_CODE);
             }
         });
@@ -131,8 +134,7 @@ public class EditUserProfileActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
-        Intent intent = getIntent();
-        icon.setImageBitmap((Bitmap) intent.getParcelableExtra(UploadIconActivity.ICON));
+        icon.setImageBitmap((Bitmap) data.getParcelableExtra(UploadIconActivity.ICON));
     }
 
 }
