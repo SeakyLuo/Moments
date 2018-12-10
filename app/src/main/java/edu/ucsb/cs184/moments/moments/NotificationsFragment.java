@@ -1,6 +1,5 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,34 +14,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class NotificationsFragment extends Fragment {
 
-    private Context context;
     private DrawerLayout drawer;
     private BottomNavigationView nav;
-    private ImageButton menu;
+    private ImageButton menu, message;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private TabPagerAdapter adapter;
     private int curr_tab;
-    private AtMeFragment atMeFragment;
-    private CommentsFragment commentsFragment;
-    private RatingsFragment ratingsFragment;
-    private MessagesFragment messagesFragment;
+    private String[] tabs = { "AtMe", "Comments", "Ratings", "Messages" };
+    private ArrayList<NotificationFragment> fragments = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notifications,container,false);
-        context = getContext();
-        menu = view.findViewById(R.id.menu_notifications);
-        mViewPager = view.findViewById(R.id.n_viewpager);
+        menu = view.findViewById(R.id.notifications_menu);
+        message = view.findViewById(R.id.notifications_message);
+        mViewPager = view.findViewById(R.id.nViewpager);
         mTabLayout = view.findViewById(R.id.nTablayout);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (drawer != null) drawer.openDrawer(Gravity.START);
+            }
+        });
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
@@ -64,29 +69,16 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
-        atMeFragment = new AtMeFragment();
-        commentsFragment = new CommentsFragment();
-        ratingsFragment = new RatingsFragment();
-        messagesFragment = new MessagesFragment();
+        fragments.add(new AtMeFragment());
+        fragments.add(new CommentsFragment());
+        fragments.add(new RatingsFragment());
+        fragments.add(new MessagesFragment());
+        for (NotificationFragment fragment: fragments)
+            fragment.setBottomNav(nav);
         adapter = new TabPagerAdapter(getFragmentManager());
-        adapter.addFragment(atMeFragment, getString(R.string.atme));
-        adapter.addFragment(commentsFragment, getString(R.string.comments));
-        adapter.addFragment(ratingsFragment, getString(R.string.ratings));
-        adapter.addFragment(messagesFragment, getString(R.string.messages));
+        adapter.addFragments(fragments, Arrays.asList(tabs));
         mViewPager.setAdapter(adapter);
         return view;
-    }
-
-    public void refresh(){
-//        final NotificationTabFragment tabFragment = (NotificationTabFragment) adapter.getItem(curr_tab);
-//        tabFragment.gotoTop();
-//        (new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                tabFragment.refresh();
-//                tabFragment.gotoTop();
-//            }
-//        })).start();
     }
 
     public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){
@@ -94,9 +86,8 @@ public class NotificationsFragment extends Fragment {
         this.nav = nav;
     }
 
-    public static class NotificationTabFragment extends Fragment{
-        public void gotoTop(){}
-        public void refresh(){}
+    public void refresh(){
+        fragments.get(curr_tab).refresh();
     }
 
 }

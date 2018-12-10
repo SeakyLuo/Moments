@@ -21,8 +21,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -55,52 +53,63 @@ public class PostAdapter extends CustomAdapter {
     }
 
     public static void setContent(final Context context, TextView textView, final String content){
-        String substr = content;
-        int at = substr.indexOf("@"), hashtag = substr.indexOf("#");
+        int at, hashtag, start = 0, end, length = content.length();
         SpannableString spannableString = new SpannableString(content);
-        while (at != -1 || hashtag != -1){
-            final int start = (at < 0) ? hashtag : ((at < hashtag || hashtag < 0) ? at : hashtag);
+        while (true){
+            at = content.substring(start).indexOf("@");
+            hashtag = content.substring(start).indexOf("#");
+            if (at < 0 && hashtag < 0) break;
+            if (at != -1) at += start;
+            if (hashtag != -1) hashtag += start;
+            start = (at < 0) ? hashtag : ((at < hashtag || hashtag < 0) ? at : hashtag);
             final boolean isAt = start == at;
-            int end = isAt ? substr.indexOf(" ") : substr.substring(1).indexOf("#");
-            if (end == -1) end = substr.length();
-            final String target = substr.substring(start + (isAt ? 1 : 0), end + (isAt ? 0 : 2));
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View widget) {
-                    if (isAt){
-                        User user = User.findUserWithName(target);
-                        if (user == null)
-                            Toast.makeText(context, "User " + target + " not found!" , Toast.LENGTH_SHORT).show();
-                        else{
-                            Intent intent = new Intent(context, UserProfileActivity.class);
-                            intent.putExtra(UserProfileActivity.USERID, user.getId());
+            // if last char, break
+            if (start + 1 == length) break;
+            if (isAt){
+                end = content.substring(start + 1).indexOf(" ");
+                if (end == -1) end = length;
+                else end += start + 1;
+            }else{
+                end = content.substring(start + 1).indexOf("#");
+                if (end == -1) break;
+                else end += start + 1;
+            }
+            String word = content.substring(start + 1, end);
+            if (!word.isEmpty()){
+                final String target = isAt ? word : ("#" + word + "#");
+                ClickableSpan clickableSpan = new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        if (isAt){
+                            User user = User.findUserWithName(target);
+                            if (user == null)
+                                Toast.makeText(context, "User " + target + " not found!" , Toast.LENGTH_SHORT).show();
+                            else{
+                                Intent intent = new Intent(context, UserProfileActivity.class);
+                                intent.putExtra(UserProfileActivity.USERID, user.getId());
+                                context.startActivity(intent);
+                                ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                            }
+                        }else{
+                            Intent intent = new Intent(context, SearchActivity.class);
+                            intent.putExtra(SearchActivity.TAB, SearchPair.POSTS);
+                            intent.putExtra(SearchActivity.KEYWORD, target);
                             context.startActivity(intent);
                             ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         }
-                    }else{
-                        Intent intent = new Intent(context, SearchActivity.class);
-                        intent.putExtra(SearchActivity.TAB, SearchPair.POSTS);
-                        intent.putExtra(SearchActivity.KEYWORD, target);
-                        context.startActivity(intent);
-                        ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                     }
-                }
 
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setColor(context.getColor(R.color.DeepBlue));
-                    ds.setUnderlineText(false);
-                }
-            };
-            spannableString.setSpan(clickableSpan, start, end + (isAt ? 0 : 2), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            try{
-                substr = substr.substring(end + 1);
-                at = substr.indexOf("@");
-                hashtag = substr.substring(1).indexOf("#");
-            }catch (StringIndexOutOfBoundsException e){
-                break;
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        super.updateDrawState(ds);
+                        ds.setColor(context.getColor(R.color.DeepBlue));
+                        ds.setUnderlineText(false);
+                    }
+                };
+                spannableString.setSpan(clickableSpan, start, end + (isAt ? 0 : 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
+            if (end + 1 >= length) break;
+            start = end + 1;
         }
         textView.setText(spannableString);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -158,7 +167,7 @@ public class PostAdapter extends CustomAdapter {
                     collect(!User.user.hasCollected(data));
                 }
             });
-            int comments_count = data.comments_count();
+            int comments_count = data.comments_recv();
             comments_counter.setText(comments_count + "");
             comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
             comment.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +175,7 @@ public class PostAdapter extends CustomAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, FullPostActivity.class);
                     intent.putExtra(FullPostActivity.POST, data);
-                    intent.putExtra(FullPostActivity.ADD_COMMENT, FullPostActivity.ADD_COMMENT);
+                    intent.putExtra(FullPostActivity.ADD_COMMENT, true);
                     activity.startActivity(intent);
                     activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                 }
@@ -175,12 +184,12 @@ public class PostAdapter extends CustomAdapter {
                 @Override
                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                     if (!fromUser) return;
-                    if (data.getUserid().equals(User.user.getId())){
+                    if (User.user.isUser(data.getUserid())){
                         Toast.makeText(context, "You can't rate your own post!", Toast.LENGTH_SHORT).show();
                         ratingBar.setRating(data.ratings_avg());
                     }else{
                         User.user.rate(new Rating(User.user.getId(), (int) rating, Calendar.getInstance().getTimeInMillis(), data.GetKey()));
-                        if (rating == 0) ratingBar.setRating(data.ratings_avg());
+                        if (rating == 0f) ratingBar.setRating(data.ratings_avg());
                     }
                 }
             });
@@ -222,7 +231,7 @@ public class PostAdapter extends CustomAdapter {
                     helper.show();
                 }
             });
-            Glide.with(context).load(user.GetIcon()).into(usericon);
+            FirebaseHelper.setIcon(user.GetIcon(), activity, usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             setContent(context, content, data.getContent());

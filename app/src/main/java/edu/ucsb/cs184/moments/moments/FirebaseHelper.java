@@ -1,8 +1,13 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -211,15 +216,19 @@ public class FirebaseHelper {
         return null;
     }
     public static Comment findComment(Comment.Key key){
-        for (Comment data: Post.powerfulFindPost(key.postKey).getComments())
-            if (data.GetKey().equals(key))
-                return data;
+        Post post = Post.powerfulFindPost(key.postKey);
+        if (post != null)
+            for (Comment data: post.getComments())
+                if (data.GetKey().equals(key))
+                    return data;
         return null;
     }
     public static Rating findRating(Rating.Key key){
-        for (Rating data: Post.powerfulFindPost(key.postKey).getRatings())
-            if (data.GetKey().equals(key))
-                return data;
+        Post post = Post.powerfulFindPost(key.postKey);
+        if (post != null)
+            for (Rating data: post.getRatings())
+                if (data.GetKey().equals(key))
+                    return data;
         return null;
     }
 
@@ -251,8 +260,7 @@ public class FirebaseHelper {
                 if (post.postedInGroup()){
                     if (gds == null || gdb == null) return;
                     for (DataSnapshot ds: gds.child(post.getGroupid() + "/posts/").getChildren()){
-                        Post data = ds.getValue(Post.class);
-                        if (data.equals(post)){
+                        if (ds.getValue(Post.class).equals(post)){
                             gdb.child(post.getGroupid() + "/posts/" + index + "/" + key).setValue(value);
                             return;
                         }
@@ -261,8 +269,7 @@ public class FirebaseHelper {
                 }else{
                     if (uds == null || udb == null) return;
                     for (DataSnapshot ds: uds.child(post.getUserid() + "/posts/").getChildren()){
-                        Post data = ds.getValue(Post.class);
-                        if (data.equals(post)){
+                        if (ds.getValue(Post.class).equals(post)){
                             udb.child(post.getUserid() + "/posts/" + index + "/" + key).setValue(value);
                             return;
                         }
@@ -349,6 +356,21 @@ public class FirebaseHelper {
             default:
                 return null;
         }
+    }
+
+    public static void setIcon(StorageReference reference, final Activity activity, final ImageView imageView)  {
+        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d("setImageWithGlide", "onSuccess: " + uri);
+                Glide.with(activity).load(uri).into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("setImageWithGlide", "onFailure: ");
+            }
+        });
     }
 
     interface OnUDBReceivedListener{

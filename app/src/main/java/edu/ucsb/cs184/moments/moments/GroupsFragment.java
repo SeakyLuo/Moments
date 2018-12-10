@@ -44,7 +44,7 @@ public class GroupsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_groups, container, false);
         context = getContext();
         toolbar = view.findViewById(R.id.groups_toolbar);
-        menu = view.findViewById(R.id.menu_groups);
+        menu = view.findViewById(R.id.groups_menu);
         add = view.findViewById(R.id.groups_add);
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override

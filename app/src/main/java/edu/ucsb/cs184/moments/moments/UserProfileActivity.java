@@ -6,8 +6,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class UserProfileActivity extends AppCompatActivity {
     private ImageView icon, gender;
     private TextView username, intro, following, followers, posts_count;
     private ImageButton  edit, follow, message;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView recyclerView;
     private RecyclerViewFragment fragment;
     private String userid;
     private User user;
@@ -60,11 +63,21 @@ public class UserProfileActivity extends AppCompatActivity {
         follow = findViewById(R.id.up_follow);
         posts_count = findViewById(R.id.up_posts);
         message = findViewById(R.id.up_message);
+        recyclerView = findViewById(R.id.up_timeline);
+//        swipeRefreshLayout = findViewById(R.id.up_swipeFreshLayout);
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refresh();
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
         fragment = new RecyclerViewFragment();
         PostAdapter adapter = new PostAdapter();
         adapter.setUsericonClickable(false);
+        fragment.setSwipeEnabled(false);
         fragment.setAdapter(adapter);
-        fragment.show(getSupportFragmentManager(), R.id.up_timeline);
+        fragment.setRecyclerView(recyclerView);
 
         collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
@@ -179,8 +192,6 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
-                // TODO: Remove the line below
-                icon.setImageResource(R.drawable.user_icon);
                 intent.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
                 startActivityForResult(intent, EditUserProfileActivity.FINISH);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
@@ -194,12 +205,12 @@ public class UserProfileActivity extends AppCompatActivity {
                 setFollow(userid);
             }
         });
-        setUserProfile();
+        setUserProfile(user);
     }
 
-    private void setUserProfile(){
+    private void setUserProfile(User user){
         collapsingToolbarLayout.setTitle(user.getName());
-        Glide.with(this).load(user.GetIcon()).into(icon);
+        FirebaseHelper.setIcon(user.GetIcon(), this, icon);
         username.setText(user.getName());
         if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.GONE);
         else{
@@ -222,6 +233,11 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 
+    private void refresh(){
+        user = User.findUser(userid);
+        setUserProfile(user);
+    }
+
     private static String FollowCount(int count){
         if (count > 1000000) return count / 1000000 + " M";
         else if (count > 1000) return count / 1000 + " K";
@@ -239,8 +255,7 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == EditUserProfileActivity.FINISH){
-            user = User.findUser(userid);
-            setUserProfile();
+            refresh();
         }
     }
 

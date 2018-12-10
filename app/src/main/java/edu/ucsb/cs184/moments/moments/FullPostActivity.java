@@ -18,7 +18,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import java.text.SimpleDateFormat;
@@ -91,7 +90,7 @@ public class FullPostActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                post = Post.refresh(post);
+                post = Post.powerfulFindPost(post);
                 setPost(post);
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -154,14 +153,6 @@ public class FullPostActivity extends AppCompatActivity {
                 int position = tab.getPosition();
                 mViewPager.setCurrentItem(position, true);
                 tab.select();
-                switch (position){
-                    case 0:
-                        //
-                        break;
-                    case 1:
-                        ratingsFragment.setRating(post);
-                        break;
-                }
             }
 
             @Override
@@ -174,6 +165,7 @@ public class FullPostActivity extends AppCompatActivity {
 
             }
         });
+        mViewPager.setSwipeable(false);
         poster_icon.setClickable(true);
         poster_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,7 +176,7 @@ public class FullPostActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
-        Glide.with(this).load(User.user.GetIcon()).into(comment_usericon);
+        FirebaseHelper.setIcon(User.user.GetIcon(), this, comment_usericon);
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,19 +210,22 @@ public class FullPostActivity extends AppCompatActivity {
         pagerAdapter.addFragment(ratingsFragment, "Ratings");
         mViewPager.setAdapter(pagerAdapter);
         setPost(post);
-        if (intent.getStringExtra(ADD_COMMENT) != null) showAddComment();
+        if (intent.getBooleanExtra(ADD_COMMENT, false)) showAddComment();
     }
 
     private void setPost(final Post post){
         User user = User.findUser(post.getUserid());
         username.setText(user.getName());
-        Glide.with(this).load(user.GetIcon()).into(poster_icon);
+        FirebaseHelper.setIcon(user.GetIcon(), this, poster_icon);
         time.setText(TimeText(post.getTime()));
         PostAdapter.setContent(getApplicationContext(), content, post.getContent());
-        int comments_count = post.comments_count();
+        Rating rating = post.hasRated();
+        if (rating != null) ratingBar.setRating(rating.getRating());
+        int comments_count = post.comments_recv();
         comments_counter.setText(comments_count + "");
         comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);
         commentsFragment.setData(post.getComments());
+        ratingsFragment.setRating(post);
         setCollect(User.user.hasCollected(post));
         collect.setOnClickListener(new View.OnClickListener() {
             @Override

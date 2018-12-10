@@ -50,7 +50,7 @@ public class FullPostRatingsFragment extends Fragment {
         this.post = post;
         if (!shown) return;
         float rating = post.ratings_avg(1);
-        int review = post.ratings_received();
+        int review = post.ratings_recv();
         ratingBar.setRating(rating);
         avg_rating.setText("Rating: " + rating + "/5.0");
         reviews.setText("Reviews: " + review);

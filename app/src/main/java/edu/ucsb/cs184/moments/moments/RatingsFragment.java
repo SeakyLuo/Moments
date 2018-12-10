@@ -1,18 +1,13 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class RatingsFragment extends Fragment {
-
-    private Context context;
-    private RecyclerViewFragment fragment;
+public class RatingsFragment extends NotificationFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -27,11 +22,13 @@ public class RatingsFragment extends Fragment {
                 refresh();
             }
         });
+        if (nav != null) fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.ratings_content);
         return view;
     }
 
-    private void refresh(){
+    @Override
+    public void refresh(){
         try {
             User.user.refreshRatingsRecv();
             fragment.setData(User.user.getRatingsRecv());

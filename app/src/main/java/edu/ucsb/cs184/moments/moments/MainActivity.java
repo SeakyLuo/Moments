@@ -18,8 +18,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawer;
@@ -80,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         View header = dNavigationView.getHeaderView(0);
-        Glide.with(this).load(User.user.GetIcon()).into((ImageView) header.findViewById(R.id.nav_usericon));
+        FirebaseHelper.setIcon(User.user.GetIcon(), this, (ImageView) header.findViewById(R.id.nav_usericon));
         ((TextView) header.findViewById(R.id.nav_username)).setText(User.user.getName());
         header.findViewById(R.id.nav_usericon).setOnClickListener(new View.OnClickListener() {
             @Override
