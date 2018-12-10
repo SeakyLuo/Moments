@@ -41,7 +41,7 @@ public class FullPostActivity extends AppCompatActivity {
     private TextView username, time, content, comments_counter;
     private RatingBar ratingBar;
     private ImageButton comment, collect, share, dropdown;
-    private ImageView usericon;
+    private ImageView comment_usericon;
     private EditText edit_comment;
     private Post post;
     private FullPostCommentsFragment commentsFragment;
@@ -77,7 +77,7 @@ public class FullPostActivity extends AppCompatActivity {
         more = findViewById(R.id.fullpost_more);
         mViewPager = findViewById(R.id.fullpost_viewpager);
         mTabLayout = findViewById(R.id.fullpost_tablayout);
-        usericon = findViewById(R.id.fpac_user_icon);
+        comment_usericon = findViewById(R.id.fpac_user_icon);
         edit_comment = findViewById(R.id.fpac_editcomment);
 
         addCommentDialog.setCaller(edit_comment, commentsFragment);
@@ -184,6 +184,7 @@ public class FullPostActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
+        Glide.with(this).load(User.user.GetIcon()).into(comment_usericon);
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

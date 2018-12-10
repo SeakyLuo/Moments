@@ -197,7 +197,6 @@ public class FirebaseHelper {
     public static Post findPost(Post.Key key){
         for (DataSnapshot ds: uds.child(key.userid).child("posts").getChildren()){
             Post data = ds.getValue(Post.class);
-            ArrayList<Rating> arrayList = (ArrayList<Rating>) ds.child("ratings").getValue();
             if (data.GetKey().equals(key))
                 return data;
         }
@@ -206,7 +205,6 @@ public class FirebaseHelper {
     public static Post findPostInGroup(Post.Key key, String id){
         for (DataSnapshot ds: gds.child(id).child("posts").getChildren()){
             Post data = ds.getValue(Post.class);
-            ArrayList<Rating> arrayList = (ArrayList<Rating>) ds.child("ratings").getValue();
             if (data.GetKey().equals(key))
                 return data;
         }
@@ -249,9 +247,9 @@ public class FirebaseHelper {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (udb == null) return;
                 int index = 0;
                 if (post.postedInGroup()){
+                    if (gds == null || gdb == null) return;
                     for (DataSnapshot ds: gds.child(post.getGroupid() + "/posts/").getChildren()){
                         Post data = ds.getValue(Post.class);
                         if (data.equals(post)){
@@ -261,10 +259,11 @@ public class FirebaseHelper {
                         index++;
                     }
                 }else{
-                    for (DataSnapshot ds: uds.child(post.getUserid()).child("posts").getChildren()){
+                    if (uds == null || udb == null) return;
+                    for (DataSnapshot ds: uds.child(post.getUserid() + "/posts/").getChildren()){
                         Post data = ds.getValue(Post.class);
                         if (data.equals(post)){
-                            udb.child(post.getUserid() + "/" + "posts/" + index + "/" + key).setValue(value);
+                            udb.child(post.getUserid() + "/posts/" + index + "/" + key).setValue(value);
                             return;
                         }
                         index++;

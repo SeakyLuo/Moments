@@ -36,11 +36,11 @@ public class FullPostRatingsFragment extends Fragment {
         progressBars.add((ProgressBar) view.findViewById(R.id.fp3starprogressBar));
         progressBars.add((ProgressBar) view.findViewById(R.id.fp4starprogressBar));
         progressBars.add((ProgressBar) view.findViewById(R.id.fp5starprogressBar));
-        textViews.add((TextView) view.findViewById(R.id.fp5starcount));
-        textViews.add((TextView) view.findViewById(R.id.fp4starcount));
-        textViews.add((TextView) view.findViewById(R.id.fp3starcount));
-        textViews.add((TextView) view.findViewById(R.id.fp2starcount));
         textViews.add((TextView) view.findViewById(R.id.fp1starcount));
+        textViews.add((TextView) view.findViewById(R.id.fp2starcount));
+        textViews.add((TextView) view.findViewById(R.id.fp3starcount));
+        textViews.add((TextView) view.findViewById(R.id.fp4starcount));
+        textViews.add((TextView) view.findViewById(R.id.fp5starcount));
         shown = true;
         if (post != null) setRating(post);
         return view;
@@ -57,7 +57,7 @@ public class FullPostRatingsFragment extends Fragment {
         for (int i = 0; i < progressBars.size(); i++){
             ProgressBar progressBar = progressBars.get(i);
             TextView textView = textViews.get(i);
-            int counting_star = post.counting_star(i);
+            int counting_star = post.counting_star(i + 1);
             textView.setText(counting_star + "");
             progressBar.setProgress((review == 0) ? 50 : counting_star / review * 100);
         }

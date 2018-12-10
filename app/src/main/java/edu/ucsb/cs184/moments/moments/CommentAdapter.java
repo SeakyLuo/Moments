@@ -46,7 +46,7 @@ public class CommentAdapter extends CustomAdapter {
                 }
             });
             time.setText(PostAdapter.TimeText(data.getTime()));
-            content.setText(data.getContent());
+            PostAdapter.setContent(context, content, data.getContent());
         }
     }
 
