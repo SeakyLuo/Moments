@@ -250,9 +250,10 @@ public class Post implements Parcelable {
     public static class RatingComparator implements Comparator<Post> {
         @Override
         public int compare(Post o1, Post o2) {
-            int result = Double.compare(o1.ratings_avg(), o2.ratings_avg());
+            int result = Double.compare(o2.ratings_avg(), o1.ratings_avg());
+            if (result != 0) return result;
             for (int i = 1; i <= 5; i++){
-                result = o1.counting_star(i) - o2.counting_star(i);
+                result = o2.counting_star(i) - o1.counting_star(i);
                 if (result != 0)
                     return result;
             }
