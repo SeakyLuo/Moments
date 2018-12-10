@@ -109,6 +109,9 @@ public class Comment implements Parcelable {
             sum += ratings.get(i).getRating();
         return sum / count;
     }
+    public void addComment(Comment comment){
+        replies.add(comment);
+    }
     public String getUserid() { return userid; }
     public String getContent() { return content; }
     public Long getTime() { return time; }

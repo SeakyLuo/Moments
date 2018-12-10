@@ -74,8 +74,7 @@ public class FullPostCommentAdapter extends CustomAdapter {
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             PostAdapter.setContent(context, content, data.getContent());
-            int number = data.getComments().size();
-            replies.setText(number + " Repl" + ((number == 1) ? "y" : "ies"));
+            replies.setText("Replies: " + data.getComments().size());
         }
     }
 }

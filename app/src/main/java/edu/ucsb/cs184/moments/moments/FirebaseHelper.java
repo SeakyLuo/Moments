@@ -214,13 +214,13 @@ public class FirebaseHelper {
     }
     public static Comment findComment(Comment.Key key){
         for (Comment data: Post.powerfulFindPost(key.postKey).getComments())
-            if (data.equals(key))
+            if (data.GetKey().equals(key))
                 return data;
         return null;
     }
     public static Rating findRating(Rating.Key key){
         for (Rating data: Post.powerfulFindPost(key.postKey).getRatings())
-            if (data.equals(key))
+            if (data.GetKey().equals(key))
                 return data;
         return null;
     }
