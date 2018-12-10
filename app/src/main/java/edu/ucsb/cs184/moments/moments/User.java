@@ -31,6 +31,7 @@ public class User implements Parcelable {
     private ArrayList<String> followers = new ArrayList<>();  // id
     private ArrayList<String> following = new ArrayList<>();  // id
     private ArrayList<Post.Key> atMe = new ArrayList<>();
+    // TODO: at me comments
     private ArrayList<Comment.Key> commentsNotification = new ArrayList<>();
     private ArrayList<Post.Key> postsNotification = new ArrayList<>();
     private ArrayList<Rating.Key> ratingsNotification = new ArrayList<>();
@@ -120,6 +121,7 @@ public class User implements Parcelable {
     public String getIntro() { return intro; }
     public void setIntro(String intro){ this.intro = intro; }
     public String getGender() { return gender; }
+    public void setIcon(String icon) { this.icon = icon; }
     public void setGender(String gender){ this.gender = gender; }
     public ArrayList<Message> getMessages() { return messages; }
     public ArrayList<Group> getGroups() {
