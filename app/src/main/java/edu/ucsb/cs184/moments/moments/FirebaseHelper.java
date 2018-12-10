@@ -217,15 +217,19 @@ public class FirebaseHelper {
         return null;
     }
     public static Comment findComment(Comment.Key key){
-        for (Comment data: Post.powerfulFindPost(key.postKey).getComments())
-            if (data.GetKey().equals(key))
-                return data;
+        Post post = Post.powerfulFindPost(key.postKey);
+        if (post != null)
+            for (Comment data: post.getComments())
+                if (data.GetKey().equals(key))
+                    return data;
         return null;
     }
     public static Rating findRating(Rating.Key key){
-        for (Rating data: Post.powerfulFindPost(key.postKey).getRatings())
-            if (data.GetKey().equals(key))
-                return data;
+        Post post = Post.powerfulFindPost(key.postKey);
+        if (post != null)
+            for (Rating data: post.getRatings())
+                if (data.GetKey().equals(key))
+                    return data;
         return null;
     }
 
