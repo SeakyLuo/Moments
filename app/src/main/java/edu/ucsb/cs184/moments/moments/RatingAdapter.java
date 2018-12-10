@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 public class RatingAdapter extends CustomAdapter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -18,23 +16,23 @@ public class RatingAdapter extends CustomAdapter {
     }
 
     public class ViewHolder extends CustomAdapter.CustomViewHolder {
-        public TextView time, content, username;
-        public ImageView usericon;
+        public TextView time, content, name;
+        public ImageView icon;
         private Rating data;
 
         public ViewHolder(final View view) {
             super(view);
             time = view.findViewById(R.id.rating_time);
             content = view.findViewById(R.id.rating_content);
-            username = view.findViewById(R.id.rating_username);
-            usericon = view.findViewById(R.id.rating_usericon);
+            name = view.findViewById(R.id.rating_username);
+            icon = view.findViewById(R.id.rating_usericon);
         }
 
         public void setData(Object object) {
             data = (Rating) object;
             User user = User.findUser(data.getRaterId());
-            Glide.with(context).load(user.GetIcon()).into(usericon);
-            username.setText(user.getName());
+            FirebaseHelper.setIcon(user.GetIcon(), activity, icon);
+            name.setText(user.getName());
             view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -46,6 +44,7 @@ public class RatingAdapter extends CustomAdapter {
                 }
             });
             time.setText(PostAdapter.TimeText(data.getTime()));
+            content.setText(user.getName() + " gave you " + data.getRating() + "-star.");
 //            content.setText(data.getContent());
         }
     }

@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -88,7 +86,7 @@ public class GroupAdapter extends CustomAdapter {
         public void setData(Object object) {
             data = (Group) object;
             group_name.setText(data.getName());
-            Glide.with(context).load(data.GetIcon()).into(group_icon);
+            FirebaseHelper.setIcon(data.GetIcon(), activity, group_icon);
             Message message = data.latestActivity();
             time.setText(TimeText(message.getTime()));
             content.setText(message.getContent());

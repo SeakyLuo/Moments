@@ -1,8 +1,13 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -351,6 +356,21 @@ public class FirebaseHelper {
             default:
                 return null;
         }
+    }
+
+    public static void setIcon(StorageReference reference, final Activity activity, final ImageView imageView)  {
+        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d("setImageWithGlide", "onSuccess: " + uri);
+                Glide.with(activity).load(uri).into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("setImageWithGlide", "onFailure: ");
+            }
+        });
     }
 
     interface OnUDBReceivedListener{

@@ -11,12 +11,12 @@
 
     <ImageView
         android:id="@+id/nav_usericon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/user_icon_post"
+        android:layout_height="@dimen/user_icon_post"
         android:layout_margin="8dp"
         android:clickable="true"
         android:padding="8dp"
-        android:scaleType="center"
+        android:scaleType="centerCrop"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <TextView

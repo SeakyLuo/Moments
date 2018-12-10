@@ -16,7 +16,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.jude.swipbackhelper.SwipeBackHelper;
 
 import java.util.ArrayList;
@@ -199,7 +198,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void setUserProfile(){
         collapsingToolbarLayout.setTitle(user.getName());
-        Glide.with(this).load(user.GetIcon()).into(icon);
+        FirebaseHelper.setIcon(user.GetIcon(), this, icon);
         username.setText(user.getName());
         if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.GONE);
         else{

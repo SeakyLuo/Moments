@@ -8,8 +8,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 public class SearchGroupsAdapter extends CustomAdapter{
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,7 +51,7 @@ public class SearchGroupsAdapter extends CustomAdapter{
                     join.setVisibility(View.GONE);
                 }
             });
-            Glide.with(context).load(data.GetIcon()).into(icon);
+            FirebaseHelper.setIcon(data.GetIcon(), activity, icon);
             name.setText(data.getName());
             intro.setText(data.getIntro());
             members.setText("Members: " + data.getMemberSize());

@@ -10,8 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.Calendar;
 
 public class EditPostActivity extends AppCompatActivity {
@@ -60,7 +58,7 @@ public class EditPostActivity extends AppCompatActivity {
                 send.setImageResource(hasText ? R.drawable.ic_send : R.drawable.ic_send_unclickable);
             }
         });
-        Glide.with(this).load(User.user.GetIcon()).into(usericon);
+        FirebaseHelper.setIcon(User.user.GetIcon(), this, usericon);
         if (draft != null) edit_content.setText(draft.getContent());
         back.setOnClickListener(new View.OnClickListener() {
             @Override

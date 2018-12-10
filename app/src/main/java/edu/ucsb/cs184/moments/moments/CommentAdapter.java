@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 public class CommentAdapter extends CustomAdapter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,7 +31,7 @@ public class CommentAdapter extends CustomAdapter {
         public void setData(Object object) {
             data = (Comment) object;
             User user = User.findUser(data.getUserid());
-            Glide.with(context).load(user.GetIcon()).into(usericon);
+            FirebaseHelper.setIcon(user.GetIcon(), activity, usericon);
             username.setText(user.getName());
             view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {

@@ -21,8 +21,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -55,7 +53,7 @@ public class PostAdapter extends CustomAdapter {
     }
 
     public static void setContent(final Context context, TextView textView, final String content){
-        int at, hashtag, start = 0, end;
+        int at, hashtag, start = 0, end, length = content.length();
         SpannableString spannableString = new SpannableString(content);
         while (true){
             at = content.substring(start).indexOf("@");
@@ -66,10 +64,10 @@ public class PostAdapter extends CustomAdapter {
             start = (at < 0) ? hashtag : ((at < hashtag || hashtag < 0) ? at : hashtag);
             final boolean isAt = start == at;
             // if last char, break
-            if (start + 1 == content.length()) break;
+            if (start + 1 == length) break;
             if (isAt){
                 end = content.substring(start + 1).indexOf(" ");
-                if (end == -1) end = content.length();
+                if (end == -1) end = length;
                 else end += start + 1;
             }else{
                 end = content.substring(start + 1).indexOf("#");
@@ -110,7 +108,7 @@ public class PostAdapter extends CustomAdapter {
                 };
                 spannableString.setSpan(clickableSpan, start, end + (isAt ? 0 : 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            if (end + 1 == content.length()) break;
+            if (end + 1 >= length) break;
             start = end + 1;
         }
         textView.setText(spannableString);
@@ -233,7 +231,7 @@ public class PostAdapter extends CustomAdapter {
                     helper.show();
                 }
             });
-            Glide.with(context).load(user.GetIcon()).into(usericon);
+            FirebaseHelper.setIcon(user.GetIcon(), activity, usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             setContent(context, content, data.getContent());

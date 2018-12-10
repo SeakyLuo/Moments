@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 public class FullPostCommentAdapter extends CustomAdapter {
 
     @Override
@@ -65,7 +63,7 @@ public class FullPostCommentAdapter extends CustomAdapter {
         public void setData(Object obj) {
             data = (Comment) obj;
             User user = User.findUser(data.getUserid());
-            Glide.with(context).load(user.GetIcon()).into(usericon);
+            FirebaseHelper.setIcon(user.GetIcon(), activity, usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             PostAdapter.setContent(context, content, data.getContent());
