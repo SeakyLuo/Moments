@@ -178,8 +178,6 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UserProfileActivity.this, EditUserProfileActivity.class);
-                // TODO: Remove the line below
-                icon.setImageResource(R.drawable.user_icon);
                 intent.putExtra(UploadIconActivity.ICON, ((BitmapDrawable) icon.getDrawable()).getBitmap());
                 startActivityForResult(intent, EditUserProfileActivity.FINISH);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
