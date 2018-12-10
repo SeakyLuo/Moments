@@ -227,6 +227,8 @@ public class FullPostActivity extends AppCompatActivity {
         Glide.with(this).load(user.GetIcon()).into(poster_icon);
         time.setText(TimeText(post.getTime()));
         PostAdapter.setContent(getApplicationContext(), content, post.getContent());
+        Rating rating = post.hasRated();
+        if (rating != null) ratingBar.setRating(rating.getRating());
         int comments_count = post.comments_count();
         comments_counter.setText(comments_count + "");
         comments_counter.setVisibility(comments_count == 0 ? View.GONE : View.VISIBLE);

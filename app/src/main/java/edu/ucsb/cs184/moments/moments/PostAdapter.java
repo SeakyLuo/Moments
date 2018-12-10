@@ -61,43 +61,45 @@ public class PostAdapter extends CustomAdapter {
         while (at != -1 || hashtag != -1){
             final int start = (at < 0) ? hashtag : ((at < hashtag || hashtag < 0) ? at : hashtag);
             final boolean isAt = start == at;
-            int end = isAt ? substr.indexOf(" ") : substr.substring(1).indexOf("#");
+            int end = isAt ? substr.indexOf(" ") : (substr.substring(1).indexOf("#") + 1);
             if (end == -1) end = substr.length();
-            final String target = substr.substring(start + (isAt ? 1 : 0), end + (isAt ? 0 : 2));
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View widget) {
-                    if (isAt){
-                        User user = User.findUserWithName(target);
-                        if (user == null)
-                            Toast.makeText(context, "User " + target + " not found!" , Toast.LENGTH_SHORT).show();
-                        else{
-                            Intent intent = new Intent(context, UserProfileActivity.class);
-                            intent.putExtra(UserProfileActivity.USERID, user.getId());
+            final String target = substr.substring(start + (isAt ? 1 : 0), end + (isAt ? 0 : 1));
+            if (!target.isEmpty()){
+                ClickableSpan clickableSpan = new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        if (isAt){
+                            User user = User.findUserWithName(target);
+                            if (user == null)
+                                Toast.makeText(context, "User " + target + " not found!" , Toast.LENGTH_SHORT).show();
+                            else{
+                                Intent intent = new Intent(context, UserProfileActivity.class);
+                                intent.putExtra(UserProfileActivity.USERID, user.getId());
+                                context.startActivity(intent);
+                                ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
+                            }
+                        }else{
+                            Intent intent = new Intent(context, SearchActivity.class);
+                            intent.putExtra(SearchActivity.TAB, SearchPair.POSTS);
+                            intent.putExtra(SearchActivity.KEYWORD, target);
                             context.startActivity(intent);
                             ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         }
-                    }else{
-                        Intent intent = new Intent(context, SearchActivity.class);
-                        intent.putExtra(SearchActivity.TAB, SearchPair.POSTS);
-                        intent.putExtra(SearchActivity.KEYWORD, target);
-                        context.startActivity(intent);
-                        ((Activity) context).overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                     }
-                }
 
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setColor(context.getColor(R.color.DeepBlue));
-                    ds.setUnderlineText(false);
-                }
-            };
-            spannableString.setSpan(clickableSpan, start, end + (isAt ? 0 : 2), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        super.updateDrawState(ds);
+                        ds.setColor(context.getColor(R.color.DeepBlue));
+                        ds.setUnderlineText(false);
+                    }
+                };
+                spannableString.setSpan(clickableSpan, start, end + (isAt ? 0 : 1), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
             try{
-                substr = substr.substring(end + 1);
+                substr = substr.substring(end + (isAt ? 1 : 2));
                 at = substr.indexOf("@");
-                hashtag = substr.substring(1).indexOf("#");
+                hashtag = substr.indexOf("#");
             }catch (StringIndexOutOfBoundsException e){
                 break;
             }
