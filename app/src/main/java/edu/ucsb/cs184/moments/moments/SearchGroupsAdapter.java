@@ -40,7 +40,8 @@ public class SearchGroupsAdapter extends CustomAdapter{
                 public void onClick(View v) {
                     if (User.user.inGroup(data.getId())){
                         Intent intent = new Intent(context, GroupPostsActivity.class);
-                        intent.putExtra(GroupPostsActivity.GROUP, data);
+//                        intent.putExtra(GroupPostsActivity.GROUP, data);
+                        GroupPostsActivity.group = data;
                         activity.startActivity(intent);
                         activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                     }
