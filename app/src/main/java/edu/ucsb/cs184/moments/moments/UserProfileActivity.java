@@ -212,10 +212,10 @@ public class UserProfileActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(user.getName());
         FirebaseHelper.setIcon(user.GetIcon(), this, icon);
         username.setText(user.getName());
-        if (user.getGender().equals(getString(R.string.unknown))) gender.setVisibility(View.GONE);
+        if (user.getGender().equals(User.UNKNOWN)) gender.setVisibility(View.GONE);
         else{
             gender.setVisibility(View.VISIBLE);
-            gender.setImageDrawable(user.getGender().equals(getString(R.string.male)) ? getDrawable(R.drawable.ic_male) : getDrawable(R.drawable.ic_female));
+            gender.setImageResource(user.getGender().equals(User.MALE) ? R.drawable.ic_male : R.drawable.ic_female);
         }
         following.setText("Following: " + user.getFollowing().size());
         followers.setText("Followers: " + user.getFollowers().size());
