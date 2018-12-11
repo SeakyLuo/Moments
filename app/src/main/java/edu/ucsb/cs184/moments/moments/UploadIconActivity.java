@@ -41,7 +41,7 @@ public class UploadIconActivity extends AppCompatActivity {
     private ImageView icon;
     private ImageButton camera;
     private String imageFileName;
-    private Group group;
+    public static Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class UploadIconActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
-        group = callerIntent.getParcelableExtra(GROUP);
+//        group = callerIntent.getParcelableExtra(GROUP);
         if (group == null)
             icon.setImageBitmap((Bitmap) callerIntent.getParcelableExtra(ICON));
         else

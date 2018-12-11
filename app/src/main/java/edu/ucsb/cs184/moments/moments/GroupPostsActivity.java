@@ -115,7 +115,7 @@ public class GroupPostsActivity extends AppCompatActivity {
                 }
                 break;
             case SETTINGS:
-                if (data.getStringExtra(GroupSettingsActivity.QUIT) != null){
+                if (data.getBooleanExtra(GroupSettingsActivity.QUIT, false)){
                     close();
                 }
                 break;
