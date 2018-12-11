@@ -30,6 +30,7 @@ public class Comment implements Parcelable {
         this.userid = userid;
         this.content = content;
         this.time = time;
+        this.postKey = null;
 //        this.parent = parent;
     }
 
