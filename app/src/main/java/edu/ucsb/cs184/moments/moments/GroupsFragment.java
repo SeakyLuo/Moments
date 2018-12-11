@@ -85,11 +85,7 @@ public class GroupsFragment extends Fragment {
         fragment = new RecyclerViewFragment();
         fragment.setShowDivider(true);
         fragment.setAdapter(new GroupAdapter());
-        try {
-            fragment.setData(User.user.getGroups());
-        } catch (RecyclerViewFragment.UnsupportedDataException e) {
-            e.printStackTrace();
-        }
+        refresh();
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -103,7 +99,7 @@ public class GroupsFragment extends Fragment {
 
     public void refresh(){
         fragment.gotoTop();
-        new Thread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 User.user.refreshGroups();
@@ -116,7 +112,7 @@ public class GroupsFragment extends Fragment {
                 }
                 fragment.gotoTop();
             }
-        }).start();
+        });
     }
 
     public void setWidgets(DrawerLayout drawer, BottomNavigationView nav){

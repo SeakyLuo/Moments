@@ -76,7 +76,8 @@ public class Post implements Parcelable {
         if (count == 0) return 0f;
         int sum = 0;
         for (Rating rating: ratings)
-            sum += rating.getRating();
+            if (rating.getRating() <= 5)
+                sum += rating.getRating();
         return (float) sum / count;
     }
     public float ratings_avg(int digit){

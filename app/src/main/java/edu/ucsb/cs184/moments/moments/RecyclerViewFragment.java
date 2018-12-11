@@ -140,7 +140,8 @@ public class RecyclerViewFragment extends Fragment {
     }
 
     public void gotoTop(){
-        recyclerView.smoothScrollToPosition(0);
+        if (recyclerView != null)
+             recyclerView.smoothScrollToPosition(0);
     }
 
     public void show(FragmentManager manager, int viewId){
