@@ -221,7 +221,7 @@ public class UserProfileActivity extends AppCompatActivity {
         followers.setText("Followers: " + user.getFollowers().size());
         intro.setText("Intro: " + user.getIntro());
         posts_count.setText("Posts: " + user.getPosts().size());
-        boolean self = userid.equals(User.user.getId());
+        boolean self = User.user.isUser(userid);
         edit.setVisibility(self ? View.VISIBLE : View.GONE);
         message.setVisibility(self ? View.GONE : View.VISIBLE);
         follow.setVisibility(self ? View.GONE : View.VISIBLE);

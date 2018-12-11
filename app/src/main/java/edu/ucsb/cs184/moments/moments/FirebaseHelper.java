@@ -219,7 +219,7 @@ public class FirebaseHelper {
         Post post = Post.powerfulFindPost(key.postKey);
         if (post != null)
             for (Comment data: post.getComments())
-                if (data.GetKey().equals(key))
+                if (data != null && data.GetKey().equals(key))
                     return data;
         return null;
     }
@@ -227,7 +227,7 @@ public class FirebaseHelper {
         Post post = Post.powerfulFindPost(key.postKey);
         if (post != null)
             for (Rating data: post.getRatings())
-                if (data.GetKey().equals(key))
+                if (data != null && data.GetKey().equals(key))
                     return data;
         return null;
     }
