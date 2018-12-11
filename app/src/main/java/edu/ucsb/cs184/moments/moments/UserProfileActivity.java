@@ -64,14 +64,14 @@ public class UserProfileActivity extends AppCompatActivity {
         posts_count = findViewById(R.id.up_posts);
         message = findViewById(R.id.up_message);
         recyclerView = findViewById(R.id.up_timeline);
-//        swipeRefreshLayout = findViewById(R.id.up_swipeFreshLayout);
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                refresh();
-//                swipeRefreshLayout.setRefreshing(false);
-//            }
-//        });
+        swipeRefreshLayout = findViewById(R.id.up_swipeFreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         fragment = new RecyclerViewFragment();
         PostAdapter adapter = new PostAdapter();
         adapter.setUsericonClickable(false);
