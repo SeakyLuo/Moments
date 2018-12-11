@@ -204,6 +204,22 @@ public class Post implements Parcelable {
             }
         }
 
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(userid);
+            if (time == null) {
+                dest.writeByte((byte) 0);
+            } else {
+                dest.writeByte((byte) 1);
+                dest.writeLong(time);
+            }
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
         public static final Creator<Key> CREATOR = new Creator<Key>() {
             @Override
             public Key createFromParcel(Parcel in) {
@@ -222,22 +238,6 @@ public class Post implements Parcelable {
             if (!(obj instanceof Key)) return false;
             Key k = (Key) obj;
             return time.equals(k.time) && userid.equals(k.userid);
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(userid);
-            if (time == null) {
-                dest.writeByte((byte) 0);
-            } else {
-                dest.writeByte((byte) 1);
-                dest.writeLong(time);
-            }
         }
     }
 
