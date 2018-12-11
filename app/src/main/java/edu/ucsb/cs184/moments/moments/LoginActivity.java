@@ -144,15 +144,6 @@ public class LoginActivity extends AppCompatActivity {
         User.user = null;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-                onLoginSuccess();
-            }
-        }
-    }
-
     private void onLoginSuccess() {
         _loginButton.setEnabled(true);
         User.firebaseUser = mAuth.getCurrentUser();
@@ -208,6 +199,15 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_SIGNUP) {
+            if (resultCode == RESULT_OK) {
+                onLoginSuccess();
+            }
+        }
     }
 }
 
