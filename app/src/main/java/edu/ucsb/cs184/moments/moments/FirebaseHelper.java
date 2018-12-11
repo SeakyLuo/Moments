@@ -134,28 +134,19 @@ public class FirebaseHelper {
     public static DatabaseReference getGdb() { return gdb; }
 
     public static void insertUser(final User user){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                udb.child(user.getId()).setValue(user);
-                if (uInsertionListener != null) uInsertionListener.afterUserInserted(user);
-            }
-        }).start();
+        udb.child(user.getId()).setValue(user);
+        if (uInsertionListener != null)
+            uInsertionListener.afterUserInserted(user);
     }
 
     public static void insertGroup(final Group group){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String id = gdb.push().getKey();
-                group.setId(id);
-                int number = gcds.getValue(Integer.class);
-                group.setNumber(number);
-                gc.setValue(++number);
-                gdb.child(id).setValue(group);
-                if (gInsertionListener != null) gInsertionListener.afterGroupInserted(group);
-            }
-        }).start();
+        String id = gdb.push().getKey();
+        group.setId(id);
+        int number = gcds.getValue(Integer.class);
+        group.setNumber(number);
+        gc.setValue(++number);
+        gdb.child(id).setValue(group);
+        if (gInsertionListener != null) gInsertionListener.afterGroupInserted(group);
     }
 
     public static void removeGroup(final String id){
@@ -233,51 +224,36 @@ public class FirebaseHelper {
     }
 
     public static void updateUser(final String id, final String key, final Object data){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if(udb != null)
-                    udb.child(id).child(key).setValue(data);
-            }
-        }).start();
+        if(udb != null)
+            udb.child(id).child(key).setValue(data);
     }
 
     public static void updateGroup(final String id, final String key, final Object data){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if(gdb != null)
-                    gdb.child(id).child(key).setValue(data);
-            }
-        }).start();
+        if(gdb != null)
+            gdb.child(id).child(key).setValue(data);
     }
 
     public static void updatePost(final Post post, final String key, final Object value){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int index = 0;
-                if (post.postedInGroup()){
-                    if (gds == null || gdb == null) return;
-                    for (DataSnapshot ds: gds.child(post.getGroupid() + "/posts/").getChildren()){
-                        if (ds.getValue(Post.class).equals(post)){
-                            gdb.child(post.getGroupid() + "/posts/" + index + "/" + key).setValue(value);
-                            return;
-                        }
-                        index++;
-                    }
-                }else{
-                    if (uds == null || udb == null) return;
-                    for (DataSnapshot ds: uds.child(post.getUserid() + "/posts/").getChildren()){
-                        if (ds.getValue(Post.class).equals(post)){
-                            udb.child(post.getUserid() + "/posts/" + index + "/" + key).setValue(value);
-                            return;
-                        }
-                        index++;
-                    }
+        int index = 0;
+        if (post.postedInGroup()){
+            if (gds == null || gdb == null) return;
+            for (DataSnapshot ds: gds.child(post.getGroupid() + "/posts/").getChildren()){
+                if (ds.getValue(Post.class).equals(post)){
+                    gdb.child(post.getGroupid() + "/posts/" + index + "/" + key).setValue(value);
+                    return;
                 }
+                index++;
             }
-        }).start();
+        }else{
+            if (uds == null || udb == null) return;
+            for (DataSnapshot ds: uds.child(post.getUserid() + "/posts/").getChildren()){
+                if (ds.getValue(Post.class).equals(post)){
+                    udb.child(post.getUserid() + "/posts/" + index + "/" + key).setValue(value);
+                    return;
+                }
+                index++;
+            }
+        }
     }
 
     public static User findUserWithName(String name){
@@ -308,15 +284,6 @@ public class FirebaseHelper {
     public static boolean initFinished() { return uds != null && gds != null && gcds != null; }
 
     public static void uploadIcon(final Bitmap bitmap, final String type, final String id){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                UploadIcon(bitmap, type, id);
-            }
-        }).start();
-    }
-
-    private static void UploadIcon(Bitmap bitmap, String type, String url) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -324,11 +291,11 @@ public class FirebaseHelper {
         StorageReference imagesRef;
         switch (type){
             case USER_ICON:
-                imagesRef = usr.child(url);
+                imagesRef = usr.child(id);
                 break;
             case GROUP_ICON:
-                 imagesRef = gsr.child(url);
-                 break;
+                imagesRef = gsr.child(id);
+                break;
             default:
                 return;
         }
