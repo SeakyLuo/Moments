@@ -169,6 +169,6 @@ public class Group implements Parcelable {
 
     public static class GroupComparator implements Comparator<Group> {
         @Override
-        public int compare(Group o1, Group o2) { return new Post.TimeComparator().compare(o1.posts.get(0).GetKey(), o2.posts.get(0).GetKey()); }
+        public int compare(Group o1, Group o2) { return o2.latestActivity().getTime().compareTo(o1.latestActivity().getTime()); }
     }
 }

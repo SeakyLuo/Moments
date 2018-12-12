@@ -60,4 +60,12 @@ public class Message implements Parcelable {
         return (new Gson()).fromJson(json, Message.class);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (!(obj instanceof Message)) return false;
+        Message m = (Message) obj;
+        return content.equals(m.content) && time.equals(m.time);
+    }
+
 }
