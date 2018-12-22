@@ -46,13 +46,8 @@ public class SignupActivity extends AppCompatActivity {
         _loginLink = findViewById(R.id.link_login);
         mAuth = FirebaseAuth.getInstance();
 
-        String email = signInIntent.getStringExtra(LoginActivity.EMAIL);
-        if (signInIntent.getStringExtra(LoginActivity.EMAIL) != null){
-            _emailText.setText(email);
-            String password = signInIntent.getStringExtra(LoginActivity.PASSWORD);
-            if (signInIntent.getStringExtra(LoginActivity.PASSWORD) != null)
-                _passwordText.setText(password);
-        }
+        _emailText.setText(signInIntent.getStringExtra(LoginActivity.EMAIL));
+        _passwordText.setText(signInIntent.getStringExtra(LoginActivity.PASSWORD));
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +59,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Finish the registration screen and return to the Login activity
+                setResult(RESULT_CANCELED);
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }

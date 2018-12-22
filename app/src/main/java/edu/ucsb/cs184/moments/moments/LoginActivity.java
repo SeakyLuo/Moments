@@ -80,12 +80,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                if (!_emailText.getText().toString().isEmpty()){
-                    intent.putExtra(EMAIL, _emailText.getText().toString());
-                    if (!_passwordText.getText().toString().isEmpty())
-                        intent.putExtra(PASSWORD, _passwordText.getText().toString());
-                }
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                intent.putExtra(EMAIL, _emailText.getText().toString());
+                intent.putExtra(PASSWORD, _passwordText.getText().toString());
                 startActivityForResult(intent, REQUEST_SIGNUP);
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
