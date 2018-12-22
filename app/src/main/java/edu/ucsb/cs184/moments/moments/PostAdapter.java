@@ -116,10 +116,10 @@ public class PostAdapter extends CustomAdapter {
     }
 
     public class ViewHolder extends CustomAdapter.CustomViewHolder {
-        public ImageView usericon;
-        public TextView username, time, content, comments_counter;
-        public RatingBar ratingBar;
-        public ImageButton comment, collect, share, dropdown;
+        private ImageView usericon;
+        private TextView username, time, content, comments_counter;
+        private RatingBar ratingBar;
+        private ImageButton comment, collect, share, dropdown;
         private Post data;
 
         public ViewHolder(final View view) {

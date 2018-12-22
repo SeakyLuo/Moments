@@ -57,8 +57,9 @@ public class RecyclerViewFragment extends Fragment {
     private void SetRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayout = new LinearLayoutManager(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) recyclerView.getLayoutParams();
         layoutParams.setMargins(lMargin, tMargin, rMargin, bMargin);
+        recyclerView.setLayoutParams(layoutParams);
         recyclerView.setLayoutManager(linearLayout);
         recyclerView.setNestedScrollingEnabled(nestedScrolling);
         recyclerView.setAdapter(adapter);
@@ -70,8 +71,9 @@ public class RecyclerViewFragment extends Fragment {
                 super.onScrolled(recyclerView, dx, dy);
                 for (final View view: hideViews){
                     if (view instanceof FloatingActionButton){
-                        if (dy > 0 && view.isShown()) ((FloatingActionButton) view).hide();
-                        else if (dy <= 0 && !view.isShown()) ((FloatingActionButton) view).show();
+                        FloatingActionButton fab = (FloatingActionButton) view;
+                        if (dy > 0 && view.isShown()) fab.hide();
+                        else if (dy <= 0 && !view.isShown()) fab.show();
                     }else{
                         if (dy > 0 && view.isShown()) view.setVisibility(View.GONE);
                         else if (dy <= 0 && !view.isShown()) view.setVisibility(View.VISIBLE);

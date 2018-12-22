@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private NavigationView dNavigationView;
     private BottomNavigationView bNavigation;
-    private ImageButton menuButton;
     private HomeFragment homeFragment;
     private GroupsFragment groupsFragment;
     private NotificationsFragment notificationsFragment;
@@ -48,28 +46,28 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent;
                 switch (item.getItemId()){
                     case R.id.nav_user_profile:
-                        intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                        intent = new Intent(MainActivity.this, UserProfileActivity.class);
                         intent.putExtra(UserProfileActivity.USERID, User.user.getId());
                         startActivity(intent);
                         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.nav_user_collections:
-                        intent = new Intent(getApplicationContext(), CollectionsActivity.class);
+                        intent = new Intent(MainActivity.this, CollectionsActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.nav_user_draftbox:
-                        intent = new Intent(getApplicationContext(), DraftboxActivity.class);
+                        intent = new Intent(MainActivity.this, DraftboxActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.nav_settings:
-                        intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                        intent = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
                     case R.id.test:
-                        intent = new Intent(getApplicationContext(), TestActivity.class);
+                        intent = new Intent(MainActivity.this, TestActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
                         return true;
@@ -84,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 drawer.closeDrawer(Gravity.START);
-                Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+                Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
                 intent.putExtra(UserProfileActivity.USERID, User.user.getId());
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
