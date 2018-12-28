@@ -8,33 +8,31 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class SearchHistoryAdapter extends CustomAdapter{
+public class SearchHistoryAdapter extends CustomAdapter<SearchPair> {
     private SearchActivity searchActivity;
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_search_history, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_search_history, parent, false));
     }
 
     public void setSearchActivity(SearchActivity activity){
         searchActivity = activity;
     }
 
-    public class ViewHolder extends CustomAdapter.CustomViewHolder{
+    public class ViewHolder extends CustomViewHolder {
         TextView keyword;
         ImageButton delete;
-        private SearchPair data;
-        public ViewHolder(@NonNull View view) {
+
+        ViewHolder(View view) {
             super(view);
             keyword = view.findViewById(R.id.sh_text);
             delete = view.findViewById(R.id.sh_delete);
         }
 
         @Override
-        public void setData(Object object){
-            data = (SearchPair) object;
+        void setData() {
             keyword.setText(data.keyword);
             keyword.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -62,7 +60,7 @@ public class SearchHistoryAdapter extends CustomAdapter{
                 @Override
                 public void onClick(View v) {
                     User.user.removeHistory(data.keyword);
-                    removeElement(data);
+                    remove(data);
                 }
             });
         }

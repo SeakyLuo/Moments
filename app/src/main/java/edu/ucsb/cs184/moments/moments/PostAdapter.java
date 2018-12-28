@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.view.menu.MenuBuilder;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -24,17 +25,16 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class PostAdapter extends CustomAdapter {
+public class PostAdapter extends CustomAdapter<Post> {
 
     public static final int FULL_POST = 1;
     private boolean usericonClickable = true;
     public void setUsericonClickable(boolean clickable) { usericonClickable = clickable; }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_post, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_post, parent, false));
     }
 
     public static String TimeText(Long time){
@@ -115,14 +115,13 @@ public class PostAdapter extends CustomAdapter {
         textView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    public class ViewHolder extends CustomAdapter.CustomViewHolder {
-        private ImageView usericon;
-        private TextView username, time, content, comments_counter;
-        private RatingBar ratingBar;
-        private ImageButton comment, collect, share, dropdown;
-        private Post data;
+    class ViewHolder extends CustomViewHolder {
+        ImageView usericon;
+        TextView username, time, content, comments_counter;
+        RatingBar ratingBar;
+        ImageButton comment, collect, share, dropdown;
 
-        public ViewHolder(final View view) {
+        ViewHolder(final View view) {
             super(view);
             usericon = view.findViewById(R.id.post_usericon);
             username = view.findViewById(R.id.post_username);
@@ -136,8 +135,8 @@ public class PostAdapter extends CustomAdapter {
             dropdown = view.findViewById(R.id.post_dropdown);
         }
 
-        public void setData(Object object) {
-            data = (Post) object;
+        @Override
+        void setData() {
             final User user = User.findUser(data.getUserid());
             view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +164,12 @@ public class PostAdapter extends CustomAdapter {
                 @Override
                 public void onClick(View v) {
                     collect(!User.user.hasCollected(data));
+                }
+            });
+            share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
                 }
             });
             int comments_count = data.comments_recv();
@@ -214,7 +219,7 @@ public class PostAdapter extends CustomAdapter {
                                     return true;
                                 case R.id.post_more_delete:
                                     User.user.removePost(data);
-                                    removeElement(data);
+                                    remove(data);
                                     return true;
                                 case R.id.post_more_report:
                                     return true;
@@ -231,7 +236,7 @@ public class PostAdapter extends CustomAdapter {
                     helper.show();
                 }
             });
-            FirebaseHelper.setIcon(user.GetIcon(), activity, usericon);
+            FirebaseHelper.setIcon(user.GetIcon(), context, usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             setContent(context, content, data.getContent());
@@ -241,11 +246,11 @@ public class PostAdapter extends CustomAdapter {
         }
 
 
-        public void setCollect(boolean Collect){
+        void setCollect(boolean Collect){
             collect.setImageResource(Collect ? R.drawable.ic_heart_filled : R.drawable.ic_heart);
         }
 
-        public void collect(boolean Collect){
+        void collect(boolean Collect){
             if (Collect) User.user.collect(data);
             else User.user.uncollect(data);
             setCollect(Collect);

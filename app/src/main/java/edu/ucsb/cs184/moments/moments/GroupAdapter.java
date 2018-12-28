@@ -1,6 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.view.menu.MenuBuilder;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,13 +14,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class GroupAdapter extends CustomAdapter {
+public class GroupAdapter extends CustomAdapter<Group> {
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_group, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_group, parent, false));
     }
 
     public static String TimeText(Long time){
@@ -34,15 +34,14 @@ public class GroupAdapter extends CustomAdapter {
         return new SimpleDateFormat("MM-dd").format(time);
     }
 
-    public class ViewHolder extends CustomAdapter.CustomViewHolder {
-        public ImageView group_icon;
-        public TextView group_name;
-        public TextView time;
-        public TextView content;
-        public ImageView quiet;
-        private Group data;
+    class ViewHolder extends CustomViewHolder {
+        ImageView group_icon;
+        TextView group_name;
+        TextView time;
+        TextView content;
+        ImageView quiet;
 
-        public ViewHolder(final View view) {
+        ViewHolder(final View view) {
             super(view);
             group_icon = view.findViewById(R.id.group_icon);
             group_name = view.findViewById(R.id.group_name);
@@ -81,16 +80,13 @@ public class GroupAdapter extends CustomAdapter {
         }
 
         @Override
-        public void setData(Object object) {
-            data = (Group) object;
+        void setData() {
             group_name.setText(data.getName());
-            FirebaseHelper.setIcon(data.GetIcon(), activity, group_icon);
+            FirebaseHelper.setIcon(data.GetIcon(), context, group_icon);
             Message message = data.latestActivity();
             time.setText(TimeText(message.getTime()));
             content.setText(message.getContent());
-        }
-        public void setQuiet(boolean isQuiet){
-            quiet.setVisibility(isQuiet ? View.VISIBLE : View.GONE);
+            quiet.setVisibility(data.isSilent() ? View.VISIBLE : View.GONE);
         }
     } 
 }

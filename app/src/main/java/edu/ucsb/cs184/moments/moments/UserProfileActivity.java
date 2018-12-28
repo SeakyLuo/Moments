@@ -9,25 +9,22 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 public class UserProfileActivity extends AppCompatActivity {
 
     public static final String USERID = "userid";
-    public static final String SORTBY = "Sort By";
-    private Button sortBy;
+    private ButtonBarLayout buttonBarLayout;
+    private TextView sortBy;
     private ImageButton back, search;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private Toolbar toolbar;
@@ -52,7 +49,8 @@ public class UserProfileActivity extends AppCompatActivity {
         search = findViewById(R.id.up_search);
         toolbar = findViewById(R.id.up_toolbar);
         collapsingToolbarLayout = findViewById(R.id.up_ctoolbar);
-        sortBy = findViewById(R.id.up_sortby_button);
+        buttonBarLayout = findViewById(R.id.up_sortby_buttonbar);
+        sortBy = findViewById(R.id.up_sortby_comparator);
         icon = findViewById(R.id.up_usericon);
         gender = findViewById(R.id.up_gender);
         username = findViewById(R.id.up_username);
@@ -111,49 +109,39 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         });
-        sortBy.setText(SORTBY);
-        sortBy.setOnClickListener(new View.OnClickListener() {
+        sortBy.setText("");
+        buttonBarLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenuHelper helper = new PopupMenuHelper(R.menu.sort_by_menu, UserProfileActivity.this, sortBy);
                 helper.setOnItemSelectedListener(new PopupMenuHelper.onItemSelectListener() {
                     @Override
                     public boolean onItemSelected(MenuBuilder menuBuilder, MenuItem menuItem) {
-                        ArrayList<Post> data = user.getPosts();
+                        fragment.setData(user.getPosts());
                         switch (menuItem.getItemId()){
                             case R.id.sb_most_popular:
-                                sortBy.setText(SORTBY + ": " + getString(R.string.most_popular));
-                                Collections.sort(data, new Post.PopularityComparator());
+                                sortBy.setText(": " + getString(R.string.most_popular));
+                                fragment.sort(new Post.PopularityComparator());
                                 break;
                             case R.id.sb_least_popular:
-                                sortBy.setText(SORTBY + ": " + getString(R.string.least_popular));
-                                Collections.sort(data, new Post.PopularityComparator());
-                                Collections.reverse(data);
+                                sortBy.setText(": " + getString(R.string.least_popular));
+                                fragment.sort(new Post.PopularityComparator().reversed());
                                 break;
                             case R.id.sb_highest_rating:
-                                sortBy.setText(SORTBY + ": " + getString(R.string.highest_rating));
-                                Collections.sort(data, new Post.RatingComparator());
+                                sortBy.setText(": " + getString(R.string.highest_rating));
+                                fragment.sort(new Post.RatingComparator());
                                 break;
                             case R.id.sb_lowest_rating:
-                                sortBy.setText(SORTBY + ": " + getString(R.string.lowest_rating));
-                                Collections.sort(data, new Post.RatingComparator());
-                                Collections.reverse(data);
+                                sortBy.setText(": " + getString(R.string.lowest_rating));
+                                fragment.sort(new Post.RatingComparator().reversed());
                                 break;
                             case R.id.sb_latest:
-                                sortBy.setText(SORTBY + ": " + getString(R.string.most_recent));
+                                sortBy.setText(": " + getString(R.string.most_recent));
                                 break;
                             case R.id.sb_oldest:
-                                sortBy.setText(SORTBY + ": " + getString(R.string.least_recent));
-                                Collections.sort(data, new Post.PostComparator());
-                                Collections.reverse(data);
+                                sortBy.setText(": " + getString(R.string.least_recent));
+                                fragment.sort(new Post.PostComparator().reversed());
                                 break;
-                            default:
-                                return false;
-                        }
-                        try {
-                            fragment.setData(data);
-                        } catch (RecyclerViewFragment.UnsupportedDataException e) {
-                            e.printStackTrace();
                         }
                         fragment.gotoTop();
                         return true;

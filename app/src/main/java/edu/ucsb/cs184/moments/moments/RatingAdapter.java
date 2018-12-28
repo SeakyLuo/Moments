@@ -1,26 +1,26 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class RatingAdapter extends CustomAdapter {
+public class RatingAdapter extends CustomAdapter<Rating> {
+
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_rating, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_rating, parent, false));
     }
 
-    public class ViewHolder extends CustomAdapter.CustomViewHolder {
-        public TextView time, content, name;
-        public ImageView icon;
-        private Rating data;
+    class ViewHolder extends CustomViewHolder {
+        TextView time, content, name;
+        ImageView icon;
 
-        public ViewHolder(final View view) {
+        ViewHolder(View view) {
             super(view);
             time = view.findViewById(R.id.rating_time);
             content = view.findViewById(R.id.rating_content);
@@ -28,10 +28,10 @@ public class RatingAdapter extends CustomAdapter {
             icon = view.findViewById(R.id.rating_icon);
         }
 
-        public void setData(Object object) {
-            data = (Rating) object;
+        @Override
+        void setData() {
             User user = User.findUser(data.getRaterId());
-            FirebaseHelper.setIcon(user.GetIcon(), activity, icon);
+            FirebaseHelper.setIcon(user.GetIcon(), context, icon);
             name.setText(user.getName());
             view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {

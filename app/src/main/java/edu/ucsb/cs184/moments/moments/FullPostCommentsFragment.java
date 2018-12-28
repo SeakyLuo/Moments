@@ -82,20 +82,12 @@ public class FullPostCommentsFragment extends Fragment {
     }
 
     public void addElement(Comment comment){
-        try {
-            fragment.addElement(comment);
-        } catch (RecyclerViewFragment.UnsupportedDataException e) {
-            e.printStackTrace();
-        }
+        fragment.addElement(comment);
     }
 
     public void setData(ArrayList<Comment> comments){
-        try {
-            this.comments = comments;
-            if (init) fragment.setData(comments);
-        } catch (RecyclerViewFragment.UnsupportedDataException e) {
-            e.printStackTrace();
-        }
+        this.comments = comments;
+        if (init) fragment.setData(comments);
     }
 
 }

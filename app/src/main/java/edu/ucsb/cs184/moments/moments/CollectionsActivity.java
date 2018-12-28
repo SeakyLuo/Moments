@@ -46,11 +46,7 @@ public class CollectionsActivity extends AppCompatActivity {
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                try {
-                    fragment.setData(User.user.getCollections());
-                } catch (RecyclerViewFragment.UnsupportedDataException e) {
-                    e.printStackTrace();
-                }
+                fragment.setData(User.user.getCollections());
             }
         });
         fragment.show(getSupportFragmentManager(), R.id.collections_content);

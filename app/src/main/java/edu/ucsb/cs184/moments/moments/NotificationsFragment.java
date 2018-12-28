@@ -74,7 +74,7 @@ public class NotificationsFragment extends Fragment {
         fragments.add(new RatingsFragment());
         fragments.add(new MessagesFragment());
         for (NotificationFragment fragment: fragments)
-            fragment.setBottomNav(nav);
+            fragment.setBottomNavigationView(nav);
         adapter = new TabPagerAdapter(getFragmentManager());
         adapter.addFragments(fragments, Arrays.asList(tabs));
         mViewPager.setAdapter(adapter);

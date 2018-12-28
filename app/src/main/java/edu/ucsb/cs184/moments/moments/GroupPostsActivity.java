@@ -25,7 +25,6 @@ public class GroupPostsActivity extends AppCompatActivity {
     private ImageButton more;
     private FloatingActionButton fab;
     private RecyclerViewFragment fragment;
-    private Intent data;
 //    private Group group;
 
     @Override
@@ -33,8 +32,7 @@ public class GroupPostsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_posts);
         SwipeBackHelper.onCreate(this);
-        data = getIntent();
-//        group = data.getParcelableExtra(GROUP);
+//        group = getIntent().getParcelableExtra(GROUP);
 
         toolbar = findViewById(R.id.gp_toolbar);
         fab = findViewById(R.id.gp_fab);
@@ -79,11 +77,7 @@ public class GroupPostsActivity extends AppCompatActivity {
         fragment = new RecyclerViewFragment();
         fragment.setAdapter(new PostAdapter());
         fragment.addHiddenView(fab);
-        try {
-            fragment.setData(group.getPosts());
-        } catch (RecyclerViewFragment.UnsupportedDataException e) {
-            e.printStackTrace();
-        }
+        fragment.setData(group.getPosts());
         fragment.show(getSupportFragmentManager(), R.id.gp_content);
     }
 
@@ -99,27 +93,18 @@ public class GroupPostsActivity extends AppCompatActivity {
         if (resultCode != RESULT_OK) return;
         switch (requestCode){
             case EditPostActivity.EDIT_POST:
-                try {
-                    fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
-                }catch (RecyclerViewFragment.UnsupportedDataException e) {
-                    e.printStackTrace();
-                }
+                fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
                 fragment.gotoTop();
                 break;
             case PostAdapter.FULL_POST:
-                try {
-                    if (data.getStringExtra(FullPostActivity.DELETE_POST) != null)
-                        fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
-                } catch (RecyclerViewFragment.UnsupportedDataException e) {
-                    e.printStackTrace();
-                }
+                if (data.getStringExtra(FullPostActivity.DELETE_POST) != null)
+                    fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
                 break;
             case SETTINGS:
                 if (data.getBooleanExtra(GroupSettingsActivity.QUIT, false)){
                     close();
                 }
                 break;
-
         }
     }
 

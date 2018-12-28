@@ -235,7 +235,6 @@ public class Post implements Parcelable {
 
         @Override
         public boolean equals(@Nullable Object obj) {
-            if (obj == null) return false;
             if (!(obj instanceof Key)) return false;
             Key k = (Key) obj;
             return time.equals(k.time) && userid.equals(k.userid);
@@ -243,6 +242,11 @@ public class Post implements Parcelable {
     }
 
     public static class PostComparator implements Comparator<Post> {
+        @Override
+        public Comparator<Post> reversed() {
+            return null;
+        }
+
         @Override
         public int compare(Post o1, Post o2) { return new TimeComparator().compare(o1.GetKey(), o2.GetKey()); }
     }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class User implements Parcelable {
+
     public static final String ANONYMOUS = "ANONYMOUS", UNKNOWN = "Unknown", MALE = "Male", FEMALE = "Female";
     public static User user;
     public static FirebaseUser firebaseUser;

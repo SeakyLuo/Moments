@@ -9,20 +9,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SearchGroupsAdapter extends CustomAdapter{
+public class SearchGroupsAdapter extends CustomAdapter<Group> {
+
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_search_group, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_rating, parent, false));
     }
 
-    public class ViewHolder extends CustomAdapter.CustomViewHolder {
+    class ViewHolder extends CustomViewHolder {
         TextView number, name, intro, members;
         ImageView icon;
         ImageButton join;
-        Group data;
-        public ViewHolder(@NonNull View view) {
+
+        ViewHolder(@NonNull View view) {
             super(view);
             number = view.findViewById(R.id.sg_number);
             icon = view.findViewById(R.id.sg_icon);
@@ -33,8 +33,7 @@ public class SearchGroupsAdapter extends CustomAdapter{
         }
 
         @Override
-        public void setData(Object object){
-            data = (Group) object;
+        void setData(){
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -59,7 +58,7 @@ public class SearchGroupsAdapter extends CustomAdapter{
                     join.setVisibility(View.GONE);
                 }
             });
-            FirebaseHelper.setIcon(data.GetIcon(), activity, icon);
+            FirebaseHelper.setIcon(data.GetIcon(), context, icon);
             name.setText(data.getName());
             intro.setText(data.getIntro());
             members.setText("Members: " + data.getMemberSize());

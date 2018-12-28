@@ -1,6 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,31 +10,29 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
-public class DraftAdapter extends CustomAdapter{
+public class DraftAdapter extends CustomAdapter<Post>{
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_draft, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_draft, parent, false));
     }
 
     public static String TimeText(Long time){
         return new SimpleDateFormat("HH:mm yyyy/MM/dd").format(time);
     }
 
-    public class ViewHolder extends CustomAdapter.CustomViewHolder {
-        public TextView time, content;
-        private Post data;
+    class ViewHolder extends CustomViewHolder {
+        TextView time, content;
 
-        public ViewHolder(final View view) {
+        ViewHolder(View view) {
             super(view);
             time = view.findViewById(R.id.draft_time);
             content = view.findViewById(R.id.draft_content);
         }
 
-        public void setData(Object object) {
-            data = (Post) object;
+        @Override
+        void setData() {
             view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

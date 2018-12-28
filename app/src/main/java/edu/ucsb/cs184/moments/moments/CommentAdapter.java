@@ -1,26 +1,26 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CommentAdapter extends CustomAdapter {
+public class CommentAdapter extends CustomAdapter<Comment> {
+
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_comment, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_comment, parent, false));
     }
 
-    public class ViewHolder extends CustomAdapter.CustomViewHolder {
-        public TextView time, content, username;
-        public ImageView usericon;
-        private Comment data;
+    class ViewHolder extends CustomViewHolder {
+        TextView time, content, username;
+        ImageView usericon;
 
-        public ViewHolder(final View view) {
+        ViewHolder(View view) {
             super(view);
             time = view.findViewById(R.id.comment_time);
             content = view.findViewById(R.id.comment_content);
@@ -28,10 +28,10 @@ public class CommentAdapter extends CustomAdapter {
             usericon = view.findViewById(R.id.comment_usericon);
         }
 
-        public void setData(Object object) {
-            data = (Comment) object;
+        @Override
+        void setData() {
             User user = User.findUser(data.getUserid());
-            FirebaseHelper.setIcon(user.GetIcon(), activity, usericon);
+            FirebaseHelper.setIcon(user.GetIcon(), context, usericon);
             username.setText(user.getName());
             view.setClickable(true);
             view.setOnClickListener(new View.OnClickListener() {
@@ -47,5 +47,4 @@ public class CommentAdapter extends CustomAdapter {
             PostAdapter.setContent(context, content, data.getContent());
         }
     }
-
 }

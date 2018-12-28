@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class RecyclerViewFragment extends Fragment {
@@ -24,7 +25,6 @@ public class RecyclerViewFragment extends Fragment {
     private RecyclerView recyclerView;
     private CustomAdapter adapter;
     private boolean showDivider = false, swipeEnabled = true, nestedScrolling = true;
-    private int lMargin = 0, rMargin = 0, tMargin = 0, bMargin = 0;
     private ArrayList<View> hideViews = new ArrayList<>();
     private ArrayList<OnRefreshListener> listeners = new ArrayList<>();
 
@@ -40,7 +40,7 @@ public class RecyclerViewFragment extends Fragment {
             public void onRefresh() {
                 for (OnRefreshListener listener: listeners)
                     listener.onRefresh();
-                refresh();
+                gotoTop();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -57,13 +57,10 @@ public class RecyclerViewFragment extends Fragment {
     private void SetRecyclerView(RecyclerView recyclerView) {
         LinearLayoutManager linearLayout = new LinearLayoutManager(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) recyclerView.getLayoutParams();
-        layoutParams.setMargins(lMargin, tMargin, rMargin, bMargin);
-        recyclerView.setLayoutParams(layoutParams);
         recyclerView.setLayoutManager(linearLayout);
         recyclerView.setNestedScrollingEnabled(nestedScrolling);
-        recyclerView.setAdapter(adapter);
         adapter.setActivity(getActivity());
+        recyclerView.setAdapter(adapter);
         if (showDivider) recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -72,8 +69,8 @@ public class RecyclerViewFragment extends Fragment {
                 for (final View view: hideViews){
                     if (view instanceof FloatingActionButton){
                         FloatingActionButton fab = (FloatingActionButton) view;
-                        if (dy > 0 && view.isShown()) fab.hide();
-                        else if (dy <= 0 && !view.isShown()) fab.show();
+                        if (dy > 0 && fab.isShown()) fab.hide();
+                        else if (dy <= 0 && !fab.isShown()) fab.show();
                     }else{
                         if (dy > 0 && view.isShown()) view.setVisibility(View.GONE);
                         else if (dy <= 0 && !view.isShown()) view.setVisibility(View.VISIBLE);
@@ -83,68 +80,23 @@ public class RecyclerViewFragment extends Fragment {
         });
     }
 
-    public void setbMargin(int bMargin) { this.bMargin = bMargin; }
-    public void setlMargin(int lMargin) { this.lMargin = lMargin; }
-    public void settMargin(int tMargin) { this.tMargin = tMargin; }
-    public void setrMargin(int rMargin) { this.rMargin = rMargin; }
-    public void setMargin(int l, int t, int r, int b){
-        tMargin = t; bMargin = b; lMargin = l; rMargin = r;
-    }
-
     public void setNestedScrollingEnabled(boolean enabled){ nestedScrolling = enabled; }
-    public void setShowDivider(boolean showDivider){
-        this.showDivider = showDivider;
-    }
-    public void setAdapter(CustomAdapter adapter){
-        this.adapter = adapter;
-    }
-    public void setSwipeEnabled(boolean swipeEnabled) {
-        this.swipeEnabled = swipeEnabled;
-    }
+    public void setShowDivider(boolean showDivider){ this.showDivider = showDivider; }
+    public void setAdapter(CustomAdapter adapter){ this.adapter = adapter; }
+    public void setSwipeEnabled(boolean swipeEnabled) { this.swipeEnabled = swipeEnabled; }
 
     public void addHiddenView(View view) { if (view != null) hideViews.add(view); }
-
-    public void addElement(Object obj) throws UnsupportedDataException {
-        if (isValidType(obj)) adapter.addElement(obj);
-        else throw new UnsupportedDataException();
-    }
-    public void addElements(List data) throws UnsupportedDataException {
-        if (data.size() == 0 || isValidType(data.get(0))) adapter.addElements(data);
-        else throw new UnsupportedDataException();
-    }
-    public void addElements(int index, List data) throws UnsupportedDataException{
-        if (data.size() == 0 || isValidType(data.get(0))) adapter.addElements(index, data);
-        else throw new UnsupportedDataException();
-    }
-    public void removeElement(Object obj) throws UnsupportedDataException{
-        if (isValidType(obj)) adapter.removeElement(obj);
-        else throw new UnsupportedDataException();
-    }
-    public void setData(List data) throws UnsupportedDataException{
-        if (data.size() == 0 || isValidType(data.get(0))) adapter.setData(data);
-        else throw new UnsupportedDataException();
-    }
-    public void refresh(){
-        adapter.notifyDataSetChanged();
-        gotoTop();
-    }
+    public void addElement(Object obj) { adapter.add(obj); }
+    public void addElements(List data) { adapter.addAll(data); }
+    public void addElements(int index, List data) { adapter.addAll(index, data); }
+    public void removeElement(Object obj) { adapter.remove(obj); }
+    public void sort(Comparator comparator) { adapter.sort(comparator); }
+    public void setData(List data) { adapter.setData(data); }
     public List getData() { return adapter.getData(); }
-    public boolean hasData(){
-        return adapter.hasData();
-    }
-    private boolean isValidType(Object obj){
-        return obj instanceof Post || obj instanceof Comment || obj instanceof User || obj instanceof Message ||
-                obj instanceof Group || obj instanceof String || obj instanceof SearchPair || obj instanceof Rating;
-    }
+    public boolean hasData(){ return adapter.hasData(); }
+    public void clear(){ adapter.clear(); }
 
-    public void clear(){
-        adapter.clear();
-    }
-
-    public void gotoTop(){
-        if (recyclerView != null)
-             recyclerView.smoothScrollToPosition(0);
-    }
+    public void gotoTop(){ if (recyclerView != null) recyclerView.smoothScrollToPosition(0); }
 
     public void show(FragmentManager manager, int viewId){
         manager.beginTransaction()
@@ -156,11 +108,5 @@ public class RecyclerViewFragment extends Fragment {
 
     public interface OnRefreshListener{
         void onRefresh();
-    }
-
-    public class UnsupportedDataException extends Exception{
-        public UnsupportedDataException(){
-            super("Unsupported data!");
-        }
     }
 }

@@ -176,7 +176,6 @@ public class FullPostActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_left_out);
             }
         });
-        FirebaseHelper.setIcon(User.user.GetIcon(), this, comment_usericon);
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

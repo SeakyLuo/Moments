@@ -1,5 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,19 +8,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MessageAdapter extends CustomAdapter {
+
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_message, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_message, parent, false));
     }
 
-    public class ViewHolder extends CustomAdapter.CustomViewHolder {
+    public class ViewHolder extends CustomViewHolder {
         public TextView time, content, name;
         public ImageView icon;
-        private Message data;
 
-        public ViewHolder(final View view) {
+        ViewHolder(final View view) {
             super(view);
             time = view.findViewById(R.id.message_time);
             content = view.findViewById(R.id.message_content);
@@ -27,10 +27,9 @@ public class MessageAdapter extends CustomAdapter {
             icon = view.findViewById(R.id.message_icon);
         }
 
-        public void setData(Object object) {
-            data = (Message) object;
-            
+        @Override
+        void setData() {
+
         }
     }
-
 }

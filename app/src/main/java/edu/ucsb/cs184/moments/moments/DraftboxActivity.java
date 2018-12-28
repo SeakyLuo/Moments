@@ -10,6 +10,8 @@ import android.widget.ImageButton;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
 
+import java.util.ArrayList;
+
 public class DraftboxActivity extends AppCompatActivity {
 
     private ImageButton back;
@@ -33,7 +35,6 @@ public class DraftboxActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_right_out);
             }
         });
-        setClear();
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,27 +52,20 @@ public class DraftboxActivity extends AppCompatActivity {
             }
         });
         fragment.setAdapter(new DraftAdapter());
-        try {
-            fragment.setData(User.user.getDrafts());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        refresh();
         fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                try {
-                    fragment.setData(User.user.getDrafts());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                refresh();
             }
         });
         fragment.setShowDivider(true);
         fragment.show(getSupportFragmentManager(), R.id.draftbox_content);
     }
-
-    private void setClear(){
-        clear.setTextColor(getColor((User.user.getDrafts().size() == 0) ? R.color.aluminum : R.color.BlackGray));
+    private void refresh(){
+        ArrayList<Post> data = User.user.getDrafts();
+        fragment.setData(data);
+        clear.setTextColor(getColor((data.size() == 0) ? R.color.aluminum : R.color.BlackGray));
     }
 
     @Override
@@ -92,8 +86,7 @@ public class DraftboxActivity extends AppCompatActivity {
         if (resultCode != RESULT_OK) return;;
         switch (requestCode){
             case EditPostActivity.EDIT_POST:
-                fragment.refresh();
-                setClear();
+                refresh();
                 break;
         }
     }

@@ -1,6 +1,6 @@
 package edu.ucsb.cs184.moments.moments;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -325,11 +325,11 @@ public class FirebaseHelper {
         }
     }
 
-    public static void setIcon(StorageReference reference, final Activity activity, final ImageView imageView)  {
+    public static void setIcon(StorageReference reference, final Context context, final ImageView imageView)  {
         reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(activity).load(uri).into(imageView);
+                Glide.with(context).load(uri).into(imageView);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

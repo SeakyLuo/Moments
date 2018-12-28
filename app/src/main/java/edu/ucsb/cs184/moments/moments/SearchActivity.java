@@ -143,34 +143,25 @@ public class SearchActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    switch (type){
-                        case POSTS:
-                            postsFragment.setData(searchPosts(keyword));
-                            break;
-                        case USERS:
-                            usersFragment.setData(searchUsers(keyword));
-                            break;
-                        case GROUPS:
-                            groupsFragment.setData(searchGroups(keyword));
-                            break;
-                        case HISTORY:
-                            postsFragment.setData(searchPosts(keyword));
-                            setCurrentTab(POSTS);
-                            break;
-                    }
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }finally {
-                    if(User.user.addHistory(new SearchPair(keyword, type.equals(HISTORY) ? POSTS : type))){
-                        try {
-                            historyFragment.setData(User.user.getSearchHistory());
-                        } catch (RecyclerViewFragment.UnsupportedDataException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    dialog.dismiss();
+                switch (type) {
+                    case POSTS:
+                        postsFragment.setData(searchPosts(keyword));
+                        break;
+                    case USERS:
+                        usersFragment.setData(searchUsers(keyword));
+                        break;
+                    case GROUPS:
+                        groupsFragment.setData(searchGroups(keyword));
+                        break;
+                    case HISTORY:
+                        postsFragment.setData(searchPosts(keyword));
+                        setCurrentTab(POSTS);
+                        break;
                 }
+                if (User.user.addHistory(new SearchPair(keyword, type.equals(HISTORY) ? POSTS : type))){
+                    historyFragment.setData(User.user.getSearchHistory());
+                }
+                dialog.dismiss();
             }
         });
     }
@@ -237,19 +228,11 @@ public class SearchActivity extends AppCompatActivity {
         usersFragment.setShowDivider(true);
         groupsFragment.setShowDivider(true);
         historyFragment.setShowDivider(true);
-        try {
-            historyFragment.setData(User.user.getSearchHistory());
-        } catch (RecyclerViewFragment.UnsupportedDataException e) {
-            e.printStackTrace();
-        }
+        historyFragment.setData(User.user.getSearchHistory());
         historyFragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                try {
-                    historyFragment.setData(User.user.getSearchHistory());
-                } catch (RecyclerViewFragment.UnsupportedDataException e) {
-                    e.printStackTrace();
-                }
+                historyFragment.setData(User.user.getSearchHistory());
             }
         });
         fragments.add(postsFragment);

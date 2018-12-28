@@ -12,27 +12,15 @@ public class MessagesFragment extends NotificationFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
-        context = getContext();
-        fragment = new RecyclerViewFragment();
+        init();
         fragment.setAdapter(new MessageAdapter());
         refresh();
-        fragment.addOnRefreshListener(new RecyclerViewFragment.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refresh();
-            }
-        });
-        if (nav != null) fragment.addHiddenView(nav);
         fragment.show(getFragmentManager(), R.id.messages_content);
         return view;
     }
 
     @Override
     public void refresh(){
-        try {
-            fragment.setData(User.user.getMessages());
-        } catch (RecyclerViewFragment.UnsupportedDataException e) {
-            e.printStackTrace();
-        }
+        fragment.setData(User.user.getMessages());
     }
 }

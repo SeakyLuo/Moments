@@ -12,12 +12,14 @@ import java.util.Calendar;
 import java.util.Comparator;
 
 public class Group implements Parcelable {
+
     private String id;
     private String managerid;
     private String name;
     private int group_number;
     private String icon = "group_icon.png";
     private String intro = "";
+    private boolean silent = false;
     // private group?
     private ArrayList<String> members = new ArrayList<>();
     private ArrayList<Post> posts = new ArrayList<>();
@@ -39,27 +41,10 @@ public class Group implements Parcelable {
         group_number = in.readInt();
         icon = in.readString();
         intro = in.readString();
+        silent = in.readByte() != 0;
         members = in.createStringArrayList();
         posts = in.createTypedArrayList(Post.CREATOR);
         messages = in.createTypedArrayList(Message.CREATOR);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(managerid);
-        dest.writeString(name);
-        dest.writeInt(group_number);
-        dest.writeString(icon);
-        dest.writeString(intro);
-        dest.writeStringList(members);
-        dest.writeTypedList(posts);
-        dest.writeTypedList(messages);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<Group> CREATOR = new Creator<Group>() {
@@ -97,6 +82,8 @@ public class Group implements Parcelable {
         this.intro = intro;
         upload("intro", intro);
     }
+    public boolean isSilent() { return silent; }
+    public void setSilent(boolean silent) { this.silent = silent; }
     public ArrayList<String> getMembers() { return members; }
     public int getMemberSize() { return members.size(); }
     public boolean hasMember(String userid) { return members.contains(userid); }
@@ -162,9 +149,27 @@ public class Group implements Parcelable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
         if (!(obj instanceof Group)) return false;
         return id.equals(((Group) obj).id);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(managerid);
+        dest.writeString(name);
+        dest.writeInt(group_number);
+        dest.writeString(icon);
+        dest.writeString(intro);
+        dest.writeByte((byte) (silent ? 1 : 0));
+        dest.writeStringList(members);
+        dest.writeTypedList(posts);
+        dest.writeTypedList(messages);
     }
 
     public static class GroupComparator implements Comparator<Group> {

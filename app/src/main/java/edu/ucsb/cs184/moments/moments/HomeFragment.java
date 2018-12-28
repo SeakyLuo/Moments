@@ -91,19 +91,14 @@ public class HomeFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    // TODO: see below
-                    // Not a good algorithm
-                    // Should add new posts only
-                    ArrayList<Post> timeline = User.user.getTimeline();
-                    int count = timeline.size() - fragment.getData().size();
-                    if (count > 0)
-                        Toast.makeText(getContext(),  count+ " new post" + (count > 1 ? "s" : "") + "!", Toast.LENGTH_SHORT).show();
-                    fragment.setData(timeline);
-                    fragment.refresh();
-                } catch (RecyclerViewFragment.UnsupportedDataException e) {
-                    e.printStackTrace();
-                }
+                // TODO: see below
+                // Not a good algorithm
+                // Should add new posts only
+                ArrayList<Post> timeline = User.user.getTimeline();
+                int count = timeline.size() - fragment.getData().size();
+                if (count > 0)
+                    Toast.makeText(getContext(),  count+ " new post" + (count > 1 ? "s" : "") + "!", Toast.LENGTH_SHORT).show();
+                fragment.setData(timeline);
             }
         });
     }
@@ -132,20 +127,12 @@ public class HomeFragment extends Fragment {
         if (resultCode != RESULT_OK) return;
         switch (requestCode){
             case EditPostActivity.EDIT_POST:
-                try {
-                    fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
-                    fragment.gotoTop();
-                }catch (RecyclerViewFragment.UnsupportedDataException e) {
-                    e.printStackTrace();
-                }
+                fragment.addElement(data.getParcelableExtra(EditPostActivity.POST));
+                fragment.gotoTop();
                 break;
             case PostAdapter.FULL_POST:
-                try {
-                    if (data.getBooleanExtra(FullPostActivity.DELETE_POST, false))
-                        fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
-                }catch (RecyclerViewFragment.UnsupportedDataException e) {
-                    e.printStackTrace();
-                }
+                if (data.getBooleanExtra(FullPostActivity.DELETE_POST, false))
+                    fragment.removeElement(data.getParcelableExtra(FullPostActivity.POST));
                 break;
         }
     }

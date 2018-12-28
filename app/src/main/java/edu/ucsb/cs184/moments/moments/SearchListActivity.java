@@ -54,23 +54,19 @@ public class SearchListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 searchBar.setText("");
                 clearButton.setVisibility(View.GONE);
-                try {
-                    switch (adapter) {
-                        case MEMBER:
-                            fragment.setData(data);
-                            break;
-                        case FOLLOWER:
-                            fragment.setData(data);
-                            break;
-                        case FOLLOWING:
-                            fragment.setData(data);
-                            break;
-                        case POST:
-                            fragment.setData(new ArrayList<Post>());
-                            break;
-                    }
-                } catch (RecyclerViewFragment.UnsupportedDataException e) {
-                    e.printStackTrace();
+                switch (adapter) {
+                    case MEMBER:
+                        fragment.setData(data);
+                        break;
+                    case FOLLOWER:
+                        fragment.setData(data);
+                        break;
+                    case FOLLOWING:
+                        fragment.setData(data);
+                        break;
+                    case POST:
+                        fragment.setData(new ArrayList<Post>());
+                        break;
                 }
             }
         });
@@ -101,58 +97,50 @@ public class SearchListActivity extends AppCompatActivity {
                 return false;
             }
         });
-        try {
-            switch (adapter){
-                case MEMBER:
-                    setUsers();
-                    break;
-                case FOLLOWER:
-                    setUsers();
-                    break;
-                case FOLLOWING:
-                    setUsers();
-                    break;
-                case POST:
-                    setPosts();
-                    break;
-            }
-        } catch (RecyclerViewFragment.UnsupportedDataException e) {
-            e.printStackTrace();
+        switch (adapter){
+            case MEMBER:
+                setUsers();
+                break;
+            case FOLLOWER:
+                setUsers();
+                break;
+            case FOLLOWING:
+                setUsers();
+                break;
+            case POST:
+                setPosts();
+                break;
         }
         fragment.show(getSupportFragmentManager(), R.id.sl_content);
     }
 
-    private void setUsers() throws RecyclerViewFragment.UnsupportedDataException {
+    private void setUsers() {
         fragment.setAdapter(new UserAdapter());
         for (String id: intent.getStringArrayListExtra(DATA))
             data.add(User.findUser(id));
         fragment.setData(data);
     }
 
-    private void setPosts() throws RecyclerViewFragment.UnsupportedDataException {
+    private void setPosts() {
         fragment.setAdapter(new PostAdapter());
         data = intent.getParcelableArrayListExtra(DATA);
         fragment.setData(new ArrayList<Post>());
     }
 
     private void search(String keyword){
-        try {
-            switch (adapter){
-                case MEMBER:
-                    fragment.setData(SearchActivity.searchUsers(keyword));
-                    break;
-                case FOLLOWER:
-                    fragment.setData(SearchActivity.searchUsers(keyword));
-                    break;
-                case FOLLOWING:
-                    fragment.setData(SearchActivity.searchUsers(keyword));
-                    break;
-                case POST:
-                    fragment.setData(SearchActivity.searchPosts(keyword));
-                    break;
-            }
-        } catch (RecyclerViewFragment.UnsupportedDataException e) {
-            e.printStackTrace();
+        switch (adapter){
+            case MEMBER:
+                fragment.setData(SearchActivity.searchUsers(keyword));
+                break;
+            case FOLLOWER:
+                fragment.setData(SearchActivity.searchUsers(keyword));
+                break;
+            case FOLLOWING:
+                fragment.setData(SearchActivity.searchUsers(keyword));
+                break;
+            case POST:
+                fragment.setData(SearchActivity.searchPosts(keyword));
+                break;
         }
     }
 

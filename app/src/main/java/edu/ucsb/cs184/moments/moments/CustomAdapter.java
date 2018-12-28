@@ -5,66 +5,61 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
-    protected List<Object> data = new ArrayList<>();
-    protected Activity activity;
-    @NonNull
-    @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
-    }
+public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
+    List<T> data = new ArrayList<>();
+    Activity activity;
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
-        holder.setData(data.get(position));
-        if (activity != null) holder.setActivity(activity);
+    public void onBindViewHolder(@NonNull CustomAdapter.CustomViewHolder holder, int position) {
+        holder.data = data.get(position);
+        holder.setData();
     }
 
     public void setActivity(Activity activity) { this.activity = activity; }
 
-    public void setData(List data){
+    public void setData(List<T> data){
         this.data = data;
         notifyDataSetChanged();
     }
-    private void add_element(Object object){
+    private void addOne(T object){
         data.add(0, object);
     }
-    public void addElements(List data){
-        for (int i = 0; i < data.size(); i++) add_element(data.get(i));
+    public void addAll(List<T> data){
+        for (int i = 0; i < data.size(); i++) addOne(data.get(i));
         notifyItemRangeInserted(0, data.size());
-//        notifyDataSetChanged();
     }
-    public void addElements(int index, List data){
+    public void addAll(int index, List<T> data){
         this.data.addAll(index, data);
-        notifyItemRangeInserted(index, data.size());
-//        notifyDataSetChanged();
+        notifyItemRangeInserted(index, getItemCount());
     }
-    public void addElement(Object object){
-        add_element(object);
+    public void add(T object){
+        addOne(object);
         notifyItemInserted(0);
     }
-    public void removeElement(Object object){
-        data.remove(object);
-        notifyDataSetChanged();
+    public void remove(T object){
+        int index = data.indexOf(object);
+        if (index > -1){
+            data.remove(object);
+            notifyItemRemoved(index);
+        }
+    }
+    public void sort(Comparator<? super T> comparator) {
+        Collections.sort(data, comparator);
+        notifyItemRangeChanged(0, getItemCount());
     }
     // Shouldn't be called
-    public List<Object> getData(){
-        return data;
-    }
-    public boolean hasData(){
-        return data.size() > 0;
-    }
+    public List<T> getData(){ return data; }
+    public boolean hasData(){ return data.size() > 0; }
     public void clear(){
-//        int size = data.size();
-//        data.clear();
-//        notifyItemRangeRemoved(0, size);
+        final int size = data.size();
         data.clear();
-        notifyDataSetChanged();
+        notifyItemRangeRemoved(0, size);
     }
 
     @Override
@@ -72,17 +67,15 @@ public abstract class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.C
         return data.size();
     }
 
-    public static abstract class CustomViewHolder extends RecyclerView.ViewHolder{
+    abstract class CustomViewHolder extends RecyclerView.ViewHolder{
         protected View view;
         protected Context context;
-        protected Activity activity;
-        public CustomViewHolder(@NonNull View view) {
+        protected T data;
+        CustomViewHolder(@NonNull View view) {
             super(view);
             this.view = view;
             this.context = view.getContext();
-            this.activity = (Activity) this.context;
         }
-        public void setActivity(Activity activity) { this.activity = activity; }
-        public abstract void setData(Object object);
+        abstract void setData();
     }
 }

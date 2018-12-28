@@ -1,6 +1,7 @@
 package edu.ucsb.cs184.moments.moments;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,28 +9,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class FullPostCommentAdapter extends CustomAdapter {
+public class FullPostCommentAdapter extends CustomAdapter<Comment> {
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_fullpost_comment, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_fullpost_comment, parent, false));
     }
 
     public static String TimeText(Long time){
         return PostAdapter.TimeText(time);
     }
 
-    public class ViewHolder extends CustomAdapter.CustomViewHolder {
-        public ImageView usericon;
-        public TextView username;
-        public TextView time;
-        public TextView content;
-        public TextView replies;
-        private Comment data;
+    class ViewHolder extends CustomViewHolder {
+        ImageView usericon;
+        TextView username;
+        TextView time;
+        TextView content;
+        TextView replies;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             usericon = view.findViewById(R.id.fpcomment_usericon);
             username = view.findViewById(R.id.fpcomment_username);
@@ -60,10 +59,9 @@ public class FullPostCommentAdapter extends CustomAdapter {
         }
 
         @Override
-        public void setData(Object obj) {
-            data = (Comment) obj;
+        void setData() {
             User user = User.findUser(data.getUserid());
-            FirebaseHelper.setIcon(user.GetIcon(), activity, usericon);
+            FirebaseHelper.setIcon(user.GetIcon(), context, usericon);
             username.setText(user.getName());
             time.setText(TimeText(data.getTime()));
             PostAdapter.setContent(context, content, data.getContent());

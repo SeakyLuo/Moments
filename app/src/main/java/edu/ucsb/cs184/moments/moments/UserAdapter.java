@@ -11,20 +11,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class UserAdapter extends CustomAdapter{
+public class UserAdapter extends CustomAdapter<User> {
+
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_listuser, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_listuser, parent, false));
     }
 
-    public class ViewHolder extends CustomAdapter.CustomViewHolder{
+    public class ViewHolder extends CustomViewHolder{
         TextView name, intro, followers;
         ImageView icon;
         ImageButton follow;
-        User data;
-        public ViewHolder(@NonNull View view) {
+
+        ViewHolder(@NonNull View view) {
             super(view);
             icon = view.findViewById(R.id.su_icon);
             name = view.findViewById(R.id.su_name);
@@ -34,8 +34,7 @@ public class UserAdapter extends CustomAdapter{
         }
 
         @Override
-        public void setData(Object object){
-            data = (User) object;
+        void setData(){
             final String id = data.getId();
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -57,7 +56,7 @@ public class UserAdapter extends CustomAdapter{
                     follow.setImageResource(UploadIconActivity.followImage(id));
                 }
             });
-            FirebaseHelper.setIcon(data.GetIcon(), activity, icon);
+            FirebaseHelper.setIcon(data.GetIcon(), context, icon);
             name.setText(data.getName());
             intro.setText(data.getIntro());
             followers.setText("Followers: " + data.getFollowers().size());

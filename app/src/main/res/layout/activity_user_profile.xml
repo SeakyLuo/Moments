@@ -209,6 +209,7 @@
                     android:id="@+id/posts_sort_row"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:layout_gravity="center_vertical">
 
                     <TextView
@@ -224,22 +225,44 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.0" />
 
-                    <Button
-                        android:id="@+id/up_sortby_button"
-                        style="@style/Widget.AppCompat.Button"
+                    <android.support.v7.widget.ButtonBarLayout
+                        android:id="@+id/up_sortby_buttonbar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:background="@android:color/transparent"
-                        android:drawableRight="@drawable/ic_down_blue"
-                        android:text="@string/sort_by"
-                        android:textAllCaps="false"
-                        android:textColor="@color/design_default_color_primary"
-                        android:textSize="14sp"
+                        android:gravity="center"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/up_sortby"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sort_by"
+                            android:textColor="@color/design_default_color_primary"
+                            android:textSize="14sp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/up_sortby_comparator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/design_default_color_primary"
+                            android:textSize="14sp"
+                            android:layout_weight="1" />
+
+                        <ImageButton
+                            android:id="@+id/up_sortby_arrow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            app:srcCompat="@drawable/ic_down_blue" />
+
+                    </android.support.v7.widget.ButtonBarLayout>
                 </android.support.constraint.ConstraintLayout>
 
                 <android.support.v7.widget.RecyclerView

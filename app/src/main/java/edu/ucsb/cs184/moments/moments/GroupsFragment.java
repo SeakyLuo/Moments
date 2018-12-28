@@ -18,9 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import static android.app.Activity.RESULT_OK;
 
 public class GroupsFragment extends Fragment {
@@ -102,14 +99,8 @@ public class GroupsFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                User.user.refreshGroups();
-                ArrayList<Group> data = User.user.getGroups();
-                Collections.sort(data, new Group.GroupComparator());
-                try {
-                    fragment.setData(data);
-                } catch (RecyclerViewFragment.UnsupportedDataException e) {
-                    e.printStackTrace();
-                }
+                fragment.setData(User.user.getGroups());
+                fragment.sort(new Group.GroupComparator());
                 fragment.gotoTop();
             }
         });
@@ -125,11 +116,7 @@ public class GroupsFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK) return;
         if (requestCode == CREATE_GROUP){
-            try {
-                fragment.addElement(data.getParcelableExtra(GroupPostsActivity.GROUP));
-            } catch (RecyclerViewFragment.UnsupportedDataException e) {
-                e.printStackTrace();
-            }
+            fragment.addElement(data.getParcelableExtra(GroupPostsActivity.GROUP));
         }
     }
 }
