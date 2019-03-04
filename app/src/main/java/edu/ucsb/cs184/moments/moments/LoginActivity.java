@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
         if (_passwordText != null) _passwordText.setText("Password");
         if (FirebaseHelper.initFinished()){
             onDataReceived();
-        }else {
+        }else{
             progressDialog.setMessage(FETCH_DATA);
             progressDialog.show();
             FirebaseHelper.setOnUDBReceivedListener(new FirebaseHelper.OnUDBReceivedListener() {

@@ -22,3 +22,5 @@ anonymously. Additionally, users can comment on posts or spread/retweet
 them. Posts can contain text, pictures, videos and geographic locations.
 The functionalities of draft box, friends, hashtag, @ and a more complete
 user profile will be implemented in the future.
+
+See Folder Screenshots for Interface.
