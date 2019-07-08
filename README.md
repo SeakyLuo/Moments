@@ -23,4 +23,4 @@ them. Posts can contain text, pictures, videos and geographic locations.
 The functionalities of draft box, friends, hashtag, @ and a more complete
 user profile will be implemented in the future.
 
-See Folder Screenshots for Interface.
+See Folder Screenshots for User Interface.
